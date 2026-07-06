@@ -58,7 +58,7 @@
       "type": "concept",
       "kicker": "핵심 개념 1",
       "heading": "키가 표를 이어 준다",
-      "body": "orders에는 고객번호와 상품번호만 있다. customers와 products에서 사전처럼 필요한 값을 찾아 붙인다.",
+      "body": "orders에는 고객번호와 상품번호가 있다. customers와 products에서 지역, 등급, 단가를 찾아 붙인다.",
       "bullets": [
         "product_id로 단가를 찾는다",
         "customer_id로 지역과 등급을 찾는다"
