@@ -1,0 +1,1477 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>S02. 좋은 데이터의 모양: tidy 데이터와 척도 · 데이터 리터러시 with AI</title>
+<meta name="description" content="S02차시: 좋은 데이터의 모양: tidy 데이터와 척도 — 커리큘럼·핸드아웃·강사대본·모범답안." />
+<style>
+:root{
+  --canvas: #010102;
+  --surface-1: #0f1011;
+  --surface-2: #141516;
+  --surface-3: #18191a;
+  --surface-4: #191a1b;
+  --ink: #f7f8f8;
+  --ink-muted: #d0d6e0;
+  --ink-subtle: #8a8f98;
+  --ink-tertiary: #62666d;
+  --primary: #5e6ad2;
+  --primary-hover: #828fff;
+  --primary-focus: #5e69d1;
+  --hairline: #23252a;
+  --hairline-strong: #34343a;
+  --hairline-tertiary: #3e3e44;
+  --success: #27a644;
+
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  --container: 900px;
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+html{ background: var(--canvas); }
+body{
+  margin:0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.05px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a{ color: inherit; text-decoration: none; }
+ul, ol{ margin:0; padding:0; }
+h1,h2,h3,h4,p{ margin:0; }
+
+.container{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 48px);
+}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--primary-hover);
+}
+.eyebrow::before{
+  content:"";
+  width:6px; height:6px;
+  background: var(--primary);
+  border-radius: 1px;
+  flex-shrink:0;
+}
+
+/* ---------- top nav ---------- */
+.top-nav{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 64px;
+  display:flex;
+  align-items:center;
+  background: rgba(1,1,2,0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.top-nav .container{ display:flex; align-items:center; justify-content:space-between; gap: 24px; max-width: 1280px; }
+.brand{ display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:600; font-size:15px; letter-spacing:-0.01em; }
+.brand-mark{ width:20px; height:20px; border-radius: 6px; background: var(--primary); flex-shrink:0; position:relative; }
+.brand-mark::after{ content:""; position:absolute; inset:6px; border-radius:2px; background: rgba(255,255,255,0.85); }
+.back-link{ font-size:14px; color: var(--ink-subtle); display:inline-flex; align-items:center; gap:6px; transition: color .15s ease; }
+.back-link:hover{ color: var(--ink); }
+
+/* ---------- session header ---------- */
+.session-header{
+  padding: var(--space-xxl) 0 var(--space-xl);
+  background:
+    radial-gradient(ellipse 60% 50% at 82% 0%, rgba(94,106,210,0.16), transparent 60%),
+    var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+.session-header-top{
+  display:flex;
+  align-items:center;
+  gap: var(--space-md);
+  margin: var(--space-md) 0 var(--space-md);
+}
+.session-num-badge{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--primary-hover);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-xs);
+  padding: 4px 10px;
+}
+.difficulty{ display:flex; gap:4px; align-items:center; }
+.difficulty .dot{ width:6px; height:6px; border-radius:50%; background: var(--hairline-strong); }
+.difficulty .dot.filled{ background: var(--primary); }
+.difficulty-label{ font-size:12px; color: var(--ink-tertiary); margin-left:6px; }
+.session-header h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ---------- tabs ---------- */
+.tabs-bar{
+  display:flex;
+  gap: 4px;
+  padding-top: var(--space-lg);
+  border-bottom: 1px solid var(--hairline);
+  overflow-x: auto;
+}
+.tab-btn{
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-subtle);
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s ease, border-color .15s ease;
+}
+.tab-btn:hover{ color: var(--ink); }
+.tab-btn.active{ color: var(--ink); border-bottom-color: var(--primary); }
+
+.tab-panels{ padding: var(--space-xxl) 0 var(--space-xxl); }
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+/* ---------- markdown body ---------- */
+.markdown-body{ color: var(--ink-muted); font-size: 15.5px; line-height: 1.75; letter-spacing: -0.05px; overflow-wrap: anywhere; word-break: break-word; }
+.markdown-body h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--hairline);
+}
+.markdown-body h2{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+.markdown-body h3{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin: var(--space-lg) 0 var(--space-xs);
+}
+.markdown-body h4{
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+.markdown-body p{ margin: 0 0 var(--space-md); }
+.markdown-body ul, .markdown-body ol{ margin: 0 0 var(--space-md); padding-left: 1.4em; }
+.markdown-body li{ margin-bottom: 6px; }
+.markdown-body ul{ list-style: disc; }
+.markdown-body ol{ list-style: decimal; }
+.markdown-body strong{ color: var(--ink); font-weight: 600; }
+.markdown-body em{ color: var(--ink-muted); }
+.markdown-body a{ color: var(--primary-hover); text-decoration: underline; text-underline-offset: 2px; }
+.markdown-body hr{ border:none; border-top: 1px solid var(--hairline); margin: var(--space-xl) 0; }
+.markdown-body blockquote{
+  margin: 0 0 var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid var(--primary);
+  background: var(--surface-1);
+  color: var(--ink-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.markdown-body code{
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--primary-hover);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.markdown-body .code-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+}
+.markdown-body pre{
+  margin: 0;
+  padding: var(--space-md);
+  background: transparent;
+  border: none;
+}
+.markdown-body pre code{
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre;
+}
+.markdown-body .table-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+}
+.markdown-body table{
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 460px;
+  font-size: 13.5px;
+}
+.markdown-body th, .markdown-body td{
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+  white-space: nowrap;
+}
+.markdown-body thead th{
+  background: var(--surface-1);
+  color: var(--ink);
+  font-weight: 600;
+  font-family: var(--font-text);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+.markdown-body tbody tr:last-child td{ border-bottom: none; }
+.markdown-body tbody tr:hover{ background: var(--surface-1); }
+
+/* ---------- pager ---------- */
+.session-pager{
+  display:flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-xl) 0 var(--space-xxl);
+  border-top: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+.pager-link{
+  display:flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  max-width: 46%;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.pager-link:hover{ border-color: var(--primary); background: var(--surface-2); }
+.pager-link.next{ margin-left: auto; text-align: right; align-items: flex-end; }
+.pager-direction{ font-size: 12px; color: var(--ink-tertiary); font-family: var(--font-mono); }
+.pager-title{ font-size: 14px; color: var(--ink); font-weight: 500; }
+.pager-spacer{ flex: 1; }
+
+footer.site-footer{
+  border-top: 1px solid var(--hairline);
+  padding: var(--space-xl) 0;
+}
+footer.site-footer .container{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: var(--ink-tertiary);
+  font-size: 12px;
+}
+footer.site-footer a:hover{ color: var(--ink-subtle); }
+
+@media (max-width: 640px){
+  .session-header{ padding: var(--space-xl) 0 var(--space-lg); }
+  .pager-link{ max-width: 100%; }
+  .session-pager{ flex-direction: column; }
+  .pager-link.next{ margin-left: 0; text-align: left; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="container">
+    <div class="brand"><span class="brand-mark"></span>데이터 리터러시 with AI</div>
+    <a class="back-link" href="../index.html#curriculum">&larr; 커리큘럼으로</a>
+  </div>
+</nav>
+
+<header class="session-header">
+  <div class="container">
+    <div class="eyebrow">PART 01 · 엑셀</div>
+    <div class="session-header-top">
+      <span class="session-num-badge">S02</span>
+      <div class="difficulty" title="난이도 1"><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">입문</span></div>
+    </div>
+    <h1>좋은 데이터의 모양: tidy 데이터와 척도</h1>
+  </div>
+  <div class="container">
+    <div class="tabs-bar" role="tablist">
+<button class="tab-btn active" data-tab="curriculum" role="tab" aria-selected="true">커리큘럼</button>
+<button class="tab-btn" data-tab="handout" role="tab" aria-selected="false">핸드아웃</button>
+<button class="tab-btn" data-tab="script" role="tab" aria-selected="false">강사대본</button>
+<button class="tab-btn" data-tab="answer" role="tab" aria-selected="false">모범답안</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="tab-panels container">
+<section class="tab-panel markdown-body active" data-panel="curriculum" aria-label="커리큘럼">
+<h1>S02. 좋은 데이터의 모양: tidy 데이터와 척도</h1>
+<h2>차시 개요</h2>
+<ul>
+<li>대상: 엑셀은 사용하지만 데이터 분석은 처음인 비개발자</li>
+<li>선수 차시: S01</li>
+<li>난이도: 1</li>
+<li>시간: 40분</li>
+<li>사용 데이터:</li>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.xlsx</code></li>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_dirty.xlsx</code></li>
+<li>확인한 데이터 규모:</li>
+<li>clean: 10,424행, 12열</li>
+<li>dirty: 10,439행, 12열</li>
+</ul>
+<h2>학습 목표</h2>
+<ol>
+<li>분석하기 좋은 표의 기본 모양을 설명할 수 있다.</li>
+<li>한 셀 한 값, 한 행 한 관찰, 한 열 한 변수의 의미를 엑셀 표에서 찾을 수 있다.</li>
+<li>병합셀, 빈 셀, 표기 혼재, 숫자와 문자의 혼합이 분석을 방해하는 이유를 이해한다.</li>
+<li>컬럼별로 범주형, 순서형, 수치형, 날짜형, 논리형 척도를 구분할 수 있다.</li>
+<li>dirty 데이터에서 tidy 원칙을 어기는 지점을 찾아 교정 방향을 말할 수 있다.</li>
+</ol>
+<h2>핵심 개념</h2>
+<h3>1. 분석용 표는 보기 좋은 보고서와 다르다</h3>
+<p>엑셀에서 사람에게 보여주기 좋은 표는 제목이 크고, 셀이 병합되어 있고, 중간중간 소계와 설명이 들어가는 경우가 많다. 이런 표는 회의 자료로는 읽기 편하지만, 피벗테이블이나 AI 분석, 파이썬, BI 도구로 넘기면 오히려 걸림돌이 된다.</p>
+<p>분석용 표는 장식보다 규칙이 중요하다. 이번 차시에서 사용할 카페 매출 데이터는 주문 한 건이 한 행이다. <code>date</code>, <code>store</code>, <code>item</code>, <code>qty</code>, <code>amount</code>처럼 각 열은 주문을 설명하는 한 가지 속성만 담는다. 이 구조가 유지되어야 필터, 정렬, 피벗, 집계가 안정적으로 작동한다.</p>
+<h3>2. tidy 데이터의 세 가지 규칙</h3>
+<p>tidy 데이터는 분석하기 좋은 표의 기본형이다. 입문 단계에서는 다음 세 문장으로 기억하면 충분하다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>규칙</th>
+<th>뜻</th>
+<th>엑셀에서 깨지는 예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>한 행은 한 관찰이다</td>
+<td>한 줄이 주문 한 건, 고객 한 명, 직원 한 명처럼 같은 단위여야 한다</td>
+<td>중간에 월별 소계 행이 끼어 있음</td>
+</tr>
+<tr>
+<td>한 열은 한 변수다</td>
+<td>한 열에는 날짜, 지점, 상품명, 수량처럼 하나의 의미만 있어야 한다</td>
+<td><code>상품/수량</code>처럼 한 열에 두 의미가 섞임</td>
+</tr>
+<tr>
+<td>한 셀은 한 값이다</td>
+<td>셀 하나에는 하나의 값만 들어가야 한다</td>
+<td><code>4,500원</code>처럼 숫자와 단위가 섞임, <code>강남점/카드</code>처럼 값 두 개가 한 셀에 있음</td>
+</tr>
+</tbody>
+</table></div>
+<p>병합셀은 이 원칙을 자주 무너뜨린다. 사람 눈에는 위아래가 같은 그룹처럼 보이지만, 컴퓨터는 병합된 첫 셀만 값이 있고 나머지 셀은 빈 칸으로 처리하는 경우가 많다. 그래서 분석용 원본 표에는 병합셀을 쓰지 않는 것이 원칙이다.</p>
+<h3>3. clean 데이터와 dirty 데이터 비교</h3>
+<p>이번 차시의 clean 데이터는 분석용 표의 기준 예시다. dirty 데이터는 같은 카페 매출 데이터에 실무에서 자주 나오는 문제를 일부러 심어 둔 파일이다.</p>
+<p>clean 데이터의 컬럼은 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>order_id</code></td>
+<td>주문번호</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td>주문일</td>
+</tr>
+<tr>
+<td><code>weekday</code></td>
+<td>요일</td>
+</tr>
+<tr>
+<td><code>hour</code></td>
+<td>주문 시간대</td>
+</tr>
+<tr>
+<td><code>store</code></td>
+<td>지점</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>상품 대분류</td>
+</tr>
+<tr>
+<td><code>item</code></td>
+<td>상품명</td>
+</tr>
+<tr>
+<td><code>unit_price</code></td>
+<td>단가</td>
+</tr>
+<tr>
+<td><code>qty</code></td>
+<td>수량</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>주문금액</td>
+</tr>
+<tr>
+<td><code>payment</code></td>
+<td>결제수단</td>
+</tr>
+<tr>
+<td><code>member</code></td>
+<td>회원 여부</td>
+</tr>
+</tbody>
+</table></div>
+<p>dirty 데이터에서 확인한 대표 문제는 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>문제 유형</th>
+<th>실제 예</th>
+<th>왜 문제인가</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>주문번호 중복</td>
+<td>같은 <code>order_id</code>가 다시 등장</td>
+<td>주문 건수가 부풀 수 있음</td>
+</tr>
+<tr>
+<td>결측</td>
+<td><code>payment</code>, <code>member</code>가 비어 있음</td>
+<td>결제수단별, 회원 여부별 집계가 흔들림</td>
+</tr>
+<tr>
+<td>날짜 형식 혼합</td>
+<td><code>2025-03-23</code>, <code>2025/03/23</code>, <code>03-23-2025</code></td>
+<td>월별, 요일별 분석 전 날짜 인식이 불안정함</td>
+</tr>
+<tr>
+<td>숫자와 문자 혼합</td>
+<td><code>unit_price</code>에 <code>4,500원</code> 형태 포함</td>
+<td>합계와 평균 계산 전에 숫자로 바꿔야 함</td>
+</tr>
+<tr>
+<td>범주 표기 혼재</td>
+<td><code>강남점</code>과 <code>강남 점</code>, <code>아메리카노</code>와 <code>Americano</code></td>
+<td>같은 대상을 다른 그룹으로 집계함</td>
+</tr>
+<tr>
+<td>앞뒤 공백</td>
+<td><code>커피</code>, <code>음료</code></td>
+<td>눈에는 같아 보여도 컴퓨터는 다른 값으로 볼 수 있음</td>
+</tr>
+<tr>
+<td>이상치</td>
+<td><code>qty</code>가 999</td>
+<td>평균과 총합을 크게 왜곡함</td>
+</tr>
+<tr>
+<td>불가능한 값</td>
+<td><code>amount</code>가 음수</td>
+<td>매출 데이터의 기본 규칙과 맞지 않음</td>
+</tr>
+</tbody>
+</table></div>
+<h3>4. 척도는 분석 방법을 고르는 기준이다</h3>
+<p>데이터 분석에서 컬럼을 볼 때는 값의 모양뿐 아니라 “이 값으로 무엇을 할 수 있는가”를 생각해야 한다. 이것이 척도 구분이다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>척도</th>
+<th>설명</th>
+<th>가능한 작업</th>
+<th>예</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>범주형</td>
+<td>이름표처럼 그룹을 구분한다</td>
+<td>개수 세기, 그룹별 합계</td>
+<td>지점, 상품명, 결제수단</td>
+</tr>
+<tr>
+<td>순서형</td>
+<td>순서가 있지만 간격이 숫자처럼 정확하지 않을 수 있다</td>
+<td>정렬, 단계별 비교</td>
+<td>만족도, 등급</td>
+</tr>
+<tr>
+<td>수치형</td>
+<td>더하기, 평균, 최솟값, 최댓값 계산이 가능하다</td>
+<td>합계, 평균, 분포 확인</td>
+<td>수량, 단가, 주문금액</td>
+</tr>
+<tr>
+<td>날짜형</td>
+<td>시간의 흐름을 나타낸다</td>
+<td>일별, 월별, 요일별 추세</td>
+<td>주문일</td>
+</tr>
+<tr>
+<td>논리형</td>
+<td>참과 거짓 또는 예와 아니오</td>
+<td>비율 계산, 필터링</td>
+<td>회원 여부</td>
+</tr>
+<tr>
+<td>식별자</td>
+<td>각 행을 구분하는 이름표다</td>
+<td>중복 확인, 추적</td>
+<td>주문번호</td>
+</tr>
+</tbody>
+</table></div>
+<p>주의할 점은 숫자로 보인다고 모두 수치형은 아니라는 것이다. <code>order_id</code>는 숫자로 저장되어 있지만 평균 주문번호를 구해도 의미가 없다. 그러니 주문번호는 계산용 숫자가 아니라 식별자로 봐야 한다.</p>
+<h2>수업 흐름</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;">시간</th>
+<th>내용</th>
+<th>진행 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0~5분</td>
+<td>S01 복습과 오늘의 질문 제시</td>
+<td>“좋은 표와 예쁜 표는 다르다”는 문제의식 공유</td>
+</tr>
+<tr>
+<td style="text-align: right;">5~15분</td>
+<td>tidy 데이터 원칙 설명</td>
+<td>주문 한 건을 한 행으로 보는 비유와 엑셀 비교</td>
+</tr>
+<tr>
+<td style="text-align: right;">15~25분</td>
+<td><code>cafe_sales_dirty.xlsx</code>에서 문제 찾기</td>
+<td>필터, 정렬, 값 목록 확인</td>
+</tr>
+<tr>
+<td style="text-align: right;">25~33분</td>
+<td>컬럼별 척도 분류</td>
+<td>clean 데이터 컬럼을 기준으로 범주형, 수치형 등 분류</td>
+</tr>
+<tr>
+<td style="text-align: right;">33~38분</td>
+<td>직접 해보기 미션</td>
+<td>수강생이 척도 분류표와 교정 방향 작성</td>
+</tr>
+<tr>
+<td style="text-align: right;">38~40분</td>
+<td>정리와 다음 차시 연결</td>
+<td>S03 피벗테이블에서 왜 tidy가 필요한지 연결</td>
+</tr>
+</tbody>
+</table></div>
+<h2>다음 차시와의 연결</h2>
+<p>S03에서는 피벗테이블로 지점별, 카테고리별, 요일별 매출 질문에 답한다. 피벗테이블이 제대로 작동하려면 이번 차시에서 다룬 tidy 구조가 먼저 필요하다. 같은 상품명이 여러 표기로 흩어져 있거나, 숫자 열에 문자가 섞여 있으면 피벗 결과가 맞아 보여도 실제로는 틀릴 수 있다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="handout" aria-label="핸드아웃">
+<h1>S02 핸드아웃. 좋은 데이터의 모양</h1>
+<h2>오늘 사용할 파일</h2>
+<p>아래 두 파일을 사용한다.</p>
+<ul>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.xlsx</code></li>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_dirty.xlsx</code></li>
+</ul>
+<p>두 파일 모두 <code>sales</code> 시트가 있으며 컬럼은 12개다. clean 파일은 10,424행, dirty 파일은 10,439행이다. 엑셀에서는 머리글 행까지 포함되므로 화면상 마지막 행 번호는 각각 10,425와 10,440으로 보일 수 있다.</p>
+<h2>따라하기 1. 분석하기 좋은 표 모양 확인</h2>
+<ol>
+<li><code>cafe_sales_clean.xlsx</code>를 연다.</li>
+<li><code>sales</code> 시트를 확인한다.</li>
+<li>1행의 머리글을 왼쪽부터 읽는다.
+   - <code>order_id</code>, <code>date</code>, <code>weekday</code>, <code>hour</code>, <code>store</code>, <code>category</code>, <code>item</code>, <code>unit_price</code>, <code>qty</code>, <code>amount</code>, <code>payment</code>, <code>member</code></li>
+<li>2행을 가로로 읽는다.
+   - 한 행이 주문 한 건을 설명하는지 확인한다.</li>
+<li>각 열을 세로로 훑어본다.
+   - <code>date</code>에는 날짜만 있다.
+   - <code>store</code>에는 지점명만 있다.
+   - <code>qty</code>에는 수량만 있다.
+   - <code>amount</code>에는 주문금액만 있다.</li>
+</ol>
+<p>정리: 이 표는 “주문 한 건이 한 행, 주문의 속성이 각 열”인 구조다. 이런 구조를 피벗테이블과 분석 도구가 반긴다.</p>
+<h2>따라하기 2. dirty 표에서 문제 찾기</h2>
+<ol>
+<li><code>cafe_sales_dirty.xlsx</code>를 연다.</li>
+<li><code>sales</code> 시트에서 1행 아무 셀이나 클릭한다.</li>
+<li>엑셀 상단 메뉴에서 <code>데이터</code>를 누른다.</li>
+<li><code>필터</code>를 클릭한다.</li>
+<li>각 컬럼의 필터 버튼을 눌러 값 목록을 확인한다.</li>
+</ol>
+<h3>2-1. 지점 표기 문제 찾기</h3>
+<ol>
+<li><code>store</code> 컬럼의 필터 버튼을 누른다.</li>
+<li>값 목록에서 다음 값이 함께 있는지 확인한다.
+   - <code>강남점</code>
+   - <code>강남 점</code>
+   - <code>홍대점</code></li>
+<li><code>강남점</code>과 <code>강남 점</code>은 같은 지점으로 보아야 한다.</li>
+</ol>
+<p>기록할 내용: <code>store</code>는 범주형 컬럼이지만 같은 범주의 표기가 섞여 있다.</p>
+<h3>2-2. 상품명 표기 문제 찾기</h3>
+<ol>
+<li><code>item</code> 컬럼의 필터 버튼을 누른다.</li>
+<li>검색창에 <code>아메</code>를 입력한다.</li>
+<li>다음처럼 비슷하지만 다른 값이 있는지 확인한다.
+   - <code>아메리카노</code>
+   - <code>아메리카</code>
+   - <code>아메 리카노</code></li>
+<li>필터 검색창에 <code>Americano</code>도 입력해 본다.</li>
+</ol>
+<p>기록할 내용: 같은 상품이 여러 이름으로 기록되면 상품별 매출이 나뉘어 계산된다.</p>
+<h3>2-3. 카테고리 앞뒤 공백 찾기</h3>
+<ol>
+<li><code>category</code> 컬럼의 필터 버튼을 누른다.</li>
+<li>값 목록에서 <code>커피</code>와 <code>커피</code>처럼 앞뒤 공백이 있는 값이 따로 보이는지 확인한다.</li>
+<li><code>음료</code>, <code>디저트</code>도 같은 방식으로 확인한다.</li>
+</ol>
+<p>기록할 내용: 사람 눈에는 거의 같아도 컴퓨터는 공백이 있으면 다른 값으로 처리할 수 있다.</p>
+<h3>2-4. 단가 컬럼의 숫자와 문자 혼합 찾기</h3>
+<ol>
+<li><code>unit_price</code> 컬럼의 필터 버튼을 누른다.</li>
+<li>검색창에 <code>원</code>을 입력한다.</li>
+<li><code>4,500원</code>, <code>5,500원</code>처럼 숫자와 문자가 함께 들어간 값을 확인한다.</li>
+</ol>
+<p>기록할 내용: 단가 열은 계산에 쓰는 수치형이어야 하므로 <code>원</code>과 쉼표를 제거하고 숫자로 맞춰야 한다.</p>
+<h3>2-5. 날짜 형식 혼합 찾기</h3>
+<ol>
+<li><code>date</code> 컬럼의 값을 훑어본다.</li>
+<li>다음처럼 날짜 형식이 섞여 있는지 확인한다.
+   - <code>2025-03-23</code>
+   - <code>2025/03/23</code>
+   - <code>03-23-2025</code></li>
+</ol>
+<p>기록할 내용: 날짜가 여러 형식으로 섞이면 월별 추세나 요일 분석 전에 날짜형으로 통일해야 한다.</p>
+<h3>2-6. 결측값 찾기</h3>
+<ol>
+<li><code>payment</code> 컬럼의 필터 버튼을 누른다.</li>
+<li>값 목록에서 <code>(빈 셀)</code> 또는 비어 있는 항목을 선택한다.</li>
+<li>결제수단이 비어 있는 행을 확인한다.</li>
+<li>필터를 해제한다.</li>
+<li><code>member</code> 컬럼에서도 같은 방식으로 빈 셀을 확인한다.</li>
+</ol>
+<p>기록할 내용: 비어 있는 값은 무시할지, 별도 범주로 둘지, 원자료를 확인해 채울지 결정해야 한다.</p>
+<h3>2-7. 수량 이상치 찾기</h3>
+<ol>
+<li><code>qty</code> 컬럼의 필터 버튼을 누른다.</li>
+<li>값 목록에서 <code>999</code>가 있는지 확인한다.</li>
+<li><code>999</code>만 선택해 해당 행을 본다.</li>
+</ol>
+<p>기록할 내용: 카페 주문 수량이 999인 값은 입력 오류일 가능성이 높다. 평균과 총합을 왜곡할 수 있다.</p>
+<h3>2-8. 음수 금액 찾기</h3>
+<ol>
+<li><code>amount</code> 컬럼의 필터 버튼을 누른다.</li>
+<li>숫자 필터에서 <code>보다 작음</code>을 선택한다.</li>
+<li>기준값에 <code>0</code>을 입력한다.</li>
+<li>음수 금액 행이 있는지 확인한다.</li>
+</ol>
+<p>기록할 내용: 환불 데이터라는 별도 설명이 없다면 매출 금액이 음수인 행은 확인이 필요하다.</p>
+<h2>따라하기 3. 컬럼별 척도 분류</h2>
+<p>아래 표를 완성한다. 먼저 스스로 분류하고, 수업 후 모범답안과 비교한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>내가 생각한 척도</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>order_id</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>weekday</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>hour</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>store</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>item</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>unit_price</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>qty</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>payment</code></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><code>member</code></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h2>직접 해보기 미션</h2>
+<p>다음 두 가지를 제출한다.</p>
+<ol>
+<li><code>cafe_sales_clean.xlsx</code>의 12개 컬럼을 척도별로 분류한 표</li>
+<li><code>cafe_sales_dirty.xlsx</code>에서 발견한 문제 5개 이상과 교정 방향</li>
+</ol>
+<p>제출 형식은 아래 표를 사용한다.</p>
+<h3>미션 표 1. 컬럼별 척도 분류</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>척도</th>
+<th>가능한 분석</th>
+<th>주의할 점</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>예: <code>order_id</code></td>
+<td>식별자</td>
+<td>중복 확인</td>
+<td>평균을 내면 안 됨</td>
+</tr>
+</tbody>
+</table></div>
+<h3>미션 표 2. dirty 데이터 문제와 교정 방향</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>발견한 문제</th>
+<th>교정 방향</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>예: <code>store</code></td>
+<td><code>강남점</code>과 <code>강남 점</code>이 함께 있음</td>
+<td><code>강남점</code>으로 통일</td>
+</tr>
+</tbody>
+</table></div>
+<h2>스스로 점검하기</h2>
+<p>아래 문장에 답할 수 있으면 오늘 차시를 통과한 것이다.</p>
+<ul>
+<li>“왜 병합셀은 분석용 원본 표에 쓰지 않는가?”</li>
+<li>“왜 <code>order_id</code>는 숫자처럼 보여도 수치형 분석 대상이 아닌가?”</li>
+<li>“왜 <code>4,500원</code>은 사람이 보기에는 편하지만 분석에는 불편한가?”</li>
+<li>“같은 상품명이 여러 표기로 들어가면 피벗테이블 결과가 어떻게 틀어지는가?”</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="script" aria-label="강사대본">
+<h1>S02 강사대본. 좋은 데이터의 모양</h1>
+<h2>수업 전 준비</h2>
+<ul>
+<li>강사용 PC에서 아래 파일이 열리는지 확인한다.</li>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.xlsx</code></li>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_dirty.xlsx</code></li>
+<li>두 파일 모두 <code>sales</code> 시트가 있다.</li>
+<li>실측 기준:</li>
+<li>clean: 10,424행, 12열</li>
+<li>dirty: 10,439행, 12열</li>
+<li>엑셀 행 번호는 머리글 때문에 각각 10,425와 10,440까지 보일 수 있다.</li>
+</ul>
+<h2>도입: 0~5분</h2>
+<p>말할 것:</p>
+<p>“지난 시간에는 데이터 분석이 무엇인지, 우리가 앞으로 엑셀, AI, 파이썬, BI를 어떻게 연결해서 쓸지 큰 지도를 봤습니다. 오늘은 그 도구들이 공통으로 좋아하는 표의 모양을 봅니다. 엑셀을 잘 쓰는 분일수록 예쁘게 꾸민 표에 익숙할 수 있습니다. 그런데 분석용 표는 예쁜 표가 아니라 규칙적인 표여야 합니다.”</p>
+<p>“오늘의 기준은 간단합니다. 한 행은 주문 한 건, 한 열은 한 가지 속성, 한 셀은 한 값입니다.”</p>
+<p>시연 포인트:</p>
+<ul>
+<li><code>cafe_sales_clean.xlsx</code>를 열고 한 행을 가로로 읽는다.</li>
+<li>“이 한 줄이 주문 한 건입니다”라고 짚는다.</li>
+<li><code>amount</code>는 주문금액, <code>qty</code>는 수량처럼 한 열이 하나의 의미만 갖는다고 말한다.</li>
+</ul>
+<h2>개념 설명: 5~15분</h2>
+<p>말할 것:</p>
+<p>“분석용 데이터에서 병합셀은 되도록 쓰지 않습니다. 보고서에서는 병합셀이 보기 좋지만, 분석 도구는 병합된 영역을 사람처럼 읽지 못하는 경우가 많습니다. 위쪽 셀에만 값이 있고 아래쪽은 빈 값으로 보일 수 있습니다.”</p>
+<p>“또 하나 중요한 것은 한 셀 한 값입니다. <code>4,500원</code>은 사람에게는 친절하지만 컴퓨터에게는 숫자 4500이 아니라 글자가 섞인 값일 수 있습니다. 그러면 합계와 평균 계산을 바로 할 수 없습니다.”</p>
+<p>“숫자로 보이는 값도 다 같은 숫자가 아닙니다. <code>order_id</code>는 숫자처럼 보이지만 평균 주문번호를 구하는 것은 의미가 없습니다. 주문번호는 계산할 숫자가 아니라 행을 구분하는 이름표입니다.”</p>
+<p>판서 또는 화면 메모:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>원칙</th>
+<th>한 문장 설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>한 행 한 관찰</td>
+<td>주문 한 건이 한 줄</td>
+</tr>
+<tr>
+<td>한 열 한 변수</td>
+<td>날짜, 지점, 상품명, 수량을 따로</td>
+</tr>
+<tr>
+<td>한 셀 한 값</td>
+<td>숫자와 단위, 값 두 개를 섞지 않음</td>
+</tr>
+<tr>
+<td>병합셀 금지</td>
+<td>빈 값과 구조 오류를 만들 수 있음</td>
+</tr>
+</tbody>
+</table></div>
+<h2>dirty 데이터 시연: 15~25분</h2>
+<p>시연 순서:</p>
+<ol>
+<li><code>cafe_sales_dirty.xlsx</code>를 연다.</li>
+<li>1행에 필터를 켠다.</li>
+<li><code>store</code> 필터를 열어 <code>강남점</code>과 <code>강남 점</code>을 보여준다.</li>
+<li><code>item</code> 필터에서 <code>아메리카노</code>, <code>아메리카</code>, <code>아메 리카노</code>, <code>Americano</code>를 보여준다.</li>
+<li><code>category</code> 필터에서 앞뒤 공백이 있는 값을 보여준다.</li>
+<li><code>unit_price</code> 필터 검색창에 <code>원</code>을 입력해 <code>4,500원</code> 형태를 보여준다.</li>
+<li><code>payment</code>와 <code>member</code>의 빈 값을 보여준다.</li>
+<li><code>qty</code>에서 999를 필터링한다.</li>
+<li><code>amount</code>에서 0보다 작은 값을 필터링한다.</li>
+</ol>
+<p>말할 것:</p>
+<p>“이 파일은 망가진 파일이 아니라 연습용 파일입니다. 실제 업무 데이터에서 이 정도 문제는 흔합니다. 중요한 건 처음부터 완벽한 표를 바라는 게 아니라, 어떤 문제가 분석 결과를 흔드는지 알아보는 눈입니다.”</p>
+<p>“<code>강남점</code>과 <code>강남 점</code>은 사람에게는 같은 지점입니다. 그러나 피벗테이블은 둘을 다른 지점으로 볼 수 있습니다. 이 상태로 지점별 매출을 구하면 강남점 매출이 둘로 갈라집니다.”</p>
+<p>“<code>unit_price</code>에 <code>원</code>이 붙어 있으면 사람에게는 읽기 쉽지만, 분석에서는 숫자 열이 문자 열로 바뀔 수 있습니다. 가격 열은 가격만 담아야 합니다.”</p>
+<p>주의할 점:</p>
+<ul>
+<li>이 차시에서는 완전한 정제 실습을 하지 않는다.</li>
+<li>목표는 문제를 고치는 기술보다 문제를 알아보는 기준이다.</li>
+<li>결측값을 무조건 삭제한다고 말하지 않는다. 결측은 삭제, 대체, 별도 범주, 원자료 확인 중 선택해야 한다고 설명한다.</li>
+</ul>
+<h2>척도 분류 활동: 25~33분</h2>
+<p>말할 것:</p>
+<p>“이제 각 컬럼이 어떤 종류의 값인지 분류해 보겠습니다. 척도는 어려운 통계 용어처럼 들리지만, 실제로는 이 컬럼으로 무엇을 할 수 있는지 정하는 기준입니다.”</p>
+<p>진행:</p>
+<ul>
+<li>수강생에게 3분간 <code>order_id</code>부터 <code>member</code>까지 척도를 적게 한다.</li>
+<li>이후 함께 모범 분류를 맞춘다.</li>
+</ul>
+<p>강사용 기준:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>척도</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>order_id</code></td>
+<td>식별자</td>
+<td>주문을 구분하는 이름표</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td>날짜형</td>
+<td>일별, 월별, 요일별 분석 가능</td>
+</tr>
+<tr>
+<td><code>weekday</code></td>
+<td>순서가 있는 범주형</td>
+<td>요일 순서가 있지만 평균 요일은 의미 없음</td>
+</tr>
+<tr>
+<td><code>hour</code></td>
+<td>시간형 수치</td>
+<td>시간대 정렬, 시간대별 집계 가능</td>
+</tr>
+<tr>
+<td><code>store</code></td>
+<td>범주형</td>
+<td>지점 그룹</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>범주형</td>
+<td>상품 대분류</td>
+</tr>
+<tr>
+<td><code>item</code></td>
+<td>범주형</td>
+<td>상품명</td>
+</tr>
+<tr>
+<td><code>unit_price</code></td>
+<td>수치형</td>
+<td>단가 계산 가능</td>
+</tr>
+<tr>
+<td><code>qty</code></td>
+<td>수치형</td>
+<td>수량 합계, 평균 가능</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>수치형</td>
+<td>매출 합계, 평균 가능</td>
+</tr>
+<tr>
+<td><code>payment</code></td>
+<td>범주형</td>
+<td>결제수단 그룹</td>
+</tr>
+<tr>
+<td><code>member</code></td>
+<td>논리형</td>
+<td>회원 여부</td>
+</tr>
+</tbody>
+</table></div>
+<p>강조할 말:</p>
+<p>“척도 분류는 정답 맞히기 시험이 아닙니다. 중요한 것은 왜 그렇게 보았는지 설명하는 것입니다. 예를 들어 <code>weekday</code>는 범주형으로 봐도 되고, 월요일부터 일요일까지 순서가 있는 범주로 봐도 됩니다. 다만 평균을 내는 숫자는 아닙니다.”</p>
+<h2>직접 해보기: 33~38분</h2>
+<p>진행:</p>
+<ol>
+<li>수강생이 미션 표 1에 컬럼별 척도를 적는다.</li>
+<li>수강생이 미션 표 2에 dirty 데이터 문제 5개 이상과 교정 방향을 적는다.</li>
+<li>1~2명에게 하나씩 발표하게 한다.</li>
+</ol>
+<p>말할 것:</p>
+<p>“오늘은 고급 기능을 많이 누르는 시간이 아닙니다. 대신 앞으로 모든 분석에서 계속 쓰게 될 판단 기준을 만드는 시간입니다. 이 표가 분석용으로 괜찮은가, 어떤 컬럼은 합계를 내도 되는가, 어떤 컬럼은 그룹으로 묶어야 하는가를 스스로 말할 수 있으면 충분합니다.”</p>
+<h2>마무리: 38~40분</h2>
+<p>말할 것:</p>
+<p>“다음 시간에는 피벗테이블을 사용합니다. 피벗테이블은 엑셀에서 가장 강력한 분석 도구 중 하나이지만, 오늘 본 것처럼 표가 정리되어 있지 않으면 결과가 틀어질 수 있습니다. 오늘의 핵심은 도구를 누르기 전에 표의 모양을 먼저 보는 것입니다.”</p>
+<h2>예상 질문과 답변</h2>
+<h3>질문 1. 병합셀을 이미 많이 쓰고 있는데 전부 없애야 하나요?</h3>
+<p>답변:</p>
+<p>보고용 시트와 분석용 원본 시트를 분리하면 된다. 보고용 시트에서는 병합셀을 사용할 수 있지만, 피벗테이블이나 분석에 연결할 원본 시트에서는 병합셀을 피하는 것이 좋다.</p>
+<h3>질문 2. <code>4,500원</code>처럼 쓰면 엑셀에서도 계산되는 경우가 있는데 왜 문제인가요?</h3>
+<p>답변:</p>
+<p>엑셀 화면에서는 계산되는 것처럼 보여도 다른 도구로 옮기거나 CSV로 저장하면 문자로 처리될 수 있다. 분석용 원본에는 숫자만 저장하고, <code>원</code> 표시는 셀 서식으로 처리하는 편이 안전하다.</p>
+<h3>질문 3. 결측값은 그냥 삭제하면 되나요?</h3>
+<p>답변:</p>
+<p>항상 삭제하는 것은 아니다. 결측이 적고 분석에 큰 영향이 없으면 삭제할 수 있지만, 특정 지점이나 특정 결제수단에서만 결측이 많다면 중요한 신호일 수 있다. 삭제, 대체, 별도 범주 처리, 원자료 확인 중에서 목적에 맞게 결정한다.</p>
+<h3>질문 4. <code>weekday</code>는 범주형인가요, 순서형인가요?</h3>
+<p>답변:</p>
+<p>요일 이름은 그룹을 나누는 값이므로 범주형이다. 다만 월요일부터 일요일까지 자연스러운 순서가 있으므로 “순서가 있는 범주형”으로 다룰 수 있다. 평균 요일을 계산하는 수치형은 아니다.</p>
+<h3>질문 5. <code>member</code>는 참과 거짓인데 범주형인가요?</h3>
+<p>답변:</p>
+<p>회원과 비회원 두 그룹을 나누므로 범주형으로 볼 수 있고, 값이 <code>True</code>와 <code>False</code> 두 개뿐이므로 논리형으로도 부른다. 분석에서는 회원 비율, 회원 여부별 매출 비교에 자주 쓴다.</p>
+<h2>완료 판단 체크포인트</h2>
+<p>수강생이 <code>order_id</code>를 식별자라고 설명하고, dirty 데이터에서 같은 범주의 표기 혼재와 숫자·문자 혼합 문제를 각각 하나 이상 찾아 교정 방향을 말하면 완료로 판단한다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="answer" aria-label="모범답안">
+<h1>S02 모범답안. 좋은 데이터의 모양</h1>
+<h2>사용 파일과 검증 결과</h2>
+<p>실제 파일을 <code>pandas 3.0.3</code>으로 열어 확인했다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>파일</th>
+<th style="text-align: right;">행</th>
+<th style="text-align: right;">열</th>
+<th>시트 또는 파일</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>cafe_sales_clean.csv</code></td>
+<td style="text-align: right;">10,424</td>
+<td style="text-align: right;">12</td>
+<td>CSV</td>
+</tr>
+<tr>
+<td><code>cafe_sales_dirty.csv</code></td>
+<td style="text-align: right;">10,439</td>
+<td style="text-align: right;">12</td>
+<td>CSV</td>
+</tr>
+<tr>
+<td><code>cafe_sales_clean.xlsx</code></td>
+<td style="text-align: right;">10,424</td>
+<td style="text-align: right;">12</td>
+<td><code>sales</code></td>
+</tr>
+<tr>
+<td><code>cafe_sales_dirty.xlsx</code></td>
+<td style="text-align: right;">10,439</td>
+<td style="text-align: right;">12</td>
+<td><code>sales</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>컬럼은 두 파일 모두 같다.</p>
+<div class="code-scroll"><pre><code class="language-text">order_id, date, weekday, hour, store, category, item, unit_price, qty, amount, payment, member
+</code></pre></div>
+<h2>미션 1. 컬럼별 척도 분류 모범답안</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>척도</th>
+<th>가능한 분석</th>
+<th>주의할 점</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>order_id</code></td>
+<td>식별자</td>
+<td>중복 확인, 주문 추적</td>
+<td>숫자로 보여도 평균이나 합계는 의미 없음</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td>날짜형</td>
+<td>일별, 월별, 요일별 추세</td>
+<td>날짜 형식이 섞이면 먼저 통일 필요</td>
+</tr>
+<tr>
+<td><code>weekday</code></td>
+<td>순서가 있는 범주형</td>
+<td>요일별 매출, 주중·주말 비교</td>
+<td>평균 요일 계산은 의미 없음</td>
+</tr>
+<tr>
+<td><code>hour</code></td>
+<td>시간형 수치</td>
+<td>시간대별 주문 수, 피크 시간 확인</td>
+<td>8~21시 범위의 시간대로 해석</td>
+</tr>
+<tr>
+<td><code>store</code></td>
+<td>범주형</td>
+<td>지점별 매출, 지점별 주문 수</td>
+<td><code>강남점</code>과 <code>강남 점</code> 같은 표기 혼재 주의</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>범주형</td>
+<td>카테고리별 매출</td>
+<td>앞뒤 공백이 있으면 다른 범주로 집계될 수 있음</td>
+</tr>
+<tr>
+<td><code>item</code></td>
+<td>범주형</td>
+<td>상품별 매출, 인기 상품</td>
+<td>같은 상품의 표기 통일 필요</td>
+</tr>
+<tr>
+<td><code>unit_price</code></td>
+<td>수치형</td>
+<td>단가 평균, 가격대 확인</td>
+<td><code>4,500원</code>처럼 문자 포함 시 숫자 변환 필요</td>
+</tr>
+<tr>
+<td><code>qty</code></td>
+<td>수치형</td>
+<td>판매 수량 합계, 평균 주문 수량</td>
+<td>999 같은 이상치 확인 필요</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>수치형</td>
+<td>총매출, 평균 주문금액</td>
+<td>음수 금액 또는 단가×수량 불일치 확인 필요</td>
+</tr>
+<tr>
+<td><code>payment</code></td>
+<td>범주형</td>
+<td>결제수단별 비중</td>
+<td>결측값 처리 기준 필요</td>
+</tr>
+<tr>
+<td><code>member</code></td>
+<td>논리형</td>
+<td>회원 여부별 매출, 회원 비율</td>
+<td>결측값 처리 기준 필요</td>
+</tr>
+</tbody>
+</table></div>
+<h2>미션 2. dirty 데이터 문제와 교정 방향 모범답안</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>발견한 문제</th>
+<th style="text-align: right;">확인한 개수</th>
+<th>교정 방향</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>order_id</code></td>
+<td>같은 주문번호가 반복됨</td>
+<td style="text-align: right;">중복 주문번호 15건</td>
+<td>실제 중복이면 한 건만 남기고, 재주문이면 별도 주문번호 부여</td>
+</tr>
+<tr>
+<td>전체 행</td>
+<td>완전히 동일한 행이 있음</td>
+<td style="text-align: right;">13행</td>
+<td>중복 제거 전후 행수와 매출 합계 비교</td>
+</tr>
+<tr>
+<td><code>payment</code></td>
+<td>결제수단 결측</td>
+<td style="text-align: right;">313행</td>
+<td>원자료 확인, 불명 처리, 분석 제외 중 선택</td>
+</tr>
+<tr>
+<td><code>member</code></td>
+<td>회원 여부 결측</td>
+<td style="text-align: right;">209행</td>
+<td>원자료 확인, 불명 처리, 분석 제외 중 선택</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td>날짜 형식 혼합</td>
+<td style="text-align: right;"><code>/</code> 형식 206행, <code>MM-DD-YYYY</code> 형식 104행</td>
+<td>하나의 날짜형으로 변환</td>
+</tr>
+<tr>
+<td><code>unit_price</code></td>
+<td>숫자와 문자가 섞임</td>
+<td style="text-align: right;"><code>원</code> 또는 쉼표 포함 157행</td>
+<td><code>원</code>과 쉼표 제거 후 숫자형으로 변환</td>
+</tr>
+<tr>
+<td><code>store</code></td>
+<td><code>강남점</code>과 <code>강남 점</code> 혼재</td>
+<td style="text-align: right;"><code>강남 점</code> 310행</td>
+<td><code>강남점</code>으로 통일</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>앞뒤 공백 포함</td>
+<td style="text-align: right;">313행</td>
+<td>앞뒤 공백 제거</td>
+</tr>
+<tr>
+<td><code>item</code></td>
+<td>아메리카노 표기 혼재</td>
+<td style="text-align: right;"><code>아메리카</code> 37행, <code>Americano</code> 36행, <code>아메 리카노</code> 33행</td>
+<td><code>아메리카노</code>로 통일</td>
+</tr>
+<tr>
+<td><code>qty</code></td>
+<td>비현실적 수량</td>
+<td style="text-align: right;">999가 2행</td>
+<td>원자료 확인 후 수정 또는 제외</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>음수 금액</td>
+<td style="text-align: right;">1행</td>
+<td>환불 데이터인지 확인, 아니면 오류로 수정</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>단가×수량과 금액 불일치</td>
+<td style="text-align: right;">3행</td>
+<td>단가와 수량 기준으로 재계산하거나 원자료 확인</td>
+</tr>
+</tbody>
+</table></div>
+<p>참고: dirty 파일은 clean 파일보다 15행 많다. 다만 일부 중복 행에 다른 dirty 처리가 겹쳐서, 전체 컬럼이 완전히 같은 행은 <code>duplicated()</code> 기준 13행으로 확인된다. 초급 실습에서는 “주문번호가 중복된 주문 15건”과 “완전히 같은 행 13건”을 구분해 설명하면 된다.</p>
+<h2>tidy 교정 방향 예시</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>원칙</th>
+<th>dirty에서 깨진 예</th>
+<th>tidy하게 만드는 방향</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>한 셀 한 값</td>
+<td><code>unit_price</code>의 <code>4,500원</code></td>
+<td>값은 <code>4500</code>, 단위 표시는 셀 서식으로 처리</td>
+</tr>
+<tr>
+<td>한 열 한 변수</td>
+<td>날짜 열에 여러 형식 혼합</td>
+<td>하나의 날짜형으로 통일</td>
+</tr>
+<tr>
+<td>같은 범주는 같은 표기</td>
+<td><code>강남점</code>과 <code>강남 점</code></td>
+<td>표준명을 정하고 일괄 치환</td>
+</tr>
+<tr>
+<td>계산 가능한 숫자는 숫자로 저장</td>
+<td><code>unit_price</code>가 문자처럼 읽힘</td>
+<td>숫자형 변환 후 합계·평균 계산</td>
+</tr>
+<tr>
+<td>분석 단위 유지</td>
+<td>같은 <code>order_id</code> 반복</td>
+<td>중복 여부를 확인하고 한 주문은 한 행으로 정리</td>
+</tr>
+</tbody>
+</table></div>
+<h2>검증 코드</h2>
+<p>아래 코드는 <code>/mnt/d/ai-data-analysis-course/06_answers/S02_code.py</code>로도 저장했다.</p>
+<div class="code-scroll"><pre><code class="language-python">from pathlib import Path
+
+import pandas as pd
+
+
+ROOT = Path(__file__).resolve().parents[1]
+DATA_DIR = ROOT / &quot;02_datasets&quot; / &quot;cafe_sales&quot;
+
+CLEAN_CSV = DATA_DIR / &quot;cafe_sales_clean.csv&quot;
+DIRTY_CSV = DATA_DIR / &quot;cafe_sales_dirty.csv&quot;
+CLEAN_XLSX = DATA_DIR / &quot;cafe_sales_clean.xlsx&quot;
+DIRTY_XLSX = DATA_DIR / &quot;cafe_sales_dirty.xlsx&quot;
+
+EXPECTED_COLUMNS = [
+    &quot;order_id&quot;,
+    &quot;date&quot;,
+    &quot;weekday&quot;,
+    &quot;hour&quot;,
+    &quot;store&quot;,
+    &quot;category&quot;,
+    &quot;item&quot;,
+    &quot;unit_price&quot;,
+    &quot;qty&quot;,
+    &quot;amount&quot;,
+    &quot;payment&quot;,
+    &quot;member&quot;,
+]
+
+
+def main() -&gt; None:
+    clean = pd.read_csv(CLEAN_CSV)
+    dirty = pd.read_csv(DIRTY_CSV)
+    clean_xlsx = pd.read_excel(CLEAN_XLSX, sheet_name=&quot;sales&quot;)
+    dirty_xlsx = pd.read_excel(DIRTY_XLSX, sheet_name=&quot;sales&quot;)
+
+    print(&quot;파일 존재 확인&quot;)
+    for path in [CLEAN_CSV, DIRTY_CSV, CLEAN_XLSX, DIRTY_XLSX]:
+        print(f&quot;- {path}: {path.exists()}&quot;)
+
+    print(&quot;\n행수와 열수&quot;)
+    print(f&quot;clean csv: {clean.shape}&quot;)
+    print(f&quot;dirty csv: {dirty.shape}&quot;)
+    print(f&quot;clean xlsx: {clean_xlsx.shape}&quot;)
+    print(f&quot;dirty xlsx: {dirty_xlsx.shape}&quot;)
+
+    print(&quot;\n컬럼&quot;)
+    print(list(clean.columns))
+
+    unit_price_text = dirty[&quot;unit_price&quot;].astype(str).str.contains(&quot;원|,&quot;, regex=True, na=False)
+    slash_dates = dirty[&quot;date&quot;].astype(str).str.contains(&quot;/&quot;, regex=False, na=False)
+    mdy_dash_dates = dirty[&quot;date&quot;].astype(str).str.match(r&quot;\d{2}-\d{2}-\d{4}&quot;, na=False)
+    category_spaces = dirty[&quot;category&quot;].astype(str) != dirty[&quot;category&quot;].astype(str).str.strip()
+    qty_numeric = pd.to_numeric(dirty[&quot;qty&quot;], errors=&quot;coerce&quot;)
+    amount_numeric = pd.to_numeric(dirty[&quot;amount&quot;], errors=&quot;coerce&quot;)
+    unit_price_numeric = pd.to_numeric(
+        dirty[&quot;unit_price&quot;].astype(str).str.replace(&quot;,&quot;, &quot;&quot;, regex=False).str.replace(&quot;원&quot;, &quot;&quot;, regex=False),
+        errors=&quot;coerce&quot;,
+    )
+
+    issue_summary = pd.DataFrame(
+        [
+            [&quot;원본 대비 증가 행&quot;, len(dirty) - len(clean)],
+            [&quot;주문번호 중복&quot;, dirty[&quot;order_id&quot;].duplicated().sum()],
+            [&quot;완전 동일 중복 행&quot;, dirty.duplicated().sum()],
+            [&quot;payment 결측&quot;, dirty[&quot;payment&quot;].isna().sum()],
+            [&quot;member 결측&quot;, dirty[&quot;member&quot;].isna().sum()],
+            [&quot;날짜 YYYY/MM/DD 형식&quot;, slash_dates.sum()],
+            [&quot;날짜 MM-DD-YYYY 형식&quot;, mdy_dash_dates.sum()],
+            [&quot;unit_price 문자 포함&quot;, unit_price_text.sum()],
+            [&quot;store='강남 점'&quot;, (dirty[&quot;store&quot;] == &quot;강남 점&quot;).sum()],
+            [&quot;category 앞뒤 공백&quot;, category_spaces.sum()],
+            [&quot;item='아메리카'&quot;, (dirty[&quot;item&quot;] == &quot;아메리카&quot;).sum()],
+            [&quot;item='Americano'&quot;, (dirty[&quot;item&quot;] == &quot;Americano&quot;).sum()],
+            [&quot;item='아메 리카노'&quot;, (dirty[&quot;item&quot;] == &quot;아메 리카노&quot;).sum()],
+            [&quot;qty=999&quot;, (qty_numeric == 999).sum()],
+            [&quot;amount 음수&quot;, (amount_numeric &lt; 0).sum()],
+            [&quot;단가×수량과 금액 불일치&quot;, ((unit_price_numeric * qty_numeric) != amount_numeric).sum()],
+        ],
+        columns=[&quot;항목&quot;, &quot;확인값&quot;],
+    )
+
+    scale_table = pd.DataFrame(
+        [
+            [&quot;order_id&quot;, &quot;식별자&quot;, &quot;중복 확인, 주문 추적&quot;],
+            [&quot;date&quot;, &quot;날짜형&quot;, &quot;일별, 월별, 요일별 추세&quot;],
+            [&quot;weekday&quot;, &quot;순서가 있는 범주형&quot;, &quot;요일별 집계, 주중·주말 비교&quot;],
+            [&quot;hour&quot;, &quot;시간형 수치&quot;, &quot;시간대별 주문 수&quot;],
+            [&quot;store&quot;, &quot;범주형&quot;, &quot;지점별 비교&quot;],
+            [&quot;category&quot;, &quot;범주형&quot;, &quot;상품 대분류별 비교&quot;],
+            [&quot;item&quot;, &quot;범주형&quot;, &quot;상품별 비교&quot;],
+            [&quot;unit_price&quot;, &quot;수치형&quot;, &quot;단가 계산&quot;],
+            [&quot;qty&quot;, &quot;수치형&quot;, &quot;수량 합계와 평균&quot;],
+            [&quot;amount&quot;, &quot;수치형&quot;, &quot;총매출과 평균 주문금액&quot;],
+            [&quot;payment&quot;, &quot;범주형&quot;, &quot;결제수단별 비중&quot;],
+            [&quot;member&quot;, &quot;논리형&quot;, &quot;회원 여부별 비교&quot;],
+        ],
+        columns=[&quot;컬럼&quot;, &quot;척도&quot;, &quot;가능한 분석&quot;],
+    )
+
+    print(&quot;\ndirty 문제 요약&quot;)
+    print(issue_summary.to_string(index=False))
+
+    print(&quot;\n척도 분류표&quot;)
+    print(scale_table.to_string(index=False))
+
+    assert clean.shape == (10424, 12)
+    assert dirty.shape == (10439, 12)
+    assert clean_xlsx.shape == (10424, 12)
+    assert dirty_xlsx.shape == (10439, 12)
+    assert list(clean.columns) == EXPECTED_COLUMNS
+    assert list(dirty.columns) == EXPECTED_COLUMNS
+    assert len(dirty) - len(clean) == 15
+    assert dirty[&quot;order_id&quot;].duplicated().sum() == 15
+    assert dirty.duplicated().sum() == 13
+    assert dirty[&quot;payment&quot;].isna().sum() == 313
+    assert dirty[&quot;member&quot;].isna().sum() == 209
+    assert slash_dates.sum() == 206
+    assert mdy_dash_dates.sum() == 104
+    assert unit_price_text.sum() == 157
+    assert (dirty[&quot;store&quot;] == &quot;강남 점&quot;).sum() == 310
+    assert category_spaces.sum() == 313
+    assert (dirty[&quot;item&quot;] == &quot;아메리카&quot;).sum() == 37
+    assert (dirty[&quot;item&quot;] == &quot;Americano&quot;).sum() == 36
+    assert (dirty[&quot;item&quot;] == &quot;아메 리카노&quot;).sum() == 33
+    assert (qty_numeric == 999).sum() == 2
+    assert (amount_numeric &lt; 0).sum() == 1
+    assert ((unit_price_numeric * qty_numeric) != amount_numeric).sum() == 3
+
+    print(&quot;\n검증 통과&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre></div>
+</section>
+  </div>
+
+  <nav class="session-pager container">
+    <a class="pager-link prev" href="./S01.html"><span class="pager-direction">&larr; 이전 차시</span><span class="pager-title">S01 · 데이터 분석이란, AI 시대의 작업 흐름 + 환경 세팅</span></a>
+    <a class="pager-link next" href="./S03.html"><span class="pager-direction">다음 차시 &rarr;</span><span class="pager-title">S03 · 피벗테이블로 질문에 답하기</span></a>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>데이터 리터러시 with AI · S02 차시</span>
+    <a href="../index.html#curriculum">전체 커리큘럼으로</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.tab-panel');
+  function activate(key, updateHash){
+    tabs.forEach(function(btn){
+      var on = btn.getAttribute('data-tab') === key;
+      btn.classList.toggle('active', on);
+    });
+    panels.forEach(function(panel){
+      var on = panel.getAttribute('data-panel') === key;
+      panel.classList.toggle('active', on);
+    });
+    if (updateHash && history.replaceState){
+      history.replaceState(null, '', '#' + key);
+    }
+  }
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      activate(btn.getAttribute('data-tab'), true);
+    });
+  });
+  var initial = (location.hash || '').replace('#', '');
+  var valid = ['curriculum', 'handout', 'script', 'answer'];
+  if (valid.indexOf(initial) !== -1){
+    activate(initial, false);
+  }
+})();
+</script>
+
+</body>
+</html>

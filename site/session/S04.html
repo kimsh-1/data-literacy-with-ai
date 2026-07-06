@@ -1,0 +1,1210 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>S04. 실무 함수: VLOOKUP·XLOOKUP과 조건부 집계 · 데이터 리터러시 with AI</title>
+<meta name="description" content="S04차시: 실무 함수: VLOOKUP·XLOOKUP과 조건부 집계 — 커리큘럼·핸드아웃·강사대본·모범답안." />
+<style>
+:root{
+  --canvas: #010102;
+  --surface-1: #0f1011;
+  --surface-2: #141516;
+  --surface-3: #18191a;
+  --surface-4: #191a1b;
+  --ink: #f7f8f8;
+  --ink-muted: #d0d6e0;
+  --ink-subtle: #8a8f98;
+  --ink-tertiary: #62666d;
+  --primary: #5e6ad2;
+  --primary-hover: #828fff;
+  --primary-focus: #5e69d1;
+  --hairline: #23252a;
+  --hairline-strong: #34343a;
+  --hairline-tertiary: #3e3e44;
+  --success: #27a644;
+
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  --container: 900px;
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+html{ background: var(--canvas); }
+body{
+  margin:0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.05px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a{ color: inherit; text-decoration: none; }
+ul, ol{ margin:0; padding:0; }
+h1,h2,h3,h4,p{ margin:0; }
+
+.container{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 48px);
+}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--primary-hover);
+}
+.eyebrow::before{
+  content:"";
+  width:6px; height:6px;
+  background: var(--primary);
+  border-radius: 1px;
+  flex-shrink:0;
+}
+
+/* ---------- top nav ---------- */
+.top-nav{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 64px;
+  display:flex;
+  align-items:center;
+  background: rgba(1,1,2,0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.top-nav .container{ display:flex; align-items:center; justify-content:space-between; gap: 24px; max-width: 1280px; }
+.brand{ display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:600; font-size:15px; letter-spacing:-0.01em; }
+.brand-mark{ width:20px; height:20px; border-radius: 6px; background: var(--primary); flex-shrink:0; position:relative; }
+.brand-mark::after{ content:""; position:absolute; inset:6px; border-radius:2px; background: rgba(255,255,255,0.85); }
+.back-link{ font-size:14px; color: var(--ink-subtle); display:inline-flex; align-items:center; gap:6px; transition: color .15s ease; }
+.back-link:hover{ color: var(--ink); }
+
+/* ---------- session header ---------- */
+.session-header{
+  padding: var(--space-xxl) 0 var(--space-xl);
+  background:
+    radial-gradient(ellipse 60% 50% at 82% 0%, rgba(94,106,210,0.16), transparent 60%),
+    var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+.session-header-top{
+  display:flex;
+  align-items:center;
+  gap: var(--space-md);
+  margin: var(--space-md) 0 var(--space-md);
+}
+.session-num-badge{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--primary-hover);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-xs);
+  padding: 4px 10px;
+}
+.difficulty{ display:flex; gap:4px; align-items:center; }
+.difficulty .dot{ width:6px; height:6px; border-radius:50%; background: var(--hairline-strong); }
+.difficulty .dot.filled{ background: var(--primary); }
+.difficulty-label{ font-size:12px; color: var(--ink-tertiary); margin-left:6px; }
+.session-header h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ---------- tabs ---------- */
+.tabs-bar{
+  display:flex;
+  gap: 4px;
+  padding-top: var(--space-lg);
+  border-bottom: 1px solid var(--hairline);
+  overflow-x: auto;
+}
+.tab-btn{
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-subtle);
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s ease, border-color .15s ease;
+}
+.tab-btn:hover{ color: var(--ink); }
+.tab-btn.active{ color: var(--ink); border-bottom-color: var(--primary); }
+
+.tab-panels{ padding: var(--space-xxl) 0 var(--space-xxl); }
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+/* ---------- markdown body ---------- */
+.markdown-body{ color: var(--ink-muted); font-size: 15.5px; line-height: 1.75; letter-spacing: -0.05px; overflow-wrap: anywhere; word-break: break-word; }
+.markdown-body h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--hairline);
+}
+.markdown-body h2{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+.markdown-body h3{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin: var(--space-lg) 0 var(--space-xs);
+}
+.markdown-body h4{
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+.markdown-body p{ margin: 0 0 var(--space-md); }
+.markdown-body ul, .markdown-body ol{ margin: 0 0 var(--space-md); padding-left: 1.4em; }
+.markdown-body li{ margin-bottom: 6px; }
+.markdown-body ul{ list-style: disc; }
+.markdown-body ol{ list-style: decimal; }
+.markdown-body strong{ color: var(--ink); font-weight: 600; }
+.markdown-body em{ color: var(--ink-muted); }
+.markdown-body a{ color: var(--primary-hover); text-decoration: underline; text-underline-offset: 2px; }
+.markdown-body hr{ border:none; border-top: 1px solid var(--hairline); margin: var(--space-xl) 0; }
+.markdown-body blockquote{
+  margin: 0 0 var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid var(--primary);
+  background: var(--surface-1);
+  color: var(--ink-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.markdown-body code{
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--primary-hover);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.markdown-body .code-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+}
+.markdown-body pre{
+  margin: 0;
+  padding: var(--space-md);
+  background: transparent;
+  border: none;
+}
+.markdown-body pre code{
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre;
+}
+.markdown-body .table-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+}
+.markdown-body table{
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 460px;
+  font-size: 13.5px;
+}
+.markdown-body th, .markdown-body td{
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+  white-space: nowrap;
+}
+.markdown-body thead th{
+  background: var(--surface-1);
+  color: var(--ink);
+  font-weight: 600;
+  font-family: var(--font-text);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+.markdown-body tbody tr:last-child td{ border-bottom: none; }
+.markdown-body tbody tr:hover{ background: var(--surface-1); }
+
+/* ---------- pager ---------- */
+.session-pager{
+  display:flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-xl) 0 var(--space-xxl);
+  border-top: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+.pager-link{
+  display:flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  max-width: 46%;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.pager-link:hover{ border-color: var(--primary); background: var(--surface-2); }
+.pager-link.next{ margin-left: auto; text-align: right; align-items: flex-end; }
+.pager-direction{ font-size: 12px; color: var(--ink-tertiary); font-family: var(--font-mono); }
+.pager-title{ font-size: 14px; color: var(--ink); font-weight: 500; }
+.pager-spacer{ flex: 1; }
+
+footer.site-footer{
+  border-top: 1px solid var(--hairline);
+  padding: var(--space-xl) 0;
+}
+footer.site-footer .container{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: var(--ink-tertiary);
+  font-size: 12px;
+}
+footer.site-footer a:hover{ color: var(--ink-subtle); }
+
+@media (max-width: 640px){
+  .session-header{ padding: var(--space-xl) 0 var(--space-lg); }
+  .pager-link{ max-width: 100%; }
+  .session-pager{ flex-direction: column; }
+  .pager-link.next{ margin-left: 0; text-align: left; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="container">
+    <div class="brand"><span class="brand-mark"></span>데이터 리터러시 with AI</div>
+    <a class="back-link" href="../index.html#curriculum">&larr; 커리큘럼으로</a>
+  </div>
+</nav>
+
+<header class="session-header">
+  <div class="container">
+    <div class="eyebrow">PART 01 · 엑셀</div>
+    <div class="session-header-top">
+      <span class="session-num-badge">S04</span>
+      <div class="difficulty" title="난이도 2"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">기초</span></div>
+    </div>
+    <h1>실무 함수: VLOOKUP·XLOOKUP과 조건부 집계</h1>
+  </div>
+  <div class="container">
+    <div class="tabs-bar" role="tablist">
+<button class="tab-btn active" data-tab="curriculum" role="tab" aria-selected="true">커리큘럼</button>
+<button class="tab-btn" data-tab="handout" role="tab" aria-selected="false">핸드아웃</button>
+<button class="tab-btn" data-tab="script" role="tab" aria-selected="false">강사대본</button>
+<button class="tab-btn" data-tab="answer" role="tab" aria-selected="false">모범답안</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="tab-panels container">
+<section class="tab-panel markdown-body active" data-panel="curriculum" aria-label="커리큘럼">
+<h1>S04 실무 함수: VLOOKUP/XLOOKUP과 조건부 집계</h1>
+<h2>차시 개요</h2>
+<ul>
+<li>대상: 엑셀은 사용하지만 데이터분석은 처음인 비개발자</li>
+<li>선수 차시: S03</li>
+<li>난이도: 2</li>
+<li>시간: 50분</li>
+<li>사용 데이터: <code>/mnt/d/ai-data-analysis-course/02_datasets/shop_orders/shop_orders_clean.xlsx</code></li>
+<li>사용 시트: <code>orders</code>, <code>customers</code>, <code>products</code></li>
+</ul>
+<p>이번 차시가 다루는 건 엑셀로 실무 데이터를 만질 때 거의 매번 부딪히는 문제다. 주문 목록에 들어 있는 정보는 주문번호, 고객번호, 상품번호, 수량, 할인율뿐이다. 고객이 어느 지역 사람인지, 등급이 무엇인지, 상품 단가가 얼마인지는 여기 없다. 실무 데이터는 이렇게 여러 표에 흩어져 있기 마련이라, 분석을 시작하려면 표부터 이어 붙여야 한다.</p>
+<p>작업의 뼈대는 이렇다. <code>orders</code>를 중심 표로 삼아 <code>products</code>에서 단가를, <code>customers</code>에서 지역과 등급을 끌어온 다음 매출을 계산한다. 이어서 <code>SUMIF</code>, <code>COUNTIF</code>로 지역별 매출과 등급별 객단가를 구한다.</p>
+<h2>학습 목표</h2>
+<p>수강생은 이 차시가 끝나면 다음을 할 수 있어야 한다.</p>
+<ol>
+<li>주문 표의 상품번호와 고객번호를 기준으로 다른 표의 값을 가져올 수 있다.</li>
+<li><code>VLOOKUP</code>과 <code>XLOOKUP</code>의 차이를 설명할 수 있다.</li>
+<li>단가, 수량, 할인율을 이용해 주문별 매출을 계산할 수 있다.</li>
+<li><code>SUMIF</code>, <code>COUNTIF</code>로 조건에 맞는 합계와 건수를 계산할 수 있다.</li>
+<li>엑셀 함수 방식이 행이 많아질수록 관리하기 어려워지는 이유를 말할 수 있다.</li>
+</ol>
+<h2>데이터 구조</h2>
+<p>실제 파일 확인 결과는 다음과 같다.</p>
+<ul>
+<li><code>orders</code>: 20,000행, 6열</li>
+<li>컬럼: <code>order_id</code>, <code>customer_id</code>, <code>product_id</code>, <code>order_date</code>, <code>qty</code>, <code>discount_rate</code></li>
+<li><code>customers</code>: 3,000행, 7열</li>
+<li>컬럼: <code>customer_id</code>, <code>name</code>, <code>gender</code>, <code>age</code>, <code>region</code>, <code>join_date</code>, <code>grade</code></li>
+<li><code>products</code>: 200행, 5열</li>
+<li>컬럼: <code>product_id</code>, <code>product_name</code>, <code>category</code>, <code>price</code>, <code>cost</code></li>
+</ul>
+<p><code>orders</code>에는 매출 컬럼이 없다. 매출은 다음 공식으로 직접 계산한다.</p>
+<div class="code-scroll"><pre><code class="language-text">매출 = 단가 × 수량 × (1 - 할인율)
+</code></pre></div>
+<h2>개념 설명</h2>
+<h3>1. 주문 표는 영수증, 고객 표와 상품 표는 사전</h3>
+<p><code>orders</code> 시트는 거래가 한 줄씩 쌓인 영수증 목록에 가깝다. 그런데 영수증에 적힌 건 고객번호와 상품번호뿐이다. 고객번호 <code>C000787</code>이 어느 지역 고객인지, 상품번호 <code>P00159</code>의 단가가 얼마인지 알려면 다른 표를 들여다봐야 한다.</p>
+<p>여기서 <code>customers</code>와 <code>products</code>가 사전 노릇을 한다. 고객번호로 사전을 찾으면 지역과 등급이, 상품번호로 찾으면 상품명과 단가가 나온다. <code>VLOOKUP</code>과 <code>XLOOKUP</code>이 바로 이 사전 찾기를 대신해 주는 함수다.</p>
+<h3>2. VLOOKUP은 왼쪽 첫 열에서 찾아 오른쪽 값을 가져온다</h3>
+<p><code>VLOOKUP</code>은 다음 구조로 읽는다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(찾을값, 찾을표범위, 가져올열번호, 정확히찾기)
+</code></pre></div>
+<p>예를 들어 상품번호를 기준으로 단가를 가져오려면 다음처럼 쓴다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(C2,products!$A:$E,4,FALSE)
+</code></pre></div>
+<p>뜻은 다음과 같다.</p>
+<ul>
+<li><code>C2</code>: 현재 주문의 상품번호</li>
+<li><code>products!$A:$E</code>: 상품 사전 범위</li>
+<li><code>4</code>: 상품 사전에서 네 번째 열인 <code>price</code></li>
+<li><code>FALSE</code>: 비슷한 값이 아니라 정확히 같은 상품번호만 찾기</li>
+</ul>
+<p>입문 단계에서는 마지막 인수 <code>FALSE</code>를 빠뜨리지 않는 게 중요하다. 상품번호나 고객번호처럼 정확히 맞아떨어져야 하는 키에 근사값 검색을 쓰면 엉뚱한 값이 딸려 올 수 있다.</p>
+<h3>3. XLOOKUP은 찾을 열과 가져올 열을 따로 지정한다</h3>
+<p><code>XLOOKUP</code>은 최신 엑셀에서 쓸 수 있는 함수로, 구조가 한결 직관적이다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=XLOOKUP(찾을값, 찾을열, 가져올열, 못찾을때값)
+</code></pre></div>
+<p>단가를 가져오는 공식은 다음과 같다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=XLOOKUP(C2,products!$A:$A,products!$D:$D,&quot;확인필요&quot;)
+</code></pre></div>
+<p><code>VLOOKUP</code>은 표 범위에서 몇 번째 열을 가져올지 숫자로 세야 한다. <code>XLOOKUP</code>은 찾을 열과 가져올 열을 곧바로 지정하니, 열이 추가되거나 순서가 바뀌어도 공식이 덜 흔들린다.</p>
+<h3>4. SUMIF와 COUNTIF는 조건을 걸어 계산한다</h3>
+<p>분석 질문은 대개 “전체 매출은 얼마인가”에서 끝나지 않는다. 실무에서는 “지역별 매출은 얼마인가”, “등급별 객단가는 얼마인가”처럼 조건이 따라붙는다.</p>
+<p><code>SUMIF</code>는 조건에 맞는 행의 값을 합산한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=SUMIF(조건범위, 조건, 합계범위)
+</code></pre></div>
+<p><code>COUNTIF</code>는 조건에 맞는 행의 개수를 센다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=COUNTIF(조건범위, 조건)
+</code></pre></div>
+<p>등급별 객단가는 다음처럼 계산한다.</p>
+<div class="code-scroll"><pre><code class="language-text">등급별 객단가 = 등급별 매출 합계 ÷ 등급별 주문 건수
+</code></pre></div>
+<h2>엑셀 비교와 한계</h2>
+<p>엑셀 함수는 눈앞의 표를 빠르게 잇고 요약하는 데 대단히 강하다. 2만 행 남짓한 주문 데이터라면 수강생이 공식이 흘러가는 과정을 직접 눈으로 좇을 수 있어 학습 효과도 좋다.</p>
+<p>하지만 실무 데이터가 커지고 표가 늘어나면 다음 문제가 생긴다.</p>
+<ul>
+<li>열 번호를 잘못 세면 <code>VLOOKUP</code> 결과가 조용히 틀릴 수 있다.</li>
+<li>공식이 여러 열에 복사되면 어느 열이 원본이고 어느 열이 계산 결과인지 헷갈릴 수 있다.</li>
+<li>파일이 무거워지고 다시 계산하는 시간이 길어진다.</li>
+<li>같은 계산을 다음 달에도 반복하려면 사람이 다시 클릭하고 복사해야 한다.</li>
+<li>연결해야 할 표가 세 개, 네 개로 늘어나면 공식 관리가 어려워진다.</li>
+</ul>
+<p>이 차시에서는 엑셀 실무 함수로 분석의 기본 골격을 익힌다. 뒤이어 파이썬과 BI 도구를 배우고 나면, 같은 문제를 더 재현하기 쉽고 관리하기 편한 방식으로 풀 수 있다.</p>
+<h2>50분 수업 흐름</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;">시간</th>
+<th>내용</th>
+<th>진행 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0-5분</td>
+<td>오늘의 분석 질문 제시</td>
+<td>주문 데이터만으로는 지역별 매출을 구할 수 없는 이유 확인</td>
+</tr>
+<tr>
+<td style="text-align: right;">5-12분</td>
+<td>세 표 구조 이해</td>
+<td><code>orders</code>, <code>customers</code>, <code>products</code>의 키 컬럼 확인</td>
+</tr>
+<tr>
+<td style="text-align: right;">12-25분</td>
+<td>VLOOKUP으로 값 가져오기</td>
+<td>단가, 지역, 등급을 <code>orders</code>에 붙이기</td>
+</tr>
+<tr>
+<td style="text-align: right;">25-30분</td>
+<td>XLOOKUP 비교</td>
+<td>같은 작업을 최신 함수로 읽는 방법 확인</td>
+</tr>
+<tr>
+<td style="text-align: right;">30-36분</td>
+<td>주문별 매출 계산</td>
+<td><code>price × qty × (1 - discount_rate)</code> 공식 작성</td>
+</tr>
+<tr>
+<td style="text-align: right;">36-43분</td>
+<td>지역별 SUMIF/COUNTIF</td>
+<td>지역별 매출, 주문 건수, 객단가 계산</td>
+</tr>
+<tr>
+<td style="text-align: right;">43-48분</td>
+<td>직접 해보기</td>
+<td>등급별 객단가 구하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">48-50분</td>
+<td>정리</td>
+<td>엑셀 함수의 장점과 한계 연결</td>
+</tr>
+</tbody>
+</table></div>
+<h2>수업의 핵심 메시지</h2>
+<p>데이터분석은 필요한 정보를 한 표에 모으는 일에서 출발한다. 엑셀에서는 <code>VLOOKUP</code>이나 <code>XLOOKUP</code>으로 표를 잇고, <code>SUMIF</code>, <code>COUNTIF</code>로 조건이 붙은 질문에 답한다. 다만 함수가 늘수록 관리 비용도 불어난다. 이 한계를 몸으로 느끼는 순간이 다음 단계인 자동화 도구로 넘어가는 출발점이다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="handout" aria-label="핸드아웃">
+<h1>S04 핸드아웃: VLOOKUP/XLOOKUP과 조건부 집계</h1>
+<h2>실습 목표</h2>
+<p>이번 실습에서는 주문 데이터에 상품 단가와 고객의 지역, 등급을 붙이고 주문별 매출을 계산한다. 끝으로 지역별 매출을 구한 뒤, 직접 해보기 미션에서 등급별 객단가까지 계산한다.</p>
+<h2>사용할 파일</h2>
+<div class="code-scroll"><pre><code class="language-text">/mnt/d/ai-data-analysis-course/02_datasets/shop_orders/shop_orders_clean.xlsx
+</code></pre></div>
+<p>파일을 열면 세 개의 시트가 있다.</p>
+<ul>
+<li><code>orders</code>: 주문 목록, 20,000행</li>
+<li><code>customers</code>: 고객 정보, 3,000행</li>
+<li><code>products</code>: 상품 정보, 200행</li>
+</ul>
+<h2>따라하기</h2>
+<h3>1단계. 세 시트의 역할 확인하기</h3>
+<ol>
+<li><code>shop_orders_clean.xlsx</code>를 연다.</li>
+<li>아래 시트를 차례로 클릭한다.
+   - <code>orders</code>
+   - <code>customers</code>
+   - <code>products</code></li>
+<li>각 시트에서 다음 컬럼을 확인한다.</li>
+</ol>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>시트</th>
+<th>확인할 컬럼</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>orders</code></td>
+<td><code>customer_id</code></td>
+<td>고객을 찾는 번호</td>
+</tr>
+<tr>
+<td><code>orders</code></td>
+<td><code>product_id</code></td>
+<td>상품을 찾는 번호</td>
+</tr>
+<tr>
+<td><code>orders</code></td>
+<td><code>qty</code></td>
+<td>주문 수량</td>
+</tr>
+<tr>
+<td><code>orders</code></td>
+<td><code>discount_rate</code></td>
+<td>할인율</td>
+</tr>
+<tr>
+<td><code>customers</code></td>
+<td><code>customer_id</code>, <code>region</code>, <code>grade</code></td>
+<td>고객번호별 지역과 등급</td>
+</tr>
+<tr>
+<td><code>products</code></td>
+<td><code>product_id</code>, <code>price</code></td>
+<td>상품번호별 단가</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>orders</code>에는 매출이 없다. 매출을 구하려면 <code>products</code>에서 단가부터 가져와야 한다.</p>
+<h3>2단계. orders 시트에 새 열 만들기</h3>
+<p><code>orders</code> 시트에서 F열 오른쪽에 다음 제목을 추가한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>열</th>
+<th>제목</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>G열</td>
+<td><code>product_name</code></td>
+</tr>
+<tr>
+<td>H열</td>
+<td><code>category</code></td>
+</tr>
+<tr>
+<td>I열</td>
+<td><code>price</code></td>
+</tr>
+<tr>
+<td>J열</td>
+<td><code>region</code></td>
+</tr>
+<tr>
+<td>K열</td>
+<td><code>grade</code></td>
+</tr>
+<tr>
+<td>L열</td>
+<td><code>sales</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3>3단계. VLOOKUP으로 상품 정보 가져오기</h3>
+<p><code>orders</code> 시트의 G2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(C2,products!$A:$E,2,FALSE)
+</code></pre></div>
+<p>H2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(C2,products!$A:$E,3,FALSE)
+</code></pre></div>
+<p>I2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(C2,products!$A:$E,4,FALSE)
+</code></pre></div>
+<p>각 공식의 뜻은 다음과 같다.</p>
+<ul>
+<li><code>C2</code>: 현재 주문의 상품번호</li>
+<li><code>products!$A:$E</code>: 상품번호를 찾을 상품 표</li>
+<li><code>2</code>, <code>3</code>, <code>4</code>: 상품명, 카테고리, 단가가 있는 열 번호</li>
+<li><code>FALSE</code>: 정확히 일치하는 상품번호만 찾기</li>
+</ul>
+<p>G2부터 I2까지 선택한 뒤 20,001행까지 채운다.</p>
+<h3>4단계. VLOOKUP으로 고객 정보 가져오기</h3>
+<p>J2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(B2,customers!$A:$G,5,FALSE)
+</code></pre></div>
+<p>K2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(B2,customers!$A:$G,7,FALSE)
+</code></pre></div>
+<p>뜻은 다음과 같다.</p>
+<ul>
+<li><code>B2</code>: 현재 주문의 고객번호</li>
+<li><code>customers!$A:$G</code>: 고객번호를 찾을 고객 표</li>
+<li><code>5</code>: <code>region</code> 열</li>
+<li><code>7</code>: <code>grade</code> 열</li>
+<li><code>FALSE</code>: 정확히 일치하는 고객번호만 찾기</li>
+</ul>
+<p>J2부터 K2까지 선택한 뒤 20,001행까지 채운다.</p>
+<h3>5단계. XLOOKUP 방식도 비교하기</h3>
+<p>엑셀에 <code>XLOOKUP</code>이 있다면 같은 작업을 아래처럼 쓸 수도 있다. 앞서 VLOOKUP으로 값을 이미 채웠다면 다시 입력할 필요는 없고, 두 함수의 구조를 견줘 보는 셈 치고 읽으면 된다.</p>
+<p>단가를 가져오는 공식:</p>
+<div class="code-scroll"><pre><code class="language-excel">=XLOOKUP(C2,products!$A:$A,products!$D:$D,&quot;확인필요&quot;)
+</code></pre></div>
+<p>지역을 가져오는 공식:</p>
+<div class="code-scroll"><pre><code class="language-excel">=XLOOKUP(B2,customers!$A:$A,customers!$E:$E,&quot;확인필요&quot;)
+</code></pre></div>
+<p>등급을 가져오는 공식:</p>
+<div class="code-scroll"><pre><code class="language-excel">=XLOOKUP(B2,customers!$A:$A,customers!$G:$G,&quot;확인필요&quot;)
+</code></pre></div>
+<p><code>VLOOKUP</code>은 가져올 열을 숫자로 세고, <code>XLOOKUP</code>은 찾을 열과 가져올 열을 직접 지정한다.</p>
+<h3>6단계. 주문별 매출 계산하기</h3>
+<p>L2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=I2*E2*(1-F2)
+</code></pre></div>
+<p>뜻은 다음과 같다.</p>
+<div class="code-scroll"><pre><code class="language-text">매출 = 단가 × 수량 × (1 - 할인율)
+</code></pre></div>
+<p>L2 셀을 20,001행까지 채운다.</p>
+<p>확인할 값:</p>
+<ul>
+<li>L2: <code>22900</code></li>
+<li>L3: <code>35910</code></li>
+<li>L4: <code>105800</code></li>
+</ul>
+<h3>7단계. 지역별 매출 집계표 만들기</h3>
+<ol>
+<li>새 시트를 만든다.</li>
+<li>시트 이름을 <code>region_summary</code>로 바꾼다.</li>
+<li>A1:D1에 제목을 입력한다.</li>
+</ol>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>셀</th>
+<th>제목</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A1</td>
+<td><code>region</code></td>
+</tr>
+<tr>
+<td>B1</td>
+<td><code>order_count</code></td>
+</tr>
+<tr>
+<td>C1</td>
+<td><code>total_sales</code></td>
+</tr>
+<tr>
+<td>D1</td>
+<td><code>avg_order_value</code></td>
+</tr>
+</tbody>
+</table></div>
+<ol start="4">
+<li><code>orders</code> 시트의 J2:J20001을 복사해 <code>region_summary</code>의 A2에 붙여넣는다.</li>
+<li>A열을 선택하고 데이터 탭에서 중복 제거를 실행한다.</li>
+<li>A열을 오름차순으로 정렬한다.</li>
+</ol>
+<p>B2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=COUNTIF(orders!$J$2:$J$20001,A2)
+</code></pre></div>
+<p>C2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=SUMIF(orders!$J$2:$J$20001,A2,orders!$L$2:$L$20001)
+</code></pre></div>
+<p>D2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=C2/B2
+</code></pre></div>
+<p>B2:D2를 마지막 지역 행까지 채운다.</p>
+<p>검산 기준:</p>
+<ul>
+<li><code>order_count</code> 합계: <code>20000</code></li>
+<li><code>total_sales</code> 합계: <code>1938489803</code></li>
+<li>서울특별시 매출: <code>570482124</code></li>
+<li>경기도 매출: <code>530726511</code></li>
+</ul>
+<h2>직접 해보기</h2>
+<h3>미션. 등급별 객단가 구하기</h3>
+<p>고객 등급별로 주문 건수, 매출 합계, 객단가를 구한다.</p>
+<ol>
+<li>새 시트를 만든다.</li>
+<li>시트 이름을 <code>grade_summary</code>로 바꾼다.</li>
+<li>A1:D1에 제목을 입력한다.</li>
+</ol>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>셀</th>
+<th>제목</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A1</td>
+<td><code>grade</code></td>
+</tr>
+<tr>
+<td>B1</td>
+<td><code>order_count</code></td>
+</tr>
+<tr>
+<td>C1</td>
+<td><code>total_sales</code></td>
+</tr>
+<tr>
+<td>D1</td>
+<td><code>avg_order_value</code></td>
+</tr>
+</tbody>
+</table></div>
+<ol start="4">
+<li>A2:A5에 등급을 입력한다.</li>
+</ol>
+<div class="code-scroll"><pre><code class="language-text">VIP
+골드
+실버
+브론즈
+</code></pre></div>
+<ol start="5">
+<li>B2:D2에 알맞은 <code>COUNTIF</code>, <code>SUMIF</code>, 나눗셈 공식을 작성한다.</li>
+<li>B2:D2를 5행까지 채운다.</li>
+<li>어떤 등급의 객단가가 가장 높은지 한 문장으로 적는다.</li>
+</ol>
+<p>힌트:</p>
+<ul>
+<li>등급은 <code>orders</code> 시트의 K열에 있다.</li>
+<li>매출은 <code>orders</code> 시트의 L열에 있다.</li>
+<li>객단가는 매출 합계를 주문 건수로 나눈 값이다.</li>
+</ul>
+<h2>제출 전 확인</h2>
+<p>아래 값과 맞으면 실습이 정상적으로 완료된 것이다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th style="text-align: right;">기준값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>전체 주문 건수</td>
+<td style="text-align: right;">20,000</td>
+</tr>
+<tr>
+<td>전체 매출</td>
+<td style="text-align: right;">1,938,489,803</td>
+</tr>
+<tr>
+<td>VIP 객단가</td>
+<td style="text-align: right;">104,719.97</td>
+</tr>
+<tr>
+<td>골드 객단가</td>
+<td style="text-align: right;">100,777.65</td>
+</tr>
+<tr>
+<td>실버 객단가</td>
+<td style="text-align: right;">94,709.48</td>
+</tr>
+<tr>
+<td>브론즈 객단가</td>
+<td style="text-align: right;">88,787.10</td>
+</tr>
+</tbody>
+</table></div>
+<p>가장 높은 객단가는 VIP 등급이다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="script" aria-label="강사대본">
+<h1>S04 강사대본: 실무 함수</h1>
+<h2>수업 전 준비</h2>
+<ul>
+<li>파일 확인: <code>/mnt/d/ai-data-analysis-course/02_datasets/shop_orders/shop_orders_clean.xlsx</code></li>
+<li>시트 확인: <code>orders</code>, <code>customers</code>, <code>products</code></li>
+<li>실제 데이터 행수:</li>
+<li><code>orders</code>: 20,000행</li>
+<li><code>customers</code>: 3,000행</li>
+<li><code>products</code>: 200행</li>
+<li>실습 결과 검산값:</li>
+<li>전체 주문 건수: 20,000</li>
+<li>전체 매출: 1,938,489,803</li>
+<li>VIP 객단가: 104,719.97</li>
+</ul>
+<h2>도입: 0-5분</h2>
+<p>오늘 다루는 건 엑셀 실무에서 가장 손이 자주 가는 함수 묶음이다. 주문 데이터를 열어 보면 주문번호, 고객번호, 상품번호, 수량, 할인율은 있는데 지역도 단가도 없다. 지역별 매출을 내려면 지역과 매출이 둘 다 있어야 하니, 지금 표 하나만으로는 답이 안 나온다.</p>
+<p>실무에서는 흔한 장면이다. 거래 기록 따로, 고객 정보 따로, 상품 정보 따로 놓여 있다. 분석하려면 이 표들부터 연결해야 한다. 오늘 목표는 <code>orders</code>를 가운데 두고 <code>customers</code>와 <code>products</code>에서 필요한 값을 끌어오는 것이다.</p>
+<h2>데이터 구조 설명: 5-12분</h2>
+<p>시연 포인트:</p>
+<ol>
+<li><code>orders</code> 시트를 연다.</li>
+<li><code>customer_id</code>, <code>product_id</code>, <code>qty</code>, <code>discount_rate</code>를 짚는다.</li>
+<li><code>customers</code> 시트에서 <code>customer_id</code>, <code>region</code>, <code>grade</code>를 짚는다.</li>
+<li><code>products</code> 시트에서 <code>product_id</code>, <code>price</code>를 짚는다.</li>
+</ol>
+<p>말할 내용:</p>
+<p><code>orders</code>는 주문이 한 줄씩 쌓인 거래 기록이다. 그런데 주문표만 봐서는 <code>P00159</code>가 얼마짜리인지 알 도리가 없다. 상품번호를 들고 <code>products</code>라는 사전을 뒤져야 한다. 고객도 똑같다. <code>C000787</code>이 어느 지역, 어떤 등급 고객인지는 <code>customers</code>에서 찾아야 나온다.</p>
+<p>여기서 기억할 단어가 키다. 표와 표를 이을 때 기준이 되는 값을 키라고 부른다. 오늘은 <code>product_id</code>와 <code>customer_id</code>가 그 키다.</p>
+<h2>VLOOKUP 시연: 12-25분</h2>
+<p>시연 포인트:</p>
+<ol>
+<li><code>orders</code> 시트 G:L 열에 새 제목을 만든다.</li>
+<li>G2, H2, I2에 상품 관련 VLOOKUP을 입력한다.</li>
+<li>J2, K2에 고객 관련 VLOOKUP을 입력한다.</li>
+<li>한두 줄 결과를 눈으로 확인한 뒤 아래로 채운다.</li>
+</ol>
+<p>입력 공식:</p>
+<div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(C2,products!$A:$E,2,FALSE)
+</code></pre></div>
+<div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(C2,products!$A:$E,3,FALSE)
+</code></pre></div>
+<div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(C2,products!$A:$E,4,FALSE)
+</code></pre></div>
+<div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(B2,customers!$A:$G,5,FALSE)
+</code></pre></div>
+<div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(B2,customers!$A:$G,7,FALSE)
+</code></pre></div>
+<p>말할 내용:</p>
+<p><code>VLOOKUP</code>은 세로로 늘어선 표에서 값을 찾는 함수다. 인수는 순서대로 찾을 값, 찾을 표, 가져올 열 번호, 그리고 정확히 찾을지 여부다. 고객번호와 상품번호는 정확히 일치해야 하니 맨 끝에는 <code>FALSE</code>를 넣는다.</p>
+<p>수강생이 가장 헷갈려 하는 건 세 번째 인수다. <code>products!$A:$E</code> 범위에서는 A열이 1번, B열이 2번, C열이 3번, D열이 4번이다. 그러니 단가인 <code>price</code>를 가져오려면 4를 쓴다.</p>
+<h2>XLOOKUP 비교: 25-30분</h2>
+<p>시연 포인트:</p>
+<ol>
+<li>VLOOKUP으로 이미 계산한 값을 지우지 않는다.</li>
+<li>빈 셀에 XLOOKUP 예시를 보여 주거나 화면에 공식만 설명한다.</li>
+</ol>
+<p>예시 공식:</p>
+<div class="code-scroll"><pre><code class="language-excel">=XLOOKUP(C2,products!$A:$A,products!$D:$D,&quot;확인필요&quot;)
+</code></pre></div>
+<p>말할 내용:</p>
+<p><code>XLOOKUP</code>은 찾을 열과 가져올 열을 따로 지정하니 열 번호를 셀 일이 없다. 최신 엑셀이라면 이쪽이 읽기 쉽고 덜 헷갈린다. 다만 회사마다 엑셀 버전이 제각각이라, 오늘은 VLOOKUP을 기본으로 익히고 XLOOKUP은 한 수 나은 대안으로만 알아 둔다.</p>
+<h2>매출 계산: 30-36분</h2>
+<p>시연 포인트:</p>
+<ol>
+<li>L2 셀에 매출 공식을 입력한다.</li>
+<li>첫 세 행의 값이 기준과 맞는지 확인한다.</li>
+<li>L열 전체를 채운다.</li>
+</ol>
+<p>입력 공식:</p>
+<div class="code-scroll"><pre><code class="language-excel">=I2*E2*(1-F2)
+</code></pre></div>
+<p>말할 내용:</p>
+<p>매출은 단가에 수량을 곱한 뒤 할인율을 반영한 값이다. 할인율이 5%면 고객은 정가의 95%를 낸다. 그래서 <code>1 - 할인율</code>을 곱한다.</p>
+<p>확인할 값:</p>
+<ul>
+<li>L2: 22,900</li>
+<li>L3: 35,910</li>
+<li>L4: 105,800</li>
+</ul>
+<p>이 값이 어긋나면 십중팔구 단가를 가져온 열이 틀렸거나 수량 컬럼을 잘못 참조한 경우다. 이 데이터의 수량 컬럼은 <code>qty</code>이고 E열에 있다.</p>
+<h2>지역별 SUMIF/COUNTIF: 36-43분</h2>
+<p>시연 포인트:</p>
+<ol>
+<li><code>region_summary</code> 시트를 만든다.</li>
+<li>지역 목록을 만들고 중복 제거한다.</li>
+<li><code>COUNTIF</code>, <code>SUMIF</code>, 객단가 공식을 입력한다.</li>
+<li>전체 합계를 검산한다.</li>
+</ol>
+<p>입력 공식:</p>
+<div class="code-scroll"><pre><code class="language-excel">=COUNTIF(orders!$J$2:$J$20001,A2)
+</code></pre></div>
+<div class="code-scroll"><pre><code class="language-excel">=SUMIF(orders!$J$2:$J$20001,A2,orders!$L$2:$L$20001)
+</code></pre></div>
+<div class="code-scroll"><pre><code class="language-excel">=C2/B2
+</code></pre></div>
+<p>말할 내용:</p>
+<p><code>SUMIF</code>는 조건에 맞는 값만 골라 더한다. 여기서는 J열 지역이 A2와 같은 행만 추려 L열 매출을 합친다. <code>COUNTIF</code>는 그 같은 조건의 주문 건수를 센다. 매출을 주문 건수로 나누면 객단가다.</p>
+<p>검산 기준:</p>
+<ul>
+<li>주문 건수 합계: 20,000</li>
+<li>매출 합계: 1,938,489,803</li>
+<li>서울특별시 매출: 570,482,124</li>
+<li>경기도 매출: 530,726,511</li>
+</ul>
+<h2>직접 해보기: 43-48분</h2>
+<p>미션:</p>
+<p>등급별 주문 건수, 매출 합계, 객단가를 구한다.</p>
+<p>힌트로만 말할 내용:</p>
+<p>지역별 집계에서는 조건 범위가 지역 열인 J열이었다. 이번엔 조건 범위만 등급 열인 K열로 바뀌고, 합계 범위는 여전히 매출 열인 L열이다.</p>
+<p>정답 기준:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>grade</th>
+<th style="text-align: right;">order_count</th>
+<th style="text-align: right;">total_sales</th>
+<th style="text-align: right;">avg_order_value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VIP</td>
+<td style="text-align: right;">3,757</td>
+<td style="text-align: right;">393,432,930</td>
+<td style="text-align: right;">104,719.97</td>
+</tr>
+<tr>
+<td>골드</td>
+<td style="text-align: right;">5,433</td>
+<td style="text-align: right;">547,524,985</td>
+<td style="text-align: right;">100,777.65</td>
+</tr>
+<tr>
+<td>실버</td>
+<td style="text-align: right;">6,373</td>
+<td style="text-align: right;">603,583,519</td>
+<td style="text-align: right;">94,709.48</td>
+</tr>
+<tr>
+<td>브론즈</td>
+<td style="text-align: right;">4,437</td>
+<td style="text-align: right;">393,948,369</td>
+<td style="text-align: right;">88,787.10</td>
+</tr>
+</tbody>
+</table></div>
+<h2>정리: 48-50분</h2>
+<p>말할 내용:</p>
+<p>오늘 한 일이 곧 데이터분석의 기본 흐름이다. 필요한 값을 여러 표에서 끌어와 한 표로 모으고, 매출이라는 계산 컬럼을 새로 만들고, 끝으로 조건별 합계와 건수를 구해 질문에 답했다.</p>
+<p>엑셀은 이 과정을 눈으로 좇으며 따라가기에 좋다. 그러나 함수가 불어나고 파일이 무거워지면 실수가 끼어들 자리도 그만큼 늘어난다. 그래서 다음부터는 같은 작업을 더 되풀이하기 쉽게 만드는 도구를 배운다.</p>
+<h2>예상 질문과 답변</h2>
+<p>Q. 왜 <code>FALSE</code>를 꼭 넣어야 하나요?</p>
+<p>A. 고객번호와 상품번호는 정확히 같은 값을 찾아야 한다. <code>FALSE</code>를 빼면 엑셀이 비슷한 값을 찾는 방식으로 움직일 수 있고, 그러면 엉뚱한 값이 딸려 올 위험이 있다.</p>
+<p>Q. VLOOKUP과 XLOOKUP 중 무엇을 쓰면 되나요?</p>
+<p>A. 회사 엑셀이 XLOOKUP을 지원하면 XLOOKUP이 읽기 편하다. 다만 VLOOKUP은 오래된 파일이나 조직에서도 여전히 흔하게 쓰이니, 읽고 고칠 줄은 알아야 한다.</p>
+<p>Q. 숫자가 정답과 조금 다릅니다.</p>
+<p>A. 먼저 L열 매출 공식이 <code>=I2*E2*(1-F2)</code>인지 본다. 다음으로 I열 단가가 <code>products</code>의 네 번째 열인 <code>price</code>를 제대로 가져오는지 확인한다. 지역이나 등급별 집계라면 조건 범위와 합계 범위가 서로 다른 열을 가리키고 있어야 한다.</p>
+<p>Q. 지역 목록은 꼭 중복 제거로 만들어야 하나요?</p>
+<p>A. 꼭 그렇진 않다. 다만 입문 단계에서는 눈으로 확인하기 쉬워 중복 제거를 쓴다. 최신 엑셀이라면 <code>=SORT(UNIQUE(orders!J2:J20001))</code>로도 만들 수 있다.</p>
+<p>Q. 객단가는 고객 1명당 평균 구매액인가요?</p>
+<p>A. 이 실습에서 말하는 객단가는 주문 1건당 평균 매출이다. 고객 1명당 평균 구매액을 보려면 고객별로 먼저 묶는 계산이 따로 필요하다.</p>
+<h2>완료 판단 체크포인트</h2>
+<p>수강생이 <code>orders</code>에 단가, 지역, 등급, 매출을 붙였고, <code>region_summary</code>의 주문 건수 합계가 20,000, 매출 합계가 1,938,489,803으로 나오며, <code>grade_summary</code>에서 VIP 객단가가 104,719.97원으로 잡히면 완료로 본다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="answer" aria-label="모범답안">
+<h1>S04 모범답안: 등급별 객단가</h1>
+<h2>미션</h2>
+<p>고객 등급별로 주문 건수, 매출 합계, 객단가를 구한다.</p>
+<p>객단가는 이 실습에서 주문 1건당 평균 매출을 뜻한다.</p>
+<div class="code-scroll"><pre><code class="language-text">객단가 = 매출 합계 ÷ 주문 건수
+</code></pre></div>
+<h2>전제</h2>
+<p><code>orders</code> 시트에 따라하기 결과가 이미 만들어져 있어야 한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>열</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>I열</td>
+<td><code>price</code></td>
+</tr>
+<tr>
+<td>J열</td>
+<td><code>region</code></td>
+</tr>
+<tr>
+<td>K열</td>
+<td><code>grade</code></td>
+</tr>
+<tr>
+<td>L열</td>
+<td><code>sales</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>주문별 매출 공식은 다음과 같다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=I2*E2*(1-F2)
+</code></pre></div>
+<h2>엑셀 풀이</h2>
+<p>새 시트 <code>grade_summary</code>를 만들고 A1:D1에 다음 제목을 입력한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>셀</th>
+<th>제목</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A1</td>
+<td><code>grade</code></td>
+</tr>
+<tr>
+<td>B1</td>
+<td><code>order_count</code></td>
+</tr>
+<tr>
+<td>C1</td>
+<td><code>total_sales</code></td>
+</tr>
+<tr>
+<td>D1</td>
+<td><code>avg_order_value</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>A2:A5에는 등급을 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-text">VIP
+골드
+실버
+브론즈
+</code></pre></div>
+<p>B2 셀:</p>
+<div class="code-scroll"><pre><code class="language-excel">=COUNTIF(orders!$K$2:$K$20001,A2)
+</code></pre></div>
+<p>C2 셀:</p>
+<div class="code-scroll"><pre><code class="language-excel">=SUMIF(orders!$K$2:$K$20001,A2,orders!$L$2:$L$20001)
+</code></pre></div>
+<p>D2 셀:</p>
+<div class="code-scroll"><pre><code class="language-excel">=C2/B2
+</code></pre></div>
+<p>B2:D2를 5행까지 채운다.</p>
+<h2>정답</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>grade</th>
+<th style="text-align: right;">order_count</th>
+<th style="text-align: right;">total_sales</th>
+<th style="text-align: right;">avg_order_value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VIP</td>
+<td style="text-align: right;">3,757</td>
+<td style="text-align: right;">393,432,930</td>
+<td style="text-align: right;">104,719.97</td>
+</tr>
+<tr>
+<td>골드</td>
+<td style="text-align: right;">5,433</td>
+<td style="text-align: right;">547,524,985</td>
+<td style="text-align: right;">100,777.65</td>
+</tr>
+<tr>
+<td>실버</td>
+<td style="text-align: right;">6,373</td>
+<td style="text-align: right;">603,583,519</td>
+<td style="text-align: right;">94,709.48</td>
+</tr>
+<tr>
+<td>브론즈</td>
+<td style="text-align: right;">4,437</td>
+<td style="text-align: right;">393,948,369</td>
+<td style="text-align: right;">88,787.10</td>
+</tr>
+</tbody>
+</table></div>
+<p>해석: 네 등급 중 주문 1건당 평균 매출이 가장 높은 등급은 VIP다. VIP의 객단가는 104,719.97원이고, 브론즈의 객단가 88,787.10원보다 높다.</p>
+<h2>검산값</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th style="text-align: right;">값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>전체 주문 건수</td>
+<td style="text-align: right;">20,000</td>
+</tr>
+<tr>
+<td>전체 매출</td>
+<td style="text-align: right;">1,938,489,803</td>
+</tr>
+<tr>
+<td>전체 객단가</td>
+<td style="text-align: right;">96,924.49</td>
+</tr>
+</tbody>
+</table></div>
+<p>등급별 주문 건수 합계와 매출 합계가 위 검산값과 일치해야 한다.</p>
+<h2>강사용 검증 코드</h2>
+<p>아래 코드는 엑셀 풀이와 같은 계산을 pandas로 재현해 검산한 코드다. 이 차시는 엑셀 함수 차시이므로 수강생 실습용 코드는 엑셀 공식이며, 별도 <code>S04_code.py</code> 산출물은 만들지 않는다.</p>
+<div class="code-scroll"><pre><code class="language-python">import pandas as pd
+from pathlib import Path
+
+base = Path(&quot;/mnt/d/ai-data-analysis-course/02_datasets/shop_orders&quot;)
+
+orders = pd.read_csv(base / &quot;orders.csv&quot;)
+customers = pd.read_csv(base / &quot;customers.csv&quot;)
+products = pd.read_csv(base / &quot;products.csv&quot;)
+
+merged = orders.merge(
+    products[[&quot;product_id&quot;, &quot;price&quot;]],
+    on=&quot;product_id&quot;,
+    how=&quot;left&quot;,
+)
+merged = merged.merge(
+    customers[[&quot;customer_id&quot;, &quot;grade&quot;]],
+    on=&quot;customer_id&quot;,
+    how=&quot;left&quot;,
+)
+
+merged[&quot;sales&quot;] = merged[&quot;price&quot;] * merged[&quot;qty&quot;] * (1 - merged[&quot;discount_rate&quot;])
+
+answer = (
+    merged.groupby(&quot;grade&quot;, as_index=False)
+    .agg(
+        order_count=(&quot;order_id&quot;, &quot;count&quot;),
+        total_sales=(&quot;sales&quot;, &quot;sum&quot;),
+        avg_order_value=(&quot;sales&quot;, &quot;mean&quot;),
+    )
+    .sort_values(&quot;avg_order_value&quot;, ascending=False)
+)
+
+print(answer.to_string(index=False, float_format=lambda x: f&quot;{x:.2f}&quot;))
+print(&quot;orders&quot;, len(merged))
+print(&quot;total_sales&quot;, f&quot;{merged['sales'].sum():.2f}&quot;)
+</code></pre></div>
+<p>실행 확인 결과:</p>
+<div class="code-scroll"><pre><code class="language-text">grade  order_count  total_sales  avg_order_value
+  VIP         3757 393432930.00        104719.97
+   골드         5433 547524985.00        100777.65
+   실버         6373 603583519.00         94709.48
+  브론즈         4437 393948369.00         88787.10
+orders 20000
+total_sales 1938489803.00
+</code></pre></div>
+</section>
+  </div>
+
+  <nav class="session-pager container">
+    <a class="pager-link prev" href="./S03.html"><span class="pager-direction">&larr; 이전 차시</span><span class="pager-title">S03 · 피벗테이블로 질문에 답하기</span></a>
+    <a class="pager-link next" href="./S05.html"><span class="pager-direction">다음 차시 &rarr;</span><span class="pager-title">S05 · 중심·산포·분포·박스플롯</span></a>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>데이터 리터러시 with AI · S04 차시</span>
+    <a href="../index.html#curriculum">전체 커리큘럼으로</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.tab-panel');
+  function activate(key, updateHash){
+    tabs.forEach(function(btn){
+      var on = btn.getAttribute('data-tab') === key;
+      btn.classList.toggle('active', on);
+    });
+    panels.forEach(function(panel){
+      var on = panel.getAttribute('data-panel') === key;
+      panel.classList.toggle('active', on);
+    });
+    if (updateHash && history.replaceState){
+      history.replaceState(null, '', '#' + key);
+    }
+  }
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      activate(btn.getAttribute('data-tab'), true);
+    });
+  });
+  var initial = (location.hash || '').replace('#', '');
+  var valid = ['curriculum', 'handout', 'script', 'answer'];
+  if (valid.indexOf(initial) !== -1){
+    activate(initial, false);
+  }
+})();
+</script>
+
+</body>
+</html>

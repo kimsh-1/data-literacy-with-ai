@@ -330,7 +330,10 @@
     border-radius: var(--radius-md);
     padding: var(--space-md) var(--space-lg);
     margin-bottom: var(--space-xxl);
+    cursor: pointer;
+    transition: border-color .2s ease, background-color .2s ease;
   }
+  .curriculum-intro-banner:hover{ border-color: var(--primary); background: var(--surface-3); }
   .curriculum-intro-banner .badge{
     font-family: var(--font-mono);
     font-size: 12px;
@@ -368,9 +371,15 @@
     display:flex;
     flex-direction: column;
     gap: var(--space-sm);
-    transition: border-color .2s ease, background-color .2s ease;
+    cursor: pointer;
+    transition: border-color .2s ease, background-color .2s ease, transform .2s ease, box-shadow .2s ease;
   }
-  .session-card:hover{ border-color: var(--hairline-strong); background: var(--surface-2); }
+  .session-card:hover{
+    border-color: var(--primary);
+    background: var(--surface-2);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px -16px rgba(94,106,210,0.45);
+  }
   .session-top{ display:flex; align-items:center; justify-content:space-between; }
   .session-num{ font-family: var(--font-mono); font-size:13px; color: var(--ink-tertiary); }
   .difficulty{ display:flex; gap:4px; align-items:center; }
@@ -632,10 +641,10 @@
       <p class="body-lg">각 차시는 앞선 차시에서 다진 감각 위에 쌓입니다. 파트별로 묶어 두었으니 처음부터 순서대로 읽어도 좋고, 관심 있는 파트부터 골라 봐도 좋습니다.</p>
     </div>
 
-    <div class="curriculum-intro-banner reveal">
+    <a class="curriculum-intro-banner reveal" href="./session/S01.html">
       <span class="badge">S01</span>
-      <p><strong style="color:var(--ink)">오리엔테이션.</strong> 데이터로 답할 수 있는 질문과 답하기 어려운 질문을 구분하고, 엑셀·AI·파이썬·BI가 분석 흐름에서 맡는 역할을 지도로 그린 뒤 수업 환경(OS, Colab, AI 계정)을 점검합니다.</p>
-    </div>
+      <p><strong style="color:var(--ink)">오리엔테이션.</strong> 데이터로 답할 수 있는 질문과 답하기 어려운 질문을 구분하고, 엑셀·AI·파이썬·BI가 분석 흐름에서 맡는 역할을 지도로 그린 뒤 수업 환경(OS, 필요한 계정, 데이터)을 점검합니다.</p>
+    </a>
 
     <!-- PART 1 -->
     <div class="part-group">
@@ -645,30 +654,30 @@
         <span class="part-range">S02 – S04</span>
       </div>
       <div class="session-grid reveal-stagger">
-        <div class="session-card reveal">
+        <a class="session-card reveal" href="./session/S02.html">
           <div class="session-top"><span class="session-num">S02</span>
             <div class="difficulty" title="난이도 1"><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">입문</span></div>
           </div>
           <h4 class="card-title">좋은 데이터의 모양: tidy 데이터와 척도</h4>
           <p>한 셀 한 값, 병합셀 금지 같은 tidy 원칙과 범주형·순서형·수치형 척도를 익히고, 어지러진 데이터에서 원칙이 깨진 지점을 직접 찾아봅니다.</p>
           <div class="session-tags"><span class="tag">카페 매출 데이터</span></div>
-        </div>
-        <div class="session-card reveal">
+        </a>
+        <a class="session-card reveal" href="./session/S03.html">
           <div class="session-top"><span class="session-num">S03</span>
             <div class="difficulty" title="난이도 2"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">기초</span></div>
           </div>
           <h4 class="card-title">피벗테이블로 질문에 답하기</h4>
           <p>"표를 보는 법"에서 "표에 질문하는 법"으로 넘어갑니다. 행·열·값 구성과 집계함수로 가장 잘 팔리는 시간대가 언제인지 직접 답해봅니다.</p>
           <div class="session-tags"><span class="tag">카페 매출 데이터</span></div>
-        </div>
-        <div class="session-card reveal">
+        </a>
+        <a class="session-card reveal" href="./session/S04.html">
           <div class="session-top"><span class="session-num">S04</span>
             <div class="difficulty" title="난이도 2"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">기초</span></div>
           </div>
           <h4 class="card-title">실무 함수: VLOOKUP·XLOOKUP과 조건부 집계</h4>
           <p>여러 표에 흩어진 실무 데이터를 VLOOKUP·XLOOKUP으로 이어붙여 매출을 계산하고, SUMIF·COUNTIF로 지역별·등급별 집계를 냅니다.</p>
           <div class="session-tags"><span class="tag">주문·고객·상품 데이터</span></div>
-        </div>
+        </a>
       </div>
     </div>
 
@@ -680,22 +689,22 @@
         <span class="part-range">S05 – S06</span>
       </div>
       <div class="session-grid reveal-stagger">
-        <div class="session-card reveal">
+        <a class="session-card reveal" href="./session/S05.html">
           <div class="session-top"><span class="session-num">S05</span>
             <div class="difficulty" title="난이도 2"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">기초</span></div>
           </div>
           <h4 class="card-title">중심·산포·분포·박스플롯</h4>
           <p>평균·중앙값·최빈값과 범위·표준편차로 숫자 열을 제대로 읽고, 박스플롯으로 부서별 분포와 이상치를 확인합니다. 평균이 실제 보통값을 과장하는 사례도 함께 찾아봅니다.</p>
           <div class="session-tags"><span class="tag">인사 데이터</span><span class="tag">카페 매출 데이터</span></div>
-        </div>
-        <div class="session-card reveal">
+        </a>
+        <a class="session-card reveal" href="./session/S06.html">
           <div class="session-top"><span class="session-num">S06</span>
             <div class="difficulty" title="난이도 3"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">중급</span></div>
           </div>
           <h4 class="card-title">상관 vs 인과, 심슨의 역설</h4>
           <p>강남구 아파트 실거래로 전용면적과 거래금액의 상관을 확인하고, "기온이 오르면 매출이 는다" 같은 그럴듯한 주장이 실제로는 무상관임을 반박합니다. 전체 평균과 그룹별 평균이 뒤집히는 심슨의 역설도 경험합니다.</p>
           <div class="session-tags"><span class="tag real">강남구 아파트 실거래</span><span class="tag">인사 데이터</span></div>
-        </div>
+        </a>
       </div>
     </div>
 
@@ -707,30 +716,30 @@
         <span class="part-range">S07 – S09</span>
       </div>
       <div class="session-grid reveal-stagger">
-        <div class="session-card reveal">
+        <a class="session-card reveal" href="./session/S07.html">
           <div class="session-top"><span class="session-num">S07</span>
             <div class="difficulty" title="난이도 2"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">기초</span></div>
           </div>
           <h4 class="card-title">엑셀을 AI에 올려 자연어로 분석</h4>
           <p>엑셀 파일을 AI 분석 도구에 업로드해 자연어로 요약·집계·추세를 요청하고, 서로 다른 AI의 답을 비교해 더 믿을 만한 쪽을 골라봅니다.</p>
           <div class="session-tags"><span class="tag">카페 매출 데이터(정제 전)</span></div>
-        </div>
-        <div class="session-card reveal">
+        </a>
+        <a class="session-card reveal" href="./session/S08.html">
           <div class="session-top"><span class="session-num">S08</span>
             <div class="difficulty" title="난이도 3"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">중급</span></div>
           </div>
           <h4 class="card-title">좋은 분석 프롬프트 설계</h4>
           <p>맥락·질문·출력형식 세 요소로 프롬프트를 설계하고, 설문 주관식 응답을 주제와 감성으로 분류하도록 요청합니다. 프롬프트를 세 버전으로 바꿔 재현 가능성도 함께 판단합니다.</p>
           <div class="session-tags"><span class="tag">설문 응답</span><span class="tag">영화 데이터</span></div>
-        </div>
-        <div class="session-card reveal">
+        </a>
+        <a class="session-card reveal" href="./session/S09.html">
           <div class="session-top"><span class="session-num">S09</span>
             <div class="difficulty" title="난이도 3"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">중급</span></div>
           </div>
           <h4 class="card-title">AI 답 검증하기: 환각과 계산 오류 잡기</h4>
           <p>AI가 낸 매출 수치를 엑셀 피벗테이블로 교차 확인하고, 중복·결측·표기 흔들림이 숫자를 어떻게 왜곡하는지 확인해 나만의 검증 체크리스트를 만듭니다.</p>
           <div class="session-tags"><span class="tag">카페 매출 데이터</span></div>
-        </div>
+        </a>
       </div>
     </div>
 
@@ -742,46 +751,46 @@
         <span class="part-range">S10 – S14</span>
       </div>
       <div class="session-grid reveal-stagger">
-        <div class="session-card reveal">
+        <a class="session-card reveal" href="./session/S10.html">
           <div class="session-top"><span class="session-num">S10</span>
             <div class="difficulty" title="난이도 3"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">중급</span></div>
           </div>
           <h4 class="card-title">Colab과 파이썬 기초</h4>
           <p>엑셀에서 파이썬으로 넘어가는 첫 시간입니다. 변수, 자료형, 리스트, 딕셔너리, 조건문, 반복문을 익히며 다음 차시의 pandas 필터가 오늘의 조건문을 열 전체에 한 번에 적용하는 것임을 확인합니다.</p>
           <div class="session-tags"><span class="tag">문법 예제</span></div>
-        </div>
-        <div class="session-card reveal">
+        </a>
+        <a class="session-card reveal" href="./session/S11.html">
           <div class="session-top"><span class="session-num">S11</span>
             <div class="difficulty" title="난이도 3"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">중급</span></div>
           </div>
           <h4 class="card-title">Pandas 입문: Series, DataFrame과 필터</h4>
           <p>DataFrame과 Series를 엑셀 시트와 열에 견주어 이해하고, head·info·describe로 데이터를 살핀 뒤 불리언 필터로 원하는 행만 남깁니다. 엑셀 필터가 곧 불리언 마스크라는 것이 이 차시의 핵심입니다.</p>
           <div class="session-tags"><span class="tag">카페 매출 데이터</span></div>
-        </div>
-        <div class="session-card reveal">
+        </a>
+        <a class="session-card reveal" href="./session/S12.html">
           <div class="session-top"><span class="session-num">S12</span>
             <div class="difficulty" title="난이도 4"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="difficulty-label">심화</span></div>
           </div>
           <h4 class="card-title">데이터 정제: 결측, 이상치, 타입, 중복, 인코딩</h4>
           <p>결측치 처리, IQR 이상치, 타입 변환, 중복 제거, 문자열 처리에 더해 한글 CSV의 cp949 인코딩 문제와 날짜 파싱까지 정제 전 과정을 다룹니다. 정제는 결국 계산 가능한 표로 만드는 일입니다.</p>
           <div class="session-tags"><span class="tag">카페 매출 데이터(정제 전)</span></div>
-        </div>
-        <div class="session-card reveal">
+        </a>
+        <a class="session-card reveal" href="./session/S13.html">
           <div class="session-top"><span class="session-num">S13</span>
             <div class="difficulty" title="난이도 4"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="difficulty-label">심화</span></div>
           </div>
           <h4 class="card-title">그룹화·집계·재구조화</h4>
           <p>groupby, merge, pivot_table, melt를 익힙니다. 231개 열짜리 인구 데이터를 melt로 세로형으로 바꾸고, 서울 상가업소를 업종별로 집계하며, 생활인구를 자치구 단위로 묶어보는 미션으로 마무리합니다.</p>
           <div class="session-tags"><span class="tag real">서울 상가업소 11.9만행</span><span class="tag real">인구 KOSIS</span><span class="tag real">서울 생활인구</span></div>
-        </div>
-        <div class="session-card reveal">
+        </a>
+        <a class="session-card reveal" href="./session/S14.html">
           <div class="session-top"><span class="session-num">S14</span>
             <div class="difficulty" title="난이도 4"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="difficulty-label">심화</span></div>
           </div>
           <h4 class="card-title">시각화 실전: matplotlib·seaborn과 BI 핸드오프</h4>
           <p>한글 폰트 설정부터 시작해 지하철 데이터는 히트맵으로, 아파트 데이터는 산점도와 추세선으로, 소비자물가는 시계열 라인차트로 표현합니다. 정제 결과를 저장해 BI로 넘기는 핸드오프까지 다룹니다.</p>
           <div class="session-tags"><span class="tag real">서울 지하철 19.9만행</span><span class="tag real">강남 아파트 실거래</span><span class="tag real">한국 CPI</span></div>
-        </div>
+        </a>
       </div>
     </div>
 
@@ -793,38 +802,38 @@
         <span class="part-range">S15 – S18</span>
       </div>
       <div class="session-grid reveal-stagger">
-        <div class="session-card reveal">
+        <a class="session-card reveal" href="./session/S15.html">
           <div class="session-top"><span class="session-num">S15</span>
             <div class="difficulty" title="난이도 3"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">중급</span></div>
           </div>
           <h4 class="card-title">Power BI 설치, 로드, 첫 차트</h4>
           <p>Power BI Desktop을 설치하고 CSV를 불러와 막대, 꺾은선, KPI 카드로 첫 대시보드 페이지를 만듭니다. Mac 사용자는 S18의 Looker Studio 경로로 대체됩니다.</p>
           <div class="session-tags"><span class="tag">카페 매출 데이터</span></div>
-        </div>
-        <div class="session-card reveal">
+        </a>
+        <a class="session-card reveal" href="./session/S16.html">
           <div class="session-top"><span class="session-num">S16</span>
             <div class="difficulty" title="난이도 4"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="difficulty-label">심화</span></div>
           </div>
           <h4 class="card-title">데이터 모델링: 관계, 스타 스키마, 날짜 차원</h4>
           <p>S04에서 VLOOKUP으로 풀었던 문제를 다른 방식으로 풉니다. 주문 테이블을 중심에 둔 스타 스키마로 관계를 맺고, 다음 차시의 전월 대비 계산을 위한 날짜 차원 테이블을 만듭니다.</p>
           <div class="session-tags"><span class="tag">주문·고객·상품 데이터</span></div>
-        </div>
-        <div class="session-card reveal">
+        </a>
+        <a class="session-card reveal" href="./session/S17.html">
           <div class="session-top"><span class="session-num">S17</span>
             <div class="difficulty" title="난이도 4"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="difficulty-label">심화</span></div>
           </div>
           <h4 class="card-title">시각화·상호작용·DAX 기초</h4>
           <p>슬라이서와 드릴다운으로 상호작용하는 대시보드를 만들고, 합계와 비율은 물론 전월 대비 증감까지 계산하는 DAX 측정값을 익힙니다.</p>
           <div class="session-tags"><span class="tag">주문 데이터 + 날짜 차원</span></div>
-        </div>
-        <div class="session-card reveal">
+        </a>
+        <a class="session-card reveal" href="./session/S18.html">
           <div class="session-top"><span class="session-num">S18</span>
             <div class="difficulty" title="난이도 4"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="difficulty-label">심화</span></div>
           </div>
           <h4 class="card-title">배포와 공유: Looker Studio, Power BI Copilot 선택</h4>
           <p>Power BI Service와 Copilot은 조직 계정과 유료 결제가 필요해, 무료 개인 계정으로 갈 수 있는 Looker Studio를 표준 경로로 삼습니다. CSV를 연결해 보고서를 만들고 공유 링크까지 검증합니다.</p>
           <div class="session-tags"><span class="tag">설문 응답</span></div>
-        </div>
+        </a>
       </div>
     </div>
 
@@ -836,22 +845,22 @@
         <span class="part-range">S19 – S20</span>
       </div>
       <div class="session-grid reveal-stagger">
-        <div class="session-card reveal">
+        <a class="session-card reveal" href="./session/S19.html">
           <div class="session-top"><span class="session-num">S19</span>
             <div class="difficulty" title="난이도 5"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="difficulty-label">실전</span></div>
           </div>
           <h4 class="card-title">풀사이클 실습: AI 요약, 파이썬 그래프, BI 1페이지</h4>
           <p>"서울 음식 업종 점포는 어느 구에 많이 모여 있고 구별 업종 구성은 어떻게 다른가"라는 질문 하나로, AI 요약부터 파이썬 핵심 그래프 한 장, BI 한 페이지까지 정해진 스코프를 스스로 완주합니다.</p>
           <div class="session-tags"><span class="tag real">서울 상가업소 11.9만행</span><span class="tag real">강남 아파트 실거래</span></div>
-        </div>
-        <div class="session-card reveal">
+        </a>
+        <a class="session-card reveal" href="./session/S20.html">
           <div class="session-top"><span class="session-num">S20</span>
             <div class="difficulty" title="난이도 5"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="difficulty-label">실전</span></div>
           </div>
           <h4 class="card-title">인사이트 보고: 그래서 뭘 하나</h4>
           <p>전 차시 결과물로 발견, 시사점, 액션을 담은 1페이지 보고서와 3분 발표를 만듭니다. 강남구 12,095개, 마포구 7,396개 점포 수처럼 구체적인 수치로 결론을 뒷받침합니다.</p>
           <div class="session-tags"><span class="tag real">S19 결과물</span></div>
-        </div>
+        </a>
       </div>
     </div>
   </div>

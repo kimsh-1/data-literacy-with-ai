@@ -1,0 +1,1733 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>S08. 좋은 분석 프롬프트 설계 · 데이터 리터러시 with AI</title>
+<meta name="description" content="S08차시: 좋은 분석 프롬프트 설계 — 커리큘럼·핸드아웃·강사대본·모범답안." />
+<style>
+:root{
+  --canvas: #010102;
+  --surface-1: #0f1011;
+  --surface-2: #141516;
+  --surface-3: #18191a;
+  --surface-4: #191a1b;
+  --ink: #f7f8f8;
+  --ink-muted: #d0d6e0;
+  --ink-subtle: #8a8f98;
+  --ink-tertiary: #62666d;
+  --primary: #5e6ad2;
+  --primary-hover: #828fff;
+  --primary-focus: #5e69d1;
+  --hairline: #23252a;
+  --hairline-strong: #34343a;
+  --hairline-tertiary: #3e3e44;
+  --success: #27a644;
+
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  --container: 900px;
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+html{ background: var(--canvas); }
+body{
+  margin:0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.05px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a{ color: inherit; text-decoration: none; }
+ul, ol{ margin:0; padding:0; }
+h1,h2,h3,h4,p{ margin:0; }
+
+.container{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 48px);
+}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--primary-hover);
+}
+.eyebrow::before{
+  content:"";
+  width:6px; height:6px;
+  background: var(--primary);
+  border-radius: 1px;
+  flex-shrink:0;
+}
+
+/* ---------- top nav ---------- */
+.top-nav{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 64px;
+  display:flex;
+  align-items:center;
+  background: rgba(1,1,2,0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.top-nav .container{ display:flex; align-items:center; justify-content:space-between; gap: 24px; max-width: 1280px; }
+.brand{ display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:600; font-size:15px; letter-spacing:-0.01em; }
+.brand-mark{ width:20px; height:20px; border-radius: 6px; background: var(--primary); flex-shrink:0; position:relative; }
+.brand-mark::after{ content:""; position:absolute; inset:6px; border-radius:2px; background: rgba(255,255,255,0.85); }
+.back-link{ font-size:14px; color: var(--ink-subtle); display:inline-flex; align-items:center; gap:6px; transition: color .15s ease; }
+.back-link:hover{ color: var(--ink); }
+
+/* ---------- session header ---------- */
+.session-header{
+  padding: var(--space-xxl) 0 var(--space-xl);
+  background:
+    radial-gradient(ellipse 60% 50% at 82% 0%, rgba(94,106,210,0.16), transparent 60%),
+    var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+.session-header-top{
+  display:flex;
+  align-items:center;
+  gap: var(--space-md);
+  margin: var(--space-md) 0 var(--space-md);
+}
+.session-num-badge{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--primary-hover);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-xs);
+  padding: 4px 10px;
+}
+.difficulty{ display:flex; gap:4px; align-items:center; }
+.difficulty .dot{ width:6px; height:6px; border-radius:50%; background: var(--hairline-strong); }
+.difficulty .dot.filled{ background: var(--primary); }
+.difficulty-label{ font-size:12px; color: var(--ink-tertiary); margin-left:6px; }
+.session-header h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ---------- tabs ---------- */
+.tabs-bar{
+  display:flex;
+  gap: 4px;
+  padding-top: var(--space-lg);
+  border-bottom: 1px solid var(--hairline);
+  overflow-x: auto;
+}
+.tab-btn{
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-subtle);
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s ease, border-color .15s ease;
+}
+.tab-btn:hover{ color: var(--ink); }
+.tab-btn.active{ color: var(--ink); border-bottom-color: var(--primary); }
+
+.tab-panels{ padding: var(--space-xxl) 0 var(--space-xxl); }
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+/* ---------- markdown body ---------- */
+.markdown-body{ color: var(--ink-muted); font-size: 15.5px; line-height: 1.75; letter-spacing: -0.05px; overflow-wrap: anywhere; word-break: break-word; }
+.markdown-body h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--hairline);
+}
+.markdown-body h2{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+.markdown-body h3{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin: var(--space-lg) 0 var(--space-xs);
+}
+.markdown-body h4{
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+.markdown-body p{ margin: 0 0 var(--space-md); }
+.markdown-body ul, .markdown-body ol{ margin: 0 0 var(--space-md); padding-left: 1.4em; }
+.markdown-body li{ margin-bottom: 6px; }
+.markdown-body ul{ list-style: disc; }
+.markdown-body ol{ list-style: decimal; }
+.markdown-body strong{ color: var(--ink); font-weight: 600; }
+.markdown-body em{ color: var(--ink-muted); }
+.markdown-body a{ color: var(--primary-hover); text-decoration: underline; text-underline-offset: 2px; }
+.markdown-body hr{ border:none; border-top: 1px solid var(--hairline); margin: var(--space-xl) 0; }
+.markdown-body blockquote{
+  margin: 0 0 var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid var(--primary);
+  background: var(--surface-1);
+  color: var(--ink-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.markdown-body code{
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--primary-hover);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.markdown-body .code-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+}
+.markdown-body pre{
+  margin: 0;
+  padding: var(--space-md);
+  background: transparent;
+  border: none;
+}
+.markdown-body pre code{
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre;
+}
+.markdown-body .table-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+}
+.markdown-body table{
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 460px;
+  font-size: 13.5px;
+}
+.markdown-body th, .markdown-body td{
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+  white-space: nowrap;
+}
+.markdown-body thead th{
+  background: var(--surface-1);
+  color: var(--ink);
+  font-weight: 600;
+  font-family: var(--font-text);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+.markdown-body tbody tr:last-child td{ border-bottom: none; }
+.markdown-body tbody tr:hover{ background: var(--surface-1); }
+
+/* ---------- pager ---------- */
+.session-pager{
+  display:flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-xl) 0 var(--space-xxl);
+  border-top: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+.pager-link{
+  display:flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  max-width: 46%;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.pager-link:hover{ border-color: var(--primary); background: var(--surface-2); }
+.pager-link.next{ margin-left: auto; text-align: right; align-items: flex-end; }
+.pager-direction{ font-size: 12px; color: var(--ink-tertiary); font-family: var(--font-mono); }
+.pager-title{ font-size: 14px; color: var(--ink); font-weight: 500; }
+.pager-spacer{ flex: 1; }
+
+footer.site-footer{
+  border-top: 1px solid var(--hairline);
+  padding: var(--space-xl) 0;
+}
+footer.site-footer .container{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: var(--ink-tertiary);
+  font-size: 12px;
+}
+footer.site-footer a:hover{ color: var(--ink-subtle); }
+
+@media (max-width: 640px){
+  .session-header{ padding: var(--space-xl) 0 var(--space-lg); }
+  .pager-link{ max-width: 100%; }
+  .session-pager{ flex-direction: column; }
+  .pager-link.next{ margin-left: 0; text-align: left; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="container">
+    <div class="brand"><span class="brand-mark"></span>데이터 리터러시 with AI</div>
+    <a class="back-link" href="../index.html#curriculum">&larr; 커리큘럼으로</a>
+  </div>
+</nav>
+
+<header class="session-header">
+  <div class="container">
+    <div class="eyebrow">PART 03 · AI</div>
+    <div class="session-header-top">
+      <span class="session-num-badge">S08</span>
+      <div class="difficulty" title="난이도 3"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">중급</span></div>
+    </div>
+    <h1>좋은 분석 프롬프트 설계</h1>
+  </div>
+  <div class="container">
+    <div class="tabs-bar" role="tablist">
+<button class="tab-btn active" data-tab="curriculum" role="tab" aria-selected="true">커리큘럼</button>
+<button class="tab-btn" data-tab="handout" role="tab" aria-selected="false">핸드아웃</button>
+<button class="tab-btn" data-tab="script" role="tab" aria-selected="false">강사대본</button>
+<button class="tab-btn" data-tab="answer" role="tab" aria-selected="false">모범답안</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="tab-panels container">
+<section class="tab-panel markdown-body active" data-panel="curriculum" aria-label="커리큘럼">
+<h1>S08. 좋은 분석 프롬프트 설계</h1>
+<h2>차시 개요</h2>
+<ul>
+<li>대상: 엑셀은 쓰지만 데이터분석은 처음인 비개발자</li>
+<li>선수 차시: S07</li>
+<li>난이도: 3</li>
+<li>시간: 50분</li>
+<li>주 데이터: <code>/mnt/d/ai-data-analysis-course/02_datasets/survey_responses/survey_responses_clean.csv</code></li>
+<li>보조 데이터: <code>/mnt/d/ai-data-analysis-course/02_datasets/survey_responses/survey_responses_dirty.csv</code></li>
+<li>선택 데이터: <code>/mnt/d/ai-data-analysis-course/02_datasets/real_korean/movie_box/dacon_movies_train.csv</code></li>
+<li>확인된 데이터 규모: 설문 clean 1,500행 × 8열, 설문 dirty 1,510행 × 8열, 영화 train 600행 × 12열</li>
+</ul>
+<p>이번 차시의 핵심은 AI에게 "분석해줘"라고 던지는 대신 제대로 된 분석 요청서를 쓰는 데 있다. 피벗테이블을 만들 때 행과 열과 값을 지정하듯, AI에게도 맥락과 질문과 출력형식을 짚어 줘야 한다. 이 세 가지가 빠지면 그럴듯한 문장이야 나오겠지만, 업무에 바로 쓸 만한 분석을 안정적으로 얻기는 어렵다.</p>
+<h2>학습 목표</h2>
+<p>수강생은 이 차시가 끝나면 다음을 할 수 있다.</p>
+<ol>
+<li>좋은 분석 프롬프트의 세 요소인 맥락, 질문, 출력형식을 설명할 수 있다.</li>
+<li>한 번에 큰 답을 요구하지 않고 코드북 설계, 행별 분류, 요약, 검증 순서로 프롬프트를 심화할 수 있다.</li>
+<li>설문 주관식 응답을 주제와 감성으로 분류하도록 AI에게 요청할 수 있다.</li>
+<li>같은 데이터에 대해 프롬프트 3개를 비교하고 어떤 프롬프트가 더 재현 가능한지 판단할 수 있다.</li>
+</ol>
+<h2>데이터 이해</h2>
+<p>사용하는 기본 파일은 <code>survey_responses_clean.csv</code>이다. 같은 내용의 xlsx 파일도 있지만, AI 파일 업로드와 파이썬 검증에는 CSV를 사용한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>의미</th>
+<th>이번 차시에서 쓰는 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>respondent_id</code></td>
+<td>응답자 ID</td>
+<td>AI 결과와 원본을 대조하는 기준</td>
+</tr>
+<tr>
+<td><code>age_group</code></td>
+<td>연령대</td>
+<td>요약 해석의 보조 정보</td>
+</tr>
+<tr>
+<td><code>gender</code></td>
+<td>성별</td>
+<td>이번 차시에서는 주요 분석 기준으로 쓰지 않음</td>
+</tr>
+<tr>
+<td><code>nps</code></td>
+<td>추천 의향 점수, 0-10</td>
+<td>비추천, 중립, 추천 그룹 구분</td>
+</tr>
+<tr>
+<td><code>satisfaction</code></td>
+<td>만족도, 1-5</td>
+<td>감성 해석의 참고값</td>
+</tr>
+<tr>
+<td><code>channel</code></td>
+<td>유입 또는 응답 채널</td>
+<td>채널별 차이 해석의 보조 정보</td>
+</tr>
+<tr>
+<td><code>free_text</code></td>
+<td>주관식 응답</td>
+<td>주제분류와 감성요약의 핵심</td>
+</tr>
+<tr>
+<td><code>submitted_at</code></td>
+<td>응답 제출 시각</td>
+<td>이번 차시에서는 사용하지 않음</td>
+</tr>
+</tbody>
+</table></div>
+<p>보조 파일인 <code>survey_responses_dirty.csv</code>는 1,510행이다. 실제 확인 결과 중복 응답자 ID 10건, NPS 결측 60건, 주관식 결측 22건, 만족도 문자 혼입 75건, <code>20s</code>와 <code>이십대</code> 같은 20대 표기 혼재 90건이 있다. 이번 차시의 본 실습은 clean 파일로 진행하되, dirty 파일은 "프롬프트에 데이터 상태를 알려야 하는 이유"를 설명할 때 사용한다.</p>
+<p>선택 데이터인 <code>dacon_movies_train.csv</code>는 600행 × 12열이며 <code>genre</code> 컬럼이 이미 들어 있다. 시간이 남으면 "이미 사람이 만든 범주가 있는 데이터"와 "AI에게 범주를 만들게 하는 설문 데이터"를 비교하는 확장 예제로만 사용한다.</p>
+<h2>핵심 개념</h2>
+<h3>1. 프롬프트는 AI에게 보내는 분석 요청서다</h3>
+<p>입문자가 흔히 쓰는 프롬프트는 "이 데이터 분석해줘"다. 피벗테이블을 만들면서 행과 열과 값 영역을 죄다 비워 둔 것과 비슷하다. AI가 뭔가 내놓기는 하겠지만, 그게 우리가 원한 질문에 답한다는 보장은 없다.</p>
+<p>분석 프롬프트에는 최소한 세 가지가 들어가야 한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>요소</th>
+<th>뜻</th>
+<th>설문 분석 예시</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>맥락</td>
+<td>이 데이터가 무엇이고 왜 보는지</td>
+<td>온라인 쇼핑 고객 설문이며, 주관식 불만과 칭찬을 운영 개선에 쓰려 한다</td>
+</tr>
+<tr>
+<td>질문</td>
+<td>무엇을 알고 싶은지</td>
+<td><code>free_text</code>를 읽고 주제와 감성을 분류하라</td>
+</tr>
+<tr>
+<td>출력형식</td>
+<td>어떤 모양으로 돌려받을지</td>
+<td><code>respondent_id</code>, 주제, 감성, 근거문구, 신뢰도 표로 작성하라</td>
+</tr>
+</tbody>
+</table></div>
+<p>좋은 프롬프트는 AI를 똑똑하게 만드는 주문이 아니라, 분석 기준을 좁히고 결과를 검토 가능한 표로 받아 내기 위한 업무 지시서다.</p>
+<h3>2. 맥락은 AI가 기준을 세우는 재료다</h3>
+<p>같은 "배송이 늦었다"라는 문장도 분석 목적에 따라 뜻이 달라진다. 고객경험 개선 보고서라면 배송 프로세스 문제로 잡겠지만, 마케팅 보고서라면 구매 후 커뮤니케이션 문제로 볼 수도 있다.</p>
+<p>그래서 프롬프트에는 다음 맥락을 적어야 한다.</p>
+<ul>
+<li>데이터의 출처와 단위: 고객 설문 1행이 응답 1건임</li>
+<li>주요 컬럼의 뜻: <code>nps</code>, <code>satisfaction</code>, <code>free_text</code></li>
+<li>분석 목적: 운영 개선 아이디어를 찾기 위함</li>
+<li>제한 조건: 모르면 추측하지 말고 "판단 어려움"으로 표시</li>
+<li>검증 기준: 결과에는 원문 근거와 응답자 ID를 포함</li>
+</ul>
+<p>엑셀로 치면 맥락은 표 제목이나 컬럼 설명에 해당한다. 제목 없이 숫자만 늘어놓으면 그게 매출인지 수량인지 알 수 없는 것과 같다.</p>
+<h3>3. 질문은 한 번에 하나씩 좁혀야 한다</h3>
+<p>"고객 반응을 분석해줘"는 너무 넓다. 좋은 질문은 다음처럼 단계별로 좁아진다.</p>
+<ol>
+<li>이 설문 주관식을 분류할 주제 코드 6-8개를 먼저 제안해줘.</li>
+<li>제안한 코드북으로 표본 18행을 주제와 감성으로 분류해줘.</li>
+<li>분류 결과를 주제별 응답수, 평균 NPS, 대표 근거로 요약해줘.</li>
+<li>모호하거나 다시 검토해야 할 행을 따로 표시해줘.</li>
+</ol>
+<p>순서가 중요하다. AI가 처음부터 전체 요약을 내놓으면 무슨 기준으로 분류했는지 되짚기 어렵다. 먼저 기준표를 만들고, 그 표로 행을 분류한 다음, 요약은 맨 마지막에 해야 한다.</p>
+<h3>4. 출력형식은 검증 가능하게 지정한다</h3>
+<p>AI가 줄글로만 답하면 읽기에는 편해도 검증하기가 까다롭다. 그래서 이번 차시에서는 표로 받는 것을 기본으로 삼는다.</p>
+<p>권장 출력 컬럼은 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>출력 컬럼</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>respondent_id</code></td>
+<td>원본 행과 대조하기 위해 필요</td>
+</tr>
+<tr>
+<td><code>topic</code></td>
+<td>주관식 응답의 주요 주제</td>
+</tr>
+<tr>
+<td><code>sentiment</code></td>
+<td>긍정, 부정, 혼합, 중립</td>
+</tr>
+<tr>
+<td><code>evidence</code></td>
+<td>판단 근거가 된 원문 일부</td>
+</tr>
+<tr>
+<td><code>confidence</code></td>
+<td>높음, 중간, 낮음</td>
+</tr>
+<tr>
+<td><code>needs_review</code></td>
+<td>사람이 다시 봐야 할 행 표시</td>
+</tr>
+</tbody>
+</table></div>
+<p>엑셀로 치면 출력형식은 피벗테이블 결과를 어디에 어떤 모양으로 놓을지 정하는 일이다. 표로 받아 두면 엑셀에 그대로 붙여 넣어 피벗테이블이나 필터, 정렬로 이어 갈 수 있다.</p>
+<h3>5. 범주분류와 감성분석은 "초안"으로 받아야 한다</h3>
+<p>주관식 응답은 숫자처럼 정답이 하나로 떨어지는 데이터가 아니다. "사용 중 오류가 있었지만 재접속 후 해결됐다"는 응답에는 앱 오류라는 부정 신호와 해결 경험이라는 긍정 신호가 뒤섞여 있다. 이런 문장을 억지로 긍정이나 부정 한쪽에만 밀어 넣으면 분석이 거칠어진다.</p>
+<p>따라서 프롬프트에는 다음 조건을 넣는다.</p>
+<ul>
+<li>주제는 하나만 고르되, 애매하면 <code>needs_review=예</code>로 표시한다.</li>
+<li>감성은 긍정, 부정, 혼합, 중립 중 하나로 정한다.</li>
+<li>NPS와 주관식 문장이 어긋나면 혼합 또는 검토 필요로 표시한다.</li>
+<li>각 판단에는 원문 근거를 붙인다.</li>
+</ul>
+<p>AI가 잘하는 일은 텍스트를 빠르게 훑어 초안을 만들어 내는 것이다. 최종 보고까지 가려면 샘플 검토와 기준표 조정, 원본 대조가 반드시 뒤따라야 한다.</p>
+<h2>엑셀 기능 비교</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>하고 싶은 일</th>
+<th>엑셀 중심 접근</th>
+<th>AI 프롬프트 접근</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NPS 구간 나누기</td>
+<td><code>IF</code>, <code>IFS</code> 수식</td>
+<td>기준을 알려주고 구간명을 붙이게 함</td>
+</tr>
+<tr>
+<td>이미 있는 범주 집계</td>
+<td>피벗테이블</td>
+<td>요약표 요청 가능</td>
+</tr>
+<tr>
+<td>주관식 의견 묶기</td>
+<td>사람이 읽고 새 열에 직접 입력</td>
+<td>주제 코드북을 만들고 행별 분류 요청</td>
+</tr>
+<tr>
+<td>불만 원인 요약</td>
+<td>필터 후 직접 읽기</td>
+<td>부정 또는 혼합 응답의 대표 근거 요청</td>
+</tr>
+<tr>
+<td>결과 검증</td>
+<td>원본 행과 대조</td>
+<td><code>respondent_id</code>, 근거문구, 검토 필요 열을 요구</td>
+</tr>
+</tbody>
+</table></div>
+<p>AI가 엑셀을 대체하는 것은 아니다. AI는 주관식 텍스트를 읽어 초안을 뽑고, 엑셀은 그 초안을 다시 집계하고 검증하는 자리에 선다.</p>
+<h2>50분 수업 흐름</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;">시간</th>
+<th>내용</th>
+<th>진행 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0-5분</td>
+<td>도입: "분석해줘"가 왜 부족한가</td>
+<td>같은 데이터에 짧은 프롬프트와 구조화 프롬프트를 비교</td>
+</tr>
+<tr>
+<td style="text-align: right;">5-12분</td>
+<td>개념: 맥락, 질문, 출력형식</td>
+<td>엑셀 피벗테이블의 행, 열, 값과 비교</td>
+</tr>
+<tr>
+<td style="text-align: right;">12-24분</td>
+<td>따라하기 1: 설문 표본 18행으로 주제분류 요청</td>
+<td>파일 업로드 또는 표본 복사 붙여넣기</td>
+</tr>
+<tr>
+<td style="text-align: right;">24-34분</td>
+<td>따라하기 2: 단계적 심화</td>
+<td>코드북 제안, 행별 분류, 요약, 검토 필요 행 요청</td>
+</tr>
+<tr>
+<td style="text-align: right;">34-45분</td>
+<td>직접 해보기: 프롬프트 3버전 A/B/C 비교</td>
+<td>수강생이 직접 프롬프트 개선</td>
+</tr>
+<tr>
+<td style="text-align: right;">45-50분</td>
+<td>정리와 체크포인트</td>
+<td>좋은 프롬프트의 세 요소와 검증 습관 확인</td>
+</tr>
+</tbody>
+</table></div>
+<h2>수업 중 강조할 원칙</h2>
+<ol>
+<li>AI에게 맡기기 전에 분석 목적을 먼저 정한다.</li>
+<li>프롬프트에는 맥락, 질문, 출력형식이 모두 들어가야 한다.</li>
+<li>큰 질문은 코드북 설계, 행별 분류, 요약, 검증 순서로 나눈다.</li>
+<li>주관식 분류 결과는 정답이 아니라 검토 가능한 초안이다.</li>
+<li>AI 답변에는 원문 근거와 응답자 ID가 있어야 다시 확인할 수 있다.</li>
+</ol>
+<h2>차시 평가 기준</h2>
+<ul>
+<li>상: 같은 표본 또는 파일로 프롬프트 3개를 비교하고, 가장 좋은 프롬프트를 근거와 함께 설명하며, 주제·감성 분류표를 검토 가능한 형식으로 만든다.</li>
+<li>중: 따라하기 프롬프트를 재현하고, 강사의 안내를 받아 출력형식과 근거 열을 포함한 결과를 얻는다.</li>
+<li>하: "분석해줘" 수준의 프롬프트에서 벗어나지 못하거나, AI 결과를 원본과 대조하지 못한다.</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="handout" aria-label="핸드아웃">
+<h1>S08. 좋은 분석 프롬프트 설계</h1>
+<h2>사용할 파일</h2>
+<p>기본 실습 파일:</p>
+<p><code>/mnt/d/ai-data-analysis-course/02_datasets/survey_responses/survey_responses_clean.csv</code></p>
+<p>보조 확인 파일:</p>
+<p><code>/mnt/d/ai-data-analysis-course/02_datasets/survey_responses/survey_responses_dirty.csv</code></p>
+<p>선택 확장 파일:</p>
+<p><code>/mnt/d/ai-data-analysis-course/02_datasets/real_korean/movie_box/dacon_movies_train.csv</code></p>
+<p>확인된 데이터 규모는 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>파일</th>
+<th style="text-align: right;">행수</th>
+<th style="text-align: right;">열수</th>
+<th>용도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>survey_responses_clean.csv</code></td>
+<td style="text-align: right;">1,500</td>
+<td style="text-align: right;">8</td>
+<td>주관식 주제분류와 감성요약</td>
+</tr>
+<tr>
+<td><code>survey_responses_dirty.csv</code></td>
+<td style="text-align: right;">1,510</td>
+<td style="text-align: right;">8</td>
+<td>데이터 상태를 프롬프트에 알려야 하는 이유 설명</td>
+</tr>
+<tr>
+<td><code>dacon_movies_train.csv</code></td>
+<td style="text-align: right;">600</td>
+<td style="text-align: right;">12</td>
+<td>시간이 남을 때 장르 데이터 확장 실습</td>
+</tr>
+</tbody>
+</table></div>
+<p>AI 파일 업로드 기능은 쓰는 도구와 요금제에 따라 막혀 있을 수 있다. 업로드가 되면 clean CSV 파일을 올리고, 안 되면 아래 표본 18행을 복사해서 쓴다.</p>
+<h2>오늘의 목표</h2>
+<p>오늘은 AI에게 설문 주관식 응답을 분석시켜 본다. 다만 목표는 AI 답변을 곧이곧대로 믿는 게 아니라, 좋은 분석 프롬프트를 설계해 결과를 검토 가능한 표로 받아 내는 데 있다.</p>
+<p>좋은 분석 프롬프트에는 다음 세 가지가 들어간다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>요소</th>
+<th>확인 질문</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>맥락</td>
+<td>이 데이터가 무엇이고 왜 분석하는가</td>
+</tr>
+<tr>
+<td>질문</td>
+<td>AI가 정확히 무엇을 해야 하는가</td>
+</tr>
+<tr>
+<td>출력형식</td>
+<td>결과를 어떤 표와 문장으로 받을 것인가</td>
+</tr>
+</tbody>
+</table></div>
+<h2>실습 표본 18행</h2>
+<p>파일 업로드가 안 되는 경우 아래 표를 그대로 복사해 AI에게 붙여 넣는다. 표본은 비추천, 중립, 추천 NPS 구간에서 각각 6행씩 뽑은 것이다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>respondent_id</th>
+<th>age_group</th>
+<th>channel</th>
+<th>nps</th>
+<th>satisfaction</th>
+<th>free_text</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R2025-001135</td>
+<td>60대 이상</td>
+<td>인스타그램</td>
+<td>0</td>
+<td>2</td>
+<td>기존 고객에게도 혜택이 더 있으면 좋겠습니다.</td>
+</tr>
+<tr>
+<td>R2025-001293</td>
+<td>40대</td>
+<td>네이버 검색</td>
+<td>2</td>
+<td>2</td>
+<td>교환 신청 화면이 간단해서 부담이 없었습니다.</td>
+</tr>
+<tr>
+<td>R2025-001156</td>
+<td>20대</td>
+<td>네이버 검색</td>
+<td>3</td>
+<td>3</td>
+<td>사용 중 오류가 한 번 있었지만 재접속 후 해결됐습니다.</td>
+</tr>
+<tr>
+<td>R2025-000885</td>
+<td>20대</td>
+<td>앱 푸시</td>
+<td>4</td>
+<td>3</td>
+<td>앱 디자인이 깔끔하고 글자가 잘 보입니다.</td>
+</tr>
+<tr>
+<td>R2025-000830</td>
+<td>20대</td>
+<td>지인 추천</td>
+<td>6</td>
+<td>3</td>
+<td>검색 필터가 세분화되어 원하는 상품을 빨리 찾았습니다.</td>
+</tr>
+<tr>
+<td>R2025-000881</td>
+<td>30대</td>
+<td>지인 추천</td>
+<td>6</td>
+<td>3</td>
+<td>문의 남긴 뒤 안내가 조금 늦어서 아쉬웠습니다.</td>
+</tr>
+<tr>
+<td>R2025-000360</td>
+<td>40대</td>
+<td>지인 추천</td>
+<td>7</td>
+<td>3</td>
+<td>예약 확인 화면이 직관적이라 실수가 줄었습니다.</td>
+</tr>
+<tr>
+<td>R2025-000712</td>
+<td>40대</td>
+<td>오프라인 매장</td>
+<td>7</td>
+<td>3</td>
+<td>포장 상태가 깔끔했고 파손 없이 도착했습니다.</td>
+</tr>
+<tr>
+<td>R2025-000100</td>
+<td>60대 이상</td>
+<td>네이버 검색</td>
+<td>8</td>
+<td>4</td>
+<td>사용 중 오류가 한 번 있었지만 재접속 후 해결됐습니다.</td>
+</tr>
+<tr>
+<td>R2025-001081</td>
+<td>20대</td>
+<td>카카오톡 채널</td>
+<td>8</td>
+<td>4</td>
+<td>할인 금액이 결제 전 명확하게 보여서 좋았습니다.</td>
+</tr>
+<tr>
+<td>R2025-001185</td>
+<td>20대</td>
+<td>이메일</td>
+<td>8</td>
+<td>4</td>
+<td>결제 오류 안내가 구체적이지 않아 재시도했습니다.</td>
+</tr>
+<tr>
+<td>R2025-001376</td>
+<td>20대</td>
+<td>네이버 검색</td>
+<td>8</td>
+<td>4</td>
+<td>교환 신청 화면이 간단해서 부담이 없었습니다.</td>
+</tr>
+<tr>
+<td>R2025-000024</td>
+<td>50대</td>
+<td>인스타그램</td>
+<td>9</td>
+<td>5</td>
+<td>매장 픽업 시간이 정확하게 안내됐습니다.</td>
+</tr>
+<tr>
+<td>R2025-000120</td>
+<td>40대</td>
+<td>네이버 검색</td>
+<td>9</td>
+<td>4</td>
+<td>주소 입력 화면에서 자동완성이 잘 작동했습니다.</td>
+</tr>
+<tr>
+<td>R2025-000534</td>
+<td>40대</td>
+<td>네이버 검색</td>
+<td>9</td>
+<td>4</td>
+<td>알림이 너무 자주 와서 설정을 바꿨습니다.</td>
+</tr>
+<tr>
+<td>R2025-000856</td>
+<td>30대</td>
+<td>네이버 검색</td>
+<td>9</td>
+<td>5</td>
+<td>검색 필터가 세분화되어 원하는 상품을 빨리 찾았습니다.</td>
+</tr>
+<tr>
+<td>R2025-000828</td>
+<td>20대</td>
+<td>카카오톡 채널</td>
+<td>10</td>
+<td>5</td>
+<td>상세 페이지 사진이 충분해서 구매 결정에 도움이 됐습니다.</td>
+</tr>
+<tr>
+<td>R2025-001499</td>
+<td>30대</td>
+<td>이메일</td>
+<td>10</td>
+<td>5</td>
+<td>검색 필터가 세분화되어 원하는 상품을 빨리 찾았습니다.</td>
+</tr>
+</tbody>
+</table></div>
+<h2>따라하기 1. 나쁜 프롬프트와 좋은 프롬프트 비교</h2>
+<h3>1단계. 파일 또는 표본 준비</h3>
+<p>둘 중 하나를 선택한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>상황</th>
+<th>진행 방법</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>AI 파일 업로드 가능</td>
+<td><code>survey_responses_clean.csv</code>를 업로드한다</td>
+</tr>
+<tr>
+<td>AI 파일 업로드 불가</td>
+<td>위의 표본 18행을 복사한다</td>
+</tr>
+</tbody>
+</table></div>
+<p>업로드를 했다면 AI에게 파일 이름과 컬럼명을 인식했는지 먼저 확인하게 한다.</p>
+<div class="code-scroll"><pre><code class="language-text">첨부한 파일의 행 수와 컬럼명을 확인해줘.
+그 다음 내가 지시하기 전까지 분석 결론은 내지 마.
+</code></pre></div>
+<h3>2단계. 프롬프트 A 실행</h3>
+<p>아래처럼 짧게 요청한다.</p>
+<div class="code-scroll"><pre><code class="language-text">이 설문 데이터를 분석해줘.
+</code></pre></div>
+<p>결과를 읽고 아래 질문에 답한다.</p>
+<ol>
+<li>어떤 기준으로 주제를 나눴는가?</li>
+<li>원문 근거가 보이는가?</li>
+<li>결과를 엑셀에 붙여 넣어 피벗테이블로 다시 집계할 수 있는가?</li>
+</ol>
+<p>프롬프트 A는 대개 설명은 그럴듯한데 기준과 출력형식이 흔들린다.</p>
+<h3>3단계. 프롬프트 B 실행</h3>
+<p>아래 프롬프트를 실행한다. 업로드를 하지 않았다면 마지막에 표본 18행을 붙인다.</p>
+<div class="code-scroll"><pre><code class="language-text">너는 고객경험 분석가다.
+데이터는 온라인 쇼핑 서비스의 고객 설문이다. 한 행은 응답 1건이다.
+주요 컬럼은 respondent_id, age_group, channel, nps, satisfaction, free_text다.
+
+목표는 free_text를 읽고 고객 의견을 운영 개선에 쓸 수 있게 정리하는 것이다.
+각 응답을 주제와 감성으로 분류해줘.
+
+주제는 6-8개로 만들되 너무 세분화하지 마라.
+감성은 긍정, 부정, 혼합, 중립 중 하나로 정하라.
+NPS와 free_text의 분위기가 어긋나면 혼합 또는 검토 필요로 표시하라.
+
+출력은 표로 작성하라.
+표 컬럼은 respondent_id, topic, sentiment, evidence, confidence, needs_review로 해라.
+evidence에는 판단 근거가 된 원문 일부를 넣어라.
+confidence는 높음, 중간, 낮음 중 하나로 표시하라.
+</code></pre></div>
+<p>프롬프트 A와 B의 차이를 확인한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>비교 항목</th>
+<th>A</th>
+<th>B</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>데이터 맥락이 있는가</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>질문이 구체적인가</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>표 출력이 가능한가</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>원문 근거가 있는가</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>사람이 다시 검토할 행을 찾을 수 있는가</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h2>따라하기 2. 단계적으로 심화하기</h2>
+<p>한 번에 전체 분석을 요구하지 않고 세 번에 나누어 요청한다.</p>
+<h3>1단계. 코드북 먼저 만들기</h3>
+<div class="code-scroll"><pre><code class="language-text">먼저 이 설문 free_text를 분류할 주제 코드북을 만들어줘.
+
+조건:
+- 주제는 6-8개로 제한한다.
+- 각 주제마다 정의와 포함 예시를 적는다.
+- 서로 겹치기 쉬운 주제는 구분 기준을 적는다.
+- 아직 행별 분류는 하지 말고 코드북만 제안한다.
+</code></pre></div>
+<p>확인할 점:</p>
+<ul>
+<li>주제가 너무 많지 않은가</li>
+<li>"기타"가 남용되지 않도록 기준이 있는가</li>
+<li>배송, 앱 사용성, 결제와 혜택, 고객지원처럼 업무 조치로 이어지는 범주인가</li>
+</ul>
+<h3>2단계. 같은 코드북으로 행별 분류하기</h3>
+<p>코드북이 괜찮다면 이어서 요청한다.</p>
+<div class="code-scroll"><pre><code class="language-text">방금 만든 코드북을 사용해서 아래 데이터의 각 행을 분류해줘.
+
+규칙:
+- 한 행의 topic은 하나만 고른다.
+- 감성은 긍정, 부정, 혼합, 중립 중 하나로 정한다.
+- 판단이 애매하면 confidence를 낮음으로 두고 needs_review를 예로 표시한다.
+- 원문에 없는 내용을 추측하지 않는다.
+
+출력 표 컬럼:
+respondent_id, topic, sentiment, evidence, confidence, needs_review
+</code></pre></div>
+<p>결과를 받은 뒤 <code>respondent_id</code>가 빠진 행이 없는지 확인한다.</p>
+<h3>3단계. 요약과 검토 포인트 요청하기</h3>
+<p>파일 업로드를 한 경우:</p>
+<div class="code-scroll"><pre><code class="language-text">이번에는 전체 1,500행 기준으로 요약해줘.
+
+출력:
+1. 주제별 응답수와 비중
+2. 주제별 평균 NPS와 평균 satisfaction
+3. 부정 또는 혼합 응답이 많은 주제 3개
+4. 대표 근거문구 2개씩
+5. 사람이 다시 확인해야 할 분류 기준 3개
+
+숫자는 가능한 한 표로 보여주고, 결론은 5문장 이내로 써줘.
+</code></pre></div>
+<p>파일 업로드가 안 된 경우:</p>
+<div class="code-scroll"><pre><code class="language-text">위 표본 18행 기준으로만 요약해줘.
+전체 1,500행의 결론처럼 말하지 말고, 반드시 &quot;표본 18행 기준&quot;이라고 표시해줘.
+</code></pre></div>
+<p>중요한 건 표본 분석과 전체 분석을 갈라 보는 일이다. 표본 18행만 보고 전체 고객의 결론인 양 쓰면 안 된다.</p>
+<h2>따라하기 3. AI 답변 검증하기</h2>
+<p>AI 답변을 받은 뒤 아래 프롬프트로 스스로 검토하게 한다.</p>
+<div class="code-scroll"><pre><code class="language-text">방금 만든 분류 결과에서 사람이 다시 확인해야 할 가능성이 큰 행 5개를 골라줘.
+
+기준:
+- NPS는 낮지만 free_text는 긍정적으로 보이는 행
+- NPS는 높지만 free_text에 불만이나 개선 요청이 있는 행
+- 하나의 문장에 긍정과 부정이 함께 있는 행
+- 주제를 하나로 고르기 어려운 행
+
+출력은 respondent_id, 검토 이유, 원문 근거로 작성해줘.
+</code></pre></div>
+<p>이번 표본에는 다음처럼 점수와 문장이 어긋나는 사례가 있다.</p>
+<ul>
+<li><code>R2025-001293</code>: NPS는 2점이지만 "부담이 없었습니다"라는 긍정 표현이 있다.</li>
+<li><code>R2025-000534</code>: NPS는 9점이지만 알림이 너무 잦다는 불편이 있다.</li>
+<li><code>R2025-001185</code>: NPS는 8점이지만 결제 오류와 재시도가 언급된다.</li>
+</ul>
+<p>이런 행을 집어내는 것이야말로 좋은 프롬프트가 내는 성과다.</p>
+<h2>직접 해보기. 프롬프트 3버전 A/B/C 비교</h2>
+<p>같은 파일 또는 같은 표본 18행을 사용해 프롬프트 3개를 직접 만든다.</p>
+<h3>조건</h3>
+<ol>
+<li>프롬프트 A는 일부러 짧게 만든다.</li>
+<li>프롬프트 B는 맥락, 질문, 출력형식을 넣는다.</li>
+<li>프롬프트 C는 코드북 설계, 행별 분류, 요약, 검증 요청으로 단계화한다.</li>
+<li>세 프롬프트의 결과를 비교한다.</li>
+</ol>
+<h3>제출 형식</h3>
+<p>아래 표를 채운다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>프롬프트 A</th>
+<th>프롬프트 B</th>
+<th>프롬프트 C</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>맥락이 충분한가</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>질문이 구체적인가</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>출력형식이 표로 고정되는가</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>원문 근거가 포함되는가</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>검토 필요 행을 찾는가</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>업무에 바로 쓰기 좋은가</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<p>마지막에 아래 문장으로 정리한다.</p>
+<p><code>내가 선택한 최종 프롬프트는 __이며, 이유는 __이다. 특히 __ 열이 있어 원본과 대조할 수 있다.</code></p>
+<h2>자주 생기는 문제</h2>
+<h3>AI가 전체 결론처럼 말하지만 나는 표본만 넣었다</h3>
+<p>프롬프트에 "표본 18행 기준이라고 명시하라"를 넣는다. 표본 분석을 전체 결론처럼 말하면 과장이다.</p>
+<h3>AI가 원문에 없는 내용을 추측한다</h3>
+<p>"원문에 없는 원인, 의도, 고객 특성은 추측하지 말라"를 조건에 넣는다. 결과에 <code>evidence</code> 열을 요구하면 추측을 줄일 수 있다.</p>
+<h3>주제가 너무 많아진다</h3>
+<p>"주제는 6-8개로 제한한다"를 넣는다. 분류가 너무 세밀하면 나중에 피벗테이블로 집계하기 어렵다.</p>
+<h3>같은 문장을 볼 때마다 분류가 조금씩 달라진다</h3>
+<p>먼저 코드북을 확정하고, 그 코드북을 기준으로 다시 분류하라고 요청한다. 중요한 업무라면 표본을 사람이 검토해 코드북을 고친 뒤 전체에 적용한다.</p>
+<h3>개인정보가 포함된 실제 설문이면 어떻게 하나</h3>
+<p>실제 업무 데이터에는 이름, 전화번호, 이메일, 주소 같은 개인정보를 AI에 넣지 않는다. 이번 수업 데이터는 합성 데이터지만, 실무에서는 업로드 전에 민감정보를 제거해야 한다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="script" aria-label="강사대본">
+<h1>S08. 좋은 분석 프롬프트 설계 강사대본</h1>
+<h2>수업 전 확인</h2>
+<ul>
+<li>기본 파일: <code>/mnt/d/ai-data-analysis-course/02_datasets/survey_responses/survey_responses_clean.csv</code></li>
+<li>보조 파일: <code>/mnt/d/ai-data-analysis-course/02_datasets/survey_responses/survey_responses_dirty.csv</code></li>
+<li>선택 파일: <code>/mnt/d/ai-data-analysis-course/02_datasets/real_korean/movie_box/dacon_movies_train.csv</code></li>
+<li>clean 설문 데이터 규모: 1,500행 × 8열</li>
+<li>dirty 설문 데이터 규모: 1,510행 × 8열</li>
+<li>선택 영화 데이터 규모: 600행 × 12열</li>
+<li>clean 설문 주요 컬럼: <code>respondent_id</code>, <code>age_group</code>, <code>gender</code>, <code>nps</code>, <code>satisfaction</code>, <code>channel</code>, <code>free_text</code>, <code>submitted_at</code></li>
+<li>dirty 설문 확인 사항: 중복 응답자 ID 10건, NPS 결측 60건, 주관식 결측 22건, 만족도 문자 혼입 75건, 20대 표기 혼재 90건</li>
+<li>검증 코드: <code>/mnt/d/ai-data-analysis-course/06_answers/S08_code.py</code></li>
+</ul>
+<h2>0-5분. 도입</h2>
+<p>강사 멘트:</p>
+<p>"지난 차시까지는 데이터를 표로 정리하고 질문에 맞춰 요약하는 연습을 했습니다. 오늘은 그 분석을 AI에게 맡기는 법을 다룹니다. 관건은 AI를 켜는 버튼이 아니라, 분석 요청을 어떻게 쓰느냐입니다."</p>
+<p>"많은 분이 처음에는 '이 데이터 분석해줘'라고 씁니다. 그런데 이 말은 엑셀에서 피벗테이블을 만들면서 행, 열, 값 영역을 비워 둔 것과 비슷합니다. AI가 뭔가 답하긴 하지만, 우리가 원하는 기준으로 답한다고 볼 수 없습니다."</p>
+<p>시연 포인트:</p>
+<ul>
+<li><code>survey_responses_clean.csv</code>를 보여주고 한 행이 설문 응답 1건임을 설명한다.</li>
+<li><code>free_text</code> 컬럼에 짧은 주관식 문장이 들어 있음을 보여준다.</li>
+<li><code>nps</code>와 <code>satisfaction</code>은 숫자이고, <code>free_text</code>는 텍스트라 분석 방식이 다르다고 짚는다.</li>
+</ul>
+<h2>5-12분. 개념 설명: 맥락, 질문, 출력형식</h2>
+<p>강사 멘트:</p>
+<p>"좋은 분석 프롬프트에는 세 가지가 들어갑니다. 첫째, 맥락입니다. 이 데이터가 무엇인지, 왜 분석하는지 알려줘야 합니다. 둘째, 질문입니다. AI가 무엇을 해야 하는지 좁혀야 합니다. 셋째, 출력형식입니다. 표로 받을지, 요약문으로 받을지, 어떤 열이 필요한지 정해야 합니다."</p>
+<p>"엑셀의 피벗테이블과 비교해 보겠습니다. 피벗테이블에서 행, 열, 값을 정하지 않으면 표가 만들어지지 않습니다. AI도 마찬가지입니다. 맥락, 질문, 출력형식이 없으면 분석 기준이 흔들립니다."</p>
+<p>판서 또는 화면 강조:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>프롬프트 요소</th>
+<th>설문 분석 예시</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>맥락</td>
+<td>온라인 쇼핑 고객 설문, 운영 개선 목적</td>
+</tr>
+<tr>
+<td>질문</td>
+<td>주관식 응답을 주제와 감성으로 분류</td>
+</tr>
+<tr>
+<td>출력형식</td>
+<td>응답자 ID, 주제, 감성, 근거, 신뢰도, 검토 필요</td>
+</tr>
+</tbody>
+</table></div>
+<p>주의해서 말할 점:</p>
+<ul>
+<li>프롬프트는 긴 문장이 아니라 명확한 요청서다.</li>
+<li>AI 답변은 최종 정답이 아니라 검토 가능한 초안이다.</li>
+<li>원문 근거가 없는 요약은 보고서에 바로 쓰지 않는다.</li>
+</ul>
+<h2>12-24분. 따라하기 1: 나쁜 프롬프트와 좋은 프롬프트 비교</h2>
+<p>시연 절차:</p>
+<ol>
+<li>AI 도구를 열고 파일 업로드가 가능하면 <code>survey_responses_clean.csv</code>를 업로드한다.</li>
+<li>업로드가 불가능하면 핸드아웃의 표본 18행을 복사한다.</li>
+<li>먼저 프롬프트 A를 실행한다.</li>
+</ol>
+<p>프롬프트 A:</p>
+<div class="code-scroll"><pre><code class="language-text">이 설문 데이터를 분석해줘.
+</code></pre></div>
+<p>강사 멘트:</p>
+<p>"이 답변은 읽기에는 자연스러울 수 있습니다. 하지만 어떤 기준으로 주제를 나눴는지, 어떤 원문을 근거로 삼았는지, 결과를 엑셀에 붙여 넣을 수 있는지는 불분명합니다."</p>
+<p>이어서 프롬프트 B를 실행한다.</p>
+<div class="code-scroll"><pre><code class="language-text">너는 고객경험 분석가다.
+데이터는 온라인 쇼핑 서비스의 고객 설문이다. 한 행은 응답 1건이다.
+주요 컬럼은 respondent_id, age_group, channel, nps, satisfaction, free_text다.
+
+목표는 free_text를 읽고 고객 의견을 운영 개선에 쓸 수 있게 정리하는 것이다.
+각 응답을 주제와 감성으로 분류해줘.
+
+주제는 6-8개로 만들되 너무 세분화하지 마라.
+감성은 긍정, 부정, 혼합, 중립 중 하나로 정하라.
+NPS와 free_text의 분위기가 어긋나면 혼합 또는 검토 필요로 표시하라.
+
+출력은 표로 작성하라.
+표 컬럼은 respondent_id, topic, sentiment, evidence, confidence, needs_review로 해라.
+evidence에는 판단 근거가 된 원문 일부를 넣어라.
+confidence는 높음, 중간, 낮음 중 하나로 표시하라.
+</code></pre></div>
+<p>시연 포인트:</p>
+<ul>
+<li>프롬프트 B의 결과에 <code>respondent_id</code>가 있는지 확인한다.</li>
+<li><code>evidence</code> 열이 원문 대조를 가능하게 한다고 설명한다.</li>
+<li><code>needs_review</code>는 AI가 애매한 행을 숨기지 않게 만드는 장치라고 설명한다.</li>
+</ul>
+<p>확인 질문:</p>
+<p>"프롬프트 A와 B 중 어떤 결과가 엑셀에 다시 붙여 넣기 쉬운가요?"</p>
+<p>기대 답:</p>
+<p>"프롬프트 B입니다. 표 형식과 열 이름이 정해져 있기 때문입니다."</p>
+<h2>24-34분. 따라하기 2: 단계적 심화</h2>
+<p>강사 멘트:</p>
+<p>"좋은 분석은 한 번의 프롬프트로 끝나지 않습니다. 특히 주관식 텍스트는 먼저 분류 기준을 만든 뒤, 그 기준으로 행을 분류하고, 마지막에 요약하는 순서가 좋습니다."</p>
+<p>시연 1: 코드북 요청</p>
+<div class="code-scroll"><pre><code class="language-text">먼저 이 설문 free_text를 분류할 주제 코드북을 만들어줘.
+
+조건:
+- 주제는 6-8개로 제한한다.
+- 각 주제마다 정의와 포함 예시를 적는다.
+- 서로 겹치기 쉬운 주제는 구분 기준을 적는다.
+- 아직 행별 분류는 하지 말고 코드북만 제안한다.
+</code></pre></div>
+<p>강사 멘트:</p>
+<p>"코드북은 분류 기준표입니다. 사람이 먼저 기준을 보고 납득할 수 있어야 전체 분류를 맡길 수 있습니다. 코드북이 엉성하면 결과도 엉성합니다."</p>
+<p>시연 2: 행별 분류 요청</p>
+<div class="code-scroll"><pre><code class="language-text">방금 만든 코드북을 사용해서 아래 데이터의 각 행을 분류해줘.
+
+규칙:
+- 한 행의 topic은 하나만 고른다.
+- 감성은 긍정, 부정, 혼합, 중립 중 하나로 정한다.
+- 판단이 애매하면 confidence를 낮음으로 두고 needs_review를 예로 표시한다.
+- 원문에 없는 내용을 추측하지 않는다.
+
+출력 표 컬럼:
+respondent_id, topic, sentiment, evidence, confidence, needs_review
+</code></pre></div>
+<p>시연 3: 검토 필요 행 요청</p>
+<div class="code-scroll"><pre><code class="language-text">방금 만든 분류 결과에서 사람이 다시 확인해야 할 가능성이 큰 행 5개를 골라줘.
+
+기준:
+- NPS는 낮지만 free_text는 긍정적으로 보이는 행
+- NPS는 높지만 free_text에 불만이나 개선 요청이 있는 행
+- 하나의 문장에 긍정과 부정이 함께 있는 행
+- 주제를 하나로 고르기 어려운 행
+
+출력은 respondent_id, 검토 이유, 원문 근거로 작성해줘.
+</code></pre></div>
+<p>시연 포인트:</p>
+<ul>
+<li><code>R2025-001293</code>은 NPS 2점이지만 문장은 긍정 표현이 있어 검토 대상이 될 수 있다.</li>
+<li><code>R2025-000534</code>는 NPS 9점이지만 알림 빈도 불만이 있어 검토 대상이 될 수 있다.</li>
+<li>점수와 문장이 항상 같은 방향으로 움직이지 않는다고 설명한다.</li>
+</ul>
+<h2>34-45분. 직접 해보기: 프롬프트 3버전 비교</h2>
+<p>미션 안내 멘트:</p>
+<p>"이제 여러분이 직접 프롬프트를 세 개 만들어 비교합니다. A는 일부러 짧게, B는 맥락과 질문과 출력형식을 담아서, C는 여러 단계로 쪼개서 만듭니다. 따질 것은 어느 답변이 더 그럴싸해 보이는지가 아니라, 어느 답변이 원본과 대조되고 업무에 다시 쓸 수 있는지입니다."</p>
+<p>수강생 작업:</p>
+<ol>
+<li>같은 파일 또는 같은 표본 18행을 사용한다.</li>
+<li>프롬프트 A, B, C를 각각 실행한다.</li>
+<li>결과를 핸드아웃의 비교표에 기록한다.</li>
+<li>최종으로 선택할 프롬프트와 이유를 한 문장으로 쓴다.</li>
+</ol>
+<p>강사가 돌아다니며 볼 점:</p>
+<ul>
+<li>프롬프트에 데이터 맥락이 있는가</li>
+<li>주제와 감성의 정의가 있는가</li>
+<li>결과 표에 <code>respondent_id</code>와 <code>evidence</code>가 있는가</li>
+<li>표본 분석을 전체 결론처럼 쓰지 않았는가</li>
+<li>검토 필요 행을 찾도록 요청했는가</li>
+</ul>
+<h2>45-50분. 정리</h2>
+<p>강사 멘트:</p>
+<p>"오늘 배운 핵심은 AI에게 일을 잘 시키는 문장 구조입니다. 맥락과 질문과 출력형식이 갖춰져야 결과가 흔들리지 않습니다. 큰 질문은 한꺼번에 던지지 말고 코드북, 행별 분류, 요약, 검증으로 쪼개야 합니다."</p>
+<p>"AI가 주관식 응답을 빠르게 읽어 주기는 하지만, 최종 분석에서는 결국 원본과 맞대 봐야 합니다. 그래서 <code>respondent_id</code>, <code>evidence</code>, <code>needs_review</code> 같은 열을 늘 챙겨서 요구하는 습관이 중요합니다."</p>
+<p>완료 판단 체크포인트:</p>
+<p>수강생이 같은 데이터로 프롬프트 A/B/C를 비교하고, <code>respondent_id</code>와 <code>evidence</code>가 포함된 주제·감성 분류표를 만든 뒤 최종 프롬프트 선택 이유를 말하면 이번 차시를 완료한 것으로 본다.</p>
+<h2>예상 질문과 답변</h2>
+<h3>Q1. AI가 분류한 주제는 정답인가요?</h3>
+<p>A. 정답이라기보다 초안이다. 주관식 텍스트는 해석이 들어가므로 코드북을 먼저 확인하고, 표본을 사람이 검토한 뒤 전체에 적용하는 절차가 필요하다.</p>
+<h3>Q2. 감성은 NPS만 보고 정하면 안 되나요?</h3>
+<p>A. NPS는 중요한 참고값이지만 주관식 문장과 다를 수 있다. 낮은 NPS인데 긍정 문장을 쓴 사람도 있고, 높은 NPS인데 개선 요청을 쓴 사람도 있다. 그래서 감성은 문장 근거와 함께 봐야 한다.</p>
+<h3>Q3. 주제는 몇 개가 적당한가요?</h3>
+<p>A. 이번 수업에서는 6-8개가 적당하다. 너무 적으면 뭉뚱그려지고, 너무 많으면 나중에 집계하기 어렵다. 실무에서는 표본을 보며 조정한다.</p>
+<h3>Q4. 파일 업로드가 안 되면 어떻게 하나요?</h3>
+<p>A. 핸드아웃의 표본 18행을 복사해 실습한다. 이때는 반드시 "표본 18행 기준"이라고 쓰게 해야 한다. 표본 결과를 전체 1,500행의 결론으로 말하면 안 된다.</p>
+<h3>Q5. AI가 원문에 없는 원인을 만들어 냅니다.</h3>
+<p>A. 프롬프트에 "원문에 없는 원인, 의도, 고객 특성은 추측하지 말라"를 넣는다. 또 <code>evidence</code> 열을 요구해서 원문 근거가 없는 판단을 찾아낸다.</p>
+<h3>Q6. 같은 프롬프트를 다시 실행하면 조금 다른 결과가 나옵니다.</h3>
+<p>A. 그럴 수 있다. 그래서 코드북을 먼저 고정하고, 출력 컬럼과 기준을 명확히 해야 한다. 중요한 업무라면 AI 결과를 그대로 쓰지 말고 사람이 표본을 검수한다.</p>
+<h3>Q7. dirty 파일은 왜 오늘 본 실습에 쓰지 않나요?</h3>
+<p>A. 오늘 목표는 프롬프트 구조를 배우는 것이다. dirty 파일에는 결측, 중복, 문자 혼입, 표기 혼재가 있어 별도의 정제 수업이 필요하다. 다만 데이터 상태를 프롬프트에 알려야 하는 이유를 설명할 때 보조 사례로 사용한다.</p>
+<h2>강의 운영 메모</h2>
+<ul>
+<li>수강생이 AI 답변 문장만 보고 만족하면 <code>respondent_id</code>와 <code>evidence</code>가 있는지 되묻는다.</li>
+<li>표본 실습자는 전체 결론처럼 쓰지 않도록 계속 확인한다.</li>
+<li>"좋은 프롬프트"를 길이로 판단하지 않게 한다. 길어도 기준이 흐리면 좋은 프롬프트가 아니다.</li>
+<li>프롬프트 C는 한 번에 긴 요청을 쓰는 것이 아니라 단계적으로 대화를 이어 가는 방식임을 강조한다.</li>
+<li>개인정보가 있는 실제 설문은 업로드 전에 반드시 제거해야 한다고 안내한다.</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="answer" aria-label="모범답안">
+<h1>S08. 모범답안</h1>
+<h2>미션 해설</h2>
+<p>미션은 같은 설문 데이터 또는 같은 표본 18행을 두고 프롬프트 A/B/C를 비교하는 것이다. 정답 문장은 하나로 고정되지 않지만, 좋은 답안은 다음 조건을 충족해야 한다.</p>
+<ol>
+<li>데이터 맥락을 설명한다.</li>
+<li>AI가 해야 할 질문을 좁힌다.</li>
+<li>결과 표의 컬럼을 지정한다.</li>
+<li>원문 근거와 응답자 ID를 요구한다.</li>
+<li>검토 필요 행을 찾게 한다.</li>
+<li>표본 분석과 전체 분석을 구분한다.</li>
+</ol>
+<h2>예시 답안: 프롬프트 A</h2>
+<div class="code-scroll"><pre><code class="language-text">이 설문 데이터를 분석해줘.
+</code></pre></div>
+<p>평가:</p>
+<p>프롬프트 A는 의도적으로 부족한 프롬프트다. 맥락, 질문, 출력형식이 모두 빠져 있다. AI가 요약문을 만들 수는 있지만, 어떤 기준으로 주제를 나눴는지 확인하기 어렵고 결과를 엑셀에 붙여 넣어 다시 집계하기도 어렵다.</p>
+<h2>예시 답안: 프롬프트 B</h2>
+<div class="code-scroll"><pre><code class="language-text">너는 고객경험 분석가다.
+데이터는 온라인 쇼핑 서비스의 고객 설문이다. 한 행은 응답 1건이다.
+주요 컬럼은 respondent_id, age_group, channel, nps, satisfaction, free_text다.
+
+목표는 free_text를 읽고 고객 의견을 운영 개선에 쓸 수 있게 정리하는 것이다.
+각 응답을 주제와 감성으로 분류해줘.
+
+주제는 6-8개로 만들되 너무 세분화하지 마라.
+감성은 긍정, 부정, 혼합, 중립 중 하나로 정하라.
+NPS와 free_text의 분위기가 어긋나면 혼합 또는 검토 필요로 표시하라.
+
+출력은 표로 작성하라.
+표 컬럼은 respondent_id, topic, sentiment, evidence, confidence, needs_review로 해라.
+evidence에는 판단 근거가 된 원문 일부를 넣어라.
+confidence는 높음, 중간, 낮음 중 하나로 표시하라.
+</code></pre></div>
+<p>평가:</p>
+<p>프롬프트 B는 수업 기준으로 통과 가능한 프롬프트다. 맥락, 질문, 출력형식이 들어 있고 원문 근거도 요구한다. 다만 코드북을 먼저 확인하지 않고 바로 분류하므로 주제 기준이 마음에 들지 않을 때 전체 결과를 다시 받아야 한다.</p>
+<h2>예시 답안: 프롬프트 C</h2>
+<div class="code-scroll"><pre><code class="language-text">아래 설문 데이터를 분석하되, 한 번에 결론을 내지 말고 3단계로 진행해줘.
+
+데이터 맥락:
+- 온라인 쇼핑 서비스의 고객 설문이다.
+- 한 행은 응답 1건이다.
+- 주요 컬럼은 respondent_id, age_group, channel, nps, satisfaction, free_text다.
+- 목표는 주관식 의견을 운영 개선에 쓸 수 있게 분류하는 것이다.
+
+1단계:
+free_text를 분류할 주제 코드북을 먼저 제안해줘.
+주제는 6-8개로 제한하고, 각 주제의 정의와 포함 예시를 적어줘.
+서로 겹치기 쉬운 주제는 구분 기준도 적어줘.
+이 단계에서는 행별 분류를 하지 마라.
+
+2단계:
+내가 코드북을 확인한 뒤, 그 코드북으로 각 행을 분류해줘.
+출력 표 컬럼은 respondent_id, topic, sentiment, evidence, confidence, needs_review로 해라.
+sentiment는 긍정, 부정, 혼합, 중립 중 하나로 정하라.
+NPS와 free_text가 어긋나면 혼합 또는 needs_review=예로 표시하라.
+원문에 없는 원인이나 고객 의도는 추측하지 마라.
+
+3단계:
+분류 결과를 주제별 응답수, 비중, 평균 NPS, 평균 satisfaction, 대표 근거문구로 요약해줘.
+마지막에는 사람이 다시 확인해야 할 행 5개를 respondent_id와 이유로 정리해줘.
+
+파일이 아니라 표본 데이터만 사용한 경우에는 모든 결론 앞에 &quot;표본 기준&quot;이라고 표시해줘.
+</code></pre></div>
+<p>평가:</p>
+<p>프롬프트 C가 가장 안정적이다. 코드북을 먼저 만들게 하므로 분류 기준을 검토할 수 있고, 이후 같은 기준으로 행별 분류와 요약을 진행할 수 있다. 또한 <code>respondent_id</code>, <code>evidence</code>, <code>needs_review</code>가 있어 원본 대조와 사람 검토가 가능하다.</p>
+<h2>A/B/C 비교표 예시</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>프롬프트 A</th>
+<th>프롬프트 B</th>
+<th>프롬프트 C</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>맥락이 충분한가</td>
+<td>부족</td>
+<td>있음</td>
+<td>충분</td>
+</tr>
+<tr>
+<td>질문이 구체적인가</td>
+<td>부족</td>
+<td>구체적</td>
+<td>단계별로 구체적</td>
+</tr>
+<tr>
+<td>출력형식이 표로 고정되는가</td>
+<td>불안정</td>
+<td>고정</td>
+<td>고정</td>
+</tr>
+<tr>
+<td>원문 근거가 포함되는가</td>
+<td>보장 안 됨</td>
+<td>포함 요청</td>
+<td>포함 요청</td>
+</tr>
+<tr>
+<td>검토 필요 행을 찾는가</td>
+<td>보장 안 됨</td>
+<td>일부 가능</td>
+<td>명시적으로 요청</td>
+</tr>
+<tr>
+<td>업무에 바로 쓰기 좋은가</td>
+<td>낮음</td>
+<td>보통 이상</td>
+<td>가장 좋음</td>
+</tr>
+</tbody>
+</table></div>
+<p>정리 문장 예시:</p>
+<p><code>내가 선택한 최종 프롬프트는 C이며, 이유는 코드북을 먼저 확인한 뒤 같은 기준으로 행별 분류와 요약을 진행할 수 있기 때문이다. 특히 respondent_id와 evidence 열이 있어 원본과 대조할 수 있다.</code></p>
+<h2>검증용 코드 실행 결과 요약</h2>
+<p>아래 코드는 AI 답변을 대신하는 정답 코드가 아니라, 데이터 규모와 표본, 간단한 규칙 기반 기준선을 확인하기 위한 코드다. 작성 시 실제로 실행해 통과했다.</p>
+<p>핵심 출력:</p>
+<div class="code-scroll"><pre><code class="language-text">pandas version: 3.0.3
+survey clean shape: 1500 rows x 8 columns
+survey dirty shape: 1510 rows x 8 columns
+dacon movies train shape: 600 rows x 12 columns
+
+[dirty issue counts]
+dirty_rows: 1510
+duplicated_respondent_id: 10
+missing_nps: 60
+missing_free_text: 22
+non_numeric_satisfaction: 75
+age_group_variants_for_20s: 90
+
+[NPS group counts]
+nps_group
+비추천(0-6)    552
+중립(7-8)     467
+추천(9-10)    481
+</code></pre></div>
+<p>규칙 기반 주제 요약:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>주제</th>
+<th style="text-align: right;">응답수</th>
+<th style="text-align: right;">평균NPS</th>
+<th style="text-align: right;">평균만족도</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>결제/혜택</td>
+<td style="text-align: right;">368</td>
+<td style="text-align: right;">6.93</td>
+<td style="text-align: right;">3.67</td>
+</tr>
+<tr>
+<td>앱/사용성</td>
+<td style="text-align: right;">312</td>
+<td style="text-align: right;">7.08</td>
+<td style="text-align: right;">3.71</td>
+</tr>
+<tr>
+<td>고객지원/응대</td>
+<td style="text-align: right;">308</td>
+<td style="text-align: right;">6.71</td>
+<td style="text-align: right;">3.52</td>
+</tr>
+<tr>
+<td>배송/픽업</td>
+<td style="text-align: right;">176</td>
+<td style="text-align: right;">6.70</td>
+<td style="text-align: right;">3.59</td>
+</tr>
+<tr>
+<td>기타</td>
+<td style="text-align: right;">97</td>
+<td style="text-align: right;">6.73</td>
+<td style="text-align: right;">3.60</td>
+</tr>
+<tr>
+<td>알림/마케팅</td>
+<td style="text-align: right;">92</td>
+<td style="text-align: right;">6.55</td>
+<td style="text-align: right;">3.50</td>
+</tr>
+<tr>
+<td>매장/오프라인</td>
+<td style="text-align: right;">78</td>
+<td style="text-align: right;">7.00</td>
+<td style="text-align: right;">3.71</td>
+</tr>
+<tr>
+<td>상품정보/품질</td>
+<td style="text-align: right;">69</td>
+<td style="text-align: right;">6.87</td>
+<td style="text-align: right;">3.68</td>
+</tr>
+</tbody>
+</table></div>
+<p>주의:</p>
+<p>이 주제 요약은 키워드 규칙으로 만든 기준선이다. 실제 수업의 핵심은 이 숫자를 외우는 것이 아니라, AI가 만든 주제분류 결과에 <code>respondent_id</code>, <code>evidence</code>, <code>needs_review</code>를 포함시켜 검증 가능하게 만드는 것이다.</p>
+<h2>실습 코드</h2>
+<p>아래와 같은 코드를 <code>/mnt/d/ai-data-analysis-course/06_answers/S08_code.py</code>에 저장했다.</p>
+<div class="code-scroll"><pre><code class="language-python">from pathlib import Path
+
+import pandas as pd
+
+
+ROOT = Path(&quot;/mnt/d/ai-data-analysis-course&quot;)
+SURVEY_CLEAN = ROOT / &quot;02_datasets/survey_responses/survey_responses_clean.csv&quot;
+SURVEY_DIRTY = ROOT / &quot;02_datasets/survey_responses/survey_responses_dirty.csv&quot;
+MOVIES = ROOT / &quot;02_datasets/real_korean/movie_box/dacon_movies_train.csv&quot;
+
+EXPECTED_SURVEY_COLUMNS = [
+    &quot;respondent_id&quot;,
+    &quot;age_group&quot;,
+    &quot;gender&quot;,
+    &quot;nps&quot;,
+    &quot;satisfaction&quot;,
+    &quot;channel&quot;,
+    &quot;free_text&quot;,
+    &quot;submitted_at&quot;,
+]
+
+
+def nps_group(score: int) -&gt; str:
+    if score &lt;= 6:
+        return &quot;비추천(0-6)&quot;
+    if score &lt;= 8:
+        return &quot;중립(7-8)&quot;
+    return &quot;추천(9-10)&quot;
+
+
+def classify_topic(text: str) -&gt; str:
+    rules = [
+        (&quot;배송/픽업&quot;, [&quot;배송&quot;, &quot;포장&quot;, &quot;픽업&quot;, &quot;기사님&quot;]),
+        (
+            &quot;고객지원/응대&quot;,
+            [&quot;고객센터&quot;, &quot;상담&quot;, &quot;문의&quot;, &quot;답변&quot;, &quot;처리&quot;, &quot;교환&quot;, &quot;환불&quot;, &quot;반품&quot;, &quot;응대&quot;, &quot;문제 발생&quot;],
+        ),
+        (&quot;결제/혜택&quot;, [&quot;결제&quot;, &quot;쿠폰&quot;, &quot;할인&quot;, &quot;포인트&quot;, &quot;혜택&quot;, &quot;회원&quot;, &quot;가격&quot;]),
+        (&quot;상품정보/품질&quot;, [&quot;상품 설명&quot;, &quot;상품 비교&quot;, &quot;품질&quot;, &quot;실제 구성&quot;, &quot;상세 페이지&quot;, &quot;사진&quot;]),
+        (&quot;매장/오프라인&quot;, [&quot;매장&quot;, &quot;오프라인&quot;, &quot;재고&quot;, &quot;헛걸음&quot;]),
+        (&quot;알림/마케팅&quot;, [&quot;알림&quot;, &quot;푸시&quot;, &quot;이벤트&quot;, &quot;프로모션&quot;, &quot;추천 상품&quot;]),
+        (
+            &quot;앱/사용성&quot;,
+            [&quot;모바일&quot;, &quot;앱&quot;, &quot;화면&quot;, &quot;검색&quot;, &quot;필터&quot;, &quot;로딩&quot;, &quot;메뉴&quot;, &quot;디자인&quot;, &quot;주소&quot;, &quot;자동완성&quot;, &quot;가입&quot;, &quot;이전 구매&quot;, &quot;예약&quot;, &quot;정보&quot;, &quot;글자&quot;],
+        ),
+    ]
+    for topic, keywords in rules:
+        if any(keyword in text for keyword in keywords):
+            return topic
+    return &quot;기타&quot;
+
+
+def classify_text_sentiment(text: str) -&gt; str:
+    negative_or_improve = [
+        &quot;불편&quot;,
+        &quot;헷갈&quot;,
+        &quot;오류&quot;,
+        &quot;늦&quot;,
+        &quot;오래&quot;,
+        &quot;길&quot;,
+        &quot;복잡&quot;,
+        &quot;부담&quot;,
+        &quot;개선&quot;,
+        &quot;재시도&quot;,
+        &quot;어렵&quot;,
+        &quot;달라&quot;,
+        &quot;많아서&quot;,
+        &quot;더 좋&quot;,
+        &quot;있으면&quot;,
+        &quot;아쉬&quot;,
+        &quot;표시되면&quot;,
+        &quot;바꿨습니다&quot;,
+    ]
+    positive = [
+        &quot;좋&quot;,
+        &quot;편리&quot;,
+        &quot;정확&quot;,
+        &quot;만족&quot;,
+        &quot;쉬&quot;,
+        &quot;친절&quot;,
+        &quot;명확&quot;,
+        &quot;빨&quot;,
+        &quot;안심&quot;,
+        &quot;신뢰&quot;,
+        &quot;깔끔&quot;,
+        &quot;직관&quot;,
+        &quot;잘&quot;,
+        &quot;도움&quot;,
+        &quot;부담이 없&quot;,
+        &quot;해결&quot;,
+        &quot;일치&quot;,
+    ]
+    has_negative = any(word in text for word in negative_or_improve)
+    has_positive = any(word in text for word in positive)
+    if has_negative and has_positive:
+        return &quot;혼합/개선&quot;
+    if has_negative:
+        return &quot;부정/개선&quot;
+    if has_positive:
+        return &quot;긍정&quot;
+    return &quot;중립&quot;
+
+
+def markdown_table(df: pd.DataFrame) -&gt; str:
+    cols = list(df.columns)
+    lines = [
+        &quot;| &quot; + &quot; | &quot;.join(cols) + &quot; |&quot;,
+        &quot;| &quot; + &quot; | &quot;.join([&quot;---&quot;] * len(cols)) + &quot; |&quot;,
+    ]
+    for _, row in df.iterrows():
+        lines.append(&quot;| &quot; + &quot; | &quot;.join(str(row[col]).replace(&quot;|&quot;, &quot;/&quot;) for col in cols) + &quot; |&quot;)
+    return &quot;\n&quot;.join(lines)
+
+
+def main() -&gt; None:
+    survey = pd.read_csv(SURVEY_CLEAN)
+    dirty = pd.read_csv(SURVEY_DIRTY)
+    movies = pd.read_csv(MOVIES)
+
+    assert list(survey.columns) == EXPECTED_SURVEY_COLUMNS
+    assert survey.shape == (1500, 8)
+    assert dirty.shape == (1510, 8)
+    assert movies.shape == (600, 12)
+    assert survey[&quot;free_text&quot;].isna().sum() == 0
+
+    survey = survey.copy()
+    survey[&quot;nps_group&quot;] = survey[&quot;nps&quot;].apply(nps_group)
+    survey[&quot;topic_rule&quot;] = survey[&quot;free_text&quot;].apply(classify_topic)
+    survey[&quot;text_sentiment_rule&quot;] = survey[&quot;free_text&quot;].apply(classify_text_sentiment)
+
+    sample_parts = []
+    for group in [&quot;비추천(0-6)&quot;, &quot;중립(7-8)&quot;, &quot;추천(9-10)&quot;]:
+        part = survey.loc[survey[&quot;nps_group&quot;] == group].sample(n=6, random_state=8)
+        sample_parts.append(part)
+    prompt_sample = pd.concat(sample_parts).sort_values([&quot;nps&quot;, &quot;respondent_id&quot;])
+
+    topic_summary = (
+        survey.groupby(&quot;topic_rule&quot;)
+        .agg(
+            응답수=(&quot;respondent_id&quot;, &quot;count&quot;),
+            평균NPS=(&quot;nps&quot;, &quot;mean&quot;),
+            평균만족도=(&quot;satisfaction&quot;, &quot;mean&quot;),
+        )
+        .round({&quot;평균NPS&quot;: 2, &quot;평균만족도&quot;: 2})
+        .sort_values([&quot;응답수&quot;, &quot;평균NPS&quot;], ascending=[False, True])
+        .reset_index()
+        .rename(columns={&quot;topic_rule&quot;: &quot;주제&quot;})
+    )
+
+    sentiment_summary = (
+        survey[&quot;text_sentiment_rule&quot;]
+        .value_counts()
+        .rename_axis(&quot;주관식_감성_휴리스틱&quot;)
+        .reset_index(name=&quot;응답수&quot;)
+    )
+
+    dirty_issues = {
+        &quot;dirty_rows&quot;: len(dirty),
+        &quot;duplicated_respondent_id&quot;: int(dirty.duplicated(&quot;respondent_id&quot;).sum()),
+        &quot;missing_nps&quot;: int(dirty[&quot;nps&quot;].isna().sum()),
+        &quot;missing_free_text&quot;: int(dirty[&quot;free_text&quot;].isna().sum()),
+        &quot;non_numeric_satisfaction&quot;: int(pd.to_numeric(dirty[&quot;satisfaction&quot;], errors=&quot;coerce&quot;).isna().sum()),
+        &quot;age_group_variants_for_20s&quot;: int(dirty[&quot;age_group&quot;].isin([&quot;20s&quot;, &quot;이십대&quot;]).sum()),
+    }
+
+    genre_summary = (
+        movies.groupby(&quot;genre&quot;)
+        .agg(영화수=(&quot;title&quot;, &quot;count&quot;), 평균관객수=(&quot;box_off_num&quot;, &quot;mean&quot;))
+        .round({&quot;평균관객수&quot;: 0})
+        .astype({&quot;평균관객수&quot;: &quot;int64&quot;})
+        .sort_values(&quot;영화수&quot;, ascending=False)
+        .head(5)
+        .reset_index()
+    )
+
+    print(&quot;pandas version:&quot;, pd.__version__)
+    print(&quot;survey clean shape:&quot;, survey.shape[0], &quot;rows x&quot;, 8, &quot;columns&quot;)
+    print(&quot;survey dirty shape:&quot;, dirty.shape[0], &quot;rows x&quot;, dirty.shape[1], &quot;columns&quot;)
+    print(&quot;dacon movies train shape:&quot;, movies.shape[0], &quot;rows x&quot;, movies.shape[1], &quot;columns&quot;)
+
+    print(&quot;\n[dirty issue counts]&quot;)
+    for key, value in dirty_issues.items():
+        print(f&quot;{key}: {value}&quot;)
+
+    print(&quot;\n[NPS group counts]&quot;)
+    print(survey[&quot;nps_group&quot;].value_counts().reindex([&quot;비추천(0-6)&quot;, &quot;중립(7-8)&quot;, &quot;추천(9-10)&quot;]).to_string())
+
+    print(&quot;\n[topic summary by simple rules]&quot;)
+    print(topic_summary.to_string(index=False))
+
+    print(&quot;\n[text sentiment summary by simple rules]&quot;)
+    print(sentiment_summary.to_string(index=False))
+
+    print(&quot;\n[prompt sample 18 rows]&quot;)
+    sample_cols = [&quot;respondent_id&quot;, &quot;age_group&quot;, &quot;channel&quot;, &quot;nps&quot;, &quot;satisfaction&quot;, &quot;free_text&quot;]
+    print(markdown_table(prompt_sample[sample_cols]))
+
+    print(&quot;\n[optional movie genre top 5]&quot;)
+    print(genre_summary.to_string(index=False))
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre></div>
+</section>
+  </div>
+
+  <nav class="session-pager container">
+    <a class="pager-link prev" href="./S07.html"><span class="pager-direction">&larr; 이전 차시</span><span class="pager-title">S07 · 엑셀을 AI에 올려 자연어로 분석</span></a>
+    <a class="pager-link next" href="./S09.html"><span class="pager-direction">다음 차시 &rarr;</span><span class="pager-title">S09 · AI 답 검증하기: 환각과 계산 오류 잡기</span></a>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>데이터 리터러시 with AI · S08 차시</span>
+    <a href="../index.html#curriculum">전체 커리큘럼으로</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.tab-panel');
+  function activate(key, updateHash){
+    tabs.forEach(function(btn){
+      var on = btn.getAttribute('data-tab') === key;
+      btn.classList.toggle('active', on);
+    });
+    panels.forEach(function(panel){
+      var on = panel.getAttribute('data-panel') === key;
+      panel.classList.toggle('active', on);
+    });
+    if (updateHash && history.replaceState){
+      history.replaceState(null, '', '#' + key);
+    }
+  }
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      activate(btn.getAttribute('data-tab'), true);
+    });
+  });
+  var initial = (location.hash || '').replace('#', '');
+  var valid = ['curriculum', 'handout', 'script', 'answer'];
+  if (valid.indexOf(initial) !== -1){
+    activate(initial, false);
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,973 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>S20. 인사이트 보고: 그래서 뭘 하나 · 데이터 리터러시 with AI</title>
+<meta name="description" content="S20차시: 인사이트 보고: 그래서 뭘 하나 — 커리큘럼·핸드아웃·강사대본·모범답안." />
+<style>
+:root{
+  --canvas: #010102;
+  --surface-1: #0f1011;
+  --surface-2: #141516;
+  --surface-3: #18191a;
+  --surface-4: #191a1b;
+  --ink: #f7f8f8;
+  --ink-muted: #d0d6e0;
+  --ink-subtle: #8a8f98;
+  --ink-tertiary: #62666d;
+  --primary: #5e6ad2;
+  --primary-hover: #828fff;
+  --primary-focus: #5e69d1;
+  --hairline: #23252a;
+  --hairline-strong: #34343a;
+  --hairline-tertiary: #3e3e44;
+  --success: #27a644;
+
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  --container: 900px;
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+html{ background: var(--canvas); }
+body{
+  margin:0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.05px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a{ color: inherit; text-decoration: none; }
+ul, ol{ margin:0; padding:0; }
+h1,h2,h3,h4,p{ margin:0; }
+
+.container{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 48px);
+}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--primary-hover);
+}
+.eyebrow::before{
+  content:"";
+  width:6px; height:6px;
+  background: var(--primary);
+  border-radius: 1px;
+  flex-shrink:0;
+}
+
+/* ---------- top nav ---------- */
+.top-nav{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 64px;
+  display:flex;
+  align-items:center;
+  background: rgba(1,1,2,0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.top-nav .container{ display:flex; align-items:center; justify-content:space-between; gap: 24px; max-width: 1280px; }
+.brand{ display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:600; font-size:15px; letter-spacing:-0.01em; }
+.brand-mark{ width:20px; height:20px; border-radius: 6px; background: var(--primary); flex-shrink:0; position:relative; }
+.brand-mark::after{ content:""; position:absolute; inset:6px; border-radius:2px; background: rgba(255,255,255,0.85); }
+.back-link{ font-size:14px; color: var(--ink-subtle); display:inline-flex; align-items:center; gap:6px; transition: color .15s ease; }
+.back-link:hover{ color: var(--ink); }
+
+/* ---------- session header ---------- */
+.session-header{
+  padding: var(--space-xxl) 0 var(--space-xl);
+  background:
+    radial-gradient(ellipse 60% 50% at 82% 0%, rgba(94,106,210,0.16), transparent 60%),
+    var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+.session-header-top{
+  display:flex;
+  align-items:center;
+  gap: var(--space-md);
+  margin: var(--space-md) 0 var(--space-md);
+}
+.session-num-badge{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--primary-hover);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-xs);
+  padding: 4px 10px;
+}
+.difficulty{ display:flex; gap:4px; align-items:center; }
+.difficulty .dot{ width:6px; height:6px; border-radius:50%; background: var(--hairline-strong); }
+.difficulty .dot.filled{ background: var(--primary); }
+.difficulty-label{ font-size:12px; color: var(--ink-tertiary); margin-left:6px; }
+.session-header h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ---------- tabs ---------- */
+.tabs-bar{
+  display:flex;
+  gap: 4px;
+  padding-top: var(--space-lg);
+  border-bottom: 1px solid var(--hairline);
+  overflow-x: auto;
+}
+.tab-btn{
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-subtle);
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s ease, border-color .15s ease;
+}
+.tab-btn:hover{ color: var(--ink); }
+.tab-btn.active{ color: var(--ink); border-bottom-color: var(--primary); }
+
+.tab-panels{ padding: var(--space-xxl) 0 var(--space-xxl); }
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+/* ---------- markdown body ---------- */
+.markdown-body{ color: var(--ink-muted); font-size: 15.5px; line-height: 1.75; letter-spacing: -0.05px; overflow-wrap: anywhere; word-break: break-word; }
+.markdown-body h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--hairline);
+}
+.markdown-body h2{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+.markdown-body h3{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin: var(--space-lg) 0 var(--space-xs);
+}
+.markdown-body h4{
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+.markdown-body p{ margin: 0 0 var(--space-md); }
+.markdown-body ul, .markdown-body ol{ margin: 0 0 var(--space-md); padding-left: 1.4em; }
+.markdown-body li{ margin-bottom: 6px; }
+.markdown-body ul{ list-style: disc; }
+.markdown-body ol{ list-style: decimal; }
+.markdown-body strong{ color: var(--ink); font-weight: 600; }
+.markdown-body em{ color: var(--ink-muted); }
+.markdown-body a{ color: var(--primary-hover); text-decoration: underline; text-underline-offset: 2px; }
+.markdown-body hr{ border:none; border-top: 1px solid var(--hairline); margin: var(--space-xl) 0; }
+.markdown-body blockquote{
+  margin: 0 0 var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid var(--primary);
+  background: var(--surface-1);
+  color: var(--ink-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.markdown-body code{
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--primary-hover);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.markdown-body .code-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+}
+.markdown-body pre{
+  margin: 0;
+  padding: var(--space-md);
+  background: transparent;
+  border: none;
+}
+.markdown-body pre code{
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre;
+}
+.markdown-body .table-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+}
+.markdown-body table{
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 460px;
+  font-size: 13.5px;
+}
+.markdown-body th, .markdown-body td{
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+  white-space: nowrap;
+}
+.markdown-body thead th{
+  background: var(--surface-1);
+  color: var(--ink);
+  font-weight: 600;
+  font-family: var(--font-text);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+.markdown-body tbody tr:last-child td{ border-bottom: none; }
+.markdown-body tbody tr:hover{ background: var(--surface-1); }
+
+/* ---------- pager ---------- */
+.session-pager{
+  display:flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-xl) 0 var(--space-xxl);
+  border-top: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+.pager-link{
+  display:flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  max-width: 46%;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.pager-link:hover{ border-color: var(--primary); background: var(--surface-2); }
+.pager-link.next{ margin-left: auto; text-align: right; align-items: flex-end; }
+.pager-direction{ font-size: 12px; color: var(--ink-tertiary); font-family: var(--font-mono); }
+.pager-title{ font-size: 14px; color: var(--ink); font-weight: 500; }
+.pager-spacer{ flex: 1; }
+
+footer.site-footer{
+  border-top: 1px solid var(--hairline);
+  padding: var(--space-xl) 0;
+}
+footer.site-footer .container{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: var(--ink-tertiary);
+  font-size: 12px;
+}
+footer.site-footer a:hover{ color: var(--ink-subtle); }
+
+@media (max-width: 640px){
+  .session-header{ padding: var(--space-xl) 0 var(--space-lg); }
+  .pager-link{ max-width: 100%; }
+  .session-pager{ flex-direction: column; }
+  .pager-link.next{ margin-left: 0; text-align: left; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="container">
+    <div class="brand"><span class="brand-mark"></span>데이터 리터러시 with AI</div>
+    <a class="back-link" href="../index.html#curriculum">&larr; 커리큘럼으로</a>
+  </div>
+</nav>
+
+<header class="session-header">
+  <div class="container">
+    <div class="eyebrow">PART 06 · 캡스톤</div>
+    <div class="session-header-top">
+      <span class="session-num-badge">S20</span>
+      <div class="difficulty" title="난이도 5"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="difficulty-label">실전</span></div>
+    </div>
+    <h1>인사이트 보고: 그래서 뭘 하나</h1>
+  </div>
+  <div class="container">
+    <div class="tabs-bar" role="tablist">
+<button class="tab-btn active" data-tab="curriculum" role="tab" aria-selected="true">커리큘럼</button>
+<button class="tab-btn" data-tab="handout" role="tab" aria-selected="false">핸드아웃</button>
+<button class="tab-btn" data-tab="script" role="tab" aria-selected="false">강사대본</button>
+<button class="tab-btn" data-tab="answer" role="tab" aria-selected="false">모범답안</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="tab-panels container">
+<section class="tab-panel markdown-body active" data-panel="curriculum" aria-label="커리큘럼">
+<h1>S20. 인사이트 보고: 그래서 뭘 하나</h1>
+<h2>차시 개요</h2>
+<ul>
+<li>대상: 엑셀은 쓰지만 데이터분석은 처음인 비개발자</li>
+<li>선수 차시: S19 풀사이클 실습</li>
+<li>난이도: 5</li>
+<li>시간: 60분</li>
+<li>사용 데이터</li>
+<li>기본 경로: S19에서 만든 분석 결과물</li>
+<li>강사 검증 기본 예시: <code>02_datasets/real_korean/cafe_restaurant/seoul_commercial_food_stores_202109_github.csv</code></li>
+<li>대안 예시 확인용: <code>02_datasets/real_korean/realestate_apt/molit_apt_sale_seoul_gangnam_2024.csv</code></li>
+</ul>
+<p>이번 차시는 분석을 더 하는 시간이 아니라, 분석 결과를 의사결정에 쓸 수 있는 보고서로 바꾸는 시간이다. S19에서 수강생은 AI 요약, 파이썬 그래프, BI 1페이지 가운데 적어도 하나는 산출물로 만들었다. S20에서는 그 산출물로 "무엇을 발견했는가", "그래서 어떤 의미인가", "다음 행동은 무엇인가"를 한 페이지와 3분 발표로 정리한다.</p>
+<p>수업의 기준 예시는 S19에서 다룬 상권 집계 케이스다. 실제로 검증해 보면 서울 음식점·카페 상권 데이터는 119,158행이며, 구별 점포수는 강남구 12,095개, 마포구 7,396개, 송파구 7,106개 순으로 많다. 구별·업종 조합에서는 강남구 한식 3,917개, 마포구 한식 2,835개, 송파구 한식 2,626개, 강남구 커피점/카페 2,253개가 상위에 온다. 이 숫자를 한 페이지 보고서로 옮기면 "상권 조사 우선순위는 전체 원자료가 아니라 구별·업종별 점포수 집계에서 먼저 정해야 한다"는 메시지로 정리된다.</p>
+<h2>학습 목표</h2>
+<ol>
+<li>분석 결과를 발견, 시사점, 액션의 3단 구조로 정리한다.</li>
+<li>차트를 많이 넣는 대신 결론을 가장 잘 받쳐 주는 시각화 1개를 고른다.</li>
+<li>1페이지 보고서와 3분 발표의 구조를 익힌다.</li>
+<li>동료 피드백을 받아 결론, 근거, 액션을 더 명확하게 고친다.</li>
+</ol>
+<h2>핵심 개념</h2>
+<h3>1. 발견은 데이터가 말한 사실이다</h3>
+<p>발견은 데이터에서 눈으로 확인한 관찰이다. 아직 의견도 제안도 아니다.</p>
+<p>예를 들어 아래 문장은 발견이다.</p>
+<div class="code-scroll"><pre><code class="language-text">서울 음식점·카페 상권 데이터는 119,158행이다.
+구별 점포수는 강남구 12,095개, 마포구 7,396개, 송파구 7,106개 순으로 많다.
+</code></pre></div>
+<p>반면 아래 문장은 발견만으로는 부족하다.</p>
+<div class="code-scroll"><pre><code class="language-text">강남구 상권은 무조건 성공할 것이다.
+</code></pre></div>
+<p>이 문장은 성과에 대한 예측이지, 지금 데이터만으로 확인한 사실이 아니다. 입문 단계의 보고서는 데이터가 직접 말해 준 범위 안에서 출발해야 한다.</p>
+<p>엑셀에 빗대면 발견은 피벗테이블이나 함수, 차트에서 실제로 확인한 셀 값에 해당한다. 셀에 없는 내용을 계산 결과인 척 쓰면 안 된다.</p>
+<h3>2. 시사점은 발견의 의미다</h3>
+<p>시사점은 "그 사실이 왜 중요한가"를 짚어 주는 문장으로, 발견과 액션을 잇는 다리 역할을 한다.</p>
+<p>상권 예시에서 발견이 "강남구와 마포구의 점포수가 많고, 한식과 커피점/카페 조합이 상위에 있다"라면 시사점은 이렇게 쓸 수 있다.</p>
+<div class="code-scroll"><pre><code class="language-text">상권 후보를 넓게 찾을 때는 강남구, 마포구, 송파구를 먼저 비교하되, 실제 조사에서는 전체 점포수만 보지 말고 한식과 커피점/카페처럼 업종별 밀집도를 함께 확인해야 한다.
+</code></pre></div>
+<p>엑셀에서 피벗테이블을 만들자마자 "무엇을 하자"로 건너뛰면 근거가 약해진다. 그 사이에 "이 숫자가 업무상 어떤 뜻인가"를 한 문장으로 적어 두어야 한다.</p>
+<h3>3. 액션은 누가 무엇을 할지다</h3>
+<p>액션은 보고서를 읽은 사람이 다음에 할 수 있는 행동이다. 좋은 액션은 구체적이다.</p>
+<p>나쁜 예시는 다음과 같다.</p>
+<div class="code-scroll"><pre><code class="language-text">추가 분석이 필요하다.
+</code></pre></div>
+<p>좋은 예시는 다음과 같다.</p>
+<div class="code-scroll"><pre><code class="language-text">상권 조사 담당자는 강남구, 마포구, 송파구의 한식과 커피점/카페 점포수를 먼저 비교하고, 다음 회의 전까지 후보 구별 경쟁 강도 표를 만든다.
+</code></pre></div>
+<p>액션에는 담당자, 대상, 기준, 다음 산출물이 함께 들어가면 좋다. 수업에서는 특정 조직을 전제하지 않으니 "분석 담당자", "영업 담당자", "의사결정자" 같은 일반적인 표현으로 써도 충분하다.</p>
+<h3>4. 1페이지 보고서는 모든 것을 담는 문서가 아니다</h3>
+<p>입문자가 흔히 저지르는 실수가 애써 만든 차트를 하나도 빠짐없이 보고서에 넣는 것이다. 그러나 보고서는 작업 기록이 아니라 판단을 돕는 문서다. 한 페이지에 들어가는 것은 대개 아래 정도다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>영역</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>제목</td>
+<td>결론이 드러나는 한 문장</td>
+</tr>
+<tr>
+<td>핵심 발견</td>
+<td>숫자로 확인한 사실 2-3개</td>
+</tr>
+<tr>
+<td>핵심 시각화</td>
+<td>결론을 가장 잘 보여주는 차트 1개</td>
+</tr>
+<tr>
+<td>시사점</td>
+<td>왜 중요한지 1-2문장</td>
+</tr>
+<tr>
+<td>권장 액션</td>
+<td>다음 행동 2-3개</td>
+</tr>
+<tr>
+<td>주의</td>
+<td>데이터 한계, 해석 주의점</td>
+</tr>
+</tbody>
+</table></div>
+<p>엑셀 파일에 시트가 여러 장 있어도 회의 자료에는 핵심 표와 차트만 넣는 것과 같은 이치다. 나머지는 부록으로 돌리면 된다.</p>
+<h3>5. 시각화는 예쁜 그림이 아니라 논리의 증거다</h3>
+<p>시각화 선택 기준은 "내 결론을 가장 짧게 검증해 주는가"이다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>말하고 싶은 내용</th>
+<th>적합한 시각화</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>두 숫자가 함께 움직인다</td>
+<td>산점도, 추세선</td>
+</tr>
+<tr>
+<td>그룹별 크기를 비교한다</td>
+<td>막대그래프</td>
+</tr>
+<tr>
+<td>시간 흐름을 본다</td>
+<td>선그래프</td>
+</tr>
+<tr>
+<td>구성비를 본다</td>
+<td>100% 누적 막대, 작은 표</td>
+</tr>
+<tr>
+<td>많은 지역과 시간대를 동시에 본다</td>
+<td>집계 후 히트맵</td>
+</tr>
+</tbody>
+</table></div>
+<p>상권 점포수 예시는 구별·업종별 비교가 핵심이라 막대그래프가 가장 잘 맞는다. 강남 아파트 대안 예시는 전용면적과 거래금액이라는 두 숫자의 관계를 보는 것이므로, 산점도와 추세선으로 방향과 강도인 상관계수까지만 읽는다.</p>
+<h2>60분 수업 흐름</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;">시간</th>
+<th>내용</th>
+<th>진행 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0-5분</td>
+<td>S19 결과물 확인: 분석 결과와 차트가 있는가</td>
+<td>질문</td>
+</tr>
+<tr>
+<td style="text-align: right;">5-15분</td>
+<td>발견, 시사점, 액션 구조 설명</td>
+<td>강의</td>
+</tr>
+<tr>
+<td style="text-align: right;">15-30분</td>
+<td>상권 구별·업종 점포수 예시로 1페이지 보고서 작성</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">30-40분</td>
+<td>3분 발표 구조: 결론 먼저, 근거 둘, 액션 하나</td>
+<td>시연</td>
+</tr>
+<tr>
+<td style="text-align: right;">40-50분</td>
+<td>수강생 개인 보고서 초안 작성</td>
+<td>실습</td>
+</tr>
+<tr>
+<td style="text-align: right;">50-57분</td>
+<td>동료 피드백: 결론, 근거, 액션 체크</td>
+<td>짝 활동</td>
+</tr>
+<tr>
+<td style="text-align: right;">57-60분</td>
+<td>수정 제출과 마무리</td>
+<td>공유</td>
+</tr>
+</tbody>
+</table></div>
+<h2>수업 후 수강생이 말할 수 있어야 하는 문장</h2>
+<ul>
+<li>"보고서는 분석 과정 전체가 아니라 결론, 근거, 액션을 압축한 문서다."</li>
+<li>"발견은 데이터에서 확인한 사실이고, 시사점은 그 사실의 의미이며, 액션은 다음 행동이다."</li>
+<li>"차트는 많이 넣는 것이 아니라 결론을 가장 잘 받쳐 주는 것을 고른다."</li>
+<li>"동료가 결론을 한 번에 이해하지 못하면 제목과 첫 문장을 고쳐야 한다."</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="handout" aria-label="핸드아웃">
+<h1>S20 핸드아웃: 인사이트 보고</h1>
+<h2>오늘 사용할 파일</h2>
+<p>작업 루트는 <code>/mnt/d/ai-data-analysis-course</code>이다.</p>
+<p>오늘의 기본 자료는 S19에서 만든 결과물이다. 강사 따라하기에서는 상권 데이터를 구별·업종별 점포수로 집계해 둔 S19 결과를 그대로 쓴다.</p>
+<ul>
+<li>S19 결과물: 파이썬 그래프, BI 1페이지, AI 요약 중 본인이 만든 산출물</li>
+<li>검증용 원자료: <code>02_datasets/real_korean/cafe_restaurant/seoul_commercial_food_stores_202109_github.csv</code></li>
+<li>모범답안 코드: <code>06_answers/S20_code.py</code></li>
+</ul>
+<p>S19 결과물이 없는 경우에는 아래 명령으로 강사 예시용 보고서 재료를 만들 수 있다.</p>
+<div class="code-scroll"><pre><code class="language-bash">cd /mnt/d/ai-data-analysis-course
+python3 06_answers/S20_code.py
+</code></pre></div>
+<p>실행하면 <code>06_answers/S20_outputs/</code> 폴더에 보고서 예시와 요약 CSV가 저장된다.</p>
+<h2>따라하기: 1페이지 보고서 만들기</h2>
+<p>목표는 차트를 새로 잔뜩 만드는 것이 아니라, 이미 만든 분석 결과를 보고서 한 장으로 옮기는 것이다.</p>
+<h3>1단계. 결론 제목 쓰기</h3>
+<p>보고서 제목은 주제가 아니라 결론이어야 한다.</p>
+<p>나쁜 제목:</p>
+<div class="code-scroll"><pre><code class="language-text">서울 상권 분석
+</code></pre></div>
+<p>좋은 제목:</p>
+<div class="code-scroll"><pre><code class="language-text">서울 음식점·카페 상권은 강남구에 가장 집중되어 있으며, 구별 우선순위는 한식과 커피점/카페 조합부터 확인해야 한다.
+</code></pre></div>
+<p>문장이 길어도 상관없다. 제목만 읽고도 결론이 어느 쪽인지 짐작할 수 있어야 한다.</p>
+<h3>2단계. 발견 2-3개 쓰기</h3>
+<p>S19 결과물이나 <code>S20_code.py</code> 실행 결과에서 숫자를 가져온다.</p>
+<p>강사 예시:</p>
+<div class="code-scroll"><pre><code class="language-text">분석 대상은 서울 음식점·카페 상권 데이터 119,158행이다.
+구별 점포수는 강남구 12,095개, 마포구 7,396개, 송파구 7,106개 순으로 많다.
+구별·업종 조합은 강남구 한식 3,917개, 마포구 한식 2,835개, 송파구 한식 2,626개, 강남구 커피점/카페 2,253개가 상위에 온다.
+</code></pre></div>
+<p>"오를 것이다", "무조건 좋다", "확실하다" 같은 표현은 발견에 넣지 않도록 조심한다. 발견에는 실제로 확인한 숫자만 담는다.</p>
+<h3>3단계. 시각화 1개 고르기</h3>
+<p>상권 케이스에서는 아래 중 하나를 고른다.</p>
+<ol>
+<li>S19에서 만든 구별 점포수 상위 10개 막대그래프</li>
+<li>BI에서 만든 구별·업종별 점포수 비교 화면</li>
+<li><code>06_answers/S20_outputs/s20_cafe_top_gu_category.csv</code>를 엑셀로 열어 만든 구별·업종 조합 상위 10개 막대그래프</li>
+</ol>
+<p>추천은 구별·업종 조합 상위 10개 막대그래프다. 어느 구와 업종 조합을 먼저 봐야 할지 가장 직접적으로 보여주기 때문이다.</p>
+<p>차트 제목 예시:</p>
+<div class="code-scroll"><pre><code class="language-text">강남구 한식과 강남구 커피점/카페가 상권 조사 우선 후보에 들어간다
+</code></pre></div>
+<p>차트 아래 해석 문장 예시:</p>
+<div class="code-scroll"><pre><code class="language-text">강남구 한식은 3,917개, 강남구 커피점/카페는 2,253개로 상위권이다. 전체 점포수가 많은 구라도 업종별 밀집도가 다르므로 구와 업종을 함께 비교해야 한다.
+</code></pre></div>
+<h3>4단계. 시사점 쓰기</h3>
+<p>발견을 업무 의미로 바꾼다.</p>
+<div class="code-scroll"><pre><code class="language-text">상권 후보를 고를 때는 전체 점포수가 많은 구를 먼저 보되, 실제 실행 우선순위는 업종별 밀집도까지 함께 보아야 한다. 강남구는 전체 점포수와 한식·커피점/카페 점포수가 모두 높으므로 1차 조사 후보로 적합하다.
+</code></pre></div>
+<h3>5단계. 액션 2-3개 쓰기</h3>
+<p>보고서를 읽은 사람이 다음에 할 행동을 쓴다.</p>
+<div class="code-scroll"><pre><code class="language-text">1. 상권 조사 담당자는 강남구, 마포구, 송파구를 1차 비교 대상으로 잡는다.
+2. 각 구는 한식과 커피점/카페 점포수를 먼저 비교하고, 경쟁 강도가 높은 조합을 표시한다.
+3. 의사결정 회의에는 구별 점포수 막대그래프 1개와 구별·업종 상위 10개 표 1개만 넣고, 원자료 전체 표는 부록으로 분리한다.
+</code></pre></div>
+<h3>6단계. 한계와 주의점 쓰기</h3>
+<p>좋은 보고서는 한계를 숨기지 않는다.</p>
+<div class="code-scroll"><pre><code class="language-text">이 분석은 2021년 서울 음식점·카페 상권 데이터의 점포수만 사용했다. 실제 출점 판단에는 임대료, 유동인구, 매출, 배달 수요, 폐업률, 접근성 같은 추가 정보가 필요하다.
+</code></pre></div>
+<h3>7단계. 3분 발표 원고 만들기</h3>
+<p>아래 구조로 말한다.</p>
+<div class="code-scroll"><pre><code class="language-text">1분: 결론
+서울 음식점·카페 상권은 강남구에 가장 집중되어 있으며, 구별 우선순위는 한식과 커피점/카페 조합부터 확인해야 합니다.
+
+1분: 근거
+119,158행을 집계한 결과, 구별 점포수는 강남구 12,095개, 마포구 7,396개, 송파구 7,106개 순입니다. 구별·업종 조합에서는 강남구 한식 3,917개와 강남구 커피점/카페 2,253개가 상위권에 들어갑니다.
+
+1분: 액션
+따라서 상권 조사 담당자는 강남구, 마포구, 송파구를 먼저 비교하고, 각 구에서 한식과 커피점/카페의 경쟁 강도를 확인한 뒤 후보지를 좁히는 방식이 적절합니다.
+</code></pre></div>
+<h2>직접 해보기: 동료 피드백 반영</h2>
+<p>본인의 S19 결과물을 1페이지 보고서로 바꾼다. 기본 실습은 상권의 구별·업종별 집계 결과를 사용한다. 원자료 119,158행을 그대로 차트에 넣지 말고, 구별 또는 업종별로 집계한 상위 N개만 사용한다. 아파트 결과물을 대안 예시로 쓴다면 산점도와 추세선의 방향, 상관계수, 같은 면적대의 가격 범위까지만 다룬다.</p>
+<h3>제출물</h3>
+<ol>
+<li>1페이지 보고서</li>
+<li>3분 발표 원고</li>
+<li>동료 피드백 2개와 반영 결과</li>
+</ol>
+<h3>보고서 템플릿</h3>
+<div class="code-scroll"><pre><code class="language-text">제목:
+
+핵심 발견:
+1.
+2.
+3.
+
+핵심 시각화:
+- 차트 이름:
+- 왜 이 차트를 골랐는가:
+
+시사점:
+
+권장 액션:
+1.
+2.
+3.
+
+주의점:
+
+동료 피드백과 반영:
+1. 받은 피드백:
+   반영 내용:
+2. 받은 피드백:
+   반영 내용:
+</code></pre></div>
+<h3>동료 피드백 기준</h3>
+<p>짝은 아래 질문에 답한다.</p>
+<div class="code-scroll"><pre><code class="language-text">1. 제목만 읽어도 결론을 알 수 있는가?
+2. 발견 문장에 실제 숫자가 들어 있는가?
+3. 시사점이 발견과 연결되는가?
+4. 액션이 구체적인 행동으로 쓰였는가?
+5. 차트가 결론을 직접 보여주는가?
+</code></pre></div>
+<h2>제출 기준</h2>
+<ul>
+<li>발견, 시사점, 액션이 구분되어 있다.</li>
+<li>발견에는 실제 숫자가 2개 이상 들어 있다.</li>
+<li>차트는 결론을 설명하는 1개를 골랐다.</li>
+<li>3분 발표 원고가 결론, 근거, 액션 순서로 되어 있다.</li>
+<li>동료 피드백 2개 이상을 받고 최소 1개 이상 반영했다.</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="script" aria-label="강사대본">
+<h1>S20 강사대본: 인사이트 보고</h1>
+<h2>수업 전 확인</h2>
+<ul>
+<li>작업 루트: <code>/mnt/d/ai-data-analysis-course</code></li>
+<li>기본 전제: 수강생은 S19에서 분석 결과물 하나 이상을 가지고 있다.</li>
+<li>강사 예시 데이터: <code>02_datasets/real_korean/cafe_restaurant/seoul_commercial_food_stores_202109_github.csv</code></li>
+<li>강사 예시 코드: <code>06_answers/S20_code.py</code></li>
+<li>코드 실행 명령:</li>
+</ul>
+<div class="code-scroll"><pre><code class="language-bash">cd /mnt/d/ai-data-analysis-course
+python3 06_answers/S20_code.py
+</code></pre></div>
+<p>실행 결과에서 확인할 핵심 숫자:</p>
+<ul>
+<li>서울 음식점·카페 상권 원자료: 119,158행</li>
+<li>구별 점포수 상위 3개: 강남구 12,095개, 마포구 7,396개, 송파구 7,106개</li>
+<li>구별·업종 조합 상위 예시: 강남구 한식 3,917개, 마포구 한식 2,835개, 송파구 한식 2,626개, 강남구 커피점/카페 2,253개</li>
+<li>아파트 대안 예시: 강남구 아파트 실거래 3,754행, 전용면적과 거래금액 상관계수 0.806, 80-90㎡ 거래금액 범위 65,000만원부터 480,000만원</li>
+</ul>
+<h2>오프닝 0-5분</h2>
+<p>말할 것:</p>
+<div class="code-scroll"><pre><code class="language-text">오늘은 분석을 더 많이 하는 시간이 아닙니다. 오늘은 분석 결과를 읽는 사람이 움직일 수 있게 바꾸는 시간입니다. 지난 시간에는 데이터를 열고, 요약하고, 차트를 만들었습니다. 그런데 실무에서는 &quot;차트를 만들었습니다&quot;가 끝이 아닙니다. 질문은 항상 &quot;그래서 뭘 하면 되나요&quot;로 돌아옵니다.
+</code></pre></div>
+<p>시연 포인트:</p>
+<ul>
+<li>S19 결과물이 있는 수강생에게 파일을 열게 한다.</li>
+<li>결과물이 없는 수강생은 강사 예시를 사용한다고 안내한다.</li>
+<li>오늘 제출물은 1페이지 보고서, 3분 발표 원고, 동료 피드백 반영이라고 명확히 말한다.</li>
+</ul>
+<h2>개념 설명 5-15분</h2>
+<p>말할 것:</p>
+<div class="code-scroll"><pre><code class="language-text">보고서는 세 칸으로 나눠 생각하면 됩니다. 첫째, 발견입니다. 발견은 데이터가 말한 사실입니다. 둘째, 시사점입니다. 시사점은 그 사실이 왜 중요한지입니다. 셋째, 액션입니다. 액션은 누가 무엇을 다음에 할지입니다.
+</code></pre></div>
+<p>판서 또는 화면 문장:</p>
+<div class="code-scroll"><pre><code class="language-text">발견: 구별 점포수는 강남구 12,095개, 마포구 7,396개, 송파구 7,106개 순으로 많다.
+시사점: 상권 후보는 전체 점포수만 보지 말고 구와 업종 조합을 함께 보아야 한다.
+액션: 강남구, 마포구, 송파구의 한식과 커피점/카페 점포수를 먼저 비교한다.
+</code></pre></div>
+<p>엑셀 비교 설명:</p>
+<div class="code-scroll"><pre><code class="language-text">엑셀에서 피벗테이블을 만들었다고 보고가 끝나는 것은 아닙니다. 피벗테이블은 근거입니다. 보고서는 그 근거를 읽고 판단할 수 있게 바꾼 문서입니다.
+</code></pre></div>
+<h2>따라하기 시연 15-30분</h2>
+<h3>1. 코드 실행과 숫자 확인</h3>
+<p>말할 것:</p>
+<div class="code-scroll"><pre><code class="language-text">먼저 오늘 쓸 숫자가 실제 데이터에서 나온 것인지 확인합니다. 보고서에 들어가는 숫자는 기억이나 감으로 쓰면 안 됩니다.
+</code></pre></div>
+<p>터미널에서 실행:</p>
+<div class="code-scroll"><pre><code class="language-bash">cd /mnt/d/ai-data-analysis-course
+python3 06_answers/S20_code.py
+</code></pre></div>
+<p>시연 포인트:</p>
+<ul>
+<li>원자료 행수 119,158행을 확인한다.</li>
+<li>구별 점포수 상위 3개와 구별·업종 조합 상위 값을 확인한다.</li>
+<li>보고서에는 원자료 전체가 아니라 집계 결과를 넣어야 한다는 점을 짚어 준다.</li>
+<li><code>06_answers/S20_outputs/s20_one_page_report_example.md</code>가 저장된 것을 보여준다.</li>
+</ul>
+<h3>2. 제목 고치기</h3>
+<p>말할 것:</p>
+<div class="code-scroll"><pre><code class="language-text">&quot;서울 상권 분석&quot;은 주제입니다. 보고서 제목으로는 약합니다. 제목은 결론이어야 합니다. 오늘 예시는 &quot;서울 음식점·카페 상권은 강남구에 가장 집중되어 있으며, 구별 우선순위는 한식과 커피점/카페 조합부터 확인해야 한다&quot;입니다.
+</code></pre></div>
+<p>시연 포인트:</p>
+<ul>
+<li>제목만 보고도 발표의 방향을 알 수 있는지 묻는다.</li>
+<li>제목이 길어도 괜찮다고 말해 준다. 두루뭉술한 짧은 제목보다는 구체적인 긴 제목이 낫다.</li>
+</ul>
+<h3>3. 시각화 선택</h3>
+<p>말할 것:</p>
+<div class="code-scroll"><pre><code class="language-text">이 케이스의 핵심은 구와 업종 조합별 점포수 비교입니다. 그래서 막대그래프가 가장 적합합니다. 아파트 대안 예시처럼 두 숫자의 관계를 보는 케이스라면 산점도와 추세선을 쓰되, 방향과 강도인 상관계수까지만 읽으면 됩니다. 차트는 예쁜 것을 고르는 것이 아니라 결론을 가장 직접적으로 보여주는 것을 고릅니다.
+</code></pre></div>
+<p>시연 포인트:</p>
+<ul>
+<li>S19 구별·업종 점포수 막대그래프 또는 BI 화면을 보고서 중앙에 둔다고 설명한다.</li>
+<li>차트 3개를 늘어놓기보다 핵심 차트 1개와 보조 표 1개가 낫다고 설명한다.</li>
+</ul>
+<h2>3분 발표 구조 30-40분</h2>
+<p>말할 것:</p>
+<div class="code-scroll"><pre><code class="language-text">3분 발표는 짧습니다. 분석 과정을 처음부터 설명하면 시간이 없습니다. 결론부터 말하고, 근거 두 개를 말하고, 마지막에 액션 하나를 말합니다.
+</code></pre></div>
+<p>발표 예시:</p>
+<div class="code-scroll"><pre><code class="language-text">서울 음식점·카페 상권은 강남구에 가장 집중되어 있으며, 구별 우선순위는 한식과 커피점/카페 조합부터 확인해야 합니다.
+119,158행을 집계한 결과 구별 점포수는 강남구 12,095개, 마포구 7,396개, 송파구 7,106개 순입니다.
+구별·업종 조합에서는 강남구 한식 3,917개, 마포구 한식 2,835개, 송파구 한식 2,626개, 강남구 커피점/카페 2,253개가 상위에 있습니다.
+따라서 상권 조사 담당자는 강남구, 마포구, 송파구를 먼저 비교하고, 각 구에서 한식과 커피점/카페의 경쟁 강도를 확인한 뒤 후보지를 좁히는 방식이 적절합니다.
+</code></pre></div>
+<p>강조:</p>
+<ul>
+<li>수치 2개 이상</li>
+<li>차트 1개</li>
+<li>액션 1개 이상</li>
+<li>한계 1문장</li>
+</ul>
+<h2>개인 실습 40-50분</h2>
+<p>진행 안내:</p>
+<div class="code-scroll"><pre><code class="language-text">이제 본인의 S19 결과물을 보고서 템플릿에 넣습니다. 기본 실습은 상권 데이터를 구별 또는 업종별로 집계한 상위 N개를 사용합니다. 원자료 전체를 차트에 넣지 마십시오. 아파트 결과물을 대안 예시로 쓰는 분은 산점도와 추세선의 방향, 상관계수, 같은 면적대의 가격 범위까지만 사용하십시오.
+</code></pre></div>
+<p>돌아다니며 볼 것:</p>
+<ul>
+<li>제목이 주제인지 결론인지 확인한다.</li>
+<li>발견에 숫자가 있는지 확인한다.</li>
+<li>액션이 "추가 분석 필요"에서 멈추면 더 구체적으로 다듬게 한다.</li>
+<li>차트가 너무 많으면 하나를 고르게 한다.</li>
+</ul>
+<h2>동료 피드백 50-57분</h2>
+<p>말할 것:</p>
+<div class="code-scroll"><pre><code class="language-text">좋은 피드백은 취향 평가가 아닙니다. &quot;색이 마음에 든다&quot;보다 &quot;제목만 보면 액션이 무엇인지 아직 모르겠다&quot;가 더 좋은 피드백입니다. 오늘은 결론, 근거, 액션 세 가지를 기준으로 봅니다.
+</code></pre></div>
+<p>피드백 질문:</p>
+<div class="code-scroll"><pre><code class="language-text">제목만 읽어도 결론을 알 수 있는가?
+발견 문장에 실제 숫자가 들어 있는가?
+시사점이 발견과 연결되는가?
+액션이 구체적인 행동인가?
+차트가 결론을 직접 보여주는가?
+</code></pre></div>
+<h2>마무리 57-60분</h2>
+<p>말할 것:</p>
+<div class="code-scroll"><pre><code class="language-text">오늘의 핵심은 분석이 끝난 뒤 한 번 더 번역해야 한다는 것입니다. 데이터 언어를 의사결정 언어로 번역하는 과정이 보고서입니다. 발견, 시사점, 액션을 분리해서 쓰면 보고서가 훨씬 덜 흔들립니다.
+</code></pre></div>
+<p>완료 판단 체크포인트 1문장:</p>
+<div class="code-scroll"><pre><code class="language-text">수강생이 S19 결과물을 바탕으로 실제 숫자가 들어간 발견, 그 의미인 시사점, 다음 행동인 액션을 한 페이지와 3분 발표로 설명하고 동료 피드백을 최소 1개 반영하면 완료로 판단한다.
+</code></pre></div>
+<h2>예상 질문과 답</h2>
+<h3>질문 1. 차트를 여러 개 넣으면 더 성실해 보이지 않나요?</h3>
+<p>답:</p>
+<div class="code-scroll"><pre><code class="language-text">분석 파일에는 여러 차트가 있어도 됩니다. 하지만 1페이지 보고서에는 결론을 가장 잘 보여주는 차트가 우선입니다. 차트가 많아질수록 읽는 사람이 무엇을 봐야 하는지 놓칠 수 있습니다.
+</code></pre></div>
+<h3>질문 2. 상권 데이터에서 점포수가 많으면 좋은 상권이라는 뜻인가요?</h3>
+<p>답:</p>
+<div class="code-scroll"><pre><code class="language-text">그렇게 단정하면 안 됩니다. 점포수는 상권 규모와 경쟁 강도를 함께 보여주는 출발점입니다. 그래서 점포수가 많은 구와 업종 조합을 먼저 확인하되, 실제 판단에는 임대료, 유동인구, 매출, 배달 수요, 폐업률 같은 추가 정보가 필요합니다.
+</code></pre></div>
+<h3>질문 3. 액션을 쓰기 어렵습니다. 어떻게 시작하나요?</h3>
+<p>답:</p>
+<div class="code-scroll"><pre><code class="language-text">누가 무엇을 다음에 할지로 시작하십시오. 예를 들어 &quot;상권 조사 담당자는 강남구와 마포구의 한식·커피점/카페 점포수를 비교표로 만든다&quot;처럼 쓰면 됩니다. &quot;추가 분석 필요&quot;는 방향이고, 액션은 행동입니다.
+</code></pre></div>
+<h3>질문 4. 동료가 제 결론에 동의하지 않으면 어떻게 하나요?</h3>
+<p>답:</p>
+<div class="code-scroll"><pre><code class="language-text">동의 여부보다 근거와 연결이 중요합니다. 동료가 제목을 다르게 이해했다면 제목을 고칩니다. 숫자가 부족하다고 하면 발견을 보강합니다. 액션이 너무 넓다고 하면 대상을 좁힙니다.
+</code></pre></div>
+<h3>질문 5. 상권 데이터를 선택한 사람도 같은 구조를 쓰면 되나요?</h3>
+<p>답:</p>
+<div class="code-scroll"><pre><code class="language-text">오늘 기본 예시가 그 구조입니다. 발견에는 구별 점포수, 업종별 상위 N개, 구별·업종 조합 같은 집계 숫자를 넣습니다. 시사점은 어느 구와 업종에 집중할지로 바꾸고, 액션은 상권 조사 우선순위나 추가 비교표 작성으로 쓰면 됩니다. 단, 원자료 119,158행을 그대로 차트에 넣지 말고 먼저 집계해야 합니다.
+</code></pre></div>
+</section>
+<section class="tab-panel markdown-body" data-panel="answer" aria-label="모범답안">
+<h1>S20 모범답안</h1>
+<h2>미션 모범답안</h2>
+<p>S19에서 상권 데이터를 구별·업종별 점포수로 집계한 수강생의 예시 답안이다.</p>
+<h3>1페이지 보고서 예시</h3>
+<p>제목:</p>
+<div class="code-scroll"><pre><code class="language-text">서울 음식점·카페 상권은 강남구에 가장 집중되어 있으며, 구별 우선순위는 한식과 커피점/카페 조합부터 확인해야 한다.
+</code></pre></div>
+<p>핵심 발견:</p>
+<div class="code-scroll"><pre><code class="language-text">분석 대상은 서울 음식점·카페 상권 데이터 119,158행이다.
+구별 점포수는 강남구 12,095개, 마포구 7,396개, 송파구 7,106개 순으로 많다.
+구별·업종 조합은 강남구 한식 3,917개, 마포구 한식 2,835개, 송파구 한식 2,626개, 강남구 커피점/카페 2,253개가 상위에 온다.
+</code></pre></div>
+<p>핵심 시각화:</p>
+<div class="code-scroll"><pre><code class="language-text">구별·업종 조합 상위 10개 막대그래프를 사용한다.
+이 차트는 어느 구와 업종 조합에 점포가 집중되어 있는지, 다음 조사 우선순위를 어디에 둘지 직접 보여준다.
+</code></pre></div>
+<p>시사점:</p>
+<div class="code-scroll"><pre><code class="language-text">상권 후보를 고를 때는 전체 점포수가 많은 구를 먼저 보되, 실제 실행 우선순위는 업종별 밀집도까지 함께 보아야 한다. 강남구는 전체 점포수와 한식·커피점/카페 점포수가 모두 높으므로 1차 조사 후보로 적합하다.
+</code></pre></div>
+<p>권장 액션:</p>
+<div class="code-scroll"><pre><code class="language-text">1. 상권 조사 담당자는 강남구, 마포구, 송파구를 1차 비교 대상으로 잡는다.
+2. 각 구는 한식과 커피점/카페 점포수를 먼저 비교하고, 경쟁 강도가 높은 조합을 표시한다.
+3. 회의 자료에는 구별 점포수 막대그래프 1개와 구별·업종 상위 10개 표 1개만 남기고, 원자료 전체 표는 부록으로 분리한다.
+</code></pre></div>
+<p>주의점:</p>
+<div class="code-scroll"><pre><code class="language-text">이 분석은 2021년 서울 음식점·카페 상권 데이터의 점포수만 사용한 교육용 예시다. 실제 출점 판단에는 임대료, 유동인구, 매출, 배달 수요, 폐업률, 접근성 같은 추가 정보가 필요하다.
+</code></pre></div>
+<p>동료 피드백 반영 예시:</p>
+<div class="code-scroll"><pre><code class="language-text">받은 피드백 1: 제목은 결론이 보이지만 &quot;무엇을 해야 하는지&quot;가 조금 약하다.
+반영 내용 1: 액션 영역에 &quot;강남구, 마포구, 송파구를 1차 비교 대상으로 잡고 한식·커피점/카페 점포수를 먼저 비교한다&quot;를 명확히 추가했다.
+
+받은 피드백 2: 강남구가 왜 먼저인지 근거가 부족하다.
+반영 내용 2: 구별 점포수 상위 3개와 구별·업종 조합 상위 값을 발견 문장에 추가했다.
+</code></pre></div>
+<h3>3분 발표 원고 예시</h3>
+<div class="code-scroll"><pre><code class="language-text">서울 음식점·카페 상권은 강남구에 가장 집중되어 있으며, 구별 우선순위는 한식과 커피점/카페 조합부터 확인해야 합니다.
+
+분석 대상은 119,158행입니다. 구별 점포수는 강남구 12,095개, 마포구 7,396개, 송파구 7,106개 순으로 많습니다.
+
+구별·업종 조합에서는 강남구 한식 3,917개, 마포구 한식 2,835개, 송파구 한식 2,626개, 강남구 커피점/카페 2,253개가 상위에 있습니다. 전체 점포수와 업종별 밀집도를 함께 보아야 한다는 뜻입니다.
+
+따라서 상권 조사 담당자는 강남구, 마포구, 송파구를 먼저 비교하고, 각 구에서 한식과 커피점/카페의 경쟁 강도를 확인한 뒤 후보지를 좁히는 방식이 적절합니다. 보고서에는 구별·업종 조합 막대그래프 1개와 상위 10개 표 1개만 남기고 원자료 전체 표는 부록으로 분리하겠습니다.
+</code></pre></div>
+<h2>평가 기준 해설</h2>
+<p>상:</p>
+<div class="code-scroll"><pre><code class="language-text">발견, 시사점, 액션이 분리되어 있고, 발견에 실제 숫자가 2개 이상 들어 있다. 차트 선택 이유가 결론과 연결되어 있으며, 동료 피드백을 받아 제목이나 액션을 구체적으로 고쳤다.
+</code></pre></div>
+<p>중:</p>
+<div class="code-scroll"><pre><code class="language-text">보고서 형식은 갖추었고 숫자도 일부 들어 있지만, 시사점이나 액션이 다소 추상적이다. 예를 들어 &quot;추가 분석 필요&quot;에서 멈추면 중 수준이다.
+</code></pre></div>
+<p>하:</p>
+<div class="code-scroll"><pre><code class="language-text">차트나 표는 있으나 결론이 없고, 실제 숫자가 부족하거나 S19 결과물과 연결되지 않는다. 동료 피드백 반영 흔적도 없다.
+</code></pre></div>
+<h2>실행한 검증 코드</h2>
+<p>검증 코드는 아래 파일에 저장되어 있다.</p>
+<p><code>06_answers/S20_code.py</code></p>
+<p>실행 명령:</p>
+<div class="code-scroll"><pre><code class="language-bash">cd /mnt/d/ai-data-analysis-course
+python3 06_answers/S20_code.py
+</code></pre></div>
+<p>핵심 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">from pathlib import Path
+
+import pandas as pd
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CAFE_RESTAURANT_PATH = (
+    ROOT / &quot;02_datasets/real_korean/cafe_restaurant/seoul_commercial_food_stores_202109_github.csv&quot;
+)
+
+cafe = pd.read_csv(CAFE_RESTAURANT_PATH)
+
+top_gu = (
+    cafe.groupby(&quot;시군구명&quot;)
+    .size()
+    .sort_values(ascending=False)
+    .head(3)
+    .reset_index(name=&quot;점포수&quot;)
+)
+
+top_gu_category = (
+    cafe.groupby([&quot;시군구명&quot;, &quot;상권업종중분류명&quot;])
+    .size()
+    .sort_values(ascending=False)
+    .head(4)
+    .reset_index(name=&quot;점포수&quot;)
+)
+
+print(len(cafe))
+print(top_gu)
+print(top_gu_category)
+</code></pre></div>
+<p>실제 실행 출력 요약:</p>
+<div class="code-scroll"><pre><code class="language-text">pandas version: 3.0.3
+서울 음식점·카페 상권 원자료: 119,158행
+구별 점포수 상위 3개
+시군구명   점포수
+강남구   12095
+마포구    7396
+송파구    7106
+구별·업종 조합 상위 4개
+시군구명 상권업종중분류명  점포수
+강남구        한식  3917
+마포구        한식  2835
+송파구        한식  2626
+강남구    커피점/카페  2253
+아파트 대안 예시: 강남구 아파트 실거래 3,754행, 전용면적-거래금액 상관계수 0.806
+</code></pre></div>
+<h2>코드가 저장하는 보조 산출물</h2>
+<p><code>S20_code.py</code>를 실행하면 아래 파일이 생성된다.</p>
+<ul>
+<li><code>06_answers/S20_outputs/s20_one_page_report_example.md</code></li>
+<li><code>06_answers/S20_outputs/s20_cafe_top_gu.csv</code></li>
+<li><code>06_answers/S20_outputs/s20_cafe_top_gu_category.csv</code></li>
+<li><code>06_answers/S20_outputs/s20_area_summary.csv</code></li>
+<li><code>06_answers/S20_outputs/s20_monthly_summary.csv</code></li>
+<li><code>06_answers/S20_outputs/s20_80_90sqm_by_dong.csv</code></li>
+</ul>
+<p>이 보조 산출물은 S20 상권 보고서 작성 예시와 아파트 대안 예시 확인을 위한 검증 자료다.</p>
+</section>
+  </div>
+
+  <nav class="session-pager container">
+    <a class="pager-link prev" href="./S19.html"><span class="pager-direction">&larr; 이전 차시</span><span class="pager-title">S19 · 풀사이클 실습: AI 요약, 파이썬 그래프, BI 1페이지</span></a>
+    <span class="pager-spacer"></span>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>데이터 리터러시 with AI · S20 차시</span>
+    <a href="../index.html#curriculum">전체 커리큘럼으로</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.tab-panel');
+  function activate(key, updateHash){
+    tabs.forEach(function(btn){
+      var on = btn.getAttribute('data-tab') === key;
+      btn.classList.toggle('active', on);
+    });
+    panels.forEach(function(panel){
+      var on = panel.getAttribute('data-panel') === key;
+      panel.classList.toggle('active', on);
+    });
+    if (updateHash && history.replaceState){
+      history.replaceState(null, '', '#' + key);
+    }
+  }
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      activate(btn.getAttribute('data-tab'), true);
+    });
+  });
+  var initial = (location.hash || '').replace('#', '');
+  var valid = ['curriculum', 'handout', 'script', 'answer'];
+  if (valid.indexOf(initial) !== -1){
+    activate(initial, false);
+  }
+})();
+</script>
+
+</body>
+</html>

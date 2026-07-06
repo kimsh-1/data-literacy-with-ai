@@ -1,0 +1,1196 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>S03. 피벗테이블로 질문에 답하기 · 데이터 리터러시 with AI</title>
+<meta name="description" content="S03차시: 피벗테이블로 질문에 답하기 — 커리큘럼·핸드아웃·강사대본·모범답안." />
+<style>
+:root{
+  --canvas: #010102;
+  --surface-1: #0f1011;
+  --surface-2: #141516;
+  --surface-3: #18191a;
+  --surface-4: #191a1b;
+  --ink: #f7f8f8;
+  --ink-muted: #d0d6e0;
+  --ink-subtle: #8a8f98;
+  --ink-tertiary: #62666d;
+  --primary: #5e6ad2;
+  --primary-hover: #828fff;
+  --primary-focus: #5e69d1;
+  --hairline: #23252a;
+  --hairline-strong: #34343a;
+  --hairline-tertiary: #3e3e44;
+  --success: #27a644;
+
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  --container: 900px;
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+html{ background: var(--canvas); }
+body{
+  margin:0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.05px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a{ color: inherit; text-decoration: none; }
+ul, ol{ margin:0; padding:0; }
+h1,h2,h3,h4,p{ margin:0; }
+
+.container{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 48px);
+}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--primary-hover);
+}
+.eyebrow::before{
+  content:"";
+  width:6px; height:6px;
+  background: var(--primary);
+  border-radius: 1px;
+  flex-shrink:0;
+}
+
+/* ---------- top nav ---------- */
+.top-nav{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 64px;
+  display:flex;
+  align-items:center;
+  background: rgba(1,1,2,0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.top-nav .container{ display:flex; align-items:center; justify-content:space-between; gap: 24px; max-width: 1280px; }
+.brand{ display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:600; font-size:15px; letter-spacing:-0.01em; }
+.brand-mark{ width:20px; height:20px; border-radius: 6px; background: var(--primary); flex-shrink:0; position:relative; }
+.brand-mark::after{ content:""; position:absolute; inset:6px; border-radius:2px; background: rgba(255,255,255,0.85); }
+.back-link{ font-size:14px; color: var(--ink-subtle); display:inline-flex; align-items:center; gap:6px; transition: color .15s ease; }
+.back-link:hover{ color: var(--ink); }
+
+/* ---------- session header ---------- */
+.session-header{
+  padding: var(--space-xxl) 0 var(--space-xl);
+  background:
+    radial-gradient(ellipse 60% 50% at 82% 0%, rgba(94,106,210,0.16), transparent 60%),
+    var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+.session-header-top{
+  display:flex;
+  align-items:center;
+  gap: var(--space-md);
+  margin: var(--space-md) 0 var(--space-md);
+}
+.session-num-badge{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--primary-hover);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-xs);
+  padding: 4px 10px;
+}
+.difficulty{ display:flex; gap:4px; align-items:center; }
+.difficulty .dot{ width:6px; height:6px; border-radius:50%; background: var(--hairline-strong); }
+.difficulty .dot.filled{ background: var(--primary); }
+.difficulty-label{ font-size:12px; color: var(--ink-tertiary); margin-left:6px; }
+.session-header h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ---------- tabs ---------- */
+.tabs-bar{
+  display:flex;
+  gap: 4px;
+  padding-top: var(--space-lg);
+  border-bottom: 1px solid var(--hairline);
+  overflow-x: auto;
+}
+.tab-btn{
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-subtle);
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s ease, border-color .15s ease;
+}
+.tab-btn:hover{ color: var(--ink); }
+.tab-btn.active{ color: var(--ink); border-bottom-color: var(--primary); }
+
+.tab-panels{ padding: var(--space-xxl) 0 var(--space-xxl); }
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+/* ---------- markdown body ---------- */
+.markdown-body{ color: var(--ink-muted); font-size: 15.5px; line-height: 1.75; letter-spacing: -0.05px; overflow-wrap: anywhere; word-break: break-word; }
+.markdown-body h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--hairline);
+}
+.markdown-body h2{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+.markdown-body h3{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin: var(--space-lg) 0 var(--space-xs);
+}
+.markdown-body h4{
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+.markdown-body p{ margin: 0 0 var(--space-md); }
+.markdown-body ul, .markdown-body ol{ margin: 0 0 var(--space-md); padding-left: 1.4em; }
+.markdown-body li{ margin-bottom: 6px; }
+.markdown-body ul{ list-style: disc; }
+.markdown-body ol{ list-style: decimal; }
+.markdown-body strong{ color: var(--ink); font-weight: 600; }
+.markdown-body em{ color: var(--ink-muted); }
+.markdown-body a{ color: var(--primary-hover); text-decoration: underline; text-underline-offset: 2px; }
+.markdown-body hr{ border:none; border-top: 1px solid var(--hairline); margin: var(--space-xl) 0; }
+.markdown-body blockquote{
+  margin: 0 0 var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid var(--primary);
+  background: var(--surface-1);
+  color: var(--ink-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.markdown-body code{
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--primary-hover);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.markdown-body .code-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+}
+.markdown-body pre{
+  margin: 0;
+  padding: var(--space-md);
+  background: transparent;
+  border: none;
+}
+.markdown-body pre code{
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre;
+}
+.markdown-body .table-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+}
+.markdown-body table{
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 460px;
+  font-size: 13.5px;
+}
+.markdown-body th, .markdown-body td{
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+  white-space: nowrap;
+}
+.markdown-body thead th{
+  background: var(--surface-1);
+  color: var(--ink);
+  font-weight: 600;
+  font-family: var(--font-text);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+.markdown-body tbody tr:last-child td{ border-bottom: none; }
+.markdown-body tbody tr:hover{ background: var(--surface-1); }
+
+/* ---------- pager ---------- */
+.session-pager{
+  display:flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-xl) 0 var(--space-xxl);
+  border-top: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+.pager-link{
+  display:flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  max-width: 46%;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.pager-link:hover{ border-color: var(--primary); background: var(--surface-2); }
+.pager-link.next{ margin-left: auto; text-align: right; align-items: flex-end; }
+.pager-direction{ font-size: 12px; color: var(--ink-tertiary); font-family: var(--font-mono); }
+.pager-title{ font-size: 14px; color: var(--ink); font-weight: 500; }
+.pager-spacer{ flex: 1; }
+
+footer.site-footer{
+  border-top: 1px solid var(--hairline);
+  padding: var(--space-xl) 0;
+}
+footer.site-footer .container{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: var(--ink-tertiary);
+  font-size: 12px;
+}
+footer.site-footer a:hover{ color: var(--ink-subtle); }
+
+@media (max-width: 640px){
+  .session-header{ padding: var(--space-xl) 0 var(--space-lg); }
+  .pager-link{ max-width: 100%; }
+  .session-pager{ flex-direction: column; }
+  .pager-link.next{ margin-left: 0; text-align: left; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="container">
+    <div class="brand"><span class="brand-mark"></span>데이터 리터러시 with AI</div>
+    <a class="back-link" href="../index.html#curriculum">&larr; 커리큘럼으로</a>
+  </div>
+</nav>
+
+<header class="session-header">
+  <div class="container">
+    <div class="eyebrow">PART 01 · 엑셀</div>
+    <div class="session-header-top">
+      <span class="session-num-badge">S03</span>
+      <div class="difficulty" title="난이도 2"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">기초</span></div>
+    </div>
+    <h1>피벗테이블로 질문에 답하기</h1>
+  </div>
+  <div class="container">
+    <div class="tabs-bar" role="tablist">
+<button class="tab-btn active" data-tab="curriculum" role="tab" aria-selected="true">커리큘럼</button>
+<button class="tab-btn" data-tab="handout" role="tab" aria-selected="false">핸드아웃</button>
+<button class="tab-btn" data-tab="script" role="tab" aria-selected="false">강사대본</button>
+<button class="tab-btn" data-tab="answer" role="tab" aria-selected="false">모범답안</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="tab-panels container">
+<section class="tab-panel markdown-body active" data-panel="curriculum" aria-label="커리큘럼">
+<h1>S03. 피벗테이블로 질문에 답하기</h1>
+<h2>차시 개요</h2>
+<ul>
+<li>대상: 엑셀은 쓰지만 데이터분석은 처음인 비개발자</li>
+<li>선수 차시: S02</li>
+<li>난이도: 2</li>
+<li>시간: 50분</li>
+<li>데이터: <code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.xlsx</code></li>
+<li>시트: <code>sales</code></li>
+<li>확인된 데이터 규모: 10,424행 × 12열</li>
+</ul>
+<p>이번 차시의 핵심은 "표를 보는 법"에서 "표에 질문하는 법"으로 넘어가는 데 있다. 원본 데이터는 주문 한 건이 한 줄씩 쌓여 있다. 피벗테이블은 이 긴 주문 목록을 지점별, 카테고리별, 요일별, 시간대별로 접어서 보여 주는 요약 도구다.</p>
+<h2>학습 목표</h2>
+<p>수강생은 이 차시가 끝나면 다음을 할 수 있다.</p>
+<ol>
+<li>피벗테이블의 행, 열, 값 영역이 각각 어떤 역할을 하는지 설명할 수 있다.</li>
+<li>매출 합계, 판매수량 합계, 주문건수처럼 질문에 맞는 집계함수를 고를 수 있다.</li>
+<li>지점×카테고리, 요일×시간대 교차표를 보고 어느 구간이 큰지 해석할 수 있다.</li>
+<li>"가장 잘 팔리는 시간대는 언제인가?"라는 질문을 피벗테이블로 답할 수 있다.</li>
+</ol>
+<h2>데이터 이해</h2>
+<p>사용 파일은 <code>cafe_sales_clean.xlsx</code>이다. 같은 내용의 CSV 파일도 있지만, 수업에서는 엑셀 조작을 위해 xlsx 파일을 연다.</p>
+<p>주요 컬럼은 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>의미</th>
+<th>피벗에서 쓰는 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>date</code></td>
+<td>주문 날짜</td>
+<td>이후 차시에서 날짜 분석에 사용</td>
+</tr>
+<tr>
+<td><code>weekday</code></td>
+<td>요일</td>
+<td>행 또는 열</td>
+</tr>
+<tr>
+<td><code>hour</code></td>
+<td>주문 시간대</td>
+<td>행 또는 열</td>
+</tr>
+<tr>
+<td><code>store</code></td>
+<td>지점</td>
+<td>행</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>상품 카테고리</td>
+<td>열 또는 행</td>
+</tr>
+<tr>
+<td><code>item</code></td>
+<td>상품명</td>
+<td>세부 분석</td>
+</tr>
+<tr>
+<td><code>qty</code></td>
+<td>판매수량</td>
+<td>값, 합계</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>주문금액</td>
+<td>값, 합계</td>
+</tr>
+<tr>
+<td><code>order_id</code></td>
+<td>주문번호</td>
+<td>값, 개수</td>
+</tr>
+</tbody>
+</table></div>
+<p>이번 차시에서는 계산식을 새로 만들지 않는다. 이미 있는 <code>amount</code>, <code>qty</code>, <code>order_id</code>를 이용해 피벗테이블이 자동으로 요약하게 한다.</p>
+<h2>핵심 개념</h2>
+<h3>1. 피벗테이블은 긴 영수증 묶음을 요약표로 접는 도구다</h3>
+<p>카페의 하루 영수증을 모두 펼쳐 놓으면 주문 내역은 자세하지만 전체 흐름은 보이지 않는다. 점장이 알고 싶은 것은 보통 "강남점과 홍대점 중 어디가 많이 팔렸는가", "커피와 디저트 중 무엇이 매출을 만들었는가", "점심시간과 저녁시간 중 언제 바쁜가" 같은 요약 질문이다.</p>
+<p>피벗테이블은 이 질문을 표 구조로 바꾼다.</p>
+<ul>
+<li>행: 무엇별로 나눌 것인가</li>
+<li>열: 무엇과 무엇을 교차해 볼 것인가</li>
+<li>값: 무엇을 계산할 것인가</li>
+<li>필터: 어떤 범위만 볼 것인가</li>
+</ul>
+<p>예를 들어 "지점별 카테고리별 매출"은 다음처럼 번역된다.</p>
+<ul>
+<li>행: <code>store</code></li>
+<li>열: <code>category</code></li>
+<li>값: <code>amount</code>의 합계</li>
+</ul>
+<h3>2. 행과 열은 분류 기준이고, 값은 계산 대상이다</h3>
+<p>입문자가 가장 자주 헷갈리는 대목이 "어떤 필드를 값에 넣어야 하는가"이다. 행과 열은 그룹을 나누는 기준이고, 값은 더하거나 세거나 평균낼 숫자다.</p>
+<p>엑셀의 일반 표에서 여러 조건을 겹쳐 일일이 계산하려면 조건마다 수식을 새로 짜야 한다. 피벗테이블은 그 일을 마우스만으로 구성한다. <code>store=강남점</code>, <code>category=커피</code> 같은 조건 조합을 엑셀이 알아서 만들고, 그 안의 <code>amount</code>를 합산한다.</p>
+<h3>3. 집계함수는 질문의 뜻을 정한다</h3>
+<p>"많이 팔렸다"는 말은 한 가지 뜻이 아니다.</p>
+<ul>
+<li>매출이 큰가: <code>amount</code>의 합계</li>
+<li>수량이 많은가: <code>qty</code>의 합계</li>
+<li>주문이 자주 들어왔는가: <code>order_id</code>의 개수</li>
+<li>객단가가 높은가: <code>amount</code>의 평균 또는 별도 계산</li>
+</ul>
+<p>이번 미션에서는 "가장 잘 팔리는 시간대"를 매출액 합계 기준으로 판단한다. 다만 판매수량과 주문건수도 함께 확인해, 같은 시간대가 반복해서 1위인지 비교한다.</p>
+<h3>4. 교차표는 한 줄씩 읽지 말고 패턴을 본다</h3>
+<p>요일×시간대 피벗은 숫자가 많아서 칸을 하나하나 읽으려 들면 오히려 길을 잃는다. 큰 숫자가 몰리는 시간대를 먼저 찾고, 그다음 특정 요일에서 유난히 큰 칸이 있는지 확인한다.</p>
+<p>이 데이터에서는 매출액 합계 기준으로 13시가 전체 1위다. 요일과 시간대를 함께 보면 일요일 13시가 가장 큰 조합이다. 이 결론은 실제 데이터로 검증한 값이다.</p>
+<h2>엑셀 기능 비교</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>하고 싶은 일</th>
+<th>일반 엑셀 방식</th>
+<th>피벗테이블 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>지점별 매출 합계</td>
+<td><code>SUMIF</code> 또는 필터 후 합계</td>
+<td>행에 <code>store</code>, 값에 <code>amount</code></td>
+</tr>
+<tr>
+<td>지점×카테고리 매출</td>
+<td>여러 조건 조합을 일일이 계산</td>
+<td>행에 <code>store</code>, 열에 <code>category</code>, 값에 <code>amount</code></td>
+</tr>
+<tr>
+<td>시간대별 주문건수</td>
+<td><code>COUNTIF</code> 또는 필터</td>
+<td>행에 <code>hour</code>, 값에 <code>order_id</code> 개수</td>
+</tr>
+<tr>
+<td>요일×시간대 비교</td>
+<td>조건별 표를 직접 작성</td>
+<td>행에 <code>weekday</code>, 열에 <code>hour</code>, 값에 <code>amount</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>피벗테이블은 수식을 몰라도 시작할 수 있다. 대신 "어떤 질문을 어떤 필드 배치로 바꿀 것인가"는 스스로 생각해야 한다.</p>
+<h2>50분 수업 흐름</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;">시간</th>
+<th>내용</th>
+<th>진행 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0-5분</td>
+<td>S02 복습과 오늘의 질문 제시</td>
+<td>원본 데이터가 주문 한 건 단위임을 확인</td>
+</tr>
+<tr>
+<td style="text-align: right;">5-12분</td>
+<td>피벗테이블 개념 설명</td>
+<td>행, 열, 값, 필터를 영수증 요약 비유로 설명</td>
+</tr>
+<tr>
+<td style="text-align: right;">12-25분</td>
+<td>따라하기 1: 지점×카테고리 피벗</td>
+<td><code>store</code>×<code>category</code>, <code>amount</code> 합계</td>
+</tr>
+<tr>
+<td style="text-align: right;">25-38분</td>
+<td>따라하기 2: 요일×시간대 피벗</td>
+<td><code>weekday</code>×<code>hour</code>, <code>amount</code> 합계</td>
+</tr>
+<tr>
+<td style="text-align: right;">38-47분</td>
+<td>직접 해보기: 가장 잘 팔리는 시간대</td>
+<td><code>hour</code>별 매출, 수량, 주문건수 비교</td>
+</tr>
+<tr>
+<td style="text-align: right;">47-50분</td>
+<td>정리와 체크포인트</td>
+<td>질문을 필드 배치로 번역하는 법 확인</td>
+</tr>
+</tbody>
+</table></div>
+<h2>수업 중 강조할 원칙</h2>
+<ol>
+<li>피벗테이블은 원본을 바꾸지 않고 요약표를 만든다.</li>
+<li>값 영역에 숫자 컬럼을 넣으면 보통 합계가 기본값이다.</li>
+<li>값 영역에 문자 또는 주문번호를 넣으면 개수가 나올 수 있다.</li>
+<li>"합계", "개수", "평균" 중 무엇을 골랐는지에 따라 답이 달라진다.</li>
+<li>결과를 말할 때는 기준을 함께 말한다. 예: "매출액 합계 기준으로 13시가 1위입니다."</li>
+</ol>
+<h2>차시 평가 기준</h2>
+<ul>
+<li>상: 피벗테이블을 새로 만들고, 시간대별 매출 1위를 찾아 기준과 함께 해석한다.</li>
+<li>중: 따라하기 피벗을 재현하고, 강사의 안내를 받아 미션 결과를 찾는다.</li>
+<li>하: 피벗테이블 생성 또는 값 필드 설정에서 막혀 결과를 재현하지 못한다.</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="handout" aria-label="핸드아웃">
+<h1>S03. 피벗테이블로 질문에 답하기</h1>
+<h2>사용할 파일</h2>
+<p>엑셀에서 아래 파일을 연다.</p>
+<p><code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.xlsx</code></p>
+<ul>
+<li>시트 이름: <code>sales</code></li>
+<li>데이터 규모: 10,424행 × 12열</li>
+<li>이번 차시에서 주로 사용할 컬럼: <code>store</code>, <code>category</code>, <code>weekday</code>, <code>hour</code>, <code>amount</code>, <code>qty</code>, <code>order_id</code></li>
+</ul>
+<h2>오늘의 목표</h2>
+<p>피벗테이블을 이용해 다음 두 질문에 답한다.</p>
+<ol>
+<li>지점별로 어떤 카테고리가 매출을 많이 만드는가?</li>
+<li>요일과 시간대에 따라 매출은 어떻게 달라지는가?</li>
+</ol>
+<p>마지막에는 직접 "가장 잘 팔리는 시간대"를 찾는다.</p>
+<h2>피벗테이블 기본 구조</h2>
+<p>피벗테이블 필드 목록에는 보통 네 영역이 있다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>영역</th>
+<th>넣는 것</th>
+<th>예시</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>행</td>
+<td>세로로 나눌 기준</td>
+<td><code>store</code>, <code>weekday</code>, <code>hour</code></td>
+</tr>
+<tr>
+<td>열</td>
+<td>가로로 나눌 기준</td>
+<td><code>category</code>, <code>hour</code></td>
+</tr>
+<tr>
+<td>값</td>
+<td>계산할 숫자</td>
+<td><code>amount</code> 합계, <code>qty</code> 합계</td>
+</tr>
+<tr>
+<td>필터</td>
+<td>일부만 볼 조건</td>
+<td>특정 지점, 특정 카테고리</td>
+</tr>
+</tbody>
+</table></div>
+<p>중요한 질문은 "무엇별로 나눌 것인가"와 "무엇을 계산할 것인가"이다.</p>
+<h2>따라하기 1. 지점×카테고리 매출 피벗 만들기</h2>
+<p>질문: 지점별로 커피, 음료, 디저트 매출이 어떻게 다른가?</p>
+<h3>1단계. 피벗테이블 삽입</h3>
+<ol>
+<li><code>sales</code> 시트에서 데이터 안의 아무 셀이나 클릭한다.</li>
+<li>상단 메뉴에서 <code>삽입</code>을 클릭한다.</li>
+<li><code>피벗 테이블</code>을 클릭한다.</li>
+<li>표/범위가 자동으로 잡히는지 확인한다.</li>
+<li>위치는 <code>새 워크시트</code>를 선택한다.</li>
+<li><code>확인</code>을 클릭한다.</li>
+</ol>
+<h3>2단계. 필드 배치</h3>
+<p>오른쪽의 피벗테이블 필드 목록에서 다음처럼 끌어다 놓는다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>필드</th>
+<th>놓을 영역</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>store</code></td>
+<td>행</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>열</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>값</td>
+</tr>
+</tbody>
+</table></div>
+<p>값 영역에 <code>합계: amount</code>가 보이면 맞게 설정된 것이다.</p>
+<h3>3단계. 금액 형식 정리</h3>
+<ol>
+<li>피벗테이블 안의 매출 숫자 중 하나를 오른쪽 클릭한다.</li>
+<li><code>값 필드 설정</code>을 클릭한다.</li>
+<li>집계 방식이 <code>합계</code>인지 확인한다.</li>
+<li><code>표시 형식</code>을 클릭한다.</li>
+<li><code>숫자</code>를 선택하고 <code>1000 단위 구분 기호 사용</code>을 켠다.</li>
+<li>소수 자릿수는 <code>0</code>으로 설정한다.</li>
+</ol>
+<h3>4단계. 결과 읽기</h3>
+<p>실제 데이터 기준 결과는 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>지점</th>
+<th style="text-align: right;">디저트</th>
+<th style="text-align: right;">음료</th>
+<th style="text-align: right;">커피</th>
+<th style="text-align: right;">총합계</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>강남점</td>
+<td style="text-align: right;">11,604,000</td>
+<td style="text-align: right;">15,281,500</td>
+<td style="text-align: right;">26,539,500</td>
+<td style="text-align: right;">53,425,000</td>
+</tr>
+<tr>
+<td>홍대점</td>
+<td style="text-align: right;">7,732,500</td>
+<td style="text-align: right;">10,268,500</td>
+<td style="text-align: right;">19,066,500</td>
+<td style="text-align: right;">37,067,500</td>
+</tr>
+<tr>
+<td>총합계</td>
+<td style="text-align: right;">19,336,500</td>
+<td style="text-align: right;">25,550,000</td>
+<td style="text-align: right;">45,606,000</td>
+<td style="text-align: right;">90,492,500</td>
+</tr>
+</tbody>
+</table></div>
+<p>해석 문장 예시는 다음과 같다.</p>
+<p>강남점과 홍대점 모두 커피 매출이 가장 크다. 전체 매출은 강남점이 53,425,000원으로 홍대점을 앞선다.</p>
+<h2>따라하기 2. 요일×시간대 매출 피벗 만들기</h2>
+<p>질문: 요일과 시간대에 따라 매출이 어떻게 달라지는가?</p>
+<h3>1단계. 새 피벗테이블 만들기</h3>
+<ol>
+<li>다시 <code>sales</code> 시트로 이동한다.</li>
+<li>데이터 안의 아무 셀이나 클릭한다.</li>
+<li><code>삽입</code> &gt; <code>피벗 테이블</code>을 클릭한다.</li>
+<li>위치는 <code>새 워크시트</code>를 선택한다.</li>
+<li><code>확인</code>을 클릭한다.</li>
+</ol>
+<h3>2단계. 필드 배치</h3>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>필드</th>
+<th>놓을 영역</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>weekday</code></td>
+<td>행</td>
+</tr>
+<tr>
+<td><code>hour</code></td>
+<td>열</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>값</td>
+</tr>
+</tbody>
+</table></div>
+<p>값 영역은 <code>합계: amount</code>로 둔다. <code>hour</code> 값은 8부터 21까지 보인다. 여기서는 각 숫자를 8시, 9시, 10시처럼 해석한다.</p>
+<h3>3단계. 숫자 표시 형식 정리</h3>
+<p>따라하기 1과 같은 방식으로 매출 숫자에 1000 단위 구분 기호를 적용한다.</p>
+<h3>4단계. 교차표 읽기</h3>
+<p>교차표는 한 칸씩 외우는 표가 아니라 흐름을 읽는 표다. 다음 순서로 본다.</p>
+<ol>
+<li>숫자가 큰 시간대가 어느 열에 몰리는지 본다.</li>
+<li>특정 요일에서 유난히 큰 값이 있는지 본다.</li>
+<li>총합계를 보고 전체 흐름을 확인한다.</li>
+</ol>
+<p>실제 데이터에서는 13시 매출이 가장 크다. 요일과 시간대를 함께 보면 일요일 13시가 2,260,500원으로 가장 큰 조합이다.</p>
+<p>요일 값은 원본 데이터에 영어 약어로 들어 있다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>값</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mon</td>
+<td>월요일</td>
+</tr>
+<tr>
+<td>Tue</td>
+<td>화요일</td>
+</tr>
+<tr>
+<td>Wed</td>
+<td>수요일</td>
+</tr>
+<tr>
+<td>Thu</td>
+<td>목요일</td>
+</tr>
+<tr>
+<td>Fri</td>
+<td>금요일</td>
+</tr>
+<tr>
+<td>Sat</td>
+<td>토요일</td>
+</tr>
+<tr>
+<td>Sun</td>
+<td>일요일</td>
+</tr>
+</tbody>
+</table></div>
+<h2>직접 해보기. 가장 잘 팔리는 시간대 찾기</h2>
+<p>질문: 매출액 합계 기준으로 가장 잘 팔리는 시간대는 언제인가?</p>
+<h3>조건</h3>
+<p>새 피벗테이블을 만들어 아래처럼 구성한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>필드</th>
+<th>놓을 영역</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hour</code></td>
+<td>행</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>값</td>
+</tr>
+<tr>
+<td><code>qty</code></td>
+<td>값</td>
+</tr>
+<tr>
+<td><code>order_id</code></td>
+<td>값</td>
+</tr>
+</tbody>
+</table></div>
+<p>설정은 다음처럼 맞춘다.</p>
+<ul>
+<li><code>amount</code>: 합계</li>
+<li><code>qty</code>: 합계</li>
+<li><code>order_id</code>: 개수</li>
+</ul>
+<p><code>amount</code> 합계를 기준으로 내림차순 정렬한다.</p>
+<h3>제출할 답</h3>
+<p>아래 형식으로 한 문장을 작성한다.</p>
+<p><code>매출액 합계 기준 가장 잘 팔리는 시간대는 __시이며, 매출은 ______원, 판매수량은 ______개, 주문건수는 ______건이다.</code></p>
+<h3>추가 질문</h3>
+<p>시간이 남으면 다음도 확인한다.</p>
+<ol>
+<li>판매수량 기준 1위 시간대도 같은가?</li>
+<li>주문건수 기준 1위 시간대도 같은가?</li>
+<li>요일×시간대를 함께 볼 때 가장 큰 조합은 무엇인가?</li>
+</ol>
+<h2>자주 생기는 문제</h2>
+<h3>값이 합계가 아니라 개수로 나오는 경우</h3>
+<p>값 영역의 필드 이름 옆 화살표를 누르고 <code>값 필드 설정</code>으로 들어간다. <code>합계</code>, <code>개수</code>, <code>평균</code> 중 원하는 계산 방식을 선택한다.</p>
+<h3>요일 순서가 월, 화, 수 순서가 아닌 경우</h3>
+<p>이번 차시에서는 정렬 순서보다 값의 크기를 읽는 것이 중요하다. 순서가 달라도 해석에는 지장이 없다. 날짜와 요일 정렬은 이후 차시에서 더 다룬다.</p>
+<h3>피벗테이블 필드 목록이 보이지 않는 경우</h3>
+<p>피벗테이블 안의 아무 셀이나 클릭한다. 그래도 보이지 않으면 상단의 <code>피벗 테이블 분석</code> 메뉴에서 <code>필드 목록</code>을 켠다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="script" aria-label="강사대본">
+<h1>S03. 피벗테이블로 질문에 답하기 강사대본</h1>
+<h2>수업 전 확인</h2>
+<ul>
+<li>파일: <code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.xlsx</code></li>
+<li>시트: <code>sales</code></li>
+<li>데이터 규모: 10,424행 × 12열</li>
+<li>주요 컬럼: <code>store</code>, <code>category</code>, <code>weekday</code>, <code>hour</code>, <code>amount</code>, <code>qty</code>, <code>order_id</code></li>
+<li>검증된 미션 정답: 매출액 합계 기준 13시, 11,626,000원, 판매수량 2,220개, 주문건수 1,348건</li>
+</ul>
+<h2>0-5분. 도입</h2>
+<p>강사 멘트:</p>
+<p>"지난 시간에는 깨끗한 표가 왜 중요한지 봤습니다. 오늘은 그 표를 가지고 질문에 답하겠습니다. 데이터분석에서 중요한 것은 표를 오래 바라보는 것이 아니라, 질문을 표 구조로 바꾸는 것입니다."</p>
+<p>"오늘의 질문은 두 가지입니다. 지점별로 어떤 카테고리가 매출을 만드는가, 그리고 어떤 시간대가 잘 팔리는가입니다. 이 질문을 피벗테이블로 풀어 보겠습니다."</p>
+<p>시연 포인트:</p>
+<ul>
+<li><code>sales</code> 시트를 열고 행이 주문 한 건 단위로 쌓여 있음을 보여준다.</li>
+<li><code>amount</code>는 주문금액, <code>qty</code>는 판매수량, <code>order_id</code>는 주문번호임을 짚는다.</li>
+<li>원본 표를 직접 수정하지 않고 피벗테이블을 새 시트에 만든다고 설명한다.</li>
+</ul>
+<h2>5-12분. 개념 설명</h2>
+<p>강사 멘트:</p>
+<p>"피벗테이블은 긴 영수증 묶음을 요약표로 접는 도구입니다. 원본에는 주문 한 건 한 건이 있지만, 우리는 보통 전체 흐름을 알고 싶습니다."</p>
+<p>"피벗테이블 필드에는 행, 열, 값, 필터가 있습니다. 행과 열은 나누는 기준입니다. 값은 계산할 숫자입니다. 필터는 일부만 보는 조건입니다."</p>
+<p>"예를 들어 지점별 카테고리별 매출을 보고 싶다면, 지점은 행, 카테고리는 열, 매출액은 값으로 들어갑니다. 이 번역이 피벗테이블의 핵심입니다."</p>
+<p>판서 또는 화면 강조:</p>
+<ul>
+<li>질문: 지점별 카테고리별 매출은?</li>
+<li>행: <code>store</code></li>
+<li>열: <code>category</code></li>
+<li>값: <code>amount</code> 합계</li>
+</ul>
+<p>주의해서 말할 점:</p>
+<ul>
+<li>값 영역에 무엇을 넣었는지가 답의 기준이다.</li>
+<li><code>amount</code> 합계는 매출 기준이고, <code>qty</code> 합계는 수량 기준이다.</li>
+<li><code>order_id</code> 개수는 주문건수 기준이다.</li>
+</ul>
+<h2>12-25분. 따라하기 1: 지점×카테고리 매출</h2>
+<p>시연 절차:</p>
+<ol>
+<li><code>sales</code> 시트에서 데이터 안의 아무 셀이나 클릭한다.</li>
+<li><code>삽입</code> &gt; <code>피벗 테이블</code>을 클릭한다.</li>
+<li><code>새 워크시트</code>를 선택하고 확인한다.</li>
+<li><code>store</code>를 행에 넣는다.</li>
+<li><code>category</code>를 열에 넣는다.</li>
+<li><code>amount</code>를 값에 넣는다.</li>
+<li>값 필드 설정이 <code>합계</code>인지 확인한다.</li>
+<li>숫자 표시 형식을 1000 단위 구분, 소수 0자리로 바꾼다.</li>
+</ol>
+<p>강사 멘트:</p>
+<p>"이 표는 원본 데이터를 지운 것이 아니라, 같은 데이터를 다른 방식으로 요약한 것입니다. 행에는 강남점과 홍대점이 생기고, 열에는 디저트, 음료, 커피가 자리를 잡았습니다. 각 칸은 그 지점과 카테고리가 만나는 주문금액의 합계입니다."</p>
+<p>"강남점의 커피 매출은 26,539,500원입니다. 홍대점의 커피 매출은 19,066,500원입니다. 이렇게 한 칸은 두 조건이 만나는 자리입니다."</p>
+<p>확인 질문:</p>
+<p>"강남점에서 가장 매출이 큰 카테고리는 무엇인가요?"</p>
+<p>기대 답:</p>
+<p>"커피입니다."</p>
+<p>시연 포인트:</p>
+<ul>
+<li>"총합계"가 행과 열 양쪽에 생기는 것을 설명한다.</li>
+<li>강남점 총합계 53,425,000원, 홍대점 총합계 37,067,500원을 보여준다.</li>
+<li>두 지점 모두 커피 비중이 가장 크다는 해석을 말하게 한다.</li>
+</ul>
+<h2>25-38분. 따라하기 2: 요일×시간대 매출</h2>
+<p>시연 절차:</p>
+<ol>
+<li><code>sales</code> 시트로 돌아간다.</li>
+<li>새 피벗테이블을 만든다.</li>
+<li><code>weekday</code>를 행에 넣는다.</li>
+<li><code>hour</code>를 열에 넣는다.</li>
+<li><code>amount</code>를 값에 넣는다.</li>
+<li>숫자 표시 형식을 정리한다.</li>
+</ol>
+<p>강사 멘트:</p>
+<p>"이번에는 행과 열을 바꿔서 시간 패턴을 보겠습니다. 행은 요일, 열은 시간대입니다. 값은 여전히 매출액 합계입니다."</p>
+<p>"교차표는 모든 칸을 읽으려고 하면 어렵습니다. 큰 숫자가 어느 열에 몰리는지부터 봅니다. 이 데이터는 12시, 13시, 14시가 크게 보이고, 그중 13시가 가장 큽니다."</p>
+<p>"요일과 시간대를 동시에 보면 일요일 13시가 가장 큰 칸입니다. 이 말은 '일요일 13시에 주문이 가장 많았다'가 아니라, 정확히는 '일요일 13시의 매출액 합계가 가장 컸다'입니다."</p>
+<p>시연 포인트:</p>
+<ul>
+<li><code>hour</code>가 8부터 21까지 보이는 것을 확인한다.</li>
+<li><code>weekday</code>는 영어 약어이므로 Mon은 월요일, Sun은 일요일이라고 짚는다.</li>
+<li>요일 순서가 월화수목금토일로 보이지 않아도 이번 차시의 핵심은 값 읽기라고 말한다.</li>
+</ul>
+<h2>38-47분. 직접 해보기: 가장 잘 팔리는 시간대</h2>
+<p>미션 안내 멘트:</p>
+<p>"이제 여러분이 직접 하나의 질문에 답해 보겠습니다. 질문은 '가장 잘 팔리는 시간대는 언제인가'입니다. 기준을 먼저 정해야 합니다. 이번에는 매출액 합계 기준으로 보겠습니다."</p>
+<p>수강생 작업:</p>
+<ol>
+<li>새 피벗테이블을 만든다.</li>
+<li><code>hour</code>를 행에 넣는다.</li>
+<li><code>amount</code>를 값에 넣고 합계로 둔다.</li>
+<li><code>qty</code>를 값에 넣고 합계로 둔다.</li>
+<li><code>order_id</code>를 값에 넣고 개수로 바꾼다.</li>
+<li><code>amount</code> 합계 기준으로 내림차순 정렬한다.</li>
+<li>한 문장으로 답을 쓴다.</li>
+</ol>
+<p>정답 안내:</p>
+<p>"매출액 합계 기준 가장 잘 팔리는 시간대는 13시입니다. 매출은 11,626,000원, 판매수량은 2,220개, 주문건수는 1,348건입니다. 이 데이터에서는 판매수량 기준과 주문건수 기준으로 봐도 13시가 1위입니다."</p>
+<h2>47-50분. 정리</h2>
+<p>강사 멘트:</p>
+<p>"오늘 배운 내용은 피벗테이블 버튼 하나가 아니라 질문을 배치로 바꾸는 방법입니다. 지점별 카테고리별 매출이라는 질문은 행에 지점, 열에 카테고리, 값에 매출 합계로 바뀝니다. 가장 잘 팔리는 시간대라는 질문은 행에 시간대, 값에 매출 합계로 바뀝니다."</p>
+<p>"다음 차시부터는 여러 표를 연결하거나 계산 컬럼을 만드는 방식으로 질문의 범위를 넓혀 갑니다."</p>
+<p>완료 판단 체크포인트:</p>
+<p>수강생이 <code>hour</code>별 피벗테이블을 만들고 "매출액 합계 기준 13시가 1위이며 매출은 11,626,000원"이라고 말하면 이번 차시를 완료한 것으로 본다.</p>
+<h2>예상 질문과 답변</h2>
+<h3>Q1. 값이 합계가 아니라 개수로 나옵니다.</h3>
+<p>A. 값 영역의 필드 옆 화살표를 누르고 <code>값 필드 설정</code>으로 들어가 <code>합계</code>를 선택한다. 숫자처럼 보이지 않는 필드이거나 빈 값이 섞이면 엑셀이 개수로 잡을 수 있다.</p>
+<h3>Q2. <code>order_id</code>는 왜 합계가 아니라 개수로 보나요?</h3>
+<p>A. 주문번호는 더해 봐야 의미가 없다. 주문이 몇 건 있었는지 세는 식별자이므로 <code>개수</code>가 맞다.</p>
+<h3>Q3. 매출 1위와 수량 1위가 다를 수도 있나요?</h3>
+<p>A. 다를 수 있다. 비싼 상품이 적게 팔린 시간대는 매출이 높게, 싼 상품이 많이 팔린 시간대는 수량이 높게 나오기 때문이다. 그래서 "잘 팔린다"는 말을 쓸 때는 기준을 함께 밝혀야 한다.</p>
+<h3>Q4. 요일 순서가 이상합니다.</h3>
+<p>A. 원본의 <code>weekday</code> 값이 영어 약어라 엑셀이 자동으로 월화수목금토일 순서로 정렬하지 않을 수 있다. 이번 차시에서는 순서보다 교차표를 읽는 법이 중요하다. 이후 날짜 차시에서 정렬을 더 다룬다.</p>
+<h3>Q5. 원본 데이터가 바뀌면 피벗테이블도 자동으로 바뀌나요?</h3>
+<p>A. 원본을 수정한 뒤 피벗테이블을 오른쪽 클릭하고 <code>새로 고침</code>을 눌러야 반영된다. 피벗테이블은 원본을 참조하되, 늘 그 자리에서 곧바로 다시 계산되지는 않는다.</p>
+<h2>강의 운영 메모</h2>
+<ul>
+<li>수강생이 필드 배치를 외우려 하면 질문으로 되돌린다. "무엇별로 나눌까요?", "무엇을 계산할까요?"라고 묻는다.</li>
+<li>첫 피벗에서는 필드가 어디에 들어가는지 천천히 보여준다.</li>
+<li>두 번째 피벗부터는 수강생이 먼저 예측하게 한다.</li>
+<li>미션에서는 정답 숫자보다 기준을 말하는 습관을 더 중요하게 본다.</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="answer" aria-label="모범답안">
+<h1>S03. 모범답안</h1>
+<h2>미션 정답</h2>
+<p>미션 질문은 "매출액 합계 기준으로 가장 잘 팔리는 시간대는 언제인가?"이다.</p>
+<p>정답:</p>
+<p>매출액 합계 기준 가장 잘 팔리는 시간대는 13시이며, 매출은 11,626,000원, 판매수량은 2,220개, 주문건수는 1,348건이다.</p>
+<p>이 데이터에서는 판매수량 기준과 주문건수 기준으로 봐도 13시가 1위다.</p>
+<h2>시간대별 상위 결과</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;">순위</th>
+<th style="text-align: right;">시간대</th>
+<th style="text-align: right;">주문건수</th>
+<th style="text-align: right;">판매수량</th>
+<th style="text-align: right;">매출액</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">13시</td>
+<td style="text-align: right;">1,348</td>
+<td style="text-align: right;">2,220</td>
+<td style="text-align: right;">11,626,000</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">12시</td>
+<td style="text-align: right;">1,179</td>
+<td style="text-align: right;">1,937</td>
+<td style="text-align: right;">10,205,000</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">14시</td>
+<td style="text-align: right;">1,079</td>
+<td style="text-align: right;">1,778</td>
+<td style="text-align: right;">9,381,500</td>
+</tr>
+<tr>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">15시</td>
+<td style="text-align: right;">815</td>
+<td style="text-align: right;">1,362</td>
+<td style="text-align: right;">7,119,500</td>
+</tr>
+<tr>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">16시</td>
+<td style="text-align: right;">829</td>
+<td style="text-align: right;">1,348</td>
+<td style="text-align: right;">7,085,500</td>
+</tr>
+</tbody>
+</table></div>
+<p>해석:</p>
+<p>점심 직후인 13시가 매출액, 판매수량, 주문건수 모두에서 가장 크다. 따라서 이 데이터만 놓고 보면 13시를 가장 잘 팔리는 시간대로 판단할 수 있다.</p>
+<h2>따라하기 1 검증 결과: 지점×카테고리 매출</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>지점</th>
+<th style="text-align: right;">디저트</th>
+<th style="text-align: right;">음료</th>
+<th style="text-align: right;">커피</th>
+<th style="text-align: right;">총합계</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>강남점</td>
+<td style="text-align: right;">11,604,000</td>
+<td style="text-align: right;">15,281,500</td>
+<td style="text-align: right;">26,539,500</td>
+<td style="text-align: right;">53,425,000</td>
+</tr>
+<tr>
+<td>홍대점</td>
+<td style="text-align: right;">7,732,500</td>
+<td style="text-align: right;">10,268,500</td>
+<td style="text-align: right;">19,066,500</td>
+<td style="text-align: right;">37,067,500</td>
+</tr>
+<tr>
+<td>총합계</td>
+<td style="text-align: right;">19,336,500</td>
+<td style="text-align: right;">25,550,000</td>
+<td style="text-align: right;">45,606,000</td>
+<td style="text-align: right;">90,492,500</td>
+</tr>
+</tbody>
+</table></div>
+<p>해석:</p>
+<p>강남점과 홍대점 모두 커피 매출이 가장 크다. 전체 매출은 강남점이 53,425,000원으로 홍대점보다 크다.</p>
+<h2>따라하기 2 검증 결과: 요일×시간대</h2>
+<p>요일×시간대를 함께 보았을 때 매출액 합계가 가장 큰 조합은 <code>Sun</code> 13시이며, 매출액은 2,260,500원이다.</p>
+<p><code>Sun</code>은 일요일을 뜻한다.</p>
+<h2>검증용 pandas 코드</h2>
+<p>아래 코드는 엑셀 피벗테이블 결과와 같은 계산을 pandas로 재현한 것이다. 작성 시 실제로 실행해 결과를 확인했다.</p>
+<div class="code-scroll"><pre><code class="language-python">from pathlib import Path
+
+import pandas as pd
+
+data_path = Path(&quot;/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.csv&quot;)
+df = pd.read_csv(data_path)
+
+assert df.shape == (10424, 12)
+assert df[&quot;amount&quot;].isna().sum() == 0
+assert df[&quot;qty&quot;].isna().sum() == 0
+
+store_category = pd.pivot_table(
+    df,
+    index=&quot;store&quot;,
+    columns=&quot;category&quot;,
+    values=&quot;amount&quot;,
+    aggfunc=&quot;sum&quot;,
+    margins=True,
+    margins_name=&quot;총합계&quot;,
+).fillna(0).astype(int)
+
+hour_summary = (
+    df.groupby(&quot;hour&quot;)
+    .agg(
+        주문건수=(&quot;order_id&quot;, &quot;count&quot;),
+        판매수량=(&quot;qty&quot;, &quot;sum&quot;),
+        매출액=(&quot;amount&quot;, &quot;sum&quot;),
+    )
+    .reset_index()
+    .sort_values(&quot;매출액&quot;, ascending=False)
+)
+
+weekday_order = [&quot;Mon&quot;, &quot;Tue&quot;, &quot;Wed&quot;, &quot;Thu&quot;, &quot;Fri&quot;, &quot;Sat&quot;, &quot;Sun&quot;]
+weekday_hour = (
+    pd.pivot_table(
+        df,
+        index=&quot;weekday&quot;,
+        columns=&quot;hour&quot;,
+        values=&quot;amount&quot;,
+        aggfunc=&quot;sum&quot;,
+    )
+    .reindex(weekday_order)
+    .fillna(0)
+    .astype(int)
+)
+
+top_hour = hour_summary.iloc[0]
+top_weekday_hour_raw = weekday_hour.stack().sort_values(ascending=False).index[0]
+top_weekday_hour = (top_weekday_hour_raw[0], int(top_weekday_hour_raw[1]))
+top_weekday_hour_amount = int(weekday_hour.stack().sort_values(ascending=False).iloc[0])
+
+print(&quot;데이터 행열:&quot;, df.shape)
+print(&quot;전체 매출:&quot;, int(df[&quot;amount&quot;].sum()))
+print(&quot;전체 판매수량:&quot;, int(df[&quot;qty&quot;].sum()))
+print()
+print(&quot;[지점 x 카테고리 매출]&quot;)
+print(store_category)
+print()
+print(&quot;[시간대별 상위 5개]&quot;)
+print(hour_summary.head(5).to_string(index=False))
+print()
+print(
+    &quot;매출 1위 시간대:&quot;,
+    f&quot;{int(top_hour['hour'])}시&quot;,
+    f&quot;매출 {int(top_hour['매출액']):,}원&quot;,
+    f&quot;판매수량 {int(top_hour['판매수량']):,}개&quot;,
+    f&quot;주문건수 {int(top_hour['주문건수']):,}건&quot;,
+)
+print(
+    &quot;요일 x 시간대 최고 조합:&quot;,
+    top_weekday_hour,
+    f&quot;{top_weekday_hour_amount:,}원&quot;,
+)
+</code></pre></div>
+<h2>코드 실행 핵심 출력</h2>
+<div class="code-scroll"><pre><code class="language-text">데이터 행열: (10424, 12)
+전체 매출: 90492500
+전체 판매수량: 17241
+
+[시간대별 상위 5개]
+ hour  주문건수  판매수량      매출액
+   13  1348  2220 11626000
+   12  1179  1937 10205000
+   14  1079  1778  9381500
+   15   815  1362  7119500
+   16   829  1348  7085500
+
+매출 1위 시간대: 13시 매출 11,626,000원 판매수량 2,220개 주문건수 1,348건
+요일 x 시간대 최고 조합: ('Sun', 13) 2,260,500원
+</code></pre></div>
+</section>
+  </div>
+
+  <nav class="session-pager container">
+    <a class="pager-link prev" href="./S02.html"><span class="pager-direction">&larr; 이전 차시</span><span class="pager-title">S02 · 좋은 데이터의 모양: tidy 데이터와 척도</span></a>
+    <a class="pager-link next" href="./S04.html"><span class="pager-direction">다음 차시 &rarr;</span><span class="pager-title">S04 · 실무 함수: VLOOKUP·XLOOKUP과 조건부 집계</span></a>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>데이터 리터러시 with AI · S03 차시</span>
+    <a href="../index.html#curriculum">전체 커리큘럼으로</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.tab-panel');
+  function activate(key, updateHash){
+    tabs.forEach(function(btn){
+      var on = btn.getAttribute('data-tab') === key;
+      btn.classList.toggle('active', on);
+    });
+    panels.forEach(function(panel){
+      var on = panel.getAttribute('data-panel') === key;
+      panel.classList.toggle('active', on);
+    });
+    if (updateHash && history.replaceState){
+      history.replaceState(null, '', '#' + key);
+    }
+  }
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      activate(btn.getAttribute('data-tab'), true);
+    });
+  });
+  var initial = (location.hash || '').replace('#', '');
+  var valid = ['curriculum', 'handout', 'script', 'answer'];
+  if (valid.indexOf(initial) !== -1){
+    activate(initial, false);
+  }
+})();
+</script>
+
+</body>
+</html>

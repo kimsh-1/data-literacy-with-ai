@@ -1,0 +1,1407 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>S19. 풀사이클 실습: AI 요약, 파이썬 그래프, BI 1페이지 · 데이터 리터러시 with AI</title>
+<meta name="description" content="S19차시: 풀사이클 실습: AI 요약, 파이썬 그래프, BI 1페이지 — 커리큘럼·핸드아웃·강사대본·모범답안." />
+<style>
+:root{
+  --canvas: #010102;
+  --surface-1: #0f1011;
+  --surface-2: #141516;
+  --surface-3: #18191a;
+  --surface-4: #191a1b;
+  --ink: #f7f8f8;
+  --ink-muted: #d0d6e0;
+  --ink-subtle: #8a8f98;
+  --ink-tertiary: #62666d;
+  --primary: #5e6ad2;
+  --primary-hover: #828fff;
+  --primary-focus: #5e69d1;
+  --hairline: #23252a;
+  --hairline-strong: #34343a;
+  --hairline-tertiary: #3e3e44;
+  --success: #27a644;
+
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  --container: 900px;
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+html{ background: var(--canvas); }
+body{
+  margin:0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.05px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a{ color: inherit; text-decoration: none; }
+ul, ol{ margin:0; padding:0; }
+h1,h2,h3,h4,p{ margin:0; }
+
+.container{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 48px);
+}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--primary-hover);
+}
+.eyebrow::before{
+  content:"";
+  width:6px; height:6px;
+  background: var(--primary);
+  border-radius: 1px;
+  flex-shrink:0;
+}
+
+/* ---------- top nav ---------- */
+.top-nav{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 64px;
+  display:flex;
+  align-items:center;
+  background: rgba(1,1,2,0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.top-nav .container{ display:flex; align-items:center; justify-content:space-between; gap: 24px; max-width: 1280px; }
+.brand{ display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:600; font-size:15px; letter-spacing:-0.01em; }
+.brand-mark{ width:20px; height:20px; border-radius: 6px; background: var(--primary); flex-shrink:0; position:relative; }
+.brand-mark::after{ content:""; position:absolute; inset:6px; border-radius:2px; background: rgba(255,255,255,0.85); }
+.back-link{ font-size:14px; color: var(--ink-subtle); display:inline-flex; align-items:center; gap:6px; transition: color .15s ease; }
+.back-link:hover{ color: var(--ink); }
+
+/* ---------- session header ---------- */
+.session-header{
+  padding: var(--space-xxl) 0 var(--space-xl);
+  background:
+    radial-gradient(ellipse 60% 50% at 82% 0%, rgba(94,106,210,0.16), transparent 60%),
+    var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+.session-header-top{
+  display:flex;
+  align-items:center;
+  gap: var(--space-md);
+  margin: var(--space-md) 0 var(--space-md);
+}
+.session-num-badge{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--primary-hover);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-xs);
+  padding: 4px 10px;
+}
+.difficulty{ display:flex; gap:4px; align-items:center; }
+.difficulty .dot{ width:6px; height:6px; border-radius:50%; background: var(--hairline-strong); }
+.difficulty .dot.filled{ background: var(--primary); }
+.difficulty-label{ font-size:12px; color: var(--ink-tertiary); margin-left:6px; }
+.session-header h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ---------- tabs ---------- */
+.tabs-bar{
+  display:flex;
+  gap: 4px;
+  padding-top: var(--space-lg);
+  border-bottom: 1px solid var(--hairline);
+  overflow-x: auto;
+}
+.tab-btn{
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-subtle);
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s ease, border-color .15s ease;
+}
+.tab-btn:hover{ color: var(--ink); }
+.tab-btn.active{ color: var(--ink); border-bottom-color: var(--primary); }
+
+.tab-panels{ padding: var(--space-xxl) 0 var(--space-xxl); }
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+/* ---------- markdown body ---------- */
+.markdown-body{ color: var(--ink-muted); font-size: 15.5px; line-height: 1.75; letter-spacing: -0.05px; overflow-wrap: anywhere; word-break: break-word; }
+.markdown-body h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--hairline);
+}
+.markdown-body h2{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+.markdown-body h3{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin: var(--space-lg) 0 var(--space-xs);
+}
+.markdown-body h4{
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+.markdown-body p{ margin: 0 0 var(--space-md); }
+.markdown-body ul, .markdown-body ol{ margin: 0 0 var(--space-md); padding-left: 1.4em; }
+.markdown-body li{ margin-bottom: 6px; }
+.markdown-body ul{ list-style: disc; }
+.markdown-body ol{ list-style: decimal; }
+.markdown-body strong{ color: var(--ink); font-weight: 600; }
+.markdown-body em{ color: var(--ink-muted); }
+.markdown-body a{ color: var(--primary-hover); text-decoration: underline; text-underline-offset: 2px; }
+.markdown-body hr{ border:none; border-top: 1px solid var(--hairline); margin: var(--space-xl) 0; }
+.markdown-body blockquote{
+  margin: 0 0 var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid var(--primary);
+  background: var(--surface-1);
+  color: var(--ink-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.markdown-body code{
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--primary-hover);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.markdown-body .code-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+}
+.markdown-body pre{
+  margin: 0;
+  padding: var(--space-md);
+  background: transparent;
+  border: none;
+}
+.markdown-body pre code{
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre;
+}
+.markdown-body .table-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+}
+.markdown-body table{
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 460px;
+  font-size: 13.5px;
+}
+.markdown-body th, .markdown-body td{
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+  white-space: nowrap;
+}
+.markdown-body thead th{
+  background: var(--surface-1);
+  color: var(--ink);
+  font-weight: 600;
+  font-family: var(--font-text);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+.markdown-body tbody tr:last-child td{ border-bottom: none; }
+.markdown-body tbody tr:hover{ background: var(--surface-1); }
+
+/* ---------- pager ---------- */
+.session-pager{
+  display:flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-xl) 0 var(--space-xxl);
+  border-top: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+.pager-link{
+  display:flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  max-width: 46%;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.pager-link:hover{ border-color: var(--primary); background: var(--surface-2); }
+.pager-link.next{ margin-left: auto; text-align: right; align-items: flex-end; }
+.pager-direction{ font-size: 12px; color: var(--ink-tertiary); font-family: var(--font-mono); }
+.pager-title{ font-size: 14px; color: var(--ink); font-weight: 500; }
+.pager-spacer{ flex: 1; }
+
+footer.site-footer{
+  border-top: 1px solid var(--hairline);
+  padding: var(--space-xl) 0;
+}
+footer.site-footer .container{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: var(--ink-tertiary);
+  font-size: 12px;
+}
+footer.site-footer a:hover{ color: var(--ink-subtle); }
+
+@media (max-width: 640px){
+  .session-header{ padding: var(--space-xl) 0 var(--space-lg); }
+  .pager-link{ max-width: 100%; }
+  .session-pager{ flex-direction: column; }
+  .pager-link.next{ margin-left: 0; text-align: left; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="container">
+    <div class="brand"><span class="brand-mark"></span>데이터 리터러시 with AI</div>
+    <a class="back-link" href="../index.html#curriculum">&larr; 커리큘럼으로</a>
+  </div>
+</nav>
+
+<header class="session-header">
+  <div class="container">
+    <div class="eyebrow">PART 06 · 캡스톤</div>
+    <div class="session-header-top">
+      <span class="session-num-badge">S19</span>
+      <div class="difficulty" title="난이도 5"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="difficulty-label">실전</span></div>
+    </div>
+    <h1>풀사이클 실습: AI 요약, 파이썬 그래프, BI 1페이지</h1>
+  </div>
+  <div class="container">
+    <div class="tabs-bar" role="tablist">
+<button class="tab-btn active" data-tab="curriculum" role="tab" aria-selected="true">커리큘럼</button>
+<button class="tab-btn" data-tab="handout" role="tab" aria-selected="false">핸드아웃</button>
+<button class="tab-btn" data-tab="script" role="tab" aria-selected="false">강사대본</button>
+<button class="tab-btn" data-tab="answer" role="tab" aria-selected="false">모범답안</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="tab-panels container">
+<section class="tab-panel markdown-body active" data-panel="curriculum" aria-label="커리큘럼">
+<h1>S19. 풀사이클 실습: AI 요약, 파이썬 그래프, BI 1페이지</h1>
+<h2>차시 개요</h2>
+<ul>
+<li>대상: 엑셀은 쓰지만 데이터분석은 처음인 비개발자</li>
+<li>선수 차시: S14 시각화 실전, S18 AI 요약과 BI 요약</li>
+<li>난이도: 5</li>
+<li>시간: 90분</li>
+<li>사용 도구: Python, pandas, matplotlib, AI 요약 도구, Looker Studio 또는 Power BI Desktop</li>
+<li>사용 데이터: <code>02_datasets/real_korean/cafe_restaurant/seoul_commercial_food_stores_202109_github.csv</code></li>
+<li>선택 케이스: 상권 groupby 케이스</li>
+</ul>
+<p>이번 차시는 지금까지 배운 내용을 한꺼번에 길게 복습하는 시간이 아니다. 이미 짜둔 스캐폴딩을 발판 삼아, 실제 데이터분석 업무가 어떤 순서로 이어지는지 작게 한 바퀴 돌아 보는 시간이다.</p>
+<p>오늘의 질문은 다음과 같다.</p>
+<blockquote>
+<p>서울 음식 업종 점포는 어느 구에 많이 모여 있고, 구별 업종 구성은 어떻게 다른가?</p>
+</blockquote>
+<p>원자료는 119,158행 13열짜리 서울 음식 업종 상가 데이터다. 행이 이렇게 많으니 원자료를 곧바로 차트에 밀어 넣지 않는다. 먼저 파이썬으로 구와 업종별 집계표를 만든 다음, 그 표를 AI 요약과 BI 대시보드에 넘긴다.</p>
+<p>수업의 고정 스코프는 다음 세 단계다.</p>
+<ol>
+<li>AI 요약: 원자료 전체가 아니라 파이썬이 만든 집계 요약을 AI에 넣고 설명문을 만든다.</li>
+<li>파이썬 핵심 그래프 1개: 점포 수 상위 10개 구 막대그래프를 만든다.</li>
+<li>BI 1페이지: 구별·업종별 점포 수 CSV로 필터 가능한 1페이지 대시보드를 만든다.</li>
+</ol>
+<h2>실제 확인한 데이터 사실</h2>
+<p><code>pandas.read_csv()</code>로 실제 확인한 결과는 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th style="text-align: right;">확인값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>원자료 행 수</td>
+<td style="text-align: right;">119,158행</td>
+</tr>
+<tr>
+<td>원자료 열 수</td>
+<td style="text-align: right;">13열</td>
+</tr>
+<tr>
+<td>시도명</td>
+<td style="text-align: right;">모두 서울특별시</td>
+</tr>
+<tr>
+<td>시군구 수</td>
+<td style="text-align: right;">25개</td>
+</tr>
+<tr>
+<td>업종 중분류 수</td>
+<td style="text-align: right;">14개</td>
+</tr>
+<tr>
+<td>상가업소번호 중복</td>
+<td style="text-align: right;">0건</td>
+</tr>
+<tr>
+<td>상호명 결측</td>
+<td style="text-align: right;">1건</td>
+</tr>
+<tr>
+<td>행정동명 결측</td>
+<td style="text-align: right;">312건</td>
+</tr>
+<tr>
+<td>지점명 결측</td>
+<td style="text-align: right;">87,355건</td>
+</tr>
+</tbody>
+</table></div>
+<p>이번 분석에서 <code>지점명</code>은 쓰지 않는다. 지점명이 많이 비었다고 해서 그 행들을 통째로 버리면 정작 분석 목적과 어긋난다. 오늘 목적은 구별 점포 수와 업종 구성을 보는 것이니, <code>시군구명</code>, <code>상권업종중분류명</code>, <code>상가업소번호</code> 같은 핵심 컬럼이 채워져 있는지를 더 눈여겨본다.</p>
+<p>점포 수 상위 구는 실제 실행 기준으로 강남구 12,095개, 마포구 7,396개, 송파구 7,106개, 서초구 6,366개, 강서구 6,114개 순이다. 전체 커피점/카페는 19,703개이고, 업종 중분류 중 가장 많은 것은 한식 40,448개다.</p>
+<h2>학습 목표</h2>
+<ol>
+<li>큰 원자료를 바로 차트에 넣지 않고, 분석 목적에 맞는 집계표로 줄일 수 있다.</li>
+<li>AI 요약에 원자료 전체를 던지는 방식과 집계 결과를 근거로 요약시키는 방식의 차이를 설명할 수 있다.</li>
+<li>파이썬 코드로 재현 가능한 그래프와 BI 입력용 CSV를 만들 수 있다.</li>
+<li>Looker Studio 또는 Power BI에서 같은 CSV를 사용해 1페이지 대시보드를 만들 수 있다.</li>
+<li>결과 해석에서 "점포 수"와 "매출", "수요", "성공 가능성"을 구분할 수 있다.</li>
+</ol>
+<h2>핵심 개념</h2>
+<h3>1. 풀사이클은 거창한 프로젝트가 아니라 끊기지 않는 흐름이다</h3>
+<p>입문자에게 풀사이클이라는 말은 부담스럽게 들릴 수 있다. 하지만 오늘 다루는 풀사이클은 작다.</p>
+<div class="code-scroll"><pre><code class="language-text">질문 정하기
+-&gt; 데이터 확인
+-&gt; 필요한 컬럼만 고르기
+-&gt; groupby로 요약하기
+-&gt; AI로 설명 초안 만들기
+-&gt; 파이썬 그래프 1개 만들기
+-&gt; BI 1페이지로 공유하기
+-&gt; 해석의 한계 적기
+</code></pre></div>
+<p>중요한 것은 모든 도구를 많이 쓰는 것이 아니라, 도구 사이의 역할을 끊지 않는 것이다. 엑셀에서도 원자료, 피벗테이블, 차트, 보고서가 따로 놀면 보고가 어려워진다. 데이터분석에서도 같은 집계표가 AI 요약, 그래프, BI의 공통 출발점이 되어야 한다.</p>
+<h3>2. <code>groupby</code>는 피벗테이블의 값 요약이다</h3>
+<p>엑셀에서 "구별 점포 수"를 보려면 피벗테이블의 행 영역에 구를 넣고, 값 영역에 점포 번호 개수를 넣는다. pandas에서는 같은 일을 <code>groupby()</code>로 한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>엑셀 피벗테이블</th>
+<th>pandas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>행 영역: 시군구명</td>
+<td><code>groupby("시군구명")</code></td>
+</tr>
+<tr>
+<td>값 영역: 상가업소번호 개수</td>
+<td><code>.agg(점포수=("상가업소번호", "count"))</code></td>
+</tr>
+<tr>
+<td>내림차순 정렬</td>
+<td><code>.sort_values("점포수", ascending=False)</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>오늘 BI에 넘기는 표는 원자료 119,158행이 아니라 <code>시군구명 x 상권업종중분류명</code>으로 줄인 349행이다. 이 정도 크기면 BI에서 필터와 막대그래프를 다루기 쉽다.</p>
+<h3>3. AI는 계산기가 아니라 설명 초안 도구로 쓴다</h3>
+<p>AI에게 원자료 전체를 올리고 "분석해 줘"라고 하면 어떤 기준으로 요약했는지 확인하기 어렵다. 이번 차시에서는 파이썬이 만든 검증된 집계 결과만 AI에 넣는다.</p>
+<p>AI에게 맡기는 일은 다음과 같다.</p>
+<ul>
+<li>숫자를 다시 계산하는 일: 맡기지 않는다.</li>
+<li>표에 있는 숫자를 바탕으로 설명문을 정리하는 일: 맡긴다.</li>
+<li>분석 한계를 빠뜨리지 않게 점검하는 일: 맡긴다.</li>
+</ul>
+<p>비유하면 파이썬은 계산 과정이 적힌 계산기이고, AI는 그 계산 결과를 보고서 문장으로 바꾸는 초안 작성자다. 초안 작성자는 편하지만, 원장부를 검산하지 않고 믿으면 안 된다.</p>
+<h3>4. 파이썬 그래프는 보고서의 핵심 그림 한 장이다</h3>
+<p>오늘 만드는 그래프는 "서울 음식 업종 점포 수 상위 10개 구" 막대그래프다. 그래프 하나로 모든 것을 설명하려고 하지 않는다. 대신 첫 질문에 가장 직접적으로 답하는 그림 하나를 정확하게 만든다.</p>
+<p>그래프에는 점포 수와 카페 비율을 같이 표시한다. 구별 전체 규모와 카페 비중을 한 번에 보되, 카페 비율은 보조 설명으로만 사용한다. 이 데이터에는 매출, 임대료, 유동인구가 없으므로 "카페가 잘 된다"거나 "창업하기 좋다"라고 말하면 과해진다.</p>
+<h3>5. BI 1페이지는 최종 보고서가 아니라 탐색 가능한 요약 화면이다</h3>
+<p>BI 도구는 발표용 차트 하나보다 필터와 상호작용이 강하다. 오늘 BI 페이지에는 다음 요소를 둔다.</p>
+<ul>
+<li>총 점포 수 카드</li>
+<li>구별 점포 수 막대그래프</li>
+<li>업종 중분류 필터</li>
+<li>구별 업종 구성 막대그래프 또는 표</li>
+<li>해석 메모 2줄</li>
+</ul>
+<p>Windows 수강생은 Power BI Desktop을 사용할 수 있다. Mac 수강생은 Power BI Desktop 설치가 어렵기 때문에 Looker Studio 경로를 기본 대안으로 쓴다.</p>
+<h2>90분 수업 흐름</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;">시간</th>
+<th>내용</th>
+<th>진행 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0-8분</td>
+<td>오늘의 질문과 풀사이클 범위 설명</td>
+<td>강의</td>
+</tr>
+<tr>
+<td style="text-align: right;">8-18분</td>
+<td>데이터 파일 위치, 행 수, 핵심 컬럼, 결측 확인</td>
+<td>시연</td>
+</tr>
+<tr>
+<td style="text-align: right;">18-30분</td>
+<td>스캐폴딩 코드 실행과 산출 파일 확인</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">30-43분</td>
+<td>AI 요약 입력용 텍스트를 사용해 설명 초안 만들기</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">43-55분</td>
+<td>파이썬 그래프 PNG 확인과 해석</td>
+<td>강의·토의</td>
+</tr>
+<tr>
+<td style="text-align: right;">55-75분</td>
+<td>BI 1페이지 만들기</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">75-84분</td>
+<td>결과 해석과 한계 문장 작성</td>
+<td>개인 실습</td>
+</tr>
+<tr>
+<td style="text-align: right;">84-90분</td>
+<td>산출물 제출, 체크포인트 확인</td>
+<td>정리</td>
+</tr>
+</tbody>
+</table></div>
+<h2>엑셀과 연결해서 설명할 지점</h2>
+<ul>
+<li><code>groupby()</code>는 피벗테이블과 비슷하다. 행 기준으로 묶고 값의 개수나 합계를 낸다.</li>
+<li><code>to_csv()</code>는 피벗 결과를 다른 도구에 넘기기 위한 저장이다.</li>
+<li>AI 요약 입력용 텍스트는 엑셀 피벗 결과를 복사해 보고서 초안 작성자에게 주는 것과 비슷하다.</li>
+<li>파이썬 그래프는 반복 실행 가능한 차트다. 같은 코드와 같은 데이터면 같은 그림이 나온다.</li>
+<li>BI 대시보드는 엑셀 차트보다 필터와 공유에 강하다. 대신 데이터 모델과 필드 형식을 맞춰야 한다.</li>
+</ul>
+<h2>해석에서 조심할 점</h2>
+<ul>
+<li>점포 수가 많다는 것은 매출이 높다는 뜻이 아니다.</li>
+<li>카페 비율이 높다는 것은 카페 창업 성공률이 높다는 뜻이 아니다.</li>
+<li>이 데이터는 2021년 9월 기준 상가 정보이므로 현재 상권 상황과 다를 수 있다.</li>
+<li>좌표가 있지만 오늘은 지도 분석을 하지 않는다. 구별 집계와 업종 구성까지만 다룬다.</li>
+<li>행정동명 결측이 312건 있으므로 행정동 단위로 깊게 내려가려면 추가 점검이 필요하다.</li>
+</ul>
+<h2>수업 후 수강생이 말할 수 있어야 하는 문장</h2>
+<ul>
+<li>"원자료를 바로 BI에 넣기보다, 질문에 맞는 집계표로 줄여야 한다."</li>
+<li>"AI는 계산을 대신하는 도구가 아니라 검증된 숫자를 설명문으로 바꾸는 도구로 쓰겠다."</li>
+<li>"파이썬 그래프와 BI 대시보드는 같은 CSV에서 나온 산출물이어야 재현성이 있다."</li>
+<li>"점포 수 데이터만으로 매출이나 수요를 단정하지 않겠다."</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="handout" aria-label="핸드아웃">
+<h1>S19 핸드아웃. 풀사이클 실습</h1>
+<p>선수 차시: S18 배포·공유</p>
+<h2>오늘 만들 산출물</h2>
+<p>오늘은 서울 음식 업종 상가 데이터를 사용해 세 가지 산출물을 만든다.</p>
+<ol>
+<li>AI 요약 문단</li>
+<li>파이썬 그래프 PNG 1개</li>
+<li>BI 1페이지 대시보드</li>
+</ol>
+<p>사용 데이터는 다음 파일이다.</p>
+<div class="code-scroll"><pre><code class="language-text">/mnt/d/ai-data-analysis-course/02_datasets/real_korean/cafe_restaurant/seoul_commercial_food_stores_202109_github.csv
+</code></pre></div>
+<p>분석 질문은 다음과 같다.</p>
+<div class="code-scroll"><pre><code class="language-text">서울 음식 업종 점포는 어느 구에 많이 모여 있고, 구별 업종 구성은 어떻게 다른가?
+</code></pre></div>
+<h2>준비</h2>
+<p>터미널을 열고 작업 루트로 이동한다.</p>
+<div class="code-scroll"><pre><code class="language-bash">cd /mnt/d/ai-data-analysis-course
+</code></pre></div>
+<p>데이터 파일이 있는지 확인한다.</p>
+<div class="code-scroll"><pre><code class="language-bash">ls -lh 02_datasets/real_korean/cafe_restaurant/seoul_commercial_food_stores_202109_github.csv
+</code></pre></div>
+<p>모범답안 코드가 있는지 확인한다.</p>
+<div class="code-scroll"><pre><code class="language-bash">ls -lh 06_answers/S19_code.py
+</code></pre></div>
+<h2>따라하기 1. 스캐폴딩 코드 실행</h2>
+<p>아래 명령을 실행한다.</p>
+<div class="code-scroll"><pre><code class="language-bash">python3 06_answers/S19_code.py
+</code></pre></div>
+<p>정상 실행되면 대략 다음 내용을 확인할 수 있다.</p>
+<div class="code-scroll"><pre><code class="language-text">pandas: 3.0.3
+원자료: 119,158행 x 13열
+분석 행수: 119,158행
+시군구 수: 25개
+업종 중분류 수: 14개
+상가업소번호 중복 수: 0건
+BI 입력 CSV: 349행 x 5열
+1위 구: 강남구 12,095개
+전체 커피점/카페: 19,703개
+</code></pre></div>
+<p>생성된 파일을 확인한다.</p>
+<div class="code-scroll"><pre><code class="language-bash">ls -lh 06_answers/S19_outputs
+</code></pre></div>
+<p>생성 파일의 역할은 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>파일</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>S19_ai_summary_input.txt</code></td>
+<td>AI 요약에 붙여넣을 검증된 집계 텍스트</td>
+</tr>
+<tr>
+<td><code>S19_python_top10_gu_chart.png</code></td>
+<td>파이썬으로 만든 핵심 그래프</td>
+</tr>
+<tr>
+<td><code>S19_gu_summary.csv</code></td>
+<td>구별 요약표</td>
+</tr>
+<tr>
+<td><code>S19_bi_input_gu_category.csv</code></td>
+<td>BI 1페이지에 넣을 구별·업종별 집계표</td>
+</tr>
+</tbody>
+</table></div>
+<h2>따라하기 2. AI 요약 만들기</h2>
+<p>AI 요약에는 원자료 CSV 전체를 올리지 않는다. 파이썬이 만든 집계 텍스트만 사용한다.</p>
+<p>먼저 입력 텍스트를 확인한다.</p>
+<div class="code-scroll"><pre><code class="language-bash">sed -n '1,160p' 06_answers/S19_outputs/S19_ai_summary_input.txt
+</code></pre></div>
+<p>AI 도구에 아래 프롬프트를 그대로 붙여넣고, 그 아래에 <code>S19_ai_summary_input.txt</code> 내용을 붙인다.</p>
+<div class="code-scroll"><pre><code class="language-text">너는 데이터분석 입문 수업의 조교다.
+아래 집계 결과만 근거로 서울 음식 업종 상권 요약을 작성하라.
+
+조건:
+- 5문장 이내로 작성한다.
+- 가장 점포 수가 많은 구와 상위 업종을 포함한다.
+- &quot;매출이 높다&quot;, &quot;창업하기 좋다&quot;처럼 데이터에 없는 결론은 쓰지 않는다.
+- 마지막 문장은 이 데이터로 판단할 수 없는 한계를 적는다.
+
+[집계 결과]
+</code></pre></div>
+<p>유료 파일 업로드 기능이 없어도 괜찮다. 이 단계는 파일을 올릴 필요 없이 텍스트를 복사해 붙이는 것으로 충분하다.</p>
+<p>요약 예시는 다음과 같은 구조면 된다.</p>
+<div class="code-scroll"><pre><code class="language-text">서울 음식 업종 점포는 강남구에 가장 많이 분포하며, 다음으로 마포구와 송파구가 많다. 업종 중분류 기준으로는 한식이 가장 많고, 커피점/카페가 그 다음으로 많다. 점포 수 상위 구에서도 한식 비중이 대체로 크며, 카페 비율은 구마다 차이가 있다. 이 결과는 점포 수 기준의 분포를 보여주지만 매출, 수익성, 유동인구는 포함하지 않는다.
+</code></pre></div>
+<h2>따라하기 3. 파이썬 그래프 확인</h2>
+<p>다음 파일을 연다.</p>
+<div class="code-scroll"><pre><code class="language-text">06_answers/S19_outputs/S19_python_top10_gu_chart.png
+</code></pre></div>
+<p>그래프를 보고 아래 질문에 답한다.</p>
+<ol>
+<li>점포 수가 가장 많은 구는 어디인가?</li>
+<li>1위 구와 2위 구의 차이가 큰가?</li>
+<li>그래프 옆에 표시된 카페 비율은 무엇을 보조로 설명하는가?</li>
+<li>이 그래프만 보고 말하면 안 되는 결론은 무엇인가?</li>
+</ol>
+<p>정답 방향은 다음과 같다.</p>
+<ul>
+<li>1위는 강남구다.</li>
+<li>강남구 12,095개와 마포구 7,396개의 차이가 크다.</li>
+<li>카페 비율은 해당 구의 음식 업종 중 커피점/카페가 차지하는 비중이다.</li>
+<li>매출, 임대료, 수익성, 창업 성공 가능성은 이 그래프만으로 말할 수 없다.</li>
+</ul>
+<h2>따라하기 4. Looker Studio로 BI 1페이지 만들기</h2>
+<p>Mac 수강생은 이 경로를 기본으로 사용한다. Windows 수강생도 웹에서 진행하려면 같은 방법을 사용한다.</p>
+<ol>
+<li>Looker Studio에 접속한다.</li>
+<li>빈 보고서를 만든다.</li>
+<li>데이터 소스로 <code>파일 업로드</code> 또는 Google Sheets 업로드를 선택한다.</li>
+<li>아래 CSV를 연결한다.</li>
+</ol>
+<div class="code-scroll"><pre><code class="language-text">Mac/WSL: /mnt/d/ai-data-analysis-course/06_answers/S19_outputs/S19_bi_input_gu_category.csv
+Windows: D:\ai-data-analysis-course\06_answers\S19_outputs\S19_bi_input_gu_category.csv
+</code></pre></div>
+<ol start="5">
+<li>필드 형식을 확인한다.</li>
+</ol>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>필드</th>
+<th>권장 형식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>시군구명</code></td>
+<td>텍스트</td>
+</tr>
+<tr>
+<td><code>상권업종중분류명</code></td>
+<td>텍스트</td>
+</tr>
+<tr>
+<td><code>점포수</code></td>
+<td>숫자</td>
+</tr>
+<tr>
+<td><code>구내비율</code></td>
+<td>퍼센트</td>
+</tr>
+<tr>
+<td><code>전체대비비율</code></td>
+<td>퍼센트</td>
+</tr>
+</tbody>
+</table></div>
+<ol start="6">
+<li>보고서 제목을 추가한다.</li>
+</ol>
+<div class="code-scroll"><pre><code class="language-text">서울 음식 업종 점포 분포 대시보드
+</code></pre></div>
+<ol start="7">
+<li>스코어카드 2개를 만든다.</li>
+</ol>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>스코어카드</th>
+<th>측정항목</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>총 점포 수</td>
+<td><code>점포수</code>의 합계</td>
+</tr>
+<tr>
+<td>시군구 수</td>
+<td><code>시군구명</code>의 고유 개수</td>
+</tr>
+</tbody>
+</table></div>
+<ol start="8">
+<li>구별 점포 수 막대그래프를 만든다.</li>
+</ol>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>설정</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>차트 종류</td>
+<td>막대그래프</td>
+</tr>
+<tr>
+<td>측정기준</td>
+<td><code>시군구명</code></td>
+</tr>
+<tr>
+<td>측정항목</td>
+<td><code>점포수</code> 합계</td>
+</tr>
+<tr>
+<td>정렬</td>
+<td><code>점포수</code> 내림차순</td>
+</tr>
+</tbody>
+</table></div>
+<ol start="9">
+<li>구별 업종 구성 그래프를 만든다.</li>
+</ol>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>설정</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>차트 종류</td>
+<td>누적 막대그래프 또는 표</td>
+</tr>
+<tr>
+<td>측정기준</td>
+<td><code>시군구명</code></td>
+</tr>
+<tr>
+<td>세부 측정기준</td>
+<td><code>상권업종중분류명</code></td>
+</tr>
+<tr>
+<td>측정항목</td>
+<td><code>점포수</code> 합계</td>
+</tr>
+</tbody>
+</table></div>
+<ol start="10">
+<li>필터 컨트롤을 추가한다.</li>
+</ol>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>설정</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>필터 기준</td>
+<td><code>상권업종중분류명</code></td>
+</tr>
+<tr>
+<td>목적</td>
+<td>한식, 커피점/카페, 분식 등을 선택해 구별 분포 비교</td>
+</tr>
+</tbody>
+</table></div>
+<ol start="11">
+<li>해석 메모를 텍스트 상자로 추가한다.</li>
+</ol>
+<div class="code-scroll"><pre><code class="language-text">점포 수 기준으로는 강남구가 가장 많다. 이 대시보드는 점포 분포를 보여주며 매출이나 수익성을 직접 설명하지 않는다.
+</code></pre></div>
+<h2>Power BI Desktop 대안</h2>
+<p>Power BI Desktop은 Windows 전용이다. Windows 수강생은 아래 순서로 진행할 수 있다.</p>
+<ol>
+<li>Power BI Desktop을 연다.</li>
+<li><code>데이터 가져오기</code>에서 <code>텍스트/CSV</code>를 선택한다.</li>
+<li><code>06_answers/S19_outputs/S19_bi_input_gu_category.csv</code>를 연다.</li>
+<li><code>점포수</code>는 정수, <code>구내비율</code>과 <code>전체대비비율</code>은 소수 또는 백분율로 둔다.</li>
+<li>카드, 막대그래프, 누적 막대그래프, 슬라이서를 1페이지에 배치한다.</li>
+<li>슬라이서 필드는 <code>상권업종중분류명</code>으로 둔다.</li>
+</ol>
+<h2>직접 해보기. 제출 미션</h2>
+<p>아래 네 가지를 제출한다.</p>
+<ol>
+<li>AI 요약 문단: 5문장 이내</li>
+<li>파이썬 그래프: <code>S19_python_top10_gu_chart.png</code></li>
+<li>BI 1페이지: 링크 또는 화면 캡처</li>
+<li>해석과 한계: 3문장</li>
+</ol>
+<p>해석과 한계에는 반드시 다음 두 내용을 포함한다.</p>
+<ul>
+<li>가장 점포 수가 많은 구와 상위 업종</li>
+<li>이 데이터만으로는 매출, 수익성, 창업 성공 가능성을 판단할 수 없다는 점</li>
+</ul>
+<h2>제출 전 체크리스트</h2>
+<ul>
+<li><code>python3 06_answers/S19_code.py</code>가 오류 없이 실행되었다.</li>
+<li>출력에서 <code>원자료: 119,158행 x 13열</code>을 확인했다.</li>
+<li>출력에서 <code>BI 입력 CSV: 349행 x 5열</code>을 확인했다.</li>
+<li>AI 요약은 원자료가 아니라 집계 텍스트를 근거로 작성했다.</li>
+<li>BI 차트의 측정항목은 <code>점포수</code> 합계로 설정했다.</li>
+<li>해석 문장에 데이터의 한계가 포함되어 있다.</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="script" aria-label="강사대본">
+<h1>S19 강사대본. 풀사이클 실습</h1>
+<h2>수업 목표 멘트</h2>
+<p>"오늘은 새로운 문법을 많이 배우는 시간이 아닙니다. 지금까지 배운 것을 작게 연결해 보는 시간입니다. 원자료를 열고, 필요한 만큼 줄이고, AI로 설명 초안을 만들고, 파이썬 그래프 한 장과 BI 1페이지로 공유합니다."</p>
+<p>"중요한 기준은 재현성입니다. 누군가가 같은 데이터와 같은 코드를 실행했을 때 같은 CSV와 같은 그래프가 나와야 합니다."</p>
+<h2>도입 0-8분</h2>
+<p>오늘의 질문을 화면에 보여준다.</p>
+<div class="code-scroll"><pre><code class="language-text">서울 음식 업종 점포는 어느 구에 많이 모여 있고, 구별 업종 구성은 어떻게 다른가?
+</code></pre></div>
+<p>강사가 말할 것:</p>
+<p>"질문이 작아 보여야 분석이 끝납니다. 오늘은 상권 전체를 설명하지 않습니다. 창업 입지를 추천하지도 않습니다. 서울 음식 업종 점포 수가 구별로 어떻게 분포하는지만 봅니다."</p>
+<p>"엑셀에서는 원자료를 바로 차트로 만들기보다 피벗테이블을 먼저 만들 때가 많습니다. 오늘 파이썬의 <code>groupby</code>가 그 피벗테이블 역할을 합니다."</p>
+<h2>데이터 확인 8-18분</h2>
+<p>시연 명령:</p>
+<div class="code-scroll"><pre><code class="language-bash">cd /mnt/d/ai-data-analysis-course
+python3 - &lt;&lt;'PY'
+import pandas as pd
+path = &quot;02_datasets/real_korean/cafe_restaurant/seoul_commercial_food_stores_202109_github.csv&quot;
+df = pd.read_csv(path)
+print(df.shape)
+print(df.columns.tolist())
+print(df[[&quot;시도명&quot;, &quot;시군구명&quot;, &quot;상권업종중분류명&quot;]].head())
+print(df.isna().sum().sort_values(ascending=False).head())
+PY
+</code></pre></div>
+<p>강사가 말할 것:</p>
+<p>"119,158행이면 엑셀에서도 열리기는 하지만, 차트로 바로 다루기에는 부담스럽습니다. 그래서 오늘은 구와 업종으로 줄인 집계표를 만들겠습니다."</p>
+<p>"<code>지점명</code> 결측이 많습니다. 하지만 오늘 질문에는 지점명이 필요하지 않습니다. 결측이 보인다고 무조건 행을 버리는 것이 아니라, 질문에 필요한 컬럼인지 먼저 판단합니다."</p>
+<p>시연 포인트:</p>
+<ul>
+<li>데이터는 UTF-8로 바로 읽힌다.</li>
+<li><code>시도명</code>은 모두 서울특별시다.</li>
+<li><code>시군구명</code>은 25개다.</li>
+<li><code>상권업종중분류명</code>은 14개다.</li>
+<li><code>상가업소번호</code> 중복은 0건이다.</li>
+</ul>
+<h2>스캐폴딩 코드 실행 18-30분</h2>
+<p>시연 명령:</p>
+<div class="code-scroll"><pre><code class="language-bash">python3 06_answers/S19_code.py
+</code></pre></div>
+<p>정상 출력에서 강조할 부분:</p>
+<div class="code-scroll"><pre><code class="language-text">원자료: 119,158행 x 13열
+분석 행수: 119,158행
+시군구 수: 25개
+업종 중분류 수: 14개
+BI 입력 CSV: 349행 x 5열
+1위 구: 강남구 12,095개
+전체 커피점/카페: 19,703개
+</code></pre></div>
+<p>강사가 말할 것:</p>
+<p>"원자료는 119,158행이지만 BI 입력은 349행입니다. 큰 데이터를 버린 것이 아니라 질문에 맞게 요약한 것입니다."</p>
+<p>"오늘은 코드를 처음부터 외워 쓰는 수업이 아닙니다. 스캐폴딩을 보고 어느 부분이 데이터 확인, 어느 부분이 집계, 어느 부분이 저장인지 구분하는 것이 목표입니다."</p>
+<p>생성 파일 확인:</p>
+<div class="code-scroll"><pre><code class="language-bash">ls -lh 06_answers/S19_outputs
+</code></pre></div>
+<h2>AI 요약 30-43분</h2>
+<p>시연 명령:</p>
+<div class="code-scroll"><pre><code class="language-bash">sed -n '1,160p' 06_answers/S19_outputs/S19_ai_summary_input.txt
+</code></pre></div>
+<p>강사가 말할 것:</p>
+<p>"AI에는 원자료 전체를 던지지 않습니다. 우리가 검증한 집계 결과를 주고, 그 범위 안에서 설명문을 쓰게 합니다."</p>
+<p>"AI가 만든 문장이 그럴듯해 보여도 숫자를 새로 만들어내면 안 됩니다. 오늘은 입력 텍스트에 있는 숫자만 쓰게 제한합니다."</p>
+<p>AI 프롬프트 시연:</p>
+<div class="code-scroll"><pre><code class="language-text">너는 데이터분석 입문 수업의 조교다.
+아래 집계 결과만 근거로 서울 음식 업종 상권 요약을 작성하라.
+
+조건:
+- 5문장 이내로 작성한다.
+- 가장 점포 수가 많은 구와 상위 업종을 포함한다.
+- &quot;매출이 높다&quot;, &quot;창업하기 좋다&quot;처럼 데이터에 없는 결론은 쓰지 않는다.
+- 마지막 문장은 이 데이터로 판단할 수 없는 한계를 적는다.
+
+[집계 결과]
+</code></pre></div>
+<p>지도할 점:</p>
+<ul>
+<li>AI 요약이 너무 길면 5문장으로 줄이게 한다.</li>
+<li>"상권이 좋다", "수익성이 높다" 같은 문장이 나오면 삭제하게 한다.</li>
+<li>"점포 수 기준"이라는 표현을 넣게 한다.</li>
+</ul>
+<h2>파이썬 그래프 해석 43-55분</h2>
+<p>보여줄 파일:</p>
+<div class="code-scroll"><pre><code class="language-text">06_answers/S19_outputs/S19_python_top10_gu_chart.png
+</code></pre></div>
+<p>강사가 말할 것:</p>
+<p>"이 그래프의 첫 메시지는 강남구가 가장 많다는 것입니다. 두 번째 메시지는 상위 구 안에서도 카페 비율이 조금씩 다르다는 것입니다."</p>
+<p>"하지만 이 그래프는 점포 수 그래프입니다. 매출 그래프도 아니고 유동인구 그래프도 아닙니다. 데이터가 말하는 범위 안에서만 해석합니다."</p>
+<p>질문:</p>
+<p>"강남구 점포 수가 많다는 사실만으로 강남구에서 창업하면 좋다고 말할 수 있을까요?"</p>
+<p>기대 답:</p>
+<p>"아니요. 매출, 임대료, 경쟁 강도, 유동인구, 폐업률이 없기 때문입니다."</p>
+<h2>BI 1페이지 제작 55-75분</h2>
+<p>Looker Studio 경로를 기본으로 안내한다.</p>
+<p>강사가 말할 것:</p>
+<p>"BI에는 원자료가 아니라 파이썬이 만든 <code>S19_bi_input_gu_category.csv</code>를 넣습니다. 이 파일은 구와 업종으로 이미 줄어든 집계표입니다."</p>
+<p>클릭 안내:</p>
+<ol>
+<li>빈 보고서를 만든다.</li>
+<li>파일 업로드 또는 Google Sheets로 CSV를 연결한다.</li>
+<li>제목 텍스트를 넣는다.</li>
+<li>총 점포 수 스코어카드를 만든다.</li>
+<li><code>시군구명</code> 고유 개수 스코어카드를 만든다.</li>
+<li><code>시군구명</code> 기준 막대그래프를 만들고 <code>점포수</code> 내림차순으로 정렬한다.</li>
+<li><code>상권업종중분류명</code> 필터를 추가한다.</li>
+<li>누적 막대그래프 또는 표로 구별 업종 구성을 보여준다.</li>
+<li>마지막에 해석 메모를 넣는다.</li>
+</ol>
+<p>주의 멘트:</p>
+<p>"스코어카드에 <code>점포수</code> 평균을 넣으면 안 됩니다. 오늘의 값은 점포 수 합계로 봐야 합니다."</p>
+<p>"필터를 누르면 막대그래프가 바뀌어야 합니다. 이것이 BI를 쓰는 이유입니다."</p>
+<p>Power BI 안내:</p>
+<p>"Windows 수강생은 Power BI Desktop에서 같은 CSV를 불러오면 됩니다. Mac 수강생은 설치 문제가 있으므로 Looker Studio로 진행합니다."</p>
+<h2>개인 실습 75-84분</h2>
+<p>수강생에게 작성하게 할 문장:</p>
+<div class="code-scroll"><pre><code class="language-text">점포 수 기준으로 서울에서 음식 업종 점포가 가장 많은 구는 ____이다.
+업종 중분류 기준으로 전체에서 가장 많은 업종은 ____이다.
+다만 이 데이터에는 ____가 없으므로 ____라고 단정할 수 없다.
+</code></pre></div>
+<p>순회하며 확인할 것:</p>
+<ul>
+<li>BI 측정항목이 <code>점포수</code> 합계인지 확인한다.</li>
+<li>필터 기준이 <code>상권업종중분류명</code>인지 확인한다.</li>
+<li>해석 문장에 "점포 수 기준"이 들어갔는지 확인한다.</li>
+<li>한계 문장에 매출 또는 수익성이 언급되었는지 확인한다.</li>
+</ul>
+<h2>정리 84-90분</h2>
+<p>강사가 말할 것:</p>
+<p>"오늘 만든 것은 거대한 분석 프로젝트가 아닙니다. 하지만 실제 업무의 뼈대는 들어 있습니다. 데이터 확인, 집계, 설명, 그래프, 대시보드, 한계 기록입니다."</p>
+<p>"분석 결과를 믿을 수 있게 만드는 것은 멋진 차트보다 재현 가능한 과정입니다. 오늘의 제출물은 모두 같은 집계표에서 나와야 합니다."</p>
+<h2>예상 질문과 답</h2>
+<p>Q. <code>지점명</code> 결측이 많은데 왜 지우지 않나요?</p>
+<p>A. 오늘 질문은 구별 점포 수와 업종 구성입니다. <code>지점명</code>은 이 질문에 쓰지 않으므로 결측이 많아도 핵심 문제가 아닙니다. 결측 처리는 목적 컬럼 중심으로 판단합니다.</p>
+<p>Q. AI에게 CSV를 바로 올리면 더 빠르지 않나요?</p>
+<p>A. 그럴 수도 있지만 입문 단계에서는 검증이 어렵습니다. 오늘은 파이썬이 만든 집계 결과만 AI에 주어, AI가 설명문 작성 범위를 벗어나지 않게 합니다.</p>
+<p>Q. 점포 수가 많으면 좋은 상권인가요?</p>
+<p>A. 그렇게 단정할 수 없습니다. 좋은 상권을 판단하려면 매출, 유동인구, 임대료, 폐업률, 경쟁 밀도 같은 추가 데이터가 필요합니다.</p>
+<p>Q. BI에서 총 점포 수가 119,158이 아니라 다르게 보이면 무엇을 확인해야 하나요?</p>
+<p>A. 측정항목이 <code>점포수</code>의 합계인지 확인합니다. 평균, 레코드 수, 고유 개수로 들어가면 숫자가 달라질 수 있습니다.</p>
+<p>Q. 파이썬 차트에서 한글이 깨지면 어떻게 하나요?</p>
+<p>A. 한글 폰트 문제입니다. 제공 코드는 설치된 한글 폰트를 자동으로 찾도록 되어 있습니다. 그래도 깨지면 Colab이나 PC에 나눔고딕 계열 폰트를 설치한 뒤 다시 실행합니다.</p>
+<p>Q. 왜 119,158행을 BI에 바로 넣지 않나요?</p>
+<p>A. 오늘 질문에는 구와 업종별 집계면 충분합니다. 큰 원자료를 그대로 넣으면 느려지고, 수강생이 필드 설정을 실수하기 쉽습니다. 분석 목적에 맞는 집계표를 넘기는 편이 재현성이 높습니다.</p>
+<h2>완료 판단 체크포인트</h2>
+<p>수강생이 같은 코드 실행 결과에서 <code>원자료 119,158행</code>, <code>BI 입력 349행</code>, <code>강남구 12,095개</code>를 확인하고, AI 요약 문단·파이썬 PNG·BI 1페이지를 모두 제출하면 완료로 판단한다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="answer" aria-label="모범답안">
+<h1>S19 모범답안. 풀사이클 실습</h1>
+<h2>실행 환경과 데이터</h2>
+<ul>
+<li>실행 위치: <code>/mnt/d/ai-data-analysis-course</code></li>
+<li>데이터 파일: <code>02_datasets/real_korean/cafe_restaurant/seoul_commercial_food_stores_202109_github.csv</code></li>
+<li>코드 파일: <code>06_answers/S19_code.py</code></li>
+<li>pandas 버전: 3.0.3</li>
+</ul>
+<p>실제 실행으로 확인한 데이터는 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th style="text-align: right;">확인값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>원자료</td>
+<td style="text-align: right;">119,158행 x 13열</td>
+</tr>
+<tr>
+<td>분석 행수</td>
+<td style="text-align: right;">119,158행</td>
+</tr>
+<tr>
+<td>시군구 수</td>
+<td style="text-align: right;">25개</td>
+</tr>
+<tr>
+<td>업종 중분류 수</td>
+<td style="text-align: right;">14개</td>
+</tr>
+<tr>
+<td>상가업소번호 중복</td>
+<td style="text-align: right;">0건</td>
+</tr>
+<tr>
+<td>BI 입력 CSV</td>
+<td style="text-align: right;">349행 x 5열</td>
+</tr>
+<tr>
+<td>점포 수 1위 구</td>
+<td style="text-align: right;">강남구 12,095개</td>
+</tr>
+<tr>
+<td>전체 커피점/카페</td>
+<td style="text-align: right;">19,703개</td>
+</tr>
+</tbody>
+</table></div>
+<p>생성된 산출물은 다음 위치에 저장된다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>산출물</th>
+<th>경로</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>구별 요약 CSV</td>
+<td><code>06_answers/S19_outputs/S19_gu_summary.csv</code></td>
+</tr>
+<tr>
+<td>BI 입력 CSV</td>
+<td><code>06_answers/S19_outputs/S19_bi_input_gu_category.csv</code></td>
+</tr>
+<tr>
+<td>AI 요약 입력 텍스트</td>
+<td><code>06_answers/S19_outputs/S19_ai_summary_input.txt</code></td>
+</tr>
+<tr>
+<td>파이썬 그래프 PNG</td>
+<td><code>06_answers/S19_outputs/S19_python_top10_gu_chart.png</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2>미션 해설</h2>
+<h3>1. AI 요약 문단</h3>
+<p>모범 요약은 다음과 같다.</p>
+<div class="code-scroll"><pre><code class="language-text">점포 수 기준으로 서울 음식 업종은 강남구에 가장 많이 분포하며, 다음으로 마포구와 송파구가 많다. 업종 중분류 기준으로는 한식이 40,448개로 가장 많고, 커피점/카페가 19,703개로 뒤를 잇는다. 점포 수 상위 구에서도 한식 비중이 대체로 크며, 카페 비율은 구마다 차이가 있다. 이 결과는 점포 분포를 보여주지만 매출, 수익성, 유동인구, 창업 성공 가능성은 이 데이터만으로 판단할 수 없다.
+</code></pre></div>
+<p>핵심은 "점포 수 기준"이라는 말을 넣는 것이다. 이 데이터에는 매출, 임대료, 유동인구, 폐업률이 없으므로 좋은 상권이나 창업 추천으로 해석하면 안 된다.</p>
+<h3>2. 파이썬 그래프</h3>
+<p>모범 그래프 파일은 다음 경로에 생성된다.</p>
+<div class="code-scroll"><pre><code class="language-text">06_answers/S19_outputs/S19_python_top10_gu_chart.png
+</code></pre></div>
+<p>그래프 해석:</p>
+<ul>
+<li>강남구가 12,095개로 점포 수가 가장 많다.</li>
+<li>마포구 7,396개, 송파구 7,106개, 서초구 6,366개, 강서구 6,114개가 뒤를 잇는다.</li>
+<li>그래프의 카페 비율 표기는 각 구 음식 업종 중 <code>커피점/카페</code>가 차지하는 비중이다.</li>
+<li>이 그래프는 점포 수와 카페 비중을 보여줄 뿐, 매출이나 수익성을 보여주지 않는다.</li>
+</ul>
+<h3>3. BI 1페이지</h3>
+<p>BI에는 원자료가 아니라 다음 집계 파일을 사용한다.</p>
+<div class="code-scroll"><pre><code class="language-text">06_answers/S19_outputs/S19_bi_input_gu_category.csv
+</code></pre></div>
+<p>모범 BI 구성:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>영역</th>
+<th>설정</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>제목</td>
+<td>서울 음식 업종 점포 분포 대시보드</td>
+</tr>
+<tr>
+<td>카드 1</td>
+<td><code>점포수</code> 합계</td>
+</tr>
+<tr>
+<td>카드 2</td>
+<td><code>시군구명</code> 고유 개수</td>
+</tr>
+<tr>
+<td>막대그래프</td>
+<td>측정기준 <code>시군구명</code>, 측정항목 <code>점포수</code> 합계, 내림차순</td>
+</tr>
+<tr>
+<td>누적 막대그래프 또는 표</td>
+<td><code>시군구명</code>과 <code>상권업종중분류명</code>별 <code>점포수</code></td>
+</tr>
+<tr>
+<td>필터</td>
+<td><code>상권업종중분류명</code></td>
+</tr>
+<tr>
+<td>메모</td>
+<td>점포 수 기준이며 매출·수익성은 판단 불가</td>
+</tr>
+</tbody>
+</table></div>
+<p>BI에서 숫자가 다르게 나오면 먼저 <code>점포수</code>가 합계로 들어갔는지 확인한다. 평균이나 레코드 수를 쓰면 총점이 달라진다.</p>
+<h2>실행 결과</h2>
+<p>실행 명령:</p>
+<div class="code-scroll"><pre><code class="language-bash">cd /mnt/d/ai-data-analysis-course
+python3 06_answers/S19_code.py
+</code></pre></div>
+<p>실제 실행 출력:</p>
+<div class="code-scroll"><pre><code class="language-text">pandas: 3.0.3
+원자료: 119,158행 x 13열
+분석 행수: 119,158행
+시군구 수: 25개
+업종 중분류 수: 14개
+상가업소번호 중복 수: 0건
+BI 입력 CSV: 349행 x 5열
+1위 구: 강남구 12,095개
+전체 커피점/카페: 19,703개
+저장: 06_answers/S19_outputs/S19_gu_summary.csv
+저장: 06_answers/S19_outputs/S19_bi_input_gu_category.csv
+저장: 06_answers/S19_outputs/S19_ai_summary_input.txt
+저장: 06_answers/S19_outputs/S19_python_top10_gu_chart.png
+</code></pre></div>
+<h2>실습 코드</h2>
+<p>아래 코드는 <code>06_answers/S19_code.py</code>로 저장되어 있으며 실제 실행을 통과했다.</p>
+<div class="code-scroll"><pre><code class="language-python">from pathlib import Path
+
+import matplotlib.pyplot as plt
+import pandas as pd
+from matplotlib import font_manager
+
+
+ROOT = Path(__file__).resolve().parents[1]
+DATA_PATH = ROOT / &quot;02_datasets&quot; / &quot;real_korean&quot; / &quot;cafe_restaurant&quot; / &quot;seoul_commercial_food_stores_202109_github.csv&quot;
+OUT_DIR = ROOT / &quot;06_answers&quot; / &quot;S19_outputs&quot;
+
+GU_SUMMARY_PATH = OUT_DIR / &quot;S19_gu_summary.csv&quot;
+BI_INPUT_PATH = OUT_DIR / &quot;S19_bi_input_gu_category.csv&quot;
+AI_INPUT_PATH = OUT_DIR / &quot;S19_ai_summary_input.txt&quot;
+CHART_PATH = OUT_DIR / &quot;S19_python_top10_gu_chart.png&quot;
+
+
+def set_korean_font() -&gt; None:
+    &quot;&quot;&quot;실습 환경에 있는 한글 폰트를 우선 사용한다.&quot;&quot;&quot;
+    candidates = [
+        &quot;NanumGothic&quot;,
+        &quot;NanumBarunGothic&quot;,
+        &quot;NanumGothicCoding&quot;,
+        &quot;Noto Sans CJK KR&quot;,
+        &quot;Noto Sans KR&quot;,
+        &quot;Malgun Gothic&quot;,
+        &quot;AppleGothic&quot;,
+    ]
+    installed = {font.name for font in font_manager.fontManager.ttflist}
+    for name in candidates:
+        if name in installed:
+            plt.rcParams[&quot;font.family&quot;] = name
+            break
+    plt.rcParams[&quot;axes.unicode_minus&quot;] = False
+
+
+def main() -&gt; None:
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    set_korean_font()
+
+    df = pd.read_csv(DATA_PATH)
+    required_cols = [
+        &quot;상가업소번호&quot;,
+        &quot;상호명&quot;,
+        &quot;상권업종중분류명&quot;,
+        &quot;시도명&quot;,
+        &quot;시군구명&quot;,
+        &quot;행정동명&quot;,
+        &quot;경도&quot;,
+        &quot;위도&quot;,
+    ]
+    missing_cols = [col for col in required_cols if col not in df.columns]
+    if missing_cols:
+        raise ValueError(f&quot;필수 컬럼이 없습니다: {missing_cols}&quot;)
+
+    raw_rows, raw_cols = df.shape
+    required_missing = df[required_cols].isna().sum()
+    duplicate_store_ids = int(df[&quot;상가업소번호&quot;].duplicated().sum())
+
+    work = df[required_cols].copy()
+    work = work[work[&quot;시도명&quot;].eq(&quot;서울특별시&quot;)].copy()
+    work[&quot;상호명&quot;] = work[&quot;상호명&quot;].fillna(&quot;(상호명 없음)&quot;)
+
+    gu_summary = (
+        work.groupby(&quot;시군구명&quot;)
+        .agg(
+            점포수=(&quot;상가업소번호&quot;, &quot;count&quot;),
+            중분류수=(&quot;상권업종중분류명&quot;, &quot;nunique&quot;),
+            행정동수=(&quot;행정동명&quot;, &quot;nunique&quot;),
+            평균경도=(&quot;경도&quot;, &quot;mean&quot;),
+            평균위도=(&quot;위도&quot;, &quot;mean&quot;),
+        )
+        .reset_index()
+    )
+
+    cafe_counts = (
+        work[work[&quot;상권업종중분류명&quot;].eq(&quot;커피점/카페&quot;)]
+        .groupby(&quot;시군구명&quot;)
+        .size()
+        .rename(&quot;카페점포수&quot;)
+    )
+    korean_food_counts = (
+        work[work[&quot;상권업종중분류명&quot;].eq(&quot;한식&quot;)]
+        .groupby(&quot;시군구명&quot;)
+        .size()
+        .rename(&quot;한식점포수&quot;)
+    )
+
+    gu_summary = (
+        gu_summary.merge(cafe_counts, on=&quot;시군구명&quot;, how=&quot;left&quot;)
+        .merge(korean_food_counts, on=&quot;시군구명&quot;, how=&quot;left&quot;)
+        .fillna({&quot;카페점포수&quot;: 0, &quot;한식점포수&quot;: 0})
+    )
+    gu_summary[&quot;카페점포수&quot;] = gu_summary[&quot;카페점포수&quot;].astype(int)
+    gu_summary[&quot;한식점포수&quot;] = gu_summary[&quot;한식점포수&quot;].astype(int)
+    gu_summary[&quot;카페비율&quot;] = gu_summary[&quot;카페점포수&quot;] / gu_summary[&quot;점포수&quot;]
+    gu_summary[&quot;한식비율&quot;] = gu_summary[&quot;한식점포수&quot;] / gu_summary[&quot;점포수&quot;]
+    gu_summary = gu_summary.sort_values(&quot;점포수&quot;, ascending=False)
+    gu_summary.to_csv(GU_SUMMARY_PATH, index=False, encoding=&quot;utf-8-sig&quot;)
+
+    bi_input = (
+        work.groupby([&quot;시군구명&quot;, &quot;상권업종중분류명&quot;])
+        .size()
+        .rename(&quot;점포수&quot;)
+        .reset_index()
+        .sort_values([&quot;시군구명&quot;, &quot;점포수&quot;], ascending=[True, False])
+    )
+    bi_input[&quot;구내비율&quot;] = bi_input[&quot;점포수&quot;] / bi_input.groupby(&quot;시군구명&quot;)[&quot;점포수&quot;].transform(&quot;sum&quot;)
+    bi_input[&quot;전체대비비율&quot;] = bi_input[&quot;점포수&quot;] / len(work)
+    bi_input.to_csv(BI_INPUT_PATH, index=False, encoding=&quot;utf-8-sig&quot;)
+
+    top10 = gu_summary.head(10).copy()
+    top10_for_plot = top10.sort_values(&quot;점포수&quot;, ascending=True)
+
+    fig, ax = plt.subplots(figsize=(10, 6))
+    bars = ax.barh(top10_for_plot[&quot;시군구명&quot;], top10_for_plot[&quot;점포수&quot;], color=&quot;#3B7D7A&quot;)
+    ax.set_title(&quot;서울 음식 업종 점포 수 상위 10개 구&quot;)
+    ax.set_xlabel(&quot;점포 수&quot;)
+    ax.set_ylabel(&quot;시군구&quot;)
+    ax.set_xlim(0, top10_for_plot[&quot;점포수&quot;].max() * 1.22)
+    ax.grid(axis=&quot;x&quot;, linestyle=&quot;--&quot;, alpha=0.25)
+
+    for bar, count, cafe_rate in zip(bars, top10_for_plot[&quot;점포수&quot;], top10_for_plot[&quot;카페비율&quot;]):
+        ax.text(
+            count + top10_for_plot[&quot;점포수&quot;].max() * 0.015,
+            bar.get_y() + bar.get_height() / 2,
+            f&quot;{count:,}개 / 카페 {cafe_rate:.1%}&quot;,
+            va=&quot;center&quot;,
+            fontsize=9,
+        )
+
+    fig.tight_layout()
+    fig.savefig(CHART_PATH, dpi=160, bbox_inches=&quot;tight&quot;)
+    plt.close(fig)
+
+    mid_category_counts = work[&quot;상권업종중분류명&quot;].value_counts().head(8)
+    ai_text = &quot;\n&quot;.join(
+        [
+            &quot;[S19 AI 요약 입력용 집계]&quot;,
+            f&quot;- 원자료: {raw_rows:,}행 x {raw_cols:,}열&quot;,
+            f&quot;- 서울특별시 필터 후 분석 행수: {len(work):,}행&quot;,
+            f&quot;- 시군구 수: {work['시군구명'].nunique():,}개&quot;,
+            f&quot;- 업종 중분류 수: {work['상권업종중분류명'].nunique():,}개&quot;,
+            f&quot;- 상가업소번호 중복 수: {duplicate_store_ids:,}건&quot;,
+            &quot;- 필수 컬럼 결측 수:&quot;,
+            required_missing.to_string(),
+            &quot;&quot;,
+            &quot;[점포 수 상위 10개 구]&quot;,
+            top10[
+                [&quot;시군구명&quot;, &quot;점포수&quot;, &quot;카페점포수&quot;, &quot;카페비율&quot;, &quot;한식점포수&quot;, &quot;한식비율&quot;]
+            ].to_string(index=False, formatters={&quot;카페비율&quot;: &quot;{:.1%}&quot;.format, &quot;한식비율&quot;: &quot;{:.1%}&quot;.format}),
+            &quot;&quot;,
+            &quot;[업종 중분류 상위 8개]&quot;,
+            mid_category_counts.to_string(),
+        ]
+    )
+    AI_INPUT_PATH.write_text(ai_text, encoding=&quot;utf-8&quot;)
+
+    print(f&quot;pandas: {pd.__version__}&quot;)
+    print(f&quot;원자료: {raw_rows:,}행 x {raw_cols:,}열&quot;)
+    print(f&quot;분석 행수: {len(work):,}행&quot;)
+    print(f&quot;시군구 수: {work['시군구명'].nunique():,}개&quot;)
+    print(f&quot;업종 중분류 수: {work['상권업종중분류명'].nunique():,}개&quot;)
+    print(f&quot;상가업소번호 중복 수: {duplicate_store_ids:,}건&quot;)
+    print(f&quot;BI 입력 CSV: {bi_input.shape[0]:,}행 x {bi_input.shape[1]:,}열&quot;)
+    print(f&quot;1위 구: {top10.iloc[0]['시군구명']} {int(top10.iloc[0]['점포수']):,}개&quot;)
+    print(f&quot;전체 커피점/카페: {int((work['상권업종중분류명'] == '커피점/카페').sum()):,}개&quot;)
+    print(f&quot;저장: {GU_SUMMARY_PATH.relative_to(ROOT)}&quot;)
+    print(f&quot;저장: {BI_INPUT_PATH.relative_to(ROOT)}&quot;)
+    print(f&quot;저장: {AI_INPUT_PATH.relative_to(ROOT)}&quot;)
+    print(f&quot;저장: {CHART_PATH.relative_to(ROOT)}&quot;)
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre></div>
+</section>
+  </div>
+
+  <nav class="session-pager container">
+    <a class="pager-link prev" href="./S18.html"><span class="pager-direction">&larr; 이전 차시</span><span class="pager-title">S18 · 배포와 공유: Looker Studio, Power BI Copilot 선택</span></a>
+    <a class="pager-link next" href="./S20.html"><span class="pager-direction">다음 차시 &rarr;</span><span class="pager-title">S20 · 인사이트 보고: 그래서 뭘 하나</span></a>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>데이터 리터러시 with AI · S19 차시</span>
+    <a href="../index.html#curriculum">전체 커리큘럼으로</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.tab-panel');
+  function activate(key, updateHash){
+    tabs.forEach(function(btn){
+      var on = btn.getAttribute('data-tab') === key;
+      btn.classList.toggle('active', on);
+    });
+    panels.forEach(function(panel){
+      var on = panel.getAttribute('data-panel') === key;
+      panel.classList.toggle('active', on);
+    });
+    if (updateHash && history.replaceState){
+      history.replaceState(null, '', '#' + key);
+    }
+  }
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      activate(btn.getAttribute('data-tab'), true);
+    });
+  });
+  var initial = (location.hash || '').replace('#', '');
+  var valid = ['curriculum', 'handout', 'script', 'answer'];
+  if (valid.indexOf(initial) !== -1){
+    activate(initial, false);
+  }
+})();
+</script>
+
+</body>
+</html>

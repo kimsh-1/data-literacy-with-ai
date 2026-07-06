@@ -1,0 +1,1407 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>S11. Pandas 입문: Series, DataFrame과 필터 · 데이터 리터러시 with AI</title>
+<meta name="description" content="S11차시: Pandas 입문: Series, DataFrame과 필터 — 커리큘럼·핸드아웃·강사대본·모범답안." />
+<style>
+:root{
+  --canvas: #010102;
+  --surface-1: #0f1011;
+  --surface-2: #141516;
+  --surface-3: #18191a;
+  --surface-4: #191a1b;
+  --ink: #f7f8f8;
+  --ink-muted: #d0d6e0;
+  --ink-subtle: #8a8f98;
+  --ink-tertiary: #62666d;
+  --primary: #5e6ad2;
+  --primary-hover: #828fff;
+  --primary-focus: #5e69d1;
+  --hairline: #23252a;
+  --hairline-strong: #34343a;
+  --hairline-tertiary: #3e3e44;
+  --success: #27a644;
+
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  --container: 900px;
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+html{ background: var(--canvas); }
+body{
+  margin:0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.05px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a{ color: inherit; text-decoration: none; }
+ul, ol{ margin:0; padding:0; }
+h1,h2,h3,h4,p{ margin:0; }
+
+.container{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 48px);
+}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--primary-hover);
+}
+.eyebrow::before{
+  content:"";
+  width:6px; height:6px;
+  background: var(--primary);
+  border-radius: 1px;
+  flex-shrink:0;
+}
+
+/* ---------- top nav ---------- */
+.top-nav{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 64px;
+  display:flex;
+  align-items:center;
+  background: rgba(1,1,2,0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.top-nav .container{ display:flex; align-items:center; justify-content:space-between; gap: 24px; max-width: 1280px; }
+.brand{ display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:600; font-size:15px; letter-spacing:-0.01em; }
+.brand-mark{ width:20px; height:20px; border-radius: 6px; background: var(--primary); flex-shrink:0; position:relative; }
+.brand-mark::after{ content:""; position:absolute; inset:6px; border-radius:2px; background: rgba(255,255,255,0.85); }
+.back-link{ font-size:14px; color: var(--ink-subtle); display:inline-flex; align-items:center; gap:6px; transition: color .15s ease; }
+.back-link:hover{ color: var(--ink); }
+
+/* ---------- session header ---------- */
+.session-header{
+  padding: var(--space-xxl) 0 var(--space-xl);
+  background:
+    radial-gradient(ellipse 60% 50% at 82% 0%, rgba(94,106,210,0.16), transparent 60%),
+    var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+.session-header-top{
+  display:flex;
+  align-items:center;
+  gap: var(--space-md);
+  margin: var(--space-md) 0 var(--space-md);
+}
+.session-num-badge{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--primary-hover);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-xs);
+  padding: 4px 10px;
+}
+.difficulty{ display:flex; gap:4px; align-items:center; }
+.difficulty .dot{ width:6px; height:6px; border-radius:50%; background: var(--hairline-strong); }
+.difficulty .dot.filled{ background: var(--primary); }
+.difficulty-label{ font-size:12px; color: var(--ink-tertiary); margin-left:6px; }
+.session-header h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ---------- tabs ---------- */
+.tabs-bar{
+  display:flex;
+  gap: 4px;
+  padding-top: var(--space-lg);
+  border-bottom: 1px solid var(--hairline);
+  overflow-x: auto;
+}
+.tab-btn{
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-subtle);
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s ease, border-color .15s ease;
+}
+.tab-btn:hover{ color: var(--ink); }
+.tab-btn.active{ color: var(--ink); border-bottom-color: var(--primary); }
+
+.tab-panels{ padding: var(--space-xxl) 0 var(--space-xxl); }
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+/* ---------- markdown body ---------- */
+.markdown-body{ color: var(--ink-muted); font-size: 15.5px; line-height: 1.75; letter-spacing: -0.05px; overflow-wrap: anywhere; word-break: break-word; }
+.markdown-body h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--hairline);
+}
+.markdown-body h2{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+.markdown-body h3{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin: var(--space-lg) 0 var(--space-xs);
+}
+.markdown-body h4{
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+.markdown-body p{ margin: 0 0 var(--space-md); }
+.markdown-body ul, .markdown-body ol{ margin: 0 0 var(--space-md); padding-left: 1.4em; }
+.markdown-body li{ margin-bottom: 6px; }
+.markdown-body ul{ list-style: disc; }
+.markdown-body ol{ list-style: decimal; }
+.markdown-body strong{ color: var(--ink); font-weight: 600; }
+.markdown-body em{ color: var(--ink-muted); }
+.markdown-body a{ color: var(--primary-hover); text-decoration: underline; text-underline-offset: 2px; }
+.markdown-body hr{ border:none; border-top: 1px solid var(--hairline); margin: var(--space-xl) 0; }
+.markdown-body blockquote{
+  margin: 0 0 var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid var(--primary);
+  background: var(--surface-1);
+  color: var(--ink-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.markdown-body code{
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--primary-hover);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.markdown-body .code-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+}
+.markdown-body pre{
+  margin: 0;
+  padding: var(--space-md);
+  background: transparent;
+  border: none;
+}
+.markdown-body pre code{
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre;
+}
+.markdown-body .table-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+}
+.markdown-body table{
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 460px;
+  font-size: 13.5px;
+}
+.markdown-body th, .markdown-body td{
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+  white-space: nowrap;
+}
+.markdown-body thead th{
+  background: var(--surface-1);
+  color: var(--ink);
+  font-weight: 600;
+  font-family: var(--font-text);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+.markdown-body tbody tr:last-child td{ border-bottom: none; }
+.markdown-body tbody tr:hover{ background: var(--surface-1); }
+
+/* ---------- pager ---------- */
+.session-pager{
+  display:flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-xl) 0 var(--space-xxl);
+  border-top: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+.pager-link{
+  display:flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  max-width: 46%;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.pager-link:hover{ border-color: var(--primary); background: var(--surface-2); }
+.pager-link.next{ margin-left: auto; text-align: right; align-items: flex-end; }
+.pager-direction{ font-size: 12px; color: var(--ink-tertiary); font-family: var(--font-mono); }
+.pager-title{ font-size: 14px; color: var(--ink); font-weight: 500; }
+.pager-spacer{ flex: 1; }
+
+footer.site-footer{
+  border-top: 1px solid var(--hairline);
+  padding: var(--space-xl) 0;
+}
+footer.site-footer .container{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: var(--ink-tertiary);
+  font-size: 12px;
+}
+footer.site-footer a:hover{ color: var(--ink-subtle); }
+
+@media (max-width: 640px){
+  .session-header{ padding: var(--space-xl) 0 var(--space-lg); }
+  .pager-link{ max-width: 100%; }
+  .session-pager{ flex-direction: column; }
+  .pager-link.next{ margin-left: 0; text-align: left; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="container">
+    <div class="brand"><span class="brand-mark"></span>데이터 리터러시 with AI</div>
+    <a class="back-link" href="../index.html#curriculum">&larr; 커리큘럼으로</a>
+  </div>
+</nav>
+
+<header class="session-header">
+  <div class="container">
+    <div class="eyebrow">PART 04 · 파이썬</div>
+    <div class="session-header-top">
+      <span class="session-num-badge">S11</span>
+      <div class="difficulty" title="난이도 3"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">중급</span></div>
+    </div>
+    <h1>Pandas 입문: Series, DataFrame과 필터</h1>
+  </div>
+  <div class="container">
+    <div class="tabs-bar" role="tablist">
+<button class="tab-btn active" data-tab="curriculum" role="tab" aria-selected="true">커리큘럼</button>
+<button class="tab-btn" data-tab="handout" role="tab" aria-selected="false">핸드아웃</button>
+<button class="tab-btn" data-tab="script" role="tab" aria-selected="false">강사대본</button>
+<button class="tab-btn" data-tab="answer" role="tab" aria-selected="false">모범답안</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="tab-panels container">
+<section class="tab-panel markdown-body active" data-panel="curriculum" aria-label="커리큘럼">
+<h1>S11. Pandas 입문: Series, DataFrame, CSV 읽기와 필터</h1>
+<h2>차시 개요</h2>
+<ul>
+<li>대상: 엑셀은 쓰지만 데이터분석은 처음인 비개발자</li>
+<li>선수 차시: S10 Colab과 파이썬 기초</li>
+<li>난이도: 3</li>
+<li>시간: 60분</li>
+<li>사용 데이터: <code>02_datasets/cafe_sales/cafe_sales_clean.csv</code></li>
+</ul>
+<p>이번 차시는 파이썬 문법을 벗어나 실제 표 데이터를 다루는 첫 시간이다. 수강생은 pandas로 CSV 파일을 읽고, DataFrame과 Series를 엑셀 시트와 열에 견주어 이해한다. 그다음 <code>head</code>, <code>info</code>, <code>describe</code>로 데이터를 살펴본 뒤, 불리언 필터로 원하는 행만 남기고 금액순으로 정렬한다.</p>
+<p>핵심 브리지는 "엑셀 필터 = 불리언 마스크"이다. 엑셀에서는 필터 창에서 <code>강남점</code>을 체크하지만, pandas에서는 <code>df["store"] == "강남점"</code>이라는 True/False 열을 만든 뒤 True인 행만 남긴다. 이 생각을 잡으면 이후 정제, 집계, 시각화 차시에서 나오는 대부분의 pandas 코드가 덜 낯설어진다.</p>
+<h2>실제 데이터 확인 결과</h2>
+<p>수업 자료 작성 전 <code>python3</code>와 pandas 3.0.3으로 실제 파일을 열어 확인했다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th style="text-align: right;">확인 결과</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>파일 경로</td>
+<td style="text-align: right;"><code>02_datasets/cafe_sales/cafe_sales_clean.csv</code></td>
+</tr>
+<tr>
+<td>데이터 크기</td>
+<td style="text-align: right;">10,424행 x 12열</td>
+</tr>
+<tr>
+<td>날짜 범위</td>
+<td style="text-align: right;">2025-01-01 ~ 2025-06-30</td>
+</tr>
+<tr>
+<td>지점</td>
+<td style="text-align: right;">강남점 6,196행, 홍대점 4,228행</td>
+</tr>
+<tr>
+<td>카테고리</td>
+<td style="text-align: right;">커피 5,401행, 음료 2,539행, 디저트 2,484행</td>
+</tr>
+<tr>
+<td>금액 최소/최대</td>
+<td style="text-align: right;">3,000원 / 19,500원</td>
+</tr>
+<tr>
+<td>금액 평균</td>
+<td style="text-align: right;">8,681.17원</td>
+</tr>
+</tbody>
+</table></div>
+<p>컬럼은 다음 12개다.</p>
+<div class="code-scroll"><pre><code class="language-text">order_id, date, weekday, hour, store, category, item, unit_price, qty, amount, payment, member
+</code></pre></div>
+<p>이번 차시는 정제된 파일을 쓴다. 날짜가 문자열로 읽히지만 그대로 두고, 타입 변환은 S12 정제 차시로 미룬다.</p>
+<h2>학습 목표</h2>
+<ol>
+<li>pandas의 DataFrame을 엑셀 시트, Series를 엑셀의 한 열에 비유해 설명할 수 있다.</li>
+<li><code>pd.read_csv()</code>로 UTF-8 CSV 파일을 읽고, 한글 CSV에서 인코딩 문제가 생길 수 있음을 인지한다.</li>
+<li><code>head</code>, <code>info</code>, <code>describe</code>로 데이터의 첫 행, 컬럼, 타입, 기초 통계를 확인할 수 있다.</li>
+<li>불리언 조건식을 만들어 원하는 행만 필터링할 수 있다.</li>
+<li><code>.loc</code>, <code>.iloc</code>의 차이를 라벨 기준 선택과 위치 기준 선택으로 구분할 수 있다.</li>
+<li><code>sort_values</code>로 금액이 큰 주문부터 정렬할 수 있다.</li>
+</ol>
+<h2>핵심 개념</h2>
+<h3>1. pandas는 표를 다루는 파이썬 도구다</h3>
+<p>S10에서는 변수, 리스트, 딕셔너리, 조건문, 반복문을 배웠다. pandas는 그 문법을 표 데이터에 맞게 확장한 도구다.</p>
+<div class="code-scroll"><pre><code class="language-python">import pandas as pd
+</code></pre></div>
+<p>여기서 <code>pd</code>는 pandas를 짧게 부르는 별명이다. 엑셀에서 <code>SUM</code>, <code>AVERAGE</code>, <code>FILTER</code> 같은 기능을 쓰듯, pandas에서는 <code>read_csv</code>, <code>head</code>, <code>describe</code>, <code>sort_values</code> 같은 기능을 쓴다.</p>
+<h3>2. DataFrame은 시트, Series는 열이다</h3>
+<p>CSV를 읽으면 pandas는 보통 DataFrame을 만든다. DataFrame은 행과 열이 있는 표다. 엑셀의 워크시트 한 장을 떠올리면 된다.</p>
+<div class="code-scroll"><pre><code class="language-python">df = pd.read_csv(path, encoding=&quot;utf-8-sig&quot;)
+</code></pre></div>
+<p>DataFrame에서 열 하나를 꺼내면 Series가 된다.</p>
+<div class="code-scroll"><pre><code class="language-python">amount_series = df[&quot;amount&quot;]
+</code></pre></div>
+<p>엑셀로 비교하면 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>엑셀 감각</th>
+<th>pandas 감각</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>워크시트 전체</td>
+<td>DataFrame</td>
+</tr>
+<tr>
+<td>열 하나</td>
+<td>Series</td>
+</tr>
+<tr>
+<td>행 번호</td>
+<td>인덱스</td>
+</tr>
+<tr>
+<td>열 제목</td>
+<td>컬럼명</td>
+</tr>
+<tr>
+<td>필터 조건</td>
+<td>불리언 마스크</td>
+</tr>
+</tbody>
+</table></div>
+<p>처음에는 DataFrame과 Series 이름보다 "표 전체"와 "열 하나"라는 감각이 더 중요하다.</p>
+<h3>3. CSV 읽기는 파일 경로와 인코딩을 확인하는 일이다</h3>
+<p>CSV는 쉼표로 구분된 텍스트 파일이다. 엑셀 파일처럼 보이지만 실제로는 글자 파일이므로, 파일 경로와 글자 인코딩이 중요하다.</p>
+<div class="code-scroll"><pre><code class="language-python">df = pd.read_csv(path, encoding=&quot;utf-8-sig&quot;)
+</code></pre></div>
+<p>이번 과정에서 배포하는 CSV는 대부분 UTF-8로 정규화되어 있어 <code>encoding="utf-8-sig"</code>나 기본값으로 읽힌다. 다만 한국 공공데이터나 오래된 업무 파일에는 cp949 인코딩이 남아 있기도 한데, 이런 파일은 글자가 깨지거나 <code>UnicodeDecodeError</code>를 낸다. cp949 원본을 직접 여는 실습은 S12에서 한다.</p>
+<p>S11에서는 인코딩을 깊게 해결하지 않는다. 오늘은 "CSV는 글자 저장 방식이 맞아야 열린다"는 정도를 기억한다.</p>
+<h3>4. head, info, describe는 데이터 첫 점검 도구다</h3>
+<p>데이터를 읽자마자 분석을 시작하지 않는다. 먼저 어떤 표인지 확인한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>확인 도구</th>
+<th>하는 일</th>
+<th>엑셀 비교</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>df.head()</code></td>
+<td>앞쪽 몇 행 보기</td>
+<td>시트 맨 위 훑어보기</td>
+</tr>
+<tr>
+<td><code>df.info()</code></td>
+<td>행수, 컬럼, 결측, 타입 보기</td>
+<td>열 목록과 데이터 형식 확인</td>
+</tr>
+<tr>
+<td><code>df.describe()</code></td>
+<td>숫자 열의 기초 통계 보기</td>
+<td>평균, 최소, 최대 빠른 확인</td>
+</tr>
+<tr>
+<td><code>df.shape</code></td>
+<td>행과 열 개수 보기</td>
+<td>시트 크기 확인</td>
+</tr>
+<tr>
+<td><code>df.columns</code></td>
+<td>컬럼명 보기</td>
+<td>머리글 행 확인</td>
+</tr>
+</tbody>
+</table></div>
+<p>이번 데이터의 <code>info()</code>를 보면 10,424행이 모두 채워져 있고 <code>amount</code>, <code>qty</code>, <code>unit_price</code>가 숫자형으로 읽힌다. <code>date</code>만 문자열이다. 이 문자열 날짜를 실제 날짜 타입으로 바꾸는 일은 다음 차시 정제 주제로 미룬다.</p>
+<h3>5. 불리언 마스크는 True/False로 된 필터 조건이다</h3>
+<p>엑셀 필터에서 지점 열을 열고 <code>강남점</code>만 체크한다고 생각해 보자. pandas에서는 먼저 행마다 조건을 검사한다.</p>
+<div class="code-scroll"><pre><code class="language-python">gangnam_mask = df[&quot;store&quot;] == &quot;강남점&quot;
+</code></pre></div>
+<p>이 코드는 각 행의 <code>store</code> 값이 <code>강남점</code>인지 비교한다. 결과는 True 또는 False로 된 Series다. 이 True/False 열을 불리언 마스크라고 부른다.</p>
+<div class="code-scroll"><pre><code class="language-python">gangnam = df.loc[gangnam_mask]
+</code></pre></div>
+<p><code>df.loc[gangnam_mask]</code>는 마스크가 True인 행만 남긴다. 즉, 엑셀 필터에서 조건에 맞는 행만 보이게 한 상태와 같다.</p>
+<p>조건이 여러 개일 때는 괄호와 <code>&amp;</code>를 쓴다.</p>
+<div class="code-scroll"><pre><code class="language-python">mask = (
+    (df[&quot;store&quot;] == &quot;강남점&quot;)
+    &amp; (df[&quot;category&quot;] == &quot;커피&quot;)
+    &amp; (df[&quot;amount&quot;] &gt;= 10000)
+)
+</code></pre></div>
+<p>초보자가 자주 틀리는 지점은 두 가지다. 첫째, 파이썬의 <code>and</code>가 아니라 pandas 조건 결합에는 <code>&amp;</code>를 쓴다. 둘째, 각 조건을 괄호로 감싼다.</p>
+<h3>6. sort_values는 정렬이다</h3>
+<p>엑셀에서 금액 열을 기준으로 내림차순 정렬하듯, pandas에서는 <code>sort_values</code>를 쓴다.</p>
+<div class="code-scroll"><pre><code class="language-python">gangnam_sorted = gangnam.sort_values(&quot;amount&quot;, ascending=False)
+</code></pre></div>
+<p><code>ascending=False</code>는 큰 값이 위로 오게 하라는 뜻이다. 같은 금액이 많을 때는 날짜나 주문번호를 보조 기준으로 추가할 수 있다.</p>
+<div class="code-scroll"><pre><code class="language-python">gangnam.sort_values(
+    [&quot;amount&quot;, &quot;date&quot;, &quot;order_id&quot;],
+    ascending=[False, True, True],
+)
+</code></pre></div>
+<p>처음에는 정렬 기준 열 이름과 오름차순/내림차순만 이해하면 된다.</p>
+<h3>7. loc는 이름 기준, iloc는 위치 기준이다</h3>
+<p>pandas에서 행과 열을 고를 때 자주 보는 도구가 <code>.loc</code>와 <code>.iloc</code>다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>도구</th>
+<th>기준</th>
+<th>예시</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>.loc</code></td>
+<td>인덱스 라벨과 컬럼명</td>
+<td><code>df.loc[0, "store"]</code></td>
+</tr>
+<tr>
+<td><code>.iloc</code></td>
+<td>숫자 위치</td>
+<td><code>df.iloc[0, 4]</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>이번 데이터에서 첫 행의 <code>store</code>는 두 방식으로 모두 꺼낼 수 있다.</p>
+<div class="code-scroll"><pre><code class="language-python">df.loc[0, &quot;store&quot;]
+df.iloc[0, 4]
+</code></pre></div>
+<p>둘 다 <code>홍대점</code>을 반환한다. 하지만 의미는 다르다. <code>.loc</code>는 "0번 라벨 행의 store 열"이고, <code>.iloc</code>는 "0번째 행, 4번째 열"이다. 입문 단계에서는 컬럼명을 직접 쓰는 <code>.loc</code>가 읽기 쉽다.</p>
+<h2>60분 수업 흐름</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;">시간</th>
+<th>내용</th>
+<th>진행 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0-5분</td>
+<td>S10 복습: 리스트, 딕셔너리, 조건문이 표 분석으로 이어지는 방식</td>
+<td>질문과 짧은 설명</td>
+</tr>
+<tr>
+<td style="text-align: right;">5-12분</td>
+<td>pandas import, 파일 경로, <code>read_csv</code>로 CSV 로드</td>
+<td>강사 시연</td>
+</tr>
+<tr>
+<td style="text-align: right;">12-22분</td>
+<td>DataFrame과 Series를 엑셀 시트와 열에 비유</td>
+<td>코드 실습</td>
+</tr>
+<tr>
+<td style="text-align: right;">22-32분</td>
+<td><code>shape</code>, <code>columns</code>, <code>head</code>, <code>info</code>, <code>describe</code>로 첫 점검</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">32-44분</td>
+<td><code>store == "강남점"</code> 불리언 마스크와 <code>.loc</code> 필터</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">44-51분</td>
+<td><code>sort_values</code>로 금액 내림차순 정렬</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">51-56분</td>
+<td><code>.loc</code>와 <code>.iloc</code> 비교</td>
+<td>짧은 시연</td>
+</tr>
+<tr>
+<td style="text-align: right;">56-60분</td>
+<td>직접 해보기: 강남점 커피 중 10,000원 이상 주문 추출</td>
+<td>개인 실습과 확인</td>
+</tr>
+</tbody>
+</table></div>
+<h2>엑셀과 연결해서 설명할 지점</h2>
+<ul>
+<li><code>df = pd.read_csv(...)</code>는 엑셀에서 CSV를 여는 것과 비슷하다.</li>
+<li><code>df.head()</code>는 시트 맨 위 몇 줄을 눈으로 확인하는 행동이다.</li>
+<li><code>df.info()</code>는 열 이름, 빈칸 여부, 데이터 형식을 한 번에 확인하는 점검표다.</li>
+<li><code>df.describe()</code>는 숫자 열의 평균, 최소, 최대를 빠르게 보는 요약 통계다.</li>
+<li><code>df["store"] == "강남점"</code>은 엑셀 필터에서 <code>강남점</code>만 체크하기 전, 각 행이 조건에 맞는지 True/False로 표시한 것이다.</li>
+<li><code>df.loc[mask]</code>는 True인 행만 남기는 필터 결과다.</li>
+<li><code>sort_values("amount", ascending=False)</code>는 금액 열을 큰 값부터 정렬하는 것이다.</li>
+</ul>
+<h2>수업 후 수강생이 말할 수 있어야 하는 문장</h2>
+<ul>
+<li>"DataFrame은 표 전체이고, Series는 그 안의 열 하나다."</li>
+<li>"CSV를 읽은 뒤에는 바로 분석하지 않고 <code>head</code>, <code>info</code>, <code>describe</code>로 먼저 확인한다."</li>
+<li>"엑셀 필터에서 조건을 체크하는 일은 pandas에서 True/False 마스크를 만드는 일과 같다."</li>
+<li>"<code>df.loc[mask]</code>는 조건이 True인 행만 남긴다."</li>
+<li>"금액이 큰 순서로 보려면 <code>sort_values</code>에 정렬할 열과 내림차순 옵션을 준다."</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="handout" aria-label="핸드아웃">
+<h1>S11 핸드아웃: Pandas 입문</h1>
+<h2>오늘 사용할 파일</h2>
+<p>작업 루트는 <code>/mnt/d/ai-data-analysis-course</code>이다.</p>
+<p>사용 데이터:</p>
+<div class="code-scroll"><pre><code class="language-text">02_datasets/cafe_sales/cafe_sales_clean.csv
+</code></pre></div>
+<p>이 파일은 UTF-8로 정규화된 카페 매출 데이터로, 실제 확인 결과 10,424행 x 12열이다.</p>
+<p>오늘의 목표는 pandas로 CSV를 열고, 표의 구조를 확인하고, 엑셀 필터처럼 원하는 행만 추출하는 것이다.</p>
+<h2>따라하기 1: pandas 불러오기와 CSV 읽기</h2>
+<h3>1단계. 작업 폴더에서 Python 실행 준비</h3>
+<p>터미널에서 아래 명령을 실행한다.</p>
+<div class="code-scroll"><pre><code class="language-bash">cd /mnt/d/ai-data-analysis-course
+python3
+</code></pre></div>
+<p>Colab을 쓰는 경우에는 새 노트북을 만들고 코드 셀에 같은 코드를 넣어 실행한다.</p>
+<h3>2단계. CSV 파일 읽기</h3>
+<div class="code-scroll"><pre><code class="language-python">from pathlib import Path
+import pandas as pd
+
+root = Path(&quot;/mnt/d/ai-data-analysis-course&quot;)
+path = root / &quot;02_datasets/cafe_sales/cafe_sales_clean.csv&quot;
+
+df = pd.read_csv(path, encoding=&quot;utf-8-sig&quot;)
+
+print(pd.__version__)
+print(df.shape)
+print(df.columns)
+</code></pre></div>
+<p>주: 위 코드에서 <code>/</code>는 폴더 경로를 잇는 표기이다.</p>
+<p>확인할 값:</p>
+<div class="code-scroll"><pre><code class="language-text">pandas 버전: 버전 문자열이 출력되면 통과. 정확한 숫자는 환경마다 다르며 Colab의 2.x여도 실습에 지장 없음
+데이터 크기: (10424, 12)
+</code></pre></div>
+<p>컬럼은 다음과 같이 보여야 한다.</p>
+<div class="code-scroll"><pre><code class="language-text">order_id, date, weekday, hour, store, category, item, unit_price, qty, amount, payment, member
+</code></pre></div>
+<p><code>encoding="utf-8-sig"</code>는 UTF-8 CSV를 한글이 깨지지 않게 읽어 주는 옵션이고, 이번 파일도 이 옵션으로 무리 없이 열린다. cp949처럼 다른 인코딩이 필요한 경우는 다음 차시에서 직접 다룬다.</p>
+<h2>따라하기 2: DataFrame과 Series 확인하기</h2>
+<p>DataFrame은 표 전체, Series는 열 하나라고 생각한다.</p>
+<div class="code-scroll"><pre><code class="language-python">print(type(df))
+
+amount_series = df[&quot;amount&quot;]
+print(type(amount_series))
+print(len(amount_series))
+</code></pre></div>
+<p>확인할 점:</p>
+<ul>
+<li><code>df</code>는 <code>DataFrame</code>이다.</li>
+<li><code>df["amount"]</code>는 <code>Series</code>이다.</li>
+<li><code>amount_series</code>의 길이는 전체 행수와 같은 10,424이다.</li>
+</ul>
+<p>엑셀로 비유하면 <code>df</code>는 시트 전체이고, <code>amount_series</code>는 금액 열 하나다.</p>
+<h2>따라하기 3: 처음 몇 행 보기</h2>
+<div class="code-scroll"><pre><code class="language-python">print(df.head())
+</code></pre></div>
+<p>앞쪽 5행이 출력된다. 첫 행은 주문번호 <code>10001</code>이고, 지점은 <code>홍대점</code>, 품목은 <code>카푸치노</code>, 금액은 <code>15000</code>이다.</p>
+<p>앞쪽 10행을 보고 싶으면 괄호 안에 숫자를 넣는다.</p>
+<div class="code-scroll"><pre><code class="language-python">print(df.head(10))
+</code></pre></div>
+<h2>따라하기 4: 표 구조 확인하기</h2>
+<div class="code-scroll"><pre><code class="language-python">df.info()
+</code></pre></div>
+<p>확인할 점:</p>
+<ul>
+<li>전체 행수는 10,424행이다.</li>
+<li>전체 컬럼 수는 12개다.</li>
+<li><code>amount</code>, <code>qty</code>, <code>unit_price</code>는 숫자형이다.</li>
+<li><code>date</code>는 이번 파일에서 문자열로 읽힌다. 날짜 타입 변환은 다음 차시에서 다룬다.</li>
+</ul>
+<p><code>info()</code>는 화면에 구조를 출력하는 명령이다. <code>print(df.info())</code>라고 쓰면 마지막에 <code>None</code>이 추가로 보일 수 있으므로, 오늘은 <code>df.info()</code>를 한 줄로 실행한다.</p>
+<h2>따라하기 5: 숫자 열 요약 보기</h2>
+<div class="code-scroll"><pre><code class="language-python">print(df.describe())
+</code></pre></div>
+<p>숫자 열의 개수, 평균, 표준편차, 최소, 최대가 나온다. 오늘은 아래 세 열을 중심으로 본다.</p>
+<div class="code-scroll"><pre><code class="language-python">print(df[[&quot;unit_price&quot;, &quot;qty&quot;, &quot;amount&quot;]].describe())
+</code></pre></div>
+<p>확인할 값:</p>
+<ul>
+<li><code>amount</code> 최소값: 3,000</li>
+<li><code>amount</code> 최대값: 19,500</li>
+<li><code>qty</code> 최소값: 1</li>
+<li><code>qty</code> 최대값: 3</li>
+</ul>
+<h2>따라하기 6: 지점별 행수 확인하기</h2>
+<div class="code-scroll"><pre><code class="language-python">print(df[&quot;store&quot;].value_counts())
+</code></pre></div>
+<p>확인할 값:</p>
+<div class="code-scroll"><pre><code class="language-text">강남점    6196
+홍대점    4228
+</code></pre></div>
+<p><code>df["store"]</code>는 지점 열 하나다. 여기에 <code>value_counts()</code>를 붙이면 값별로 개수를 세는데, 엑셀 피벗테이블로 지점별 행수를 빠르게 세는 것과 같다.</p>
+<h2>따라하기 7: 강남점만 필터링하기</h2>
+<h3>1단계. 조건 만들기</h3>
+<div class="code-scroll"><pre><code class="language-python">gangnam_mask = df[&quot;store&quot;] == &quot;강남점&quot;
+
+print(gangnam_mask.head(10))
+</code></pre></div>
+<p><code>gangnam_mask</code>에는 True와 False가 들어 있다. 각 행의 지점이 <code>강남점</code>이면 True, 아니면 False다.</p>
+<p>이 True/False 열이 오늘의 핵심인 불리언 마스크다.</p>
+<h3>2단계. True인 행만 남기기</h3>
+<div class="code-scroll"><pre><code class="language-python">gangnam = df.loc[gangnam_mask]
+
+print(gangnam.shape)
+print(gangnam.head())
+</code></pre></div>
+<p>확인할 값:</p>
+<div class="code-scroll"><pre><code class="language-text">(6196, 12)
+</code></pre></div>
+<p>엑셀에서 지점 필터를 열고 <code>강남점</code>만 체크한 결과와 같다.</p>
+<h2>따라하기 8: 강남점 주문을 금액 큰 순서로 정렬하기</h2>
+<div class="code-scroll"><pre><code class="language-python">display_cols = [&quot;order_id&quot;, &quot;date&quot;, &quot;store&quot;, &quot;category&quot;, &quot;item&quot;, &quot;qty&quot;, &quot;amount&quot;]
+
+gangnam_sorted = gangnam.sort_values(
+    [&quot;amount&quot;, &quot;date&quot;, &quot;order_id&quot;],
+    ascending=[False, True, True],
+)
+
+print(gangnam_sorted.loc[:, display_cols].head(10))
+</code></pre></div>
+<p>해석:</p>
+<ul>
+<li><code>amount</code>는 큰 금액부터 본다.</li>
+<li>같은 금액이면 <code>date</code>, <code>order_id</code> 순서로 보기 좋게 정렬한다.</li>
+<li><code>display_cols</code>는 화면에 보여줄 열만 고른 것이다.</li>
+</ul>
+<h2>따라하기 9: loc와 iloc 비교하기</h2>
+<p><code>.loc</code>는 이름 기준, <code>.iloc</code>는 위치 기준이다.</p>
+<div class="code-scroll"><pre><code class="language-python">print(df.loc[0, &quot;store&quot;])
+print(df.iloc[0, 4])
+</code></pre></div>
+<p>둘 다 아래 값을 출력한다.</p>
+<div class="code-scroll"><pre><code class="language-text">홍대점
+</code></pre></div>
+<p>하지만 뜻은 다르다.</p>
+<ul>
+<li><code>df.loc[0, "store"]</code>: 인덱스 라벨 0번 행의 <code>store</code> 열</li>
+<li><code>df.iloc[0, 4]</code>: 0번째 행, 4번째 열</li>
+</ul>
+<p>여러 행과 여러 열을 고를 수도 있다.</p>
+<div class="code-scroll"><pre><code class="language-python">print(df.loc[0:2, [&quot;date&quot;, &quot;store&quot;, &quot;amount&quot;]])
+print(df.iloc[0:3, [1, 4, 9]])
+</code></pre></div>
+<p>주의할 점:</p>
+<ul>
+<li><code>.loc[0:2]</code>는 라벨 기준이라 0, 1, 2가 포함된다.</li>
+<li><code>.iloc[0:3]</code>는 위치 기준이라 0, 1, 2번째 행까지만 포함되고 3번째는 제외된다.</li>
+</ul>
+<h2>직접 해보기: 조건 행 추출</h2>
+<p>아래 조건을 모두 만족하는 주문만 추출한다.</p>
+<p>조건:</p>
+<ol>
+<li>지점이 <code>강남점</code>이다.</li>
+<li>카테고리가 <code>커피</code>이다.</li>
+<li>주문 금액 <code>amount</code>가 10,000원 이상이다.</li>
+</ol>
+<p>할 일:</p>
+<ol>
+<li>조건을 <code>mission_mask</code>라는 이름으로 만든다.</li>
+<li><code>df.loc[mission_mask]</code>로 조건에 맞는 행만 추출한다.</li>
+<li><code>amount</code>가 큰 순서로 정렬한다.</li>
+<li>조건에 맞는 행수, 총금액, 평균금액을 출력한다.</li>
+<li><code>order_id</code>, <code>date</code>, <code>store</code>, <code>category</code>, <code>item</code>, <code>qty</code>, <code>amount</code> 열만 골라 상위 10행을 출력한다.</li>
+</ol>
+<p>힌트:</p>
+<div class="code-scroll"><pre><code class="language-python">mission_mask = (
+    (df[&quot;store&quot;] == &quot;강남점&quot;)
+    &amp; (df[&quot;category&quot;] == &quot;커피&quot;)
+    &amp; (df[&quot;amount&quot;] &gt;= 10000)
+)
+</code></pre></div>
+<p>빈칸을 채워 완성한다.</p>
+<div class="code-scroll"><pre><code class="language-python">mission = df.loc[mission_mask, display_cols].sort_values(
+    [&quot;amount&quot;, &quot;date&quot;, &quot;order_id&quot;],
+    ascending=[False, True, True],
+)
+
+print(&quot;행수:&quot;, ________)
+print(&quot;총금액:&quot;, ________)
+print(&quot;평균금액:&quot;, ________)
+print(________)
+</code></pre></div>
+<p>완료 후 스스로 확인할 것:</p>
+<ul>
+<li>조건 3개를 모두 괄호로 감쌌는가</li>
+<li>조건 사이에 <code>&amp;</code>를 썼는가</li>
+<li><code>and</code>를 쓰지 않았는가</li>
+<li>정렬 결과가 금액 큰 순서로 보이는가</li>
+<li>행수, 총금액, 평균금액을 숫자로 출력했는가</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="script" aria-label="강사대본">
+<h1>S11 강사대본: Pandas 입문</h1>
+<h2>수업 전 확인</h2>
+<ul>
+<li>강사용 PC에서 작업 루트가 <code>/mnt/d/ai-data-analysis-course</code>인지 확인한다.</li>
+<li>데이터 파일이 존재하는지 확인한다.</li>
+</ul>
+<div class="code-scroll"><pre><code class="language-bash">ls -l /mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.csv
+</code></pre></div>
+<ul>
+<li>강사용 환경에서 아래 명령이 실행되는지 확인한다.</li>
+</ul>
+<div class="code-scroll"><pre><code class="language-bash">cd /mnt/d/ai-data-analysis-course
+python3 06_answers/S11_code.py
+</code></pre></div>
+<ul>
+<li>검증된 실행 결과는 pandas 3.0.3, 10,424행 x 12열, 강남점 6,196행, 미션 결과 1,362행이다.</li>
+<li>오늘은 정제된 <code>cafe_sales_clean.csv</code>를 사용한다. 결측, 이상치, 날짜 타입 변환, cp949 원본 처리는 S12에서 다룬다.</li>
+</ul>
+<h2>0-5분. 도입과 S10 연결</h2>
+<p>말할 것:</p>
+<p>지난 시간에는 리스트, 딕셔너리, 조건문, 반복문을 배웠다. 오늘은 그 생각을 실제 CSV 파일에 적용한다. 개발자가 되는 것이 목표가 아니라, 엑셀에서 하던 표 확인, 필터, 정렬을 pandas 코드로 재현하는 것이 목표다.</p>
+<p>오늘의 핵심 문장은 하나다. 엑셀 필터는 pandas에서 불리언 마스크다. 엑셀에서는 필터 창을 열고 <code>강남점</code>을 체크하지만, pandas에서는 <code>df["store"] == "강남점"</code>이라는 True/False 조건을 만든다.</p>
+<p>시연 전 강조:</p>
+<p>CSV를 읽은 다음 바로 분석하지 않는다. 먼저 행수, 열 이름, 타입, 앞쪽 행을 확인한다. 이것은 엑셀 파일을 받았을 때 시트 맨 위와 열 제목을 먼저 훑어보는 것과 같다.</p>
+<h2>5-12분. pandas 불러오기와 CSV 읽기</h2>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">from pathlib import Path
+import pandas as pd
+
+root = Path(&quot;/mnt/d/ai-data-analysis-course&quot;)
+path = root / &quot;02_datasets/cafe_sales/cafe_sales_clean.csv&quot;
+
+df = pd.read_csv(path, encoding=&quot;utf-8-sig&quot;)
+
+print(pd.__version__)
+print(df.shape)
+print(df.columns)
+</code></pre></div>
+<p>말할 것:</p>
+<p><code>import pandas as pd</code>는 pandas를 앞으로 <code>pd</code>라는 짧은 이름으로 부르겠다는 뜻이다. 거의 모든 pandas 예제에서 보는 관례다.</p>
+<p><code>read_csv</code>는 CSV 파일을 읽는 함수다. 이번 파일은 UTF-8로 정규화되어 있어서 <code>encoding="utf-8-sig"</code>로 정상적으로 열린다. 한국 공공데이터나 오래된 업무 파일은 cp949일 수 있는데, 오늘은 존재만 알고 넘어간다. 다음 차시에서 cp949 원본 파일을 직접 읽어 본다.</p>
+<p>확인할 값:</p>
+<ul>
+<li>pandas 버전: 3.0.3</li>
+<li>데이터 크기: 10,424행 x 12열</li>
+<li>컬럼: <code>order_id</code>, <code>date</code>, <code>weekday</code>, <code>hour</code>, <code>store</code>, <code>category</code>, <code>item</code>, <code>unit_price</code>, <code>qty</code>, <code>amount</code>, <code>payment</code>, <code>member</code></li>
+</ul>
+<p>시연 포인트:</p>
+<ul>
+<li>파일 경로가 틀리면 pandas 문제가 아니라 경로 문제임을 분명히 말한다.</li>
+<li><code>Path</code>를 쓰면 폴더와 파일명을 안전하게 이어 붙일 수 있다고만 설명한다. 깊게 들어가지 않는다.</li>
+</ul>
+<h2>12-22분. DataFrame과 Series</h2>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">print(type(df))
+
+amount_series = df[&quot;amount&quot;]
+print(type(amount_series))
+print(len(amount_series))
+</code></pre></div>
+<p>말할 것:</p>
+<p>DataFrame은 표 전체다. 엑셀로 치면 시트 한 장이다. Series는 그 안의 열 하나여서, <code>df["amount"]</code>라고 쓰면 금액 열만 꺼낸다.</p>
+<p>처음부터 자료구조 이름을 외우려고 하면 어렵다. 오늘은 DataFrame은 표, Series는 열이라는 감각만 정확히 잡으면 된다.</p>
+<p>칠판 또는 화면에 적을 비교:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>엑셀</th>
+<th>pandas</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>시트 전체</td>
+<td>DataFrame</td>
+</tr>
+<tr>
+<td>열 하나</td>
+<td>Series</td>
+</tr>
+<tr>
+<td>머리글</td>
+<td>columns</td>
+</tr>
+<tr>
+<td>행 번호</td>
+<td>index</td>
+</tr>
+</tbody>
+</table></div>
+<p>질문 유도:</p>
+<p><code>df["amount"]</code>는 표 전체인가, 열 하나인가.</p>
+<p>기대 답:</p>
+<p>열 하나다. 그래서 Series다.</p>
+<h2>22-32분. head, info, describe로 첫 점검</h2>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">print(df.head())
+df.info()
+print(df[[&quot;unit_price&quot;, &quot;qty&quot;, &quot;amount&quot;]].describe())
+</code></pre></div>
+<p>말할 것:</p>
+<p><code>head()</code>는 맨 위 몇 행을 보는 명령이다. 엑셀 파일을 열고 상단 몇 줄을 눈으로 확인하는 행동과 같다.</p>
+<p><code>info()</code>는 행수, 열수, 결측 여부, 타입을 보여준다. 이번 데이터는 10,424행이고 모든 열이 10,424개 non-null로 보인다. 즉 이번 clean 파일에는 빈칸이 없다.</p>
+<p><code>describe()</code>는 숫자 열의 기초 통계다. 금액의 최소값은 3,000원, 최대값은 19,500원이다. 수량은 1개에서 3개 사이로 보인다.</p>
+<p>시연 포인트:</p>
+<ul>
+<li><code>df.info()</code>는 결과를 화면에 직접 출력하므로 <code>print(df.info())</code>를 쓰면 마지막에 <code>None</code>이 보일 수 있다고 알려준다.</li>
+<li><code>date</code>가 문자열로 보이는 점을 짚되, 날짜 변환은 다음 차시에서 다룬다고 선을 긋는다.</li>
+</ul>
+<h2>32-44분. 강남점 불리언 필터</h2>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">print(df[&quot;store&quot;].value_counts())
+</code></pre></div>
+<p>말할 것:</p>
+<p>먼저 지점에 어떤 값이 있는지 확인한다. 강남점은 6,196행, 홍대점은 4,228행이다.</p>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">gangnam_mask = df[&quot;store&quot;] == &quot;강남점&quot;
+
+print(gangnam_mask.head(10))
+</code></pre></div>
+<p>말할 것:</p>
+<p>이 코드는 데이터를 아직 줄이지 않았다. 각 행이 강남점인지 아닌지만 True와 False로 표시했다. 이것을 불리언 마스크라고 부른다.</p>
+<p>엑셀에서는 지점 열 필터에서 <code>강남점</code>만 체크한다. pandas에서는 그 체크 결과를 True/False 열로 먼저 만든다고 생각하면 된다.</p>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">gangnam = df.loc[gangnam_mask]
+
+print(gangnam.shape)
+print(gangnam.head())
+</code></pre></div>
+<p>말할 것:</p>
+<p><code>df.loc[gangnam_mask]</code>는 True인 행만 남긴다. 결과 행수는 6,196행이다. 여기서 비로소 엑셀 필터를 적용한 것과 같은 상태가 된다.</p>
+<p>강조:</p>
+<ul>
+<li>조건을 만드는 줄과 조건을 적용하는 줄을 분리해서 보여준다.</li>
+<li><code>gangnam_mask</code> 자체를 출력해 True/False가 보이게 한다.</li>
+<li>이 시점에서 "엑셀 필터 = 불리언 마스크"를 다시 말한다.</li>
+</ul>
+<h2>44-51분. 금액 정렬</h2>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">display_cols = [&quot;order_id&quot;, &quot;date&quot;, &quot;store&quot;, &quot;category&quot;, &quot;item&quot;, &quot;qty&quot;, &quot;amount&quot;]
+
+gangnam_sorted = gangnam.sort_values(
+    [&quot;amount&quot;, &quot;date&quot;, &quot;order_id&quot;],
+    ascending=[False, True, True],
+)
+
+print(gangnam_sorted.loc[:, display_cols].head(10))
+</code></pre></div>
+<p>말할 것:</p>
+<p>엑셀에서 금액 열을 내림차순 정렬하는 것과 같다. <code>ascending=False</code>는 큰 값이 위로 오게 한다는 뜻이다.</p>
+<p>정렬 기준이 세 개 있는 이유는 같은 금액이 많기 때문이다. 먼저 금액이 큰 순서로 보고, 같은 금액이면 날짜와 주문번호 순서로 보게 했다. 오늘의 핵심은 첫 번째 기준인 <code>amount</code> 내림차순이다.</p>
+<p>시연 포인트:</p>
+<ul>
+<li><code>display_cols</code>는 원본 데이터를 바꾸는 것이 아니라 화면에 보여줄 열만 고르는 장치라고 설명한다.</li>
+<li><code>sort_values</code>는 원본 <code>df</code>를 자동으로 덮어쓰지 않는다고 말한다. 결과를 변수에 담아야 계속 쓸 수 있다.</li>
+</ul>
+<h2>51-56분. loc와 iloc</h2>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">print(df.loc[0, &quot;store&quot;])
+print(df.iloc[0, 4])
+</code></pre></div>
+<p>말할 것:</p>
+<p>둘 다 <code>홍대점</code>이 나온다. 하지만 <code>.loc</code>는 이름 기준이고, <code>.iloc</code>는 위치 기준이다.</p>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">print(df.loc[0:2, [&quot;date&quot;, &quot;store&quot;, &quot;amount&quot;]])
+print(df.iloc[0:3, [1, 4, 9]])
+</code></pre></div>
+<p>말할 것:</p>
+<p>입문 단계에서는 <code>.loc</code>가 더 읽기 쉽다. <code>store</code>, <code>amount</code>처럼 컬럼명을 직접 쓰기 때문이다. <code>.iloc</code>는 위치를 정확히 알아야 하므로 열 순서가 바뀌면 헷갈릴 수 있다.</p>
+<p>주의:</p>
+<p><code>.loc[0:2]</code>는 2가 포함되고, <code>.iloc[0:3]</code>은 3이 포함되지 않는다. 오늘은 깊게 외우기보다, <code>.loc</code>는 이름 기준, <code>.iloc</code>는 위치 기준이라는 차이를 잡는다.</p>
+<h2>56-60분. 직접 해보기 안내</h2>
+<p>미션:</p>
+<p>강남점 주문 중 카테고리가 커피이고, 주문 금액이 10,000원 이상인 행만 추출한다. 그 결과를 금액 큰 순서로 정렬하고, 행수와 총금액과 평균금액을 출력한다.</p>
+<p>힌트 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">mission_mask = (
+    (df[&quot;store&quot;] == &quot;강남점&quot;)
+    &amp; (df[&quot;category&quot;] == &quot;커피&quot;)
+    &amp; (df[&quot;amount&quot;] &gt;= 10000)
+)
+</code></pre></div>
+<p>수강생에게 안내할 점:</p>
+<ul>
+<li>조건이 3개이므로 각 조건을 괄호로 감싼다.</li>
+<li>조건 사이에는 <code>&amp;</code>를 쓴다.</li>
+<li><code>and</code>를 쓰면 pandas Series 조건에서는 오류가 난다.</li>
+<li>결과 행수, 총금액, 평균금액이 모두 출력되어야 한다.</li>
+</ul>
+<p>완료 판단 체크포인트:</p>
+<p>수강생이 <code>강남점</code>, <code>커피</code>, <code>amount &gt;= 10000</code> 조건으로 1,362행을 추출하고 총금액 16,664,500원과 평균금액 12,235.32원을 출력하면 완료로 본다.</p>
+<h2>예상 질문과 답</h2>
+<h3>질문 1. 왜 <code>df["store"] = "강남점"</code>이 아니라 <code>==</code>를 쓰나요?</h3>
+<p>답:</p>
+<p><code>=</code>는 값을 넣는 기호이고, <code>==</code>는 같은지 비교하는 기호다. 필터 조건은 값을 바꾸는 일이 아니라 같은지 묻는 일이므로 <code>==</code>를 쓴다.</p>
+<h3>질문 2. 조건을 여러 개 붙일 때 왜 <code>and</code>가 아니라 <code>&amp;</code>를 쓰나요?</h3>
+<p>답:</p>
+<p>pandas에서는 조건 하나가 True/False 하나가 아니라 True/False로 된 열 전체다. 이 열끼리 조건을 결합할 때는 <code>&amp;</code>를 쓰고, 각 조건은 괄호로 감싼다.</p>
+<h3>질문 3. <code>loc</code>와 <code>iloc</code> 중 무엇을 먼저 쓰면 되나요?</h3>
+<p>답:</p>
+<p>입문 단계에서는 <code>.loc</code>를 먼저 쓰면 된다. 컬럼명을 직접 쓰기 때문에 코드가 더 읽기 쉽다. <code>.iloc</code>는 행과 열의 숫자 위치가 필요할 때 사용한다.</p>
+<h3>질문 4. <code>head()</code>로 본 5행이 전체를 대표하나요?</h3>
+<p>답:</p>
+<p>대표한다고 보면 안 된다. <code>head()</code>는 파일이 제대로 열렸는지, 컬럼이 예상대로 있는지 확인하는 첫 점검 도구다. 대표성이나 분포는 <code>describe</code>, <code>value_counts</code>, 이후 집계로 확인한다.</p>
+<h3>질문 5. 정렬하면 원본 데이터 순서가 바뀌나요?</h3>
+<p>답:</p>
+<p><code>sort_values</code> 결과를 새 변수에 담으면 원본 <code>df</code>는 그대로 있다. 원본을 바꾸려면 덮어쓰는 코드를 직접 써야 한다. 오늘은 원본을 유지하고 <code>gangnam_sorted</code>, <code>mission</code> 같은 새 변수에 담는다.</p>
+<h2>마무리 멘트</h2>
+<p>오늘 배운 pandas의 핵심은 CSV를 읽고, 표의 구조를 확인하고, 조건에 맞는 행만 남기는 것이다. 이 세 가지는 이후 모든 분석의 출발점이다. 다음 차시에서는 clean 데이터가 아니라 일부러 문제가 들어 있는 dirty 데이터를 열고, 결측값, 중복, 타입, 문자열 표기, 인코딩 문제를 정리한다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="answer" aria-label="모범답안">
+<h1>S11 모범답안</h1>
+<h2>미션 모범답안</h2>
+<p>미션:</p>
+<div class="code-scroll"><pre><code class="language-text">강남점 주문 중 카테고리가 커피이고, 주문 금액이 10,000원 이상인 행만 추출한다.
+그 결과를 금액 큰 순서로 정렬하고, 행수와 총금액과 평균금액을 출력한다.
+</code></pre></div>
+<p>모범 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">from pathlib import Path
+import pandas as pd
+
+root = Path(&quot;/mnt/d/ai-data-analysis-course&quot;)
+path = root / &quot;02_datasets/cafe_sales/cafe_sales_clean.csv&quot;
+
+df = pd.read_csv(path, encoding=&quot;utf-8-sig&quot;)
+
+display_cols = [&quot;order_id&quot;, &quot;date&quot;, &quot;store&quot;, &quot;category&quot;, &quot;item&quot;, &quot;qty&quot;, &quot;amount&quot;]
+
+mission_mask = (
+    (df[&quot;store&quot;] == &quot;강남점&quot;)
+    &amp; (df[&quot;category&quot;] == &quot;커피&quot;)
+    &amp; (df[&quot;amount&quot;] &gt;= 10000)
+)
+
+mission = (
+    df.loc[mission_mask, display_cols]
+    .sort_values([&quot;amount&quot;, &quot;date&quot;, &quot;order_id&quot;], ascending=[False, True, True])
+    .copy()
+)
+
+print(f&quot;미션 행수: {len(mission)}&quot;)
+print(f&quot;미션 총금액: {mission['amount'].sum()}&quot;)
+print(f&quot;미션 평균금액: {mission['amount'].mean():.2f}&quot;)
+print(mission.head(10))
+</code></pre></div>
+<p>실제 실행 결과:</p>
+<div class="code-scroll"><pre><code class="language-text">미션 행수: 1362
+미션 총금액: 16664500
+미션 평균금액: 12235.32
+</code></pre></div>
+<p>상위 10행:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;">order_id</th>
+<th>date</th>
+<th>store</th>
+<th>category</th>
+<th>item</th>
+<th style="text-align: right;">qty</th>
+<th style="text-align: right;">amount</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">10029</td>
+<td>2025-01-01</td>
+<td>강남점</td>
+<td>커피</td>
+<td>콜드브루</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">16500</td>
+</tr>
+<tr>
+<td style="text-align: right;">10064</td>
+<td>2025-01-02</td>
+<td>강남점</td>
+<td>커피</td>
+<td>바닐라라떼</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">16500</td>
+</tr>
+<tr>
+<td style="text-align: right;">10085</td>
+<td>2025-01-02</td>
+<td>강남점</td>
+<td>커피</td>
+<td>콜드브루</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">16500</td>
+</tr>
+<tr>
+<td style="text-align: right;">10108</td>
+<td>2025-01-03</td>
+<td>강남점</td>
+<td>커피</td>
+<td>바닐라라떼</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">16500</td>
+</tr>
+<tr>
+<td style="text-align: right;">10114</td>
+<td>2025-01-03</td>
+<td>강남점</td>
+<td>커피</td>
+<td>콜드브루</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">16500</td>
+</tr>
+<tr>
+<td style="text-align: right;">10120</td>
+<td>2025-01-03</td>
+<td>강남점</td>
+<td>커피</td>
+<td>콜드브루</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">16500</td>
+</tr>
+<tr>
+<td style="text-align: right;">10140</td>
+<td>2025-01-04</td>
+<td>강남점</td>
+<td>커피</td>
+<td>바닐라라떼</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">16500</td>
+</tr>
+<tr>
+<td style="text-align: right;">10168</td>
+<td>2025-01-04</td>
+<td>강남점</td>
+<td>커피</td>
+<td>바닐라라떼</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">16500</td>
+</tr>
+<tr>
+<td style="text-align: right;">10413</td>
+<td>2025-01-08</td>
+<td>강남점</td>
+<td>커피</td>
+<td>콜드브루</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">16500</td>
+</tr>
+<tr>
+<td style="text-align: right;">10429</td>
+<td>2025-01-09</td>
+<td>강남점</td>
+<td>커피</td>
+<td>바닐라라떼</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">16500</td>
+</tr>
+</tbody>
+</table></div>
+<h2>해설</h2>
+<p>핵심은 조건을 먼저 True/False로 만든 뒤, 그 조건이 True인 행만 남기는 것이다.</p>
+<div class="code-scroll"><pre><code class="language-python">mission_mask = (
+    (df[&quot;store&quot;] == &quot;강남점&quot;)
+    &amp; (df[&quot;category&quot;] == &quot;커피&quot;)
+    &amp; (df[&quot;amount&quot;] &gt;= 10000)
+)
+</code></pre></div>
+<p>이 코드는 행마다 세 가지 질문을 한다.</p>
+<ol>
+<li>지점이 <code>강남점</code>인가</li>
+<li>카테고리가 <code>커피</code>인가</li>
+<li>금액이 10,000원 이상인가</li>
+</ol>
+<p>세 조건을 모두 만족해야 하므로 조건 사이에 <code>&amp;</code>를 쓴다. pandas에서는 각 조건이 True/False 하나가 아니라 True/False로 된 Series 전체이기 때문에 <code>and</code>가 아니라 <code>&amp;</code>를 사용한다. 각 조건을 괄호로 감싸는 것도 중요하다.</p>
+<p>조건을 적용하는 줄은 아래와 같다.</p>
+<div class="code-scroll"><pre><code class="language-python">df.loc[mission_mask, display_cols]
+</code></pre></div>
+<p>앞쪽의 <code>mission_mask</code>는 True인 행만 남긴다. 뒤쪽의 <code>display_cols</code>는 화면에 보여줄 열만 고른다. 엑셀로 비유하면 필터를 적용한 뒤 필요한 열만 남겨 보는 것이다.</p>
+<p>정렬은 아래 줄에서 처리한다.</p>
+<div class="code-scroll"><pre><code class="language-python">sort_values([&quot;amount&quot;, &quot;date&quot;, &quot;order_id&quot;], ascending=[False, True, True])
+</code></pre></div>
+<p>첫 번째 기준인 <code>amount</code>는 내림차순이므로 금액이 큰 주문이 위에 온다. 같은 금액이 여러 개 있을 때는 날짜와 주문번호를 오름차순으로 정렬해 결과가 일정하게 보이게 했다.</p>
+<h2>따라하기 확인 결과</h2>
+<p>자료 작성 전 <code>python3</code>와 pandas 3.0.3으로 실제 데이터를 확인했다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th style="text-align: right;">확인값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>파일</td>
+<td style="text-align: right;"><code>02_datasets/cafe_sales/cafe_sales_clean.csv</code></td>
+</tr>
+<tr>
+<td>전체 크기</td>
+<td style="text-align: right;">10,424행 x 12열</td>
+</tr>
+<tr>
+<td>컬럼 수</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr>
+<td><code>amount</code> Series 길이</td>
+<td style="text-align: right;">10,424</td>
+</tr>
+<tr>
+<td>강남점 행수</td>
+<td style="text-align: right;">6,196</td>
+</tr>
+<tr>
+<td>홍대점 행수</td>
+<td style="text-align: right;">4,228</td>
+</tr>
+<tr>
+<td><code>amount</code> 최소값</td>
+<td style="text-align: right;">3,000</td>
+</tr>
+<tr>
+<td><code>amount</code> 최대값</td>
+<td style="text-align: right;">19,500</td>
+</tr>
+<tr>
+<td>미션 행수</td>
+<td style="text-align: right;">1,362</td>
+</tr>
+<tr>
+<td>미션 총금액</td>
+<td style="text-align: right;">16,664,500</td>
+</tr>
+<tr>
+<td>미션 평균금액</td>
+<td style="text-align: right;">12,235.32</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>df.info()</code>에서 확인한 컬럼과 타입은 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>타입</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>order_id</code></td>
+<td><code>int64</code></td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td><code>str</code></td>
+</tr>
+<tr>
+<td><code>weekday</code></td>
+<td><code>str</code></td>
+</tr>
+<tr>
+<td><code>hour</code></td>
+<td><code>int64</code></td>
+</tr>
+<tr>
+<td><code>store</code></td>
+<td><code>str</code></td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td><code>str</code></td>
+</tr>
+<tr>
+<td><code>item</code></td>
+<td><code>str</code></td>
+</tr>
+<tr>
+<td><code>unit_price</code></td>
+<td><code>int64</code></td>
+</tr>
+<tr>
+<td><code>qty</code></td>
+<td><code>int64</code></td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td><code>int64</code></td>
+</tr>
+<tr>
+<td><code>payment</code></td>
+<td><code>str</code></td>
+</tr>
+<tr>
+<td><code>member</code></td>
+<td><code>bool</code></td>
+</tr>
+</tbody>
+</table></div>
+<h2>전체 실습 코드</h2>
+<p>전체 검증 코드는 아래 파일에 저장되어 있다.</p>
+<div class="code-scroll"><pre><code class="language-text">06_answers/S11_code.py
+</code></pre></div>
+<p>실행 명령:</p>
+<div class="code-scroll"><pre><code class="language-bash">cd /mnt/d/ai-data-analysis-course
+python3 06_answers/S11_code.py
+</code></pre></div>
+<p>실제 실행 출력 요약:</p>
+<div class="code-scroll"><pre><code class="language-text">pandas: 3.0.3
+행/열: 10424행 x 12열
+df의 타입: DataFrame
+df['amount']의 타입: Series
+amount Series 길이: 10424
+강남점 행수: 6196
+df.loc[0, 'store']: 홍대점
+df.iloc[0, 4]: 홍대점
+미션 행수: 1362
+미션 총금액: 16664500
+미션 평균금액: 12235.32
+검증 통과
+</code></pre></div>
+<h2>입문자에게 중요한 오류 포인트</h2>
+<p><code>=</code>와 <code>==</code>를 구분한다.</p>
+<div class="code-scroll"><pre><code class="language-python">df[&quot;store&quot;] == &quot;강남점&quot;
+</code></pre></div>
+<p>위 코드는 같은지 비교하는 조건이다. <code>df["store"] = "강남점"</code>처럼 쓰면 필터가 아니라 값을 바꾸는 코드가 된다.</p>
+<p>조건 여러 개를 연결할 때는 <code>and</code>가 아니라 <code>&amp;</code>를 쓴다.</p>
+<div class="code-scroll"><pre><code class="language-python">(df[&quot;store&quot;] == &quot;강남점&quot;) &amp; (df[&quot;category&quot;] == &quot;커피&quot;)
+</code></pre></div>
+<p>각 조건을 괄호로 감싼다. 괄호를 빼면 연산 순서 때문에 오류가 나거나 의도와 다른 결과가 나올 수 있다.</p>
+<p><code>df.info()</code>는 화면에 직접 출력하는 명령이다. <code>print(df.info())</code>라고 쓰면 정보 아래에 <code>None</code>이 추가로 보일 수 있다. 오류는 아니지만 입문자에게 혼란스럽기 때문에 수업에서는 <code>df.info()</code>만 실행한다.</p>
+</section>
+  </div>
+
+  <nav class="session-pager container">
+    <a class="pager-link prev" href="./S10.html"><span class="pager-direction">&larr; 이전 차시</span><span class="pager-title">S10 · Colab과 파이썬 기초</span></a>
+    <a class="pager-link next" href="./S12.html"><span class="pager-direction">다음 차시 &rarr;</span><span class="pager-title">S12 · 데이터 정제: 결측, 이상치, 타입, 중복, 인코딩</span></a>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>데이터 리터러시 with AI · S11 차시</span>
+    <a href="../index.html#curriculum">전체 커리큘럼으로</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.tab-panel');
+  function activate(key, updateHash){
+    tabs.forEach(function(btn){
+      var on = btn.getAttribute('data-tab') === key;
+      btn.classList.toggle('active', on);
+    });
+    panels.forEach(function(panel){
+      var on = panel.getAttribute('data-panel') === key;
+      panel.classList.toggle('active', on);
+    });
+    if (updateHash && history.replaceState){
+      history.replaceState(null, '', '#' + key);
+    }
+  }
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      activate(btn.getAttribute('data-tab'), true);
+    });
+  });
+  var initial = (location.hash || '').replace('#', '');
+  var valid = ['curriculum', 'handout', 'script', 'answer'];
+  if (valid.indexOf(initial) !== -1){
+    activate(initial, false);
+  }
+})();
+</script>
+
+</body>
+</html>

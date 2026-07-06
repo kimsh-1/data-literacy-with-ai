@@ -1,0 +1,1641 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>S16. 데이터 모델링: 관계, 스타 스키마, 날짜 차원 · 데이터 리터러시 with AI</title>
+<meta name="description" content="S16차시: 데이터 모델링: 관계, 스타 스키마, 날짜 차원 — 커리큘럼·핸드아웃·강사대본·모범답안." />
+<style>
+:root{
+  --canvas: #010102;
+  --surface-1: #0f1011;
+  --surface-2: #141516;
+  --surface-3: #18191a;
+  --surface-4: #191a1b;
+  --ink: #f7f8f8;
+  --ink-muted: #d0d6e0;
+  --ink-subtle: #8a8f98;
+  --ink-tertiary: #62666d;
+  --primary: #5e6ad2;
+  --primary-hover: #828fff;
+  --primary-focus: #5e69d1;
+  --hairline: #23252a;
+  --hairline-strong: #34343a;
+  --hairline-tertiary: #3e3e44;
+  --success: #27a644;
+
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  --container: 900px;
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+html{ background: var(--canvas); }
+body{
+  margin:0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.05px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a{ color: inherit; text-decoration: none; }
+ul, ol{ margin:0; padding:0; }
+h1,h2,h3,h4,p{ margin:0; }
+
+.container{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 48px);
+}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--primary-hover);
+}
+.eyebrow::before{
+  content:"";
+  width:6px; height:6px;
+  background: var(--primary);
+  border-radius: 1px;
+  flex-shrink:0;
+}
+
+/* ---------- top nav ---------- */
+.top-nav{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 64px;
+  display:flex;
+  align-items:center;
+  background: rgba(1,1,2,0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.top-nav .container{ display:flex; align-items:center; justify-content:space-between; gap: 24px; max-width: 1280px; }
+.brand{ display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:600; font-size:15px; letter-spacing:-0.01em; }
+.brand-mark{ width:20px; height:20px; border-radius: 6px; background: var(--primary); flex-shrink:0; position:relative; }
+.brand-mark::after{ content:""; position:absolute; inset:6px; border-radius:2px; background: rgba(255,255,255,0.85); }
+.back-link{ font-size:14px; color: var(--ink-subtle); display:inline-flex; align-items:center; gap:6px; transition: color .15s ease; }
+.back-link:hover{ color: var(--ink); }
+
+/* ---------- session header ---------- */
+.session-header{
+  padding: var(--space-xxl) 0 var(--space-xl);
+  background:
+    radial-gradient(ellipse 60% 50% at 82% 0%, rgba(94,106,210,0.16), transparent 60%),
+    var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+.session-header-top{
+  display:flex;
+  align-items:center;
+  gap: var(--space-md);
+  margin: var(--space-md) 0 var(--space-md);
+}
+.session-num-badge{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--primary-hover);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-xs);
+  padding: 4px 10px;
+}
+.difficulty{ display:flex; gap:4px; align-items:center; }
+.difficulty .dot{ width:6px; height:6px; border-radius:50%; background: var(--hairline-strong); }
+.difficulty .dot.filled{ background: var(--primary); }
+.difficulty-label{ font-size:12px; color: var(--ink-tertiary); margin-left:6px; }
+.session-header h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ---------- tabs ---------- */
+.tabs-bar{
+  display:flex;
+  gap: 4px;
+  padding-top: var(--space-lg);
+  border-bottom: 1px solid var(--hairline);
+  overflow-x: auto;
+}
+.tab-btn{
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-subtle);
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s ease, border-color .15s ease;
+}
+.tab-btn:hover{ color: var(--ink); }
+.tab-btn.active{ color: var(--ink); border-bottom-color: var(--primary); }
+
+.tab-panels{ padding: var(--space-xxl) 0 var(--space-xxl); }
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+/* ---------- markdown body ---------- */
+.markdown-body{ color: var(--ink-muted); font-size: 15.5px; line-height: 1.75; letter-spacing: -0.05px; overflow-wrap: anywhere; word-break: break-word; }
+.markdown-body h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--hairline);
+}
+.markdown-body h2{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+.markdown-body h3{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin: var(--space-lg) 0 var(--space-xs);
+}
+.markdown-body h4{
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+.markdown-body p{ margin: 0 0 var(--space-md); }
+.markdown-body ul, .markdown-body ol{ margin: 0 0 var(--space-md); padding-left: 1.4em; }
+.markdown-body li{ margin-bottom: 6px; }
+.markdown-body ul{ list-style: disc; }
+.markdown-body ol{ list-style: decimal; }
+.markdown-body strong{ color: var(--ink); font-weight: 600; }
+.markdown-body em{ color: var(--ink-muted); }
+.markdown-body a{ color: var(--primary-hover); text-decoration: underline; text-underline-offset: 2px; }
+.markdown-body hr{ border:none; border-top: 1px solid var(--hairline); margin: var(--space-xl) 0; }
+.markdown-body blockquote{
+  margin: 0 0 var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid var(--primary);
+  background: var(--surface-1);
+  color: var(--ink-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.markdown-body code{
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--primary-hover);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.markdown-body .code-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+}
+.markdown-body pre{
+  margin: 0;
+  padding: var(--space-md);
+  background: transparent;
+  border: none;
+}
+.markdown-body pre code{
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre;
+}
+.markdown-body .table-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+}
+.markdown-body table{
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 460px;
+  font-size: 13.5px;
+}
+.markdown-body th, .markdown-body td{
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+  white-space: nowrap;
+}
+.markdown-body thead th{
+  background: var(--surface-1);
+  color: var(--ink);
+  font-weight: 600;
+  font-family: var(--font-text);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+.markdown-body tbody tr:last-child td{ border-bottom: none; }
+.markdown-body tbody tr:hover{ background: var(--surface-1); }
+
+/* ---------- pager ---------- */
+.session-pager{
+  display:flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-xl) 0 var(--space-xxl);
+  border-top: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+.pager-link{
+  display:flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  max-width: 46%;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.pager-link:hover{ border-color: var(--primary); background: var(--surface-2); }
+.pager-link.next{ margin-left: auto; text-align: right; align-items: flex-end; }
+.pager-direction{ font-size: 12px; color: var(--ink-tertiary); font-family: var(--font-mono); }
+.pager-title{ font-size: 14px; color: var(--ink); font-weight: 500; }
+.pager-spacer{ flex: 1; }
+
+footer.site-footer{
+  border-top: 1px solid var(--hairline);
+  padding: var(--space-xl) 0;
+}
+footer.site-footer .container{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: var(--ink-tertiary);
+  font-size: 12px;
+}
+footer.site-footer a:hover{ color: var(--ink-subtle); }
+
+@media (max-width: 640px){
+  .session-header{ padding: var(--space-xl) 0 var(--space-lg); }
+  .pager-link{ max-width: 100%; }
+  .session-pager{ flex-direction: column; }
+  .pager-link.next{ margin-left: 0; text-align: left; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="container">
+    <div class="brand"><span class="brand-mark"></span>데이터 리터러시 with AI</div>
+    <a class="back-link" href="../index.html#curriculum">&larr; 커리큘럼으로</a>
+  </div>
+</nav>
+
+<header class="session-header">
+  <div class="container">
+    <div class="eyebrow">PART 05 · BI</div>
+    <div class="session-header-top">
+      <span class="session-num-badge">S16</span>
+      <div class="difficulty" title="난이도 4"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="difficulty-label">심화</span></div>
+    </div>
+    <h1>데이터 모델링: 관계, 스타 스키마, 날짜 차원</h1>
+  </div>
+  <div class="container">
+    <div class="tabs-bar" role="tablist">
+<button class="tab-btn active" data-tab="curriculum" role="tab" aria-selected="true">커리큘럼</button>
+<button class="tab-btn" data-tab="handout" role="tab" aria-selected="false">핸드아웃</button>
+<button class="tab-btn" data-tab="script" role="tab" aria-selected="false">강사대본</button>
+<button class="tab-btn" data-tab="answer" role="tab" aria-selected="false">모범답안</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="tab-panels container">
+<section class="tab-panel markdown-body active" data-panel="curriculum" aria-label="커리큘럼">
+<h1>S16 데이터 모델링: 관계, 스타 스키마, 날짜 차원</h1>
+<h2>차시 개요</h2>
+<ul>
+<li>대상: 엑셀은 쓰지만 데이터분석은 처음인 비개발자</li>
+<li>선수 차시: S15, S04</li>
+<li>난이도: 4</li>
+<li>시간: 70분</li>
+<li>사용 도구: Power BI Desktop</li>
+<li>사용 데이터: <code>02_datasets/shop_orders/orders.csv</code>, <code>customers.csv</code>, <code>products.csv</code></li>
+<li>Power BI 실습 파일: <code>/mnt/d/ai-data-analysis-course/02_datasets/shop_orders/shop_orders_clean.xlsx</code> (같은 <code>orders</code>, <code>customers</code>, <code>products</code> 데이터)</li>
+<li>Windows 파일 경로: <code>D:\ai-data-analysis-course\02_datasets\shop_orders\shop_orders_clean.xlsx</code></li>
+</ul>
+<p>이번 차시는 Power BI에서 여러 표를 한 모델로 연결하는 방법을 다룬다. S04에서는 <code>VLOOKUP</code>으로 주문 표에 단가, 지역, 등급을 직접 붙였다. S16에서는 같은 문제를 다른 방식으로 푼다. <code>orders</code>, <code>customers</code>, <code>products</code>를 한 표로 합치지 않고, 각 표의 역할을 유지한 채 관계를 맺는다.</p>
+<p>수업의 핵심은 <code>orders</code>를 중심에 둔 스타 스키마다. 주문 한 건 한 건은 매출을 만들 수 있는 사건이고, 고객과 상품은 그 사건을 설명하는 정보다. 여기에 날짜 차원을 추가하면 S17에서 전월대비, 누적, 월별 추세 같은 시간 계산을 안정적으로 만들 수 있다.</p>
+<h2>학습 목표</h2>
+<p>수강생은 이 차시가 끝나면 다음을 할 수 있어야 한다.</p>
+<ol>
+<li>Power BI에서 1:다 관계를 만들고 관계 방향을 확인할 수 있다.</li>
+<li>팩트 테이블과 차원 테이블을 구분할 수 있다.</li>
+<li><code>orders</code>, <code>customers</code>, <code>products</code>, <code>날짜테이블</code>로 스타 스키마를 구성할 수 있다.</li>
+<li>주문일 범위를 기준으로 날짜 차원 테이블을 만들고 날짜 테이블로 지정할 수 있다.</li>
+<li>고객 차원의 <code>region</code> 필드로 주문 매출을 지역별로 분해할 수 있다.</li>
+</ol>
+<h2>실제 데이터 구조</h2>
+<p>pandas 3.0.3으로 실제 파일을 확인한 결과는 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>표</th>
+<th style="text-align: right;">행 수</th>
+<th style="text-align: right;">열 수</th>
+<th>주요 컬럼</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>orders</code></td>
+<td style="text-align: right;">20,000</td>
+<td style="text-align: right;">6</td>
+<td><code>order_id</code>, <code>customer_id</code>, <code>product_id</code>, <code>order_date</code>, <code>qty</code>, <code>discount_rate</code></td>
+<td>주문 사건이 쌓인 팩트</td>
+</tr>
+<tr>
+<td><code>customers</code></td>
+<td style="text-align: right;">3,000</td>
+<td style="text-align: right;">7</td>
+<td><code>customer_id</code>, <code>region</code>, <code>grade</code>, <code>join_date</code></td>
+<td>고객을 설명하는 차원</td>
+</tr>
+<tr>
+<td><code>products</code></td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">5</td>
+<td><code>product_id</code>, <code>product_name</code>, <code>category</code>, <code>price</code>, <code>cost</code></td>
+<td>상품을 설명하는 차원</td>
+</tr>
+</tbody>
+</table></div>
+<p>검증 결과 <code>customers[customer_id]</code>와 <code>products[product_id]</code>는 각각 고유값이고, <code>orders</code>의 고객번호와 상품번호는 모두 양쪽 차원 테이블에 존재한다. 주문일은 2024년 1월 1일부터 2024년 12월 31일까지이며, 2024년은 윤년이므로 날짜 차원은 366행이 된다.</p>
+<p><code>orders</code>에는 매출 컬럼이 없다. 매출은 S04와 같은 계산식으로 만든다.</p>
+<div class="code-scroll"><pre><code class="language-text">매출 = 상품 단가 × 수량 × (1 - 할인율)
+</code></pre></div>
+<p>Power BI에서는 이 계산을 측정값으로 만들고, 단가는 <code>products</code>와 맺은 관계에서 가져온다.</p>
+<h2>개념 설명</h2>
+<h3>1. 관계는 엑셀 VLOOKUP을 모델로 만든 것이다</h3>
+<p>엑셀에서 <code>VLOOKUP</code>은 매 행마다 상품번호나 고객번호를 찾아 필요한 값을 복사해 온다. 이 방식은 눈으로 보기 쉽지만, 열이 늘어나고 공식이 많아질수록 관리가 어려워진다.</p>
+<p>Power BI의 관계는 값을 복사하지 않는다. 대신 "고객번호가 같으면 이 두 표는 연결된다"는 규칙을 모델에 저장한다. 그래서 보고서에서 <code>customers[region]</code>을 축으로 놓고 <code>orders</code>의 매출을 계산하면, Power BI가 관계를 따라 주문을 지역별로 나눈다.</p>
+<p>비유하면 S04의 VLOOKUP은 주문표 옆에 고객 사전과 상품 사전의 내용을 복사해 붙이는 방식이다. S16의 관계 모델은 주문표, 고객 사전, 상품 사전을 따로 보관하되, 사전의 어느 줄을 참조하면 되는지만 연결해 둔다.</p>
+<h3>2. 1:다 관계는 사전 한 줄과 거래 여러 줄의 관계다</h3>
+<p><code>customers</code>에는 고객 한 명이 한 줄만 있어야 한다. 반면 <code>orders</code>에는 같은 고객이 여러 번 주문할 수 있으므로 같은 <code>customer_id</code>가 여러 줄 반복될 수 있다. 그래서 관계는 다음처럼 읽는다.</p>
+<div class="code-scroll"><pre><code class="language-text">customers[customer_id] 1 -&gt; * orders[customer_id]
+</code></pre></div>
+<p><code>products</code>도 같다. 상품 하나는 상품 사전에 한 번만 나오지만 주문표에서는 여러 번 팔릴 수 있다.</p>
+<div class="code-scroll"><pre><code class="language-text">products[product_id] 1 -&gt; * orders[product_id]
+</code></pre></div>
+<p>입문 단계에서는 차원 테이블이 1쪽, 팩트 테이블이 다쪽이라고 기억하면 된다. 관계 방향은 차원에서 팩트로 흐르게 둔다. 즉 고객, 상품, 날짜로 주문을 필터링한다.</p>
+<h3>3. 스타 스키마는 분석용 표 배치도다</h3>
+<p>스타 스키마는 가운데에 팩트 테이블을 두고 주변에 차원 테이블을 배치하는 모델이다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>이 차시의 표</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>팩트 테이블</td>
+<td><code>orders</code></td>
+<td>주문이라는 사건, 수량, 할인율처럼 계산에 쓰는 값이 있다</td>
+</tr>
+<tr>
+<td>고객 차원</td>
+<td><code>customers</code></td>
+<td>지역, 등급, 성별, 나이처럼 고객을 분류하는 값이 있다</td>
+</tr>
+<tr>
+<td>상품 차원</td>
+<td><code>products</code></td>
+<td>상품명, 카테고리, 단가, 원가처럼 상품을 분류하는 값이 있다</td>
+</tr>
+<tr>
+<td>날짜 차원</td>
+<td><code>날짜테이블</code></td>
+<td>연도, 월번호, 연월, 연월정렬처럼 시간을 분류하는 값이 있다</td>
+</tr>
+</tbody>
+</table></div>
+<p>잘 만든 스타 스키마는 보고서를 만들 때 덜 헷갈린다. 필터와 축은 차원 테이블에서 가져오고, 합계와 평균은 팩트 테이블을 기준으로 계산한다. 가령 지역별 매출을 만들 때 지역은 <code>customers</code>에서 가져오고, 매출은 <code>orders</code>의 주문 건수와 <code>products</code>의 단가를 이용해 계산한다.</p>
+<h3>4. 날짜 차원은 시간 계산의 기준표다</h3>
+<p><code>orders</code>에 이미 <code>order_date</code>가 있는데 왜 날짜 테이블이 또 필요할까. 주문일은 주문이 있었던 날짜만 기록한다. 반면 날짜 차원은 분석 기간의 모든 날짜를 빠짐없이 담는 기준표다.</p>
+<p>이 차시의 날짜 차원은 2024년 1월 1일부터 2024년 12월 31일까지 하루에 한 줄씩 만든다. 이 테이블에는 <code>연도</code>, <code>월번호</code>, <code>연월</code>, <code>연월정렬</code> 파생 컬럼이 들어간다. S17에서 전월대비를 계산하려면 날짜가 연속되어 있고 날짜 컬럼이 고유해야 한다. 이 조건을 갖추도록 날짜 차원을 만들고 Power BI에서 날짜 테이블로 지정한다.</p>
+<h2>이 차시의 최종 모델</h2>
+<p>최종 모델은 다음 관계를 가진다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>1쪽 테이블</th>
+<th>1쪽 컬럼</th>
+<th>다쪽 테이블</th>
+<th>다쪽 컬럼</th>
+<th>관계</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>customers</code></td>
+<td><code>customer_id</code></td>
+<td><code>orders</code></td>
+<td><code>customer_id</code></td>
+<td>1:다</td>
+</tr>
+<tr>
+<td><code>products</code></td>
+<td><code>product_id</code></td>
+<td><code>orders</code></td>
+<td><code>product_id</code></td>
+<td>1:다</td>
+</tr>
+<tr>
+<td><code>날짜테이블</code></td>
+<td><code>Date</code></td>
+<td><code>orders</code></td>
+<td><code>order_date</code></td>
+<td>1:다</td>
+</tr>
+</tbody>
+</table></div>
+<p>관계는 모두 활성 상태로 두고, 교차 필터 방향은 단일 방향으로 둔다. 입문 단계에서는 양방향 필터를 기본값처럼 쓰지 않는다. 숫자가 맞아 보이는 것보다 모델이 읽히는 것이 먼저다.</p>
+<h2>70분 수업 흐름</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;">시간</th>
+<th>내용</th>
+<th>진행 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0-7분</td>
+<td>S04 복습과 오늘의 문제 제시</td>
+<td>VLOOKUP으로 붙이던 작업을 모델 관계로 바꾼다고 설명</td>
+</tr>
+<tr>
+<td style="text-align: right;">7-17분</td>
+<td>팩트와 차원 개념</td>
+<td>주문은 사건, 고객과 상품은 설명 사전이라는 비유</td>
+</tr>
+<tr>
+<td style="text-align: right;">17-27분</td>
+<td>Power BI에 3표 로드</td>
+<td>Excel 파일에서 <code>orders</code>, <code>customers</code>, <code>products</code> 가져오기</td>
+</tr>
+<tr>
+<td style="text-align: right;">27-38분</td>
+<td>관계 만들기</td>
+<td>고객-주문, 상품-주문 1:다 관계 확인</td>
+</tr>
+<tr>
+<td style="text-align: right;">38-50분</td>
+<td>날짜 차원 만들기</td>
+<td><code>CALENDAR</code>로 <code>날짜테이블</code> 생성, 날짜 테이블로 지정</td>
+</tr>
+<tr>
+<td style="text-align: right;">50-58분</td>
+<td>매출 측정값과 검산</td>
+<td><code>Total Sales</code> 측정값 작성, 전체 매출 카드 확인</td>
+</tr>
+<tr>
+<td style="text-align: right;">58-66분</td>
+<td>지역별 매출 분해</td>
+<td><code>customers[region]</code>으로 지역별 매출 표 만들기</td>
+</tr>
+<tr>
+<td style="text-align: right;">66-70분</td>
+<td>정리와 다음 차시 연결</td>
+<td>S17 전월대비 DAX가 오늘 만든 날짜 차원에 기대는 구조 설명</td>
+</tr>
+</tbody>
+</table></div>
+<h2>수업의 핵심 메시지</h2>
+<p>Power BI에서 좋은 대시보드는 예쁜 차트보다 좋은 모델에서 시작한다. <code>orders</code>처럼 숫자가 쌓이는 표는 팩트로 두고, <code>customers</code>, <code>products</code>, <code>날짜테이블</code>처럼 분류와 필터를 제공하는 표는 차원으로 둔다. 표를 무조건 하나로 합치기보다 관계를 명확히 만들면, 같은 모델로 지역별, 상품별, 월별 질문에 반복해서 답할 수 있다.</p>
+<h2>기술 기준 참고</h2>
+<p>날짜 테이블은 고유한 날짜, 결측 없음, 연속된 날짜 범위를 만족해야 한다. 이 기준과 <code>CALENDAR</code> 함수 사용 방식은 Microsoft Learn의 Power BI 날짜 테이블 및 DAX <code>CALENDAR</code> 문서 기준과 맞춘다.</p>
+<ul>
+<li>Power BI 날짜 테이블: https://learn.microsoft.com/en-us/power-bi/transform-model/desktop-date-tables</li>
+<li>Power BI 스타 스키마: https://learn.microsoft.com/en-us/power-bi/guidance/star-schema</li>
+<li>DAX <code>CALENDAR</code>: https://learn.microsoft.com/en-us/dax/calendar-function-dax</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="handout" aria-label="핸드아웃">
+<h1>S16 핸드아웃: 데이터 모델링</h1>
+<h2>실습 목표</h2>
+<p>이번 실습에서는 <code>shop_orders</code>의 세 표를 Power BI에서 관계로 연결한다. 마지막에는 날짜 차원 테이블을 만들고, 고객 차원의 지역 필드로 매출을 분해한다.</p>
+<h2>사용할 파일</h2>
+<p>기준 데이터는 S17과 같은 <code>shop_orders</code> 세 파일이다.</p>
+<div class="code-scroll"><pre><code class="language-text">02_datasets/shop_orders/orders.csv
+02_datasets/shop_orders/customers.csv
+02_datasets/shop_orders/products.csv
+</code></pre></div>
+<p>Power BI Desktop 실습에서는 같은 세 표가 들어 있는 Excel 통합 문서를 사용한다. Windows에서는 아래 파일 경로를 사용한다.</p>
+<div class="code-scroll"><pre><code class="language-text">D:\ai-data-analysis-course\02_datasets\shop_orders\shop_orders_clean.xlsx
+</code></pre></div>
+<p>같은 파일의 작업 루트 기준 경로는 다음과 같다.</p>
+<div class="code-scroll"><pre><code class="language-text">/mnt/d/ai-data-analysis-course/02_datasets/shop_orders/shop_orders_clean.xlsx
+</code></pre></div>
+<blockquote>
+<p>안내: Mac 수강생은 Power BI 대신 Looker Studio로 개념만 학습한다. 스타스키마와 시간지능은 1:1로 대체되지 않는다.</p>
+</blockquote>
+<p>파일에는 세 개의 시트가 있다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>시트</th>
+<th style="text-align: right;">행 수</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>orders</code></td>
+<td style="text-align: right;">20,000</td>
+<td>주문 내역, 팩트 테이블</td>
+</tr>
+<tr>
+<td><code>customers</code></td>
+<td style="text-align: right;">3,000</td>
+<td>고객 정보, 차원 테이블</td>
+</tr>
+<tr>
+<td><code>products</code></td>
+<td style="text-align: right;">200</td>
+<td>상품 정보, 차원 테이블</td>
+</tr>
+</tbody>
+</table></div>
+<h2>따라하기</h2>
+<h3>1단계. Power BI에 세 표 불러오기</h3>
+<ol>
+<li>Power BI Desktop을 연다.</li>
+<li>홈 탭에서 데이터 가져오기 또는 Get data를 클릭한다.</li>
+<li>Excel 통합 문서를 선택한다.</li>
+<li>아래 파일을 연다.</li>
+</ol>
+<div class="code-scroll"><pre><code class="language-text">D:\ai-data-analysis-course\02_datasets\shop_orders\shop_orders_clean.xlsx
+</code></pre></div>
+<ol start="5">
+<li>탐색기 창에서 다음 시트를 모두 선택한다.
+   - <code>orders</code>
+   - <code>customers</code>
+   - <code>products</code></li>
+<li>데이터 변환을 클릭한다.</li>
+</ol>
+<h3>2단계. 데이터 형식 확인하기</h3>
+<p>Power Query 편집기에서 각 표의 데이터 형식을 확인한다.</p>
+<p><code>orders</code>:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>권장 형식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>order_id</code></td>
+<td>텍스트</td>
+</tr>
+<tr>
+<td><code>customer_id</code></td>
+<td>텍스트</td>
+</tr>
+<tr>
+<td><code>product_id</code></td>
+<td>텍스트</td>
+</tr>
+<tr>
+<td><code>order_date</code></td>
+<td>날짜</td>
+</tr>
+<tr>
+<td><code>qty</code></td>
+<td>정수</td>
+</tr>
+<tr>
+<td><code>discount_rate</code></td>
+<td>소수</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>customers</code>:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>권장 형식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>customer_id</code></td>
+<td>텍스트</td>
+</tr>
+<tr>
+<td><code>name</code></td>
+<td>텍스트</td>
+</tr>
+<tr>
+<td><code>gender</code></td>
+<td>텍스트</td>
+</tr>
+<tr>
+<td><code>age</code></td>
+<td>정수</td>
+</tr>
+<tr>
+<td><code>region</code></td>
+<td>텍스트</td>
+</tr>
+<tr>
+<td><code>join_date</code></td>
+<td>날짜</td>
+</tr>
+<tr>
+<td><code>grade</code></td>
+<td>텍스트</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>products</code>:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>권장 형식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>product_id</code></td>
+<td>텍스트</td>
+</tr>
+<tr>
+<td><code>product_name</code></td>
+<td>텍스트</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>텍스트</td>
+</tr>
+<tr>
+<td><code>price</code></td>
+<td>정수</td>
+</tr>
+<tr>
+<td><code>cost</code></td>
+<td>정수</td>
+</tr>
+</tbody>
+</table></div>
+<p>확인이 끝나면 닫기 및 적용을 클릭한다.</p>
+<h3>3단계. 모델 보기에서 표 역할 확인하기</h3>
+<p>왼쪽의 모델 보기를 클릭한다.</p>
+<p>오늘 만들 모델은 다음 구조다.</p>
+<div class="code-scroll"><pre><code class="language-text">customers      1 -&gt; *  orders  * &lt;- 1  products
+                             *
+                             ^
+                             1
+                       날짜테이블
+</code></pre></div>
+<p>읽는 방법은 다음과 같다.</p>
+<ul>
+<li><code>orders</code>: 주문이 한 줄씩 쌓인 팩트 테이블</li>
+<li><code>customers</code>: 고객번호별 지역과 등급을 가진 고객 차원</li>
+<li><code>products</code>: 상품번호별 카테고리와 단가를 가진 상품 차원</li>
+<li><code>날짜테이블</code>: 주문일을 연월로 묶기 위한 날짜 차원</li>
+</ul>
+<h3>4단계. 고객-주문 관계 만들기</h3>
+<p>자동으로 관계가 만들어져 있으면 설정만 확인한다. 없으면 직접 만든다.</p>
+<ol>
+<li>모델 보기에서 <code>customers[customer_id]</code>를 <code>orders[customer_id]</code>로 끌어 놓는다.</li>
+<li>관계 설정 창에서 다음을 확인한다.</li>
+</ol>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>카디널리티</td>
+<td>일대다 또는 1:*</td>
+</tr>
+<tr>
+<td>1쪽</td>
+<td><code>customers</code></td>
+</tr>
+<tr>
+<td>다쪽</td>
+<td><code>orders</code></td>
+</tr>
+<tr>
+<td>교차 필터 방향</td>
+<td>단일</td>
+</tr>
+<tr>
+<td>이 관계를 활성화</td>
+<td>체크</td>
+</tr>
+</tbody>
+</table></div>
+<p>확인을 클릭한다.</p>
+<h3>5단계. 상품-주문 관계 만들기</h3>
+<ol>
+<li><code>products[product_id]</code>를 <code>orders[product_id]</code>로 끌어 놓는다.</li>
+<li>관계 설정 창에서 다음을 확인한다.</li>
+</ol>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>카디널리티</td>
+<td>일대다 또는 1:*</td>
+</tr>
+<tr>
+<td>1쪽</td>
+<td><code>products</code></td>
+</tr>
+<tr>
+<td>다쪽</td>
+<td><code>orders</code></td>
+</tr>
+<tr>
+<td>교차 필터 방향</td>
+<td>단일</td>
+</tr>
+<tr>
+<td>이 관계를 활성화</td>
+<td>체크</td>
+</tr>
+</tbody>
+</table></div>
+<p>확인을 클릭한다.</p>
+<h3>6단계. 날짜 차원 테이블 만들기</h3>
+<p>리본 메뉴에서 모델링 또는 테이블 도구의 새 테이블을 클릭한다. 수식 입력줄에 아래 DAX를 그대로 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-DAX">날짜테이블 =
+ADDCOLUMNS(
+    CALENDAR(MIN(orders[order_date]), MAX(orders[order_date])),
+    &quot;연도&quot;, YEAR([Date]),
+    &quot;월번호&quot;, MONTH([Date]),
+    &quot;연월&quot;, FORMAT([Date], &quot;yyyy-MM&quot;),
+    &quot;연월정렬&quot;, YEAR([Date]) * 100 + MONTH([Date])
+)
+</code></pre></div>
+<p>확인할 값:</p>
+<ul>
+<li><code>날짜테이블</code> 행 수: 366</li>
+<li>첫 날짜: 2024-01-01</li>
+<li>마지막 날짜: 2024-12-31</li>
+</ul>
+<h3>7단계. 날짜 테이블로 지정하기</h3>
+<ol>
+<li>오른쪽 필드 창에서 <code>날짜테이블</code>을 선택한다.</li>
+<li>테이블 도구에서 날짜 테이블로 표시 또는 Mark as date table을 클릭한다.</li>
+<li>날짜 컬럼으로 <code>날짜테이블[Date]</code>를 선택한다.</li>
+<li>확인을 클릭한다.</li>
+</ol>
+<p>날짜 테이블은 날짜가 빠짐없이 이어져 있어야 하고, 날짜 컬럼에 중복과 결측이 없어야 한다. 이 실습의 <code>날짜테이블</code>은 2024년 모든 날짜를 하루 단위로 가지고 있으므로 조건을 만족한다.</p>
+<h3>8단계. 날짜-주문 관계 만들기</h3>
+<p>모델 보기에서 <code>날짜테이블[Date]</code>를 <code>orders[order_date]</code>로 끌어 놓는다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>카디널리티</td>
+<td>일대다 또는 1:*</td>
+</tr>
+<tr>
+<td>1쪽</td>
+<td><code>날짜테이블</code></td>
+</tr>
+<tr>
+<td>다쪽</td>
+<td><code>orders</code></td>
+</tr>
+<tr>
+<td>교차 필터 방향</td>
+<td>단일</td>
+</tr>
+<tr>
+<td>이 관계를 활성화</td>
+<td>체크</td>
+</tr>
+</tbody>
+</table></div>
+<p>확인을 클릭한다.</p>
+<h3>9단계. 정렬 열 지정하기</h3>
+<p>연월은 글자로 되어 있어서 정렬 기준을 따로 지정해 두는 편이 안전하다.</p>
+<ol>
+<li>데이터 보기에서 <code>날짜테이블</code>을 연다.</li>
+<li><code>연월</code> 컬럼을 선택한다.</li>
+<li>열 도구에서 열 기준 정렬을 클릭하고 <code>연월정렬</code>을 선택한다.</li>
+</ol>
+<h3>10단계. 매출 측정값 만들기</h3>
+<p><code>orders</code> 테이블을 선택하고 새 측정값을 만든다. 아래 DAX를 그대로 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-DAX">Total Sales =
+SUMX(
+    orders,
+    orders[qty] * RELATED(products[price]) * (1 - orders[discount_rate])
+)
+</code></pre></div>
+<p>이 측정값은 주문 한 줄마다 다음 계산을 한 뒤 모두 더한다.</p>
+<div class="code-scroll"><pre><code class="language-text">상품 단가 × 수량 × (1 - 할인율)
+</code></pre></div>
+<p>검산용 측정값도 만든다.</p>
+<div class="code-scroll"><pre><code class="language-DAX">Order Count =
+DISTINCTCOUNT(orders[order_id])
+</code></pre></div>
+<div class="code-scroll"><pre><code class="language-DAX">Avg Order Value =
+DIVIDE([Total Sales], [Order Count])
+</code></pre></div>
+<h3>11단계. 카드로 전체 값 검산하기</h3>
+<p>보고서 보기로 이동한다.</p>
+<ol>
+<li>카드 시각화를 추가한다.</li>
+<li>값에 <code>[Total Sales]</code>를 넣는다.</li>
+<li>다른 카드에 <code>[Order Count]</code>를 넣는다.</li>
+</ol>
+<p>검산 기준:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th style="text-align: right;">값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Order Count</code></td>
+<td style="text-align: right;">20,000</td>
+</tr>
+<tr>
+<td><code>Total Sales</code></td>
+<td style="text-align: right;">1,938,489,803</td>
+</tr>
+</tbody>
+</table></div>
+<p>값이 다르면 관계가 빠졌거나 <code>Total Sales</code> 수식의 <code>RELATED(products[price])</code> 부분이 제대로 작동하지 않은 것이다.</p>
+<h3>12단계. 지역별 매출 표 만들기</h3>
+<ol>
+<li>테이블 시각화를 추가한다.</li>
+<li>필드를 다음 순서로 넣는다.</li>
+</ol>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>위치</th>
+<th>필드</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>첫 번째 열</td>
+<td><code>customers[region]</code></td>
+</tr>
+<tr>
+<td>두 번째 열</td>
+<td><code>[Order Count]</code></td>
+</tr>
+<tr>
+<td>세 번째 열</td>
+<td><code>[Total Sales]</code></td>
+</tr>
+<tr>
+<td>네 번째 열</td>
+<td><code>[Avg Order Value]</code></td>
+</tr>
+</tbody>
+</table></div>
+<ol start="3">
+<li><code>[Total Sales]</code> 기준 내림차순으로 정렬한다.</li>
+</ol>
+<p>검산 기준:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>region</th>
+<th style="text-align: right;">Order Count</th>
+<th style="text-align: right;">Total Sales</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>서울특별시</td>
+<td style="text-align: right;">5,711</td>
+<td style="text-align: right;">570,482,124</td>
+</tr>
+<tr>
+<td>경기도</td>
+<td style="text-align: right;">5,442</td>
+<td style="text-align: right;">530,726,511</td>
+</tr>
+<tr>
+<td>부산광역시</td>
+<td style="text-align: right;">1,268</td>
+<td style="text-align: right;">132,704,477</td>
+</tr>
+</tbody>
+</table></div>
+<p>여기서 눈여겨볼 대목은 <code>orders</code>에 <code>region</code> 컬럼이 없다는 사실이다. 지역은 <code>customers</code>에서 가져오지만, 매출은 관계를 따라 <code>orders</code> 기준으로 계산된다.</p>
+<h2>직접 해보기</h2>
+<h3>미션. 지역 차원으로 매출 분해하기</h3>
+<p>아래 조건을 만족하는 보고서 페이지를 만든다.</p>
+<ol>
+<li>막대 차트를 추가한다.</li>
+<li>축에는 <code>customers[region]</code>을 넣는다.</li>
+<li>값에는 <code>[Total Sales]</code>를 넣는다.</li>
+<li>도구 설명에는 <code>[Order Count]</code>, <code>[Avg Order Value]</code>를 넣는다.</li>
+<li>슬라이서를 추가하고 <code>날짜테이블[연월]</code>을 넣는다.</li>
+<li>선택 사항으로 범례에 <code>products[category]</code>를 넣어 지역별 매출을 상품 카테고리로 더 나눈다.</li>
+</ol>
+<p>제출할 내용:</p>
+<ul>
+<li>전체 매출</li>
+<li>매출 1위 지역과 금액</li>
+<li>매출 2위 지역과 금액</li>
+<li>지역이 몇 개로 나뉘었는지</li>
+<li><code>날짜테이블[연월]</code> 슬라이서가 지역별 매출을 바꾸는지 여부</li>
+</ul>
+<p>통과 기준:</p>
+<ul>
+<li>전체 매출이 1,938,489,803으로 나온다.</li>
+<li>지역은 17개로 나온다.</li>
+<li>매출 1위는 서울특별시, 2위는 경기도로 나온다.</li>
+<li>슬라이서의 월을 바꾸면 지역별 매출 값이 함께 바뀐다.</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="script" aria-label="강사대본">
+<h1>S16 강사대본: 데이터 모델링</h1>
+<h2>수업 전 준비</h2>
+<ul>
+<li>Power BI Desktop 설치 확인: Windows 수강생은 실습, Mac 수강생은 Power BI 대신 Looker Studio로 개념만 학습한다. 스타스키마와 시간지능은 1:1로 대체되지 않는다.</li>
+<li>사용 데이터: <code>02_datasets/shop_orders/orders.csv</code>, <code>customers.csv</code>, <code>products.csv</code></li>
+<li>Power BI 실습 파일: <code>D:\ai-data-analysis-course\02_datasets\shop_orders\shop_orders_clean.xlsx</code> (같은 <code>orders</code>, <code>customers</code>, <code>products</code> 데이터)</li>
+<li>작업 루트 기준 경로: <code>/mnt/d/ai-data-analysis-course/02_datasets/shop_orders/shop_orders_clean.xlsx</code></li>
+<li>검증 코드: <code>/mnt/d/ai-data-analysis-course/06_answers/S16_code.py</code></li>
+</ul>
+<p>실제 데이터 행수:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>표</th>
+<th style="text-align: right;">행 수</th>
+<th style="text-align: right;">열 수</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>orders</code></td>
+<td style="text-align: right;">20,000</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr>
+<td><code>customers</code></td>
+<td style="text-align: right;">3,000</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr>
+<td><code>products</code></td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">5</td>
+</tr>
+</tbody>
+</table></div>
+<p>검산값:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th style="text-align: right;">값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>주문일 범위</td>
+<td style="text-align: right;">2024-01-01부터 2024-12-31까지</td>
+</tr>
+<tr>
+<td>날짜 차원 행 수</td>
+<td style="text-align: right;">366</td>
+</tr>
+<tr>
+<td>전체 주문 건수</td>
+<td style="text-align: right;">20,000</td>
+</tr>
+<tr>
+<td>전체 매출</td>
+<td style="text-align: right;">1,938,489,803</td>
+</tr>
+<tr>
+<td>서울특별시 매출</td>
+<td style="text-align: right;">570,482,124</td>
+</tr>
+<tr>
+<td>경기도 매출</td>
+<td style="text-align: right;">530,726,511</td>
+</tr>
+</tbody>
+</table></div>
+<h2>도입: 0-7분</h2>
+<p>말할 내용:</p>
+<p>S04에서 우리는 <code>VLOOKUP</code>으로 주문표에 단가, 지역, 등급을 붙였다. 그 방식은 엑셀에서는 자연스럽지만, BI에서는 매번 값을 복사해 붙이는 대신 관계를 만든다. 오늘은 같은 세 표를 한 표로 합치지 않고, 각각의 역할을 살린 상태로 연결한다.</p>
+<p>오늘의 목표는 세 가지다. 첫째, 고객과 주문, 상품과 주문의 1:다 관계를 만든다. 둘째, <code>orders</code>를 팩트 테이블로 보고 고객, 상품, 날짜를 차원으로 두는 스타 스키마를 이해한다. 셋째, S17 전월대비 계산에 쓸 날짜 차원을 만든다.</p>
+<p>시연 포인트:</p>
+<ol>
+<li>S04에서 주문표에 지역과 단가를 붙였던 화면이나 결과를 짧게 상기시킨다.</li>
+<li>오늘은 <code>orders</code>에 <code>region</code>을 붙이지 않아도 지역별 매출이 계산된다는 점을 미리 말한다.</li>
+</ol>
+<h2>개념 설명: 7-17분</h2>
+<p>말할 내용:</p>
+<p><code>orders</code>는 주문이라는 사건이 쌓인 표다. 한 고객이 여러 번 주문할 수 있고, 한 상품이 여러 번 팔릴 수 있다. 그래서 <code>orders</code>는 다쪽이다. 반대로 <code>customers</code>에는 고객 한 명이 한 줄만 있어야 하고, <code>products</code>에는 상품 하나가 한 줄만 있어야 한다. 이 표들이 1쪽이다.</p>
+<p>팩트와 차원을 구분해 보자. 팩트는 계산할 숫자가 쌓이는 곳이다. 주문 건수, 수량, 매출 같은 값은 팩트를 기준으로 계산한다. 차원은 그 숫자를 나누어 보는 기준이다. 지역별, 등급별, 카테고리별, 월별처럼 말할 때의 지역, 등급, 카테고리, 월이 차원이다.</p>
+<p>비유:</p>
+<p>주문표는 영수증 묶음이고, 고객표와 상품표는 사전이다. 엑셀에서는 사전 내용을 영수증 옆에 복사했다. Power BI에서는 사전을 따로 두고 영수증과 연결한다.</p>
+<h2>데이터 로드: 17-27분</h2>
+<p>시연 포인트:</p>
+<ol>
+<li>Power BI Desktop을 연다.</li>
+<li>데이터 가져오기에서 Excel 통합 문서를 선택한다.</li>
+<li><code>shop_orders_clean.xlsx</code>를 연다.</li>
+<li><code>orders</code>, <code>customers</code>, <code>products</code> 세 시트를 선택한다.</li>
+<li>데이터 변환을 눌러 Power Query로 들어간다.</li>
+</ol>
+<p>말할 내용:</p>
+<p>데이터를 불러올 때 첫 번째 확인은 행 수가 아니라 컬럼의 의미와 형식이다. 고객번호와 상품번호는 숫자처럼 생겼더라도 계산할 숫자가 아니다. 이 값들은 표를 연결하는 코드이므로 텍스트로 둔다. 주문일은 날짜로 인식되어야 한다.</p>
+<p>형식 확인:</p>
+<ul>
+<li><code>orders[order_date]</code>: 날짜</li>
+<li><code>orders[qty]</code>: 정수</li>
+<li><code>orders[discount_rate]</code>: 소수</li>
+<li><code>customers[customer_id]</code>, <code>products[product_id]</code>: 텍스트</li>
+<li><code>products[price]</code>: 정수</li>
+</ul>
+<p>닫기 및 적용을 클릭한다.</p>
+<h2>관계 만들기: 27-38분</h2>
+<p>시연 포인트:</p>
+<ol>
+<li>모델 보기로 이동한다.</li>
+<li>자동 관계가 만들어졌는지 확인한다.</li>
+<li>없으면 <code>customers[customer_id]</code>를 <code>orders[customer_id]</code>로 끌어 놓는다.</li>
+<li><code>products[product_id]</code>를 <code>orders[product_id]</code>로 끌어 놓는다.</li>
+<li>두 관계가 1:다, 단일 방향, 활성 상태인지 확인한다.</li>
+</ol>
+<p>말할 내용:</p>
+<p>관계선에서 1과 별표를 보는 습관이 중요하다. 1은 고유한 값이 있는 쪽이고, 별표는 반복되는 값이 있는 쪽이다. 고객은 한 번만 등록되지만 주문은 여러 번 생긴다. 상품도 한 번만 등록되지만 주문에서는 여러 번 팔린다.</p>
+<p>양방향 필터는 오늘 쓰지 않는다. 입문 단계에서는 차원에서 팩트로 필터가 흐른다고 이해하는 것이 좋다. 고객으로 주문을 거르고, 상품으로 주문을 거르고, 날짜로 주문을 거른다.</p>
+<h2>날짜 차원 만들기: 38-50분</h2>
+<p>시연 포인트:</p>
+<ol>
+<li>새 테이블을 클릭한다.</li>
+<li>핸드아웃의 <code>날짜테이블 = ADDCOLUMNS(...)</code> DAX를 붙여 넣는다.</li>
+<li><code>날짜테이블</code>이 366행인지 확인한다.</li>
+<li><code>날짜테이블[Date]</code>를 날짜 테이블로 지정한다.</li>
+<li><code>날짜테이블[Date]</code>와 <code>orders[order_date]</code> 관계를 만든다.</li>
+<li><code>연월</code>을 <code>연월정렬</code>로 정렬한다.</li>
+</ol>
+<p>말할 내용:</p>
+<p><code>orders</code>에 주문일이 있는데도 날짜 테이블을 만드는 이유가 있다. 주문일은 주문이 있는 날짜만 담는 거래 기록이다. 날짜 테이블은 분석 기간의 모든 날짜를 담는 기준표다. 전월대비 같은 시간 계산은 이 기준표가 있을 때 훨씬 안정적이다.</p>
+<p>이 데이터는 2024년 전체를 사용한다. 2024년은 윤년이므로 날짜 테이블은 366행이다. 이 값이 365로 나오면 날짜 범위가 빠졌거나 DAX가 다르게 입력된 것이다.</p>
+<h2>매출 측정값과 검산: 50-58분</h2>
+<p>시연 포인트:</p>
+<ol>
+<li><code>orders</code> 테이블에 새 측정값을 만든다.</li>
+<li><code>Total Sales</code> DAX를 입력한다.</li>
+<li><code>Order Count</code>, <code>Avg Order Value</code>를 만든다.</li>
+<li>카드 시각화로 전체 매출과 주문 건수를 확인한다.</li>
+</ol>
+<p>입력할 DAX:</p>
+<div class="code-scroll"><pre><code class="language-DAX">Total Sales =
+SUMX(
+    orders,
+    orders[qty] * RELATED(products[price]) * (1 - orders[discount_rate])
+)
+</code></pre></div>
+<div class="code-scroll"><pre><code class="language-DAX">Order Count =
+DISTINCTCOUNT(orders[order_id])
+</code></pre></div>
+<div class="code-scroll"><pre><code class="language-DAX">Avg Order Value =
+DIVIDE([Total Sales], [Order Count])
+</code></pre></div>
+<p>말할 내용:</p>
+<p>매출은 <code>orders</code>에 이미 들어 있지 않다. 수량과 할인율은 <code>orders</code>에 있고, 단가는 <code>products</code>에 있다. <code>RELATED(products[price])</code>는 관계를 따라 현재 주문의 상품 단가를 가져온다는 뜻이다. 오늘은 DAX 문법을 깊게 파고들기보다 관계가 계산에 쓰인다는 점을 보는 것이 중요하다.</p>
+<p>검산 기준:</p>
+<ul>
+<li>주문 건수: 20,000</li>
+<li>전체 매출: 1,938,489,803</li>
+</ul>
+<h2>지역별 매출 분해: 58-66분</h2>
+<p>시연 포인트:</p>
+<ol>
+<li>테이블 시각화를 만든다.</li>
+<li><code>customers[region]</code>, <code>[Order Count]</code>, <code>[Total Sales]</code>, <code>[Avg Order Value]</code>를 넣는다.</li>
+<li><code>[Total Sales]</code> 내림차순으로 정렬한다.</li>
+<li>막대 차트로 같은 결과를 보여 준다.</li>
+<li><code>날짜테이블[연월]</code> 슬라이서를 추가해 월을 바꾸면 숫자가 바뀌는지 확인한다.</li>
+</ol>
+<p>말할 내용:</p>
+<p>여기서 눈여겨볼 장면은 <code>orders</code>에 지역 컬럼이 없는데도 지역별 매출이 나온다는 점이다. 지역은 고객 차원에 있다. Power BI는 <code>customers</code>에서 선택된 지역을 관계를 따라 <code>orders</code>에 적용하고, 그 주문들의 매출만 합산한다.</p>
+<p>검산 기준:</p>
+<ul>
+<li>서울특별시 매출: 570,482,124</li>
+<li>경기도 매출: 530,726,511</li>
+<li>지역 수: 17</li>
+</ul>
+<h2>직접 해보기: 66-70분</h2>
+<p>미션:</p>
+<p>지역별 매출 막대 차트를 만들고, <code>날짜테이블[연월]</code> 슬라이서를 붙인다. 시간이 남으면 범례에 <code>products[category]</code>를 넣어 지역별 매출을 상품 카테고리별로 더 나눈다.</p>
+<p>힌트로 말할 내용:</p>
+<p>축은 <code>customers[region]</code>에서 가져오고, 값은 <code>[Total Sales]</code>를 쓴다. 오늘의 핵심은 차원 필드와 팩트 계산값을 한 시각화에서 같이 쓰는 것이다.</p>
+<h2>정리</h2>
+<p>말할 내용:</p>
+<p>오늘은 차트를 많이 꾸미는 수업이 아니라 모델을 만드는 수업이다. Power BI에서 모델이 바르게 만들어지면 같은 매출 측정값 하나로 지역별, 상품별, 월별 질문에 답할 수 있다. 다음 S17에서는 오늘 만든 날짜 차원을 이용해 전월대비와 성장률을 계산한다.</p>
+<h2>예상 질문과 답변</h2>
+<p>Q. Power BI가 관계를 자동으로 만들었으면 그대로 두면 되나요?</p>
+<p>A. 자동 관계를 써도 되지만 반드시 확인해야 한다. 고객과 상품이 1쪽, 주문이 다쪽인지, 관계가 활성인지, 교차 필터 방향이 단일인지 확인한다.</p>
+<p>Q. 왜 세 표를 하나로 합치지 않나요?</p>
+<p>A. 작은 데이터에서는 합쳐도 계산은 된다. 하지만 BI에서는 같은 고객, 같은 상품 정보가 반복 저장되고 모델이 지저분해진다. 차원과 팩트를 나누면 필터 기준과 계산 기준이 분리되어 보고서를 유지하기 쉽다.</p>
+<p>Q. <code>orders</code>에 지역 컬럼이 없는데 지역별 매출이 왜 나오나요?</p>
+<p>A. <code>customers[region]</code>이 <code>customers[customer_id]</code>를 통해 <code>orders[customer_id]</code>와 연결되어 있기 때문이다. 지역 필터가 고객을 거쳐 주문으로 전달되고, 그 주문의 매출만 합산된다.</p>
+<p>Q. 날짜 테이블 없이 <code>orders[order_date]</code>만 쓰면 안 되나요?</p>
+<p>A. 단순 월별 차트는 가능할 수 있다. 그러나 전월대비, 누적, 전년동월 같은 시간 계산을 안정적으로 하려면 연속된 날짜 차원이 필요하다. 그래서 오늘 미리 만든다.</p>
+<p>Q. 날짜 테이블이 365행으로 나옵니다.</p>
+<p>A. 이 데이터의 주문일 범위는 2024-01-01부터 2024-12-31까지이고, 2024년은 윤년이라 366행이어야 한다. DAX의 시작일과 종료일이 <code>MIN(orders[order_date])</code>, <code>MAX(orders[order_date])</code>인지 확인한다.</p>
+<p>Q. <code>RELATED(products[price])</code>에서 오류가 납니다.</p>
+<p>A. 먼저 <code>products[product_id]</code>와 <code>orders[product_id]</code> 관계가 활성 상태인지 확인한다. <code>RELATED</code>는 현재 행에서 1쪽 테이블의 값을 가져오므로 관계가 없으면 작동하지 않는다.</p>
+<p>Q. Mac 사용자는 어떻게 하나요?</p>
+<p>A. Mac 수강생은 Power BI 대신 Looker Studio로 개념만 학습한다. 스타스키마와 시간지능은 1:1로 대체되지 않는다.</p>
+<h2>완료 판단 체크포인트</h2>
+<p>수강생이 <code>customers</code>, <code>products</code>, <code>날짜테이블</code>에서 <code>orders</code>로 이어지는 1:다 관계 3개를 만들고, <code>Total Sales</code>가 1,938,489,803이며 지역별 매출 1위가 서울특별시 570,482,124로 계산되면 완료로 판단한다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="answer" aria-label="모범답안">
+<h1>S16 모범답안: 지역 차원으로 매출 분해</h1>
+<h2>미션</h2>
+<p>Power BI에서 <code>customers</code>, <code>products</code>, <code>날짜테이블</code> 차원을 <code>orders</code> 팩트 테이블에 연결한 뒤, 고객 차원의 <code>region</code>으로 매출을 분해한다.</p>
+<p>핵심은 <code>orders</code>에 지역 컬럼을 직접 만들지 않는 것이다. 지역은 <code>customers[region]</code>에서 가져오고, 매출은 관계를 따라 <code>orders</code>의 주문 행을 기준으로 계산한다.</p>
+<h2>정답 모델</h2>
+<p>최종 관계는 다음과 같아야 한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>1쪽 테이블</th>
+<th>1쪽 컬럼</th>
+<th>다쪽 테이블</th>
+<th>다쪽 컬럼</th>
+<th>상태</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>customers</code></td>
+<td><code>customer_id</code></td>
+<td><code>orders</code></td>
+<td><code>customer_id</code></td>
+<td>활성</td>
+</tr>
+<tr>
+<td><code>products</code></td>
+<td><code>product_id</code></td>
+<td><code>orders</code></td>
+<td><code>product_id</code></td>
+<td>활성</td>
+</tr>
+<tr>
+<td><code>날짜테이블</code></td>
+<td><code>Date</code></td>
+<td><code>orders</code></td>
+<td><code>order_date</code></td>
+<td>활성</td>
+</tr>
+</tbody>
+</table></div>
+<p>세 관계 모두 카디널리티는 1:다, 교차 필터 방향은 단일 방향이다.</p>
+<h2>날짜 차원 DAX</h2>
+<div class="code-scroll"><pre><code class="language-DAX">날짜테이블 =
+ADDCOLUMNS(
+    CALENDAR(MIN(orders[order_date]), MAX(orders[order_date])),
+    &quot;연도&quot;, YEAR([Date]),
+    &quot;월번호&quot;, MONTH([Date]),
+    &quot;연월&quot;, FORMAT([Date], &quot;yyyy-MM&quot;),
+    &quot;연월정렬&quot;, YEAR([Date]) * 100 + MONTH([Date])
+)
+</code></pre></div>
+<p>확인값:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th style="text-align: right;">값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>첫 날짜</td>
+<td style="text-align: right;">2024-01-01</td>
+</tr>
+<tr>
+<td>마지막 날짜</td>
+<td style="text-align: right;">2024-12-31</td>
+</tr>
+<tr>
+<td>날짜 행 수</td>
+<td style="text-align: right;">366</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>날짜테이블[Date]</code>는 날짜 테이블로 지정한다. <code>날짜테이블[연월]</code>은 <code>날짜테이블[연월정렬]</code>로 정렬한다.</p>
+<h2>측정값 DAX</h2>
+<div class="code-scroll"><pre><code class="language-DAX">Total Sales =
+SUMX(
+    orders,
+    orders[qty] * RELATED(products[price]) * (1 - orders[discount_rate])
+)
+</code></pre></div>
+<div class="code-scroll"><pre><code class="language-DAX">Order Count =
+DISTINCTCOUNT(orders[order_id])
+</code></pre></div>
+<div class="code-scroll"><pre><code class="language-DAX">Avg Order Value =
+DIVIDE([Total Sales], [Order Count])
+</code></pre></div>
+<h2>미션 결과</h2>
+<p>지역별 매출 표는 <code>[Total Sales]</code> 내림차순으로 정렬한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>region</th>
+<th style="text-align: right;">order_count</th>
+<th style="text-align: right;">customer_count</th>
+<th style="text-align: right;">total_sales</th>
+<th style="text-align: right;">avg_order_value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>서울특별시</td>
+<td style="text-align: right;">5,711</td>
+<td style="text-align: right;">567</td>
+<td style="text-align: right;">570,482,124</td>
+<td style="text-align: right;">99,891.81</td>
+</tr>
+<tr>
+<td>경기도</td>
+<td style="text-align: right;">5,442</td>
+<td style="text-align: right;">678</td>
+<td style="text-align: right;">530,726,511</td>
+<td style="text-align: right;">97,524.17</td>
+</tr>
+<tr>
+<td>부산광역시</td>
+<td style="text-align: right;">1,268</td>
+<td style="text-align: right;">199</td>
+<td style="text-align: right;">132,704,477</td>
+<td style="text-align: right;">104,656.53</td>
+</tr>
+<tr>
+<td>인천광역시</td>
+<td style="text-align: right;">917</td>
+<td style="text-align: right;">167</td>
+<td style="text-align: right;">88,043,950</td>
+<td style="text-align: right;">96,013.03</td>
+</tr>
+<tr>
+<td>경상남도</td>
+<td style="text-align: right;">819</td>
+<td style="text-align: right;">152</td>
+<td style="text-align: right;">78,020,547</td>
+<td style="text-align: right;">95,263.18</td>
+</tr>
+<tr>
+<td>대구광역시</td>
+<td style="text-align: right;">814</td>
+<td style="text-align: right;">138</td>
+<td style="text-align: right;">69,619,874</td>
+<td style="text-align: right;">85,528.10</td>
+</tr>
+<tr>
+<td>대전광역시</td>
+<td style="text-align: right;">585</td>
+<td style="text-align: right;">105</td>
+<td style="text-align: right;">59,766,330</td>
+<td style="text-align: right;">102,164.67</td>
+</tr>
+<tr>
+<td>경상북도</td>
+<td style="text-align: right;">575</td>
+<td style="text-align: right;">120</td>
+<td style="text-align: right;">56,106,357</td>
+<td style="text-align: right;">97,576.27</td>
+</tr>
+<tr>
+<td>충청남도</td>
+<td style="text-align: right;">573</td>
+<td style="text-align: right;">121</td>
+<td style="text-align: right;">54,170,832</td>
+<td style="text-align: right;">94,538.97</td>
+</tr>
+<tr>
+<td>충청북도</td>
+<td style="text-align: right;">493</td>
+<td style="text-align: right;">108</td>
+<td style="text-align: right;">47,511,224</td>
+<td style="text-align: right;">96,371.65</td>
+</tr>
+<tr>
+<td>제주특별자치도</td>
+<td style="text-align: right;">521</td>
+<td style="text-align: right;">83</td>
+<td style="text-align: right;">46,593,809</td>
+<td style="text-align: right;">89,431.50</td>
+</tr>
+<tr>
+<td>광주광역시</td>
+<td style="text-align: right;">523</td>
+<td style="text-align: right;">99</td>
+<td style="text-align: right;">46,536,438</td>
+<td style="text-align: right;">88,979.80</td>
+</tr>
+<tr>
+<td>전라남도</td>
+<td style="text-align: right;">490</td>
+<td style="text-align: right;">103</td>
+<td style="text-align: right;">46,103,821</td>
+<td style="text-align: right;">94,089.43</td>
+</tr>
+<tr>
+<td>전북특별자치도</td>
+<td style="text-align: right;">412</td>
+<td style="text-align: right;">93</td>
+<td style="text-align: right;">36,105,831</td>
+<td style="text-align: right;">87,635.51</td>
+</tr>
+<tr>
+<td>울산광역시</td>
+<td style="text-align: right;">377</td>
+<td style="text-align: right;">76</td>
+<td style="text-align: right;">32,752,028</td>
+<td style="text-align: right;">86,875.41</td>
+</tr>
+<tr>
+<td>강원특별자치도</td>
+<td style="text-align: right;">296</td>
+<td style="text-align: right;">66</td>
+<td style="text-align: right;">26,919,673</td>
+<td style="text-align: right;">90,944.84</td>
+</tr>
+<tr>
+<td>세종특별자치시</td>
+<td style="text-align: right;">184</td>
+<td style="text-align: right;">28</td>
+<td style="text-align: right;">16,325,977</td>
+<td style="text-align: right;">88,728.14</td>
+</tr>
+</tbody>
+</table></div>
+<p>검산값:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th style="text-align: right;">값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>전체 주문 건수</td>
+<td style="text-align: right;">20,000</td>
+</tr>
+<tr>
+<td>전체 매출</td>
+<td style="text-align: right;">1,938,489,803</td>
+</tr>
+<tr>
+<td>지역 수</td>
+<td style="text-align: right;">17</td>
+</tr>
+<tr>
+<td>매출 1위 지역</td>
+<td style="text-align: right;">서울특별시</td>
+</tr>
+<tr>
+<td>매출 2위 지역</td>
+<td style="text-align: right;">경기도</td>
+</tr>
+</tbody>
+</table></div>
+<p>해석: 매출은 서울특별시가 570,482,124로 가장 크고, 경기도가 530,726,511로 두 번째다. 주문 건수도 두 지역이 가장 많다. 이 결과는 고객 차원의 <code>region</code> 필드가 주문 팩트에 정상적으로 필터를 전달하고 있음을 보여 준다.</p>
+<h2>월별 검산</h2>
+<p><code>날짜테이블[연월]</code>을 기준으로 보면 월별 주문과 매출은 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>연월</th>
+<th style="text-align: right;">order_count</th>
+<th style="text-align: right;">total_sales</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2024-01</td>
+<td style="text-align: right;">1,403</td>
+<td style="text-align: right;">131,088,708</td>
+</tr>
+<tr>
+<td>2024-02</td>
+<td style="text-align: right;">1,317</td>
+<td style="text-align: right;">128,361,174</td>
+</tr>
+<tr>
+<td>2024-03</td>
+<td style="text-align: right;">1,504</td>
+<td style="text-align: right;">135,686,515</td>
+</tr>
+<tr>
+<td>2024-04</td>
+<td style="text-align: right;">1,580</td>
+<td style="text-align: right;">152,837,005</td>
+</tr>
+<tr>
+<td>2024-05</td>
+<td style="text-align: right;">1,631</td>
+<td style="text-align: right;">164,426,614</td>
+</tr>
+<tr>
+<td>2024-06</td>
+<td style="text-align: right;">1,526</td>
+<td style="text-align: right;">137,684,249</td>
+</tr>
+<tr>
+<td>2024-07</td>
+<td style="text-align: right;">1,682</td>
+<td style="text-align: right;">168,414,635</td>
+</tr>
+<tr>
+<td>2024-08</td>
+<td style="text-align: right;">1,687</td>
+<td style="text-align: right;">162,095,281</td>
+</tr>
+<tr>
+<td>2024-09</td>
+<td style="text-align: right;">1,688</td>
+<td style="text-align: right;">150,484,525</td>
+</tr>
+<tr>
+<td>2024-10</td>
+<td style="text-align: right;">1,720</td>
+<td style="text-align: right;">158,810,201</td>
+</tr>
+<tr>
+<td>2024-11</td>
+<td style="text-align: right;">2,162</td>
+<td style="text-align: right;">223,024,439</td>
+</tr>
+<tr>
+<td>2024-12</td>
+<td style="text-align: right;">2,100</td>
+<td style="text-align: right;">225,576,457</td>
+</tr>
+</tbody>
+</table></div>
+<p>S17에서는 이 날짜 차원을 이용해 전월 매출과 전월대비 성장률을 만든다.</p>
+<h2>강사용 검증 코드</h2>
+<p>이 차시는 Power BI 차시이지만, 아래 경로의 Python 코드로 원본 데이터와 정답 숫자를 검증했다.</p>
+<div class="code-scroll"><pre><code class="language-text">/mnt/d/ai-data-analysis-course/06_answers/S16_code.py
+</code></pre></div>
+<p>코드가 검증하는 내용은 다음과 같다.</p>
+<ul>
+<li><code>orders</code>, <code>customers</code>, <code>products</code>의 실제 행 수와 열 수</li>
+<li><code>customers[customer_id]</code>, <code>products[product_id]</code>의 고유성</li>
+<li><code>orders</code>의 고객번호와 상품번호가 차원 테이블에 모두 존재하는지</li>
+<li>날짜 차원이 2024-01-01부터 2024-12-31까지 366행인지</li>
+<li>전체 매출과 지역별 매출이 Power BI 검산값과 일치하는지</li>
+</ul>
+<p>실행 명령:</p>
+<div class="code-scroll"><pre><code class="language-bash">python3 /mnt/d/ai-data-analysis-course/06_answers/S16_code.py
+</code></pre></div>
+<p>실행 확인 결과 요약:</p>
+<div class="code-scroll"><pre><code class="language-text">orders: 20,000행, 6열
+customers: 3,000행, 7열
+products: 200행, 5열
+orders -&gt; customers 참조 누락: 0
+orders -&gt; products 참조 누락: 0
+날짜테이블: 366행
+전체 주문 건수: 20,000
+전체 매출: 1,938,489,803
+지역 수: 17
+S16 검증 통과
+</code></pre></div>
+</section>
+  </div>
+
+  <nav class="session-pager container">
+    <a class="pager-link prev" href="./S15.html"><span class="pager-direction">&larr; 이전 차시</span><span class="pager-title">S15 · Power BI 설치, 로드, 첫 차트</span></a>
+    <a class="pager-link next" href="./S17.html"><span class="pager-direction">다음 차시 &rarr;</span><span class="pager-title">S17 · 시각화·상호작용·DAX 기초</span></a>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>데이터 리터러시 with AI · S16 차시</span>
+    <a href="../index.html#curriculum">전체 커리큘럼으로</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.tab-panel');
+  function activate(key, updateHash){
+    tabs.forEach(function(btn){
+      var on = btn.getAttribute('data-tab') === key;
+      btn.classList.toggle('active', on);
+    });
+    panels.forEach(function(panel){
+      var on = panel.getAttribute('data-panel') === key;
+      panel.classList.toggle('active', on);
+    });
+    if (updateHash && history.replaceState){
+      history.replaceState(null, '', '#' + key);
+    }
+  }
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      activate(btn.getAttribute('data-tab'), true);
+    });
+  });
+  var initial = (location.hash || '').replace('#', '');
+  var valid = ['curriculum', 'handout', 'script', 'answer'];
+  if (valid.indexOf(initial) !== -1){
+    activate(initial, false);
+  }
+})();
+</script>
+
+</body>
+</html>

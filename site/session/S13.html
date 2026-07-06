@@ -1,0 +1,1599 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>S13. 그룹화·집계·재구조화 · 데이터 리터러시 with AI</title>
+<meta name="description" content="S13차시: 그룹화·집계·재구조화 — 커리큘럼·핸드아웃·강사대본·모범답안." />
+<style>
+:root{
+  --canvas: #010102;
+  --surface-1: #0f1011;
+  --surface-2: #141516;
+  --surface-3: #18191a;
+  --surface-4: #191a1b;
+  --ink: #f7f8f8;
+  --ink-muted: #d0d6e0;
+  --ink-subtle: #8a8f98;
+  --ink-tertiary: #62666d;
+  --primary: #5e6ad2;
+  --primary-hover: #828fff;
+  --primary-focus: #5e69d1;
+  --hairline: #23252a;
+  --hairline-strong: #34343a;
+  --hairline-tertiary: #3e3e44;
+  --success: #27a644;
+
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  --container: 900px;
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+html{ background: var(--canvas); }
+body{
+  margin:0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.05px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a{ color: inherit; text-decoration: none; }
+ul, ol{ margin:0; padding:0; }
+h1,h2,h3,h4,p{ margin:0; }
+
+.container{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 48px);
+}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--primary-hover);
+}
+.eyebrow::before{
+  content:"";
+  width:6px; height:6px;
+  background: var(--primary);
+  border-radius: 1px;
+  flex-shrink:0;
+}
+
+/* ---------- top nav ---------- */
+.top-nav{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 64px;
+  display:flex;
+  align-items:center;
+  background: rgba(1,1,2,0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.top-nav .container{ display:flex; align-items:center; justify-content:space-between; gap: 24px; max-width: 1280px; }
+.brand{ display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:600; font-size:15px; letter-spacing:-0.01em; }
+.brand-mark{ width:20px; height:20px; border-radius: 6px; background: var(--primary); flex-shrink:0; position:relative; }
+.brand-mark::after{ content:""; position:absolute; inset:6px; border-radius:2px; background: rgba(255,255,255,0.85); }
+.back-link{ font-size:14px; color: var(--ink-subtle); display:inline-flex; align-items:center; gap:6px; transition: color .15s ease; }
+.back-link:hover{ color: var(--ink); }
+
+/* ---------- session header ---------- */
+.session-header{
+  padding: var(--space-xxl) 0 var(--space-xl);
+  background:
+    radial-gradient(ellipse 60% 50% at 82% 0%, rgba(94,106,210,0.16), transparent 60%),
+    var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+.session-header-top{
+  display:flex;
+  align-items:center;
+  gap: var(--space-md);
+  margin: var(--space-md) 0 var(--space-md);
+}
+.session-num-badge{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--primary-hover);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-xs);
+  padding: 4px 10px;
+}
+.difficulty{ display:flex; gap:4px; align-items:center; }
+.difficulty .dot{ width:6px; height:6px; border-radius:50%; background: var(--hairline-strong); }
+.difficulty .dot.filled{ background: var(--primary); }
+.difficulty-label{ font-size:12px; color: var(--ink-tertiary); margin-left:6px; }
+.session-header h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ---------- tabs ---------- */
+.tabs-bar{
+  display:flex;
+  gap: 4px;
+  padding-top: var(--space-lg);
+  border-bottom: 1px solid var(--hairline);
+  overflow-x: auto;
+}
+.tab-btn{
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-subtle);
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s ease, border-color .15s ease;
+}
+.tab-btn:hover{ color: var(--ink); }
+.tab-btn.active{ color: var(--ink); border-bottom-color: var(--primary); }
+
+.tab-panels{ padding: var(--space-xxl) 0 var(--space-xxl); }
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+/* ---------- markdown body ---------- */
+.markdown-body{ color: var(--ink-muted); font-size: 15.5px; line-height: 1.75; letter-spacing: -0.05px; overflow-wrap: anywhere; word-break: break-word; }
+.markdown-body h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--hairline);
+}
+.markdown-body h2{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+.markdown-body h3{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin: var(--space-lg) 0 var(--space-xs);
+}
+.markdown-body h4{
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+.markdown-body p{ margin: 0 0 var(--space-md); }
+.markdown-body ul, .markdown-body ol{ margin: 0 0 var(--space-md); padding-left: 1.4em; }
+.markdown-body li{ margin-bottom: 6px; }
+.markdown-body ul{ list-style: disc; }
+.markdown-body ol{ list-style: decimal; }
+.markdown-body strong{ color: var(--ink); font-weight: 600; }
+.markdown-body em{ color: var(--ink-muted); }
+.markdown-body a{ color: var(--primary-hover); text-decoration: underline; text-underline-offset: 2px; }
+.markdown-body hr{ border:none; border-top: 1px solid var(--hairline); margin: var(--space-xl) 0; }
+.markdown-body blockquote{
+  margin: 0 0 var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid var(--primary);
+  background: var(--surface-1);
+  color: var(--ink-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.markdown-body code{
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--primary-hover);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.markdown-body .code-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+}
+.markdown-body pre{
+  margin: 0;
+  padding: var(--space-md);
+  background: transparent;
+  border: none;
+}
+.markdown-body pre code{
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre;
+}
+.markdown-body .table-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+}
+.markdown-body table{
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 460px;
+  font-size: 13.5px;
+}
+.markdown-body th, .markdown-body td{
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+  white-space: nowrap;
+}
+.markdown-body thead th{
+  background: var(--surface-1);
+  color: var(--ink);
+  font-weight: 600;
+  font-family: var(--font-text);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+.markdown-body tbody tr:last-child td{ border-bottom: none; }
+.markdown-body tbody tr:hover{ background: var(--surface-1); }
+
+/* ---------- pager ---------- */
+.session-pager{
+  display:flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-xl) 0 var(--space-xxl);
+  border-top: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+.pager-link{
+  display:flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  max-width: 46%;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.pager-link:hover{ border-color: var(--primary); background: var(--surface-2); }
+.pager-link.next{ margin-left: auto; text-align: right; align-items: flex-end; }
+.pager-direction{ font-size: 12px; color: var(--ink-tertiary); font-family: var(--font-mono); }
+.pager-title{ font-size: 14px; color: var(--ink); font-weight: 500; }
+.pager-spacer{ flex: 1; }
+
+footer.site-footer{
+  border-top: 1px solid var(--hairline);
+  padding: var(--space-xl) 0;
+}
+footer.site-footer .container{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: var(--ink-tertiary);
+  font-size: 12px;
+}
+footer.site-footer a:hover{ color: var(--ink-subtle); }
+
+@media (max-width: 640px){
+  .session-header{ padding: var(--space-xl) 0 var(--space-lg); }
+  .pager-link{ max-width: 100%; }
+  .session-pager{ flex-direction: column; }
+  .pager-link.next{ margin-left: 0; text-align: left; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="container">
+    <div class="brand"><span class="brand-mark"></span>데이터 리터러시 with AI</div>
+    <a class="back-link" href="../index.html#curriculum">&larr; 커리큘럼으로</a>
+  </div>
+</nav>
+
+<header class="session-header">
+  <div class="container">
+    <div class="eyebrow">PART 04 · 파이썬</div>
+    <div class="session-header-top">
+      <span class="session-num-badge">S13</span>
+      <div class="difficulty" title="난이도 4"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="difficulty-label">심화</span></div>
+    </div>
+    <h1>그룹화·집계·재구조화</h1>
+  </div>
+  <div class="container">
+    <div class="tabs-bar" role="tablist">
+<button class="tab-btn active" data-tab="curriculum" role="tab" aria-selected="true">커리큘럼</button>
+<button class="tab-btn" data-tab="handout" role="tab" aria-selected="false">핸드아웃</button>
+<button class="tab-btn" data-tab="script" role="tab" aria-selected="false">강사대본</button>
+<button class="tab-btn" data-tab="answer" role="tab" aria-selected="false">모범답안</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="tab-panels container">
+<section class="tab-panel markdown-body active" data-panel="curriculum" aria-label="커리큘럼">
+<h1>S13. 그룹화·집계·재구조화</h1>
+<h2>차시 개요</h2>
+<ul>
+<li>대상: 엑셀은 쓰지만 데이터분석은 처음인 비개발자</li>
+<li>선수 차시: S12 pandas 파일 읽기, 기본 전처리, 인코딩 처리</li>
+<li>난이도: 4</li>
+<li>시간: 70분</li>
+<li>사용 데이터:</li>
+<li><code>02_datasets/shop_orders/orders.csv</code></li>
+<li><code>02_datasets/shop_orders/customers.csv</code></li>
+<li><code>02_datasets/shop_orders/products.csv</code></li>
+<li><code>02_datasets/real_korean/cafe_restaurant/seoul_commercial_food_stores_202109_github.csv</code></li>
+<li><code>02_datasets/real_korean/population_kosis/mois_legal_dong_gender_age_population_20260531.csv</code></li>
+<li><code>02_datasets/real_korean/seoul_living_pop/seoul_living_population_gu_daily.csv</code></li>
+</ul>
+<p>이번 차시는 여러 행을 요약표로 바꾸는 수업이다. 엑셀에서 피벗 테이블, 부분합, VLOOKUP을 써본 사람이라면 이미 핵심 감각은 가지고 있다. pandas에서는 그 일을 <code>groupby</code>, <code>merge</code>, <code>pivot_table</code>, <code>melt</code>라는 이름으로 한다.</p>
+<p>앞선 cafe 매출 데이터 대신, 오늘은 여러 표를 함께 다루어야 하므로 잠시 주문 데이터인 <code>shop_orders</code>로 옮겨 간다.</p>
+<p>수업의 중심 데이터는 <code>shop_orders</code> 3개 표다. 주문 표에는 고객 지역과 상품 카테고리가 없고, 매출 컬럼도 없다. 그래서 고객 표와 상품 표를 붙인 뒤 단가와 수량, 할인율로 매출을 계산해야 한다. 이 과정은 엑셀에서 주문표에 고객정보와 상품정보를 VLOOKUP으로 끌어온 뒤 피벗 테이블을 만드는 흐름과 같다.</p>
+<p>후반에는 실데이터를 다룬다. 231열짜리 인구 파일을 <code>melt</code>로 세로형 데이터로 바꾸고, 서울 음식점 상가업소 119,158행을 업종별로 집계한다. 마지막 미션은 서울 생활인구 77,792행을 자치구 단위로 요약하는 것이다.</p>
+<h2>학습 목표</h2>
+<ol>
+<li><code>groupby()</code>로 두 개 이상의 기준 열을 묶고 여러 집계값을 한 번에 계산할 수 있다.</li>
+<li><code>merge()</code>를 엑셀의 VLOOKUP 또는 XLOOKUP과 연결해 이해하고, 병합 후 누락값을 확인할 수 있다.</li>
+<li><code>pivot_table()</code>로 행과 열 기준이 모두 있는 요약표를 만들 수 있다.</li>
+<li><code>melt()</code>로 가로로 넓은 wide 데이터를 세로로 긴 long 데이터로 바꿀 수 있다.</li>
+<li>수만 행 이상의 실데이터를 바로 시각화하지 않고, 먼저 필터링하거나 집계해 줄이는 습관을 갖는다.</li>
+</ol>
+<h2>실제 확인한 데이터</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>데이터</th>
+<th style="text-align: right;">실제 행수</th>
+<th style="text-align: right;">실제 열수</th>
+<th>수업에서 쓰는 역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>orders.csv</code></td>
+<td style="text-align: right;">20,000</td>
+<td style="text-align: right;">6</td>
+<td>주문일, 고객ID, 상품ID, 수량, 할인율</td>
+</tr>
+<tr>
+<td><code>customers.csv</code></td>
+<td style="text-align: right;">3,000</td>
+<td style="text-align: right;">7</td>
+<td>고객 성별, 나이, 지역, 등급</td>
+</tr>
+<tr>
+<td><code>products.csv</code></td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">5</td>
+<td>상품명, 카테고리, 단가, 원가</td>
+</tr>
+<tr>
+<td><code>seoul_commercial_food_stores_202109_github.csv</code></td>
+<td style="text-align: right;">119,158</td>
+<td style="text-align: right;">13</td>
+<td>서울 음식점 업종 집계</td>
+</tr>
+<tr>
+<td><code>mois_legal_dong_gender_age_population_20260531.csv</code></td>
+<td style="text-align: right;">18,623</td>
+<td style="text-align: right;">231</td>
+<td>wide 형태의 연령·성별 인구 데이터</td>
+</tr>
+<tr>
+<td><code>seoul_living_population_gu_daily.csv</code></td>
+<td style="text-align: right;">77,792</td>
+<td style="text-align: right;">15</td>
+<td>미션용 자치구별 생활인구 일별 데이터</td>
+</tr>
+</tbody>
+</table></div>
+<h2>핵심 개념</h2>
+<h3>1. <code>groupby</code>는 부분합과 피벗의 출발점이다</h3>
+<p>엑셀에서 지역별 합계, 카테고리별 평균, 부서별 인원수를 구할 때는 부분합이나 피벗 테이블을 쓴다. pandas에서는 먼저 묶을 기준을 정한다.</p>
+<div class="code-scroll"><pre><code class="language-python">df.groupby(&quot;region&quot;)
+</code></pre></div>
+<p>기준이 하나가 아니라 둘일 수도 있다.</p>
+<div class="code-scroll"><pre><code class="language-python">df.groupby([&quot;region&quot;, &quot;category&quot;])
+</code></pre></div>
+<p>이 코드는 "지역별로 나누고, 그 안에서 다시 카테고리별로 나누라"는 뜻이다. 엑셀 피벗 테이블에서 행 영역에 <code>region</code>과 <code>category</code>를 차례로 넣는 것과 비슷하다.</p>
+<p>그 다음에는 무엇을 계산할지 정한다.</p>
+<div class="code-scroll"><pre><code class="language-python">df.groupby([&quot;region&quot;, &quot;category&quot;]).agg(
+    주문건수=(&quot;order_id&quot;, &quot;nunique&quot;),
+    판매수량=(&quot;qty&quot;, &quot;sum&quot;),
+    매출합계=(&quot;sales&quot;, &quot;sum&quot;),
+    평균주문금액=(&quot;sales&quot;, &quot;mean&quot;),
+)
+</code></pre></div>
+<p><code>agg()</code>는 여러 집계를 한 번에 만드는 도구다. 엑셀 피벗에서 값 영역에 "주문건수", "수량 합계", "매출 합계", "매출 평균"을 함께 넣는 상황과 같다.</p>
+<h3>2. <code>merge</code>는 pandas의 VLOOKUP이다</h3>
+<p><code>orders.csv</code>에는 고객 지역이 없다. 대신 <code>customer_id</code>가 있다. <code>customers.csv</code>에는 같은 <code>customer_id</code>와 함께 <code>region</code>이 있다. 두 표를 <code>customer_id</code>로 붙이면 주문마다 고객 지역을 가져올 수 있다.</p>
+<p>엑셀식으로 말하면 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>엑셀 작업</th>
+<th>pandas 작업</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>주문표에 고객ID 기준으로 고객 지역을 VLOOKUP</td>
+<td><code>orders.merge(customers, on="customer_id", how="left")</code></td>
+</tr>
+<tr>
+<td>주문표에 상품ID 기준으로 상품 카테고리와 단가를 VLOOKUP</td>
+<td><code>.merge(products, on="product_id", how="left")</code></td>
+</tr>
+<tr>
+<td>조회 실패한 행 확인</td>
+<td>병합 후 <code>isna().sum()</code> 확인</td>
+</tr>
+</tbody>
+</table></div>
+<p>입문 단계에서 가장 중요한 일은 병합 뒤 행수가 달라졌는지, 필요한 값이 비지는 않았는지 확인하는 것이다. 이번 데이터는 주문 20,000행이 병합 후에도 20,000행으로 유지되고, 지역·카테고리·단가 누락값이 0개임을 확인했다.</p>
+<h3>3. 매출은 병합 뒤 계산한다</h3>
+<p><code>orders.csv</code>에는 매출 컬럼이 없다. 단가는 상품 표에 있고, 수량과 할인율은 주문 표에 있다. 그래서 병합 후 아래 계산을 한다.</p>
+<div class="code-scroll"><pre><code class="language-python">sales = price * qty * (1 - discount_rate)
+</code></pre></div>
+<p>엑셀에서도 VLOOKUP으로 단가를 가져온 뒤 <code>단가 * 수량 * (1 - 할인율)</code> 수식을 만드는 것과 같다.</p>
+<h3>4. <code>pivot_table</code>은 결과를 가로형 요약표로 펼친다</h3>
+<p><code>groupby</code> 결과는 보통 세로로 긴 표다. 사람이 보고 비교하기에는 지역을 행에 두고 카테고리를 열에 둔 피벗 형태가 편할 때가 있다.</p>
+<div class="code-scroll"><pre><code class="language-python">pd.pivot_table(
+    df,
+    index=&quot;region&quot;,
+    columns=&quot;category&quot;,
+    values=&quot;sales&quot;,
+    aggfunc=&quot;sum&quot;,
+    fill_value=0,
+)
+</code></pre></div>
+<p>여기서 <code>index</code>는 피벗의 행, <code>columns</code>는 피벗의 열, <code>values</code>는 계산할 값, <code>aggfunc</code>는 계산 방식이다. 엑셀 피벗 테이블과 거의 같은 사고방식이다.</p>
+<h3>5. <code>melt</code>는 넓은 표를 긴 표로 바꾼다</h3>
+<p>공공데이터에는 열이 지나치게 많은 파일이 자주 있다. 이번 인구 파일은 231열이다. <code>0세남자</code>, <code>1세남자</code>, <code>2세남자</code>처럼 연령과 성별이 열 이름 안에 들어 있다.</p>
+<p>눈으로 훑어볼 때는 넓은 표가 익숙하지만, 분석과 시각화에는 긴 표가 더 다루기 쉽다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>wide 형태</th>
+<th>long 형태</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>0세남자</code>, <code>1세남자</code>, <code>2세남자</code>가 각각 별도 열</td>
+<td><code>연령성별</code> 열에 <code>0세남자</code>, <code>1세남자</code>가 값으로 들어감</td>
+</tr>
+<tr>
+<td>열이 너무 많아 필터와 그래프가 어려움</td>
+<td><code>연령</code>, <code>성별</code>, <code>인구수</code> 열로 필터와 그룹화가 쉬움</td>
+</tr>
+<tr>
+<td>엑셀 보고서처럼 보임</td>
+<td>데이터베이스와 BI 도구가 좋아하는 형태</td>
+</tr>
+</tbody>
+</table></div>
+<p>이번 수업에서는 전체 파일을 바로 길게 만들지 않고, <code>시도명 == "서울특별시"</code> 행 452개만 골라 <code>melt</code>한다. 그 결과 100,344행의 long 데이터가 된다. 원리는 전체 파일에도 똑같이 적용된다.</p>
+<h3>6. 큰 파일은 먼저 줄이고 본다</h3>
+<p>서울 음식점 상가업소 파일은 119,158행이고, 생활인구 파일은 77,792행이다. 이 정도는 pandas로 읽을 수 있지만, 입문 수업에서 원자료를 그대로 화면에 많이 출력하거나 바로 그래프로 그리면 이해가 흐려진다.</p>
+<p>큰 파일을 다룰 때의 순서는 다음과 같다.</p>
+<ol>
+<li>행수와 열 이름을 확인한다.</li>
+<li>필요한 열만 고른다.</li>
+<li>필요한 지역이나 기간만 필터링한다.</li>
+<li><code>groupby</code>로 먼저 요약한다.</li>
+<li>요약표를 보고 해석하거나 시각화한다.</li>
+</ol>
+<h2>70분 수업 흐름</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;">시간</th>
+<th>내용</th>
+<th>진행 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0-5분</td>
+<td>오늘의 위치: 엑셀 VLOOKUP과 피벗을 pandas로 옮기기</td>
+<td>강의</td>
+</tr>
+<tr>
+<td style="text-align: right;">5-15분</td>
+<td><code>shop_orders</code> 3개 표 읽기, 키 열과 행수 확인</td>
+<td>강사 시연</td>
+</tr>
+<tr>
+<td style="text-align: right;">15-27분</td>
+<td><code>merge</code>로 고객·상품 정보 붙이기, 매출 계산</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">27-40분</td>
+<td><code>groupby(["region", "category"]).agg()</code>로 다중 집계</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">40-48분</td>
+<td><code>pivot_table</code>로 지역×카테고리 매출표 만들기</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">48-58분</td>
+<td>231열 인구 파일을 서울 행으로 줄인 뒤 <code>melt</code></td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">58-64분</td>
+<td>상가업소 119,158행을 업종 상위 10개로 집계</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">64-70분</td>
+<td>미션 안내: 자치구별 생활인구 집계와 완료 기준 확인</td>
+<td>개인 실습 시작</td>
+</tr>
+</tbody>
+</table></div>
+<h2>엑셀과 연결해서 설명할 지점</h2>
+<ul>
+<li><code>merge</code>는 VLOOKUP 또는 XLOOKUP이다. 단, pandas는 여러 열을 한꺼번에 붙일 수 있다.</li>
+<li>병합 키는 엑셀의 조회값과 기준열이다. 키가 틀리면 원하는 값이 붙지 않는다.</li>
+<li><code>groupby</code>는 부분합 또는 피벗의 계산 단계다.</li>
+<li><code>pivot_table</code>은 <code>groupby</code> 결과를 사람이 보기 좋은 행×열 표로 펼치는 단계다.</li>
+<li><code>melt</code>는 여러 열에 흩어진 값을 한 열로 모으는 작업이다. 엑셀의 "파워쿼리 열 피벗 해제"와 비슷하다.</li>
+<li>큰 공공데이터는 원본을 그대로 보려 하지 말고, 집계표로 줄여서 본다.</li>
+</ul>
+<h2>수업 후 수강생이 말할 수 있어야 하는 문장</h2>
+<ul>
+<li>"주문표에 없는 고객 지역과 상품 단가는 <code>merge</code>로 붙인다."</li>
+<li>"병합 후에는 행수와 누락값을 확인해야 한다."</li>
+<li>"<code>groupby</code>는 어떤 기준으로 묶을지 정하고, <code>agg</code>는 무엇을 계산할지 정한다."</li>
+<li>"<code>pivot_table</code>은 지역×카테고리 같은 교차표를 만드는 방법이다."</li>
+<li>"<code>melt</code>는 열이 너무 많은 wide 데이터를 분석하기 쉬운 long 데이터로 바꾸는 방법이다."</li>
+</ul>
+<h2>평가 미션</h2>
+<p>미션은 <code>seoul_living_population_gu_daily.csv</code>를 사용해 자치구별 생활인구를 집계하는 것이다.</p>
+<p>통과 기준:</p>
+<ul>
+<li><code>서울시</code> 전체 행을 제외하고 25개 자치구만 남긴다.</li>
+<li>자치구별 관측일수, 평균 생활인구, 평균 주간인구, 평균 야간인구, 최대 생활인구를 계산한다.</li>
+<li>평균 생활인구 기준 내림차순으로 정렬한다.</li>
+<li>결과에서 <code>강남구</code>가 평균 생활인구 1위이고, 관측일수가 2,992일임을 확인한다.</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="handout" aria-label="핸드아웃">
+<h1>S13 핸드아웃: 그룹화·집계·재구조화</h1>
+<h2>오늘 사용할 것</h2>
+<ul>
+<li>Python 3</li>
+<li>pandas</li>
+<li>작업 루트: <code>/mnt/d/ai-data-analysis-course</code></li>
+<li>사용 데이터:</li>
+<li><code>02_datasets/shop_orders/orders.csv</code></li>
+<li><code>02_datasets/shop_orders/customers.csv</code></li>
+<li><code>02_datasets/shop_orders/products.csv</code></li>
+<li><code>02_datasets/real_korean/population_kosis/mois_legal_dong_gender_age_population_20260531.csv</code></li>
+<li><code>02_datasets/real_korean/cafe_restaurant/seoul_commercial_food_stores_202109_github.csv</code></li>
+<li><code>02_datasets/real_korean/seoul_living_pop/seoul_living_population_gu_daily.csv</code></li>
+</ul>
+<p>오늘은 엑셀의 VLOOKUP, 부분합, 피벗 테이블을 pandas로 옮긴다. 코드를 외우는 것보다 "어떤 표를 어떤 모양으로 바꾸는가"를 이해하는 것이 중요하다.</p>
+<h2>따라하기 1: 주문 3개 표 읽고 병합하기</h2>
+<p>새 파이썬 파일이나 Colab 노트북을 열고 아래 코드를 실행한다.</p>
+<div class="code-scroll"><pre><code class="language-python">from pathlib import Path
+import pandas as pd
+
+ROOT = Path(&quot;/mnt/d/ai-data-analysis-course&quot;)
+DATA = ROOT / &quot;02_datasets&quot;
+
+orders = pd.read_csv(DATA / &quot;shop_orders/orders.csv&quot;)
+customers = pd.read_csv(DATA / &quot;shop_orders/customers.csv&quot;)
+products = pd.read_csv(DATA / &quot;shop_orders/products.csv&quot;)
+
+print(orders.shape)
+print(customers.shape)
+print(products.shape)
+print(orders.head())
+</code></pre></div>
+<p>확인할 결과:</p>
+<div class="code-scroll"><pre><code class="language-text">orders: 20,000행, 6열
+customers: 3,000행, 7열
+products: 200행, 5열
+</code></pre></div>
+<p>주문 표에는 <code>customer_id</code>와 <code>product_id</code>만 있고, 고객 지역과 상품 단가는 없다. 고객 표와 상품 표를 붙인다.</p>
+<div class="code-scroll"><pre><code class="language-python">merged = (
+    orders.merge(customers, on=&quot;customer_id&quot;, how=&quot;left&quot;)
+    .merge(products, on=&quot;product_id&quot;, how=&quot;left&quot;)
+)
+
+print(merged.shape)
+print(merged[[&quot;region&quot;, &quot;category&quot;, &quot;price&quot;]].isna().sum())
+</code></pre></div>
+<p>확인할 결과:</p>
+<div class="code-scroll"><pre><code class="language-text">병합 후: 20,000행, 17열
+region      0
+category    0
+price       0
+</code></pre></div>
+<p>엑셀에서 VLOOKUP을 한 뒤 조회 실패가 있는지 확인하는 것과 같다. <code>how="left"</code>는 주문표의 20,000행을 기준으로 유지하겠다는 뜻이다.</p>
+<h2>따라하기 2: 매출 계산하기</h2>
+<p><code>orders.csv</code>에는 매출 컬럼이 없다. 상품 단가와 주문 수량, 할인율로 만든다.</p>
+<div class="code-scroll"><pre><code class="language-python">merged[&quot;sales&quot;] = merged[&quot;price&quot;] * merged[&quot;qty&quot;] * (1 - merged[&quot;discount_rate&quot;])
+
+print(merged[[&quot;order_id&quot;, &quot;price&quot;, &quot;qty&quot;, &quot;discount_rate&quot;, &quot;sales&quot;]].head())
+print(merged[&quot;sales&quot;].sum())
+</code></pre></div>
+<p>확인할 결과:</p>
+<div class="code-scroll"><pre><code class="language-text">전체 매출 합계: 1,938,489,803
+</code></pre></div>
+<p>계산식은 아래와 같다.</p>
+<div class="code-scroll"><pre><code class="language-text">매출 = 단가 * 수량 * (1 - 할인율)
+</code></pre></div>
+<h2>따라하기 3: 지역×카테고리별 다중 집계하기</h2>
+<p>지역과 카테고리를 동시에 기준으로 묶는다.</p>
+<div class="code-scroll"><pre><code class="language-python">region_category_summary = (
+    merged.groupby([&quot;region&quot;, &quot;category&quot;])
+    .agg(
+        주문건수=(&quot;order_id&quot;, &quot;nunique&quot;),
+        판매수량=(&quot;qty&quot;, &quot;sum&quot;),
+        매출합계=(&quot;sales&quot;, &quot;sum&quot;),
+        평균주문금액=(&quot;sales&quot;, &quot;mean&quot;),
+    )
+    .reset_index()
+    .sort_values(&quot;매출합계&quot;, ascending=False)
+)
+
+print(region_category_summary.head(10))
+</code></pre></div>
+<p>대표 결과:</p>
+<div class="code-scroll"><pre><code class="language-text">region    category  주문건수  판매수량      매출합계
+서울특별시  디지털       612   658  210356387
+경기도     디지털       514   565  188110354
+서울특별시  패션         990  1442   86206229
+경기도     패션         884  1292   75963357
+</code></pre></div>
+<p>읽는 법:</p>
+<ul>
+<li><code>groupby(["region", "category"])</code>: 지역별로 나눈 뒤 카테고리별로 다시 나눈다.</li>
+<li><code>주문건수=("order_id", "nunique")</code>: 주문번호의 고유 개수를 센다.</li>
+<li><code>판매수량=("qty", "sum")</code>: 수량을 합한다.</li>
+<li><code>매출합계=("sales", "sum")</code>: 매출을 합한다.</li>
+<li><code>평균주문금액=("sales", "mean")</code>: 주문 한 건의 평균 매출을 구한다.</li>
+</ul>
+<h2>따라하기 4: 지역×카테고리 피벗 테이블 만들기</h2>
+<p>이번에는 엑셀 피벗처럼 지역을 행, 카테고리를 열에 놓는다.</p>
+<div class="code-scroll"><pre><code class="language-python">pivot = pd.pivot_table(
+    merged,
+    index=&quot;region&quot;,
+    columns=&quot;category&quot;,
+    values=&quot;sales&quot;,
+    aggfunc=&quot;sum&quot;,
+    fill_value=0,
+    margins=True,
+    margins_name=&quot;합계&quot;,
+)
+
+pivot_display = pivot.round(0).astype(&quot;int64&quot;)
+print(pivot_display.head())
+</code></pre></div>
+<p>핵심 인자:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>인자</th>
+<th>뜻</th>
+<th>엑셀 피벗과 비교</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>index</code></td>
+<td>행 기준</td>
+<td>행 영역</td>
+</tr>
+<tr>
+<td><code>columns</code></td>
+<td>열 기준</td>
+<td>열 영역</td>
+</tr>
+<tr>
+<td><code>values</code></td>
+<td>계산할 값</td>
+<td>값 영역</td>
+</tr>
+<tr>
+<td><code>aggfunc</code></td>
+<td>계산 방법</td>
+<td>합계, 평균, 개수</td>
+</tr>
+<tr>
+<td><code>fill_value</code></td>
+<td>빈 칸 대체값</td>
+<td>빈 셀에 0 표시</td>
+</tr>
+</tbody>
+</table></div>
+<h2>따라하기 5: 231열 wide 인구 데이터를 long으로 바꾸기</h2>
+<p>이번 파일은 18,623행, 231열이다. 열이 너무 많으므로 수업에서는 서울특별시 행만 먼저 골라서 <code>melt</code>한다.</p>
+<div class="code-scroll"><pre><code class="language-python">pop = pd.read_csv(
+    DATA / &quot;real_korean/population_kosis/mois_legal_dong_gender_age_population_20260531.csv&quot;
+)
+
+print(pop.shape)
+print(pop.columns[:15])
+</code></pre></div>
+<p>확인할 결과:</p>
+<div class="code-scroll"><pre><code class="language-text">(18623, 231)
+</code></pre></div>
+<p>이제 서울특별시만 남기고, <code>0세남자</code>, <code>1세남자</code> 같은 연령·성별 열을 세로로 모은다.</p>
+<div class="code-scroll"><pre><code class="language-python">id_cols = [&quot;법정동코드&quot;, &quot;기준연월&quot;, &quot;시도명&quot;, &quot;시군구명&quot;, &quot;읍면동명&quot;, &quot;리명&quot;]
+
+age_gender_cols = [
+    col
+    for col in pop.columns
+    if (col.endswith(&quot;남자&quot;) or col.endswith(&quot;여자&quot;)) and col not in [&quot;남자&quot;, &quot;여자&quot;]
+]
+
+seoul_pop = pop[pop[&quot;시도명&quot;] == &quot;서울특별시&quot;].copy()
+
+long_pop = seoul_pop.melt(
+    id_vars=id_cols,
+    value_vars=age_gender_cols,
+    var_name=&quot;연령성별&quot;,
+    value_name=&quot;인구수&quot;,
+)
+
+long_pop[&quot;성별&quot;] = long_pop[&quot;연령성별&quot;].str.extract(&quot;(남자|여자)$&quot;)
+long_pop[&quot;연령&quot;] = (
+    long_pop[&quot;연령성별&quot;].str.replace(&quot;(남자|여자)$&quot;, &quot;&quot;, regex=True).str.strip()
+)
+
+print(seoul_pop.shape)
+print(len(age_gender_cols))
+print(long_pop.shape)
+print(long_pop[[&quot;시도명&quot;, &quot;시군구명&quot;, &quot;읍면동명&quot;, &quot;연령&quot;, &quot;성별&quot;, &quot;인구수&quot;]].head())
+</code></pre></div>
+<p>확인할 결과:</p>
+<div class="code-scroll"><pre><code class="language-text">서울특별시 wide: 452행, 231열
+melt 대상 연령/성별 열: 222개
+서울특별시 long: 100,344행, 10열
+</code></pre></div>
+<p><code>melt</code>를 하면 열 이름이 값으로 내려온다. 넓은 표에서는 <code>0세남자</code>가 열 이름이었지만, 긴 표에서는 <code>연령성별</code> 열 안의 값이 된다.</p>
+<h2>따라하기 6: 서울 음식점 상권 업종 상위 10개 집계하기</h2>
+<p>상가업소 파일은 119,158행이다. 원본을 그대로 보지 말고 먼저 업종별 개수로 줄인다.</p>
+<div class="code-scroll"><pre><code class="language-python">stores = pd.read_csv(
+    DATA / &quot;real_korean/cafe_restaurant/seoul_commercial_food_stores_202109_github.csv&quot;
+)
+
+top10 = (
+    stores.groupby(&quot;상권업종중분류명&quot;)
+    .size()
+    .reset_index(name=&quot;업소수&quot;)
+    .sort_values(&quot;업소수&quot;, ascending=False)
+    .head(10)
+)
+
+print(stores.shape)
+print(top10)
+</code></pre></div>
+<p>확인할 대표 결과:</p>
+<div class="code-scroll"><pre><code class="language-text">상가업소 파일: 119,158행, 13열
+한식 40,448
+커피점/카페 19,703
+유흥주점 11,693
+분식 10,199
+</code></pre></div>
+<p><code>groupby().size()</code>는 각 그룹에 행이 몇 개 있는지 세는 가장 단순한 집계다.</p>
+<h2>직접 해보기: 자치구별 생활인구 집계</h2>
+<p>사용 파일:</p>
+<div class="code-scroll"><pre><code class="language-text">02_datasets/real_korean/seoul_living_pop/seoul_living_population_gu_daily.csv
+</code></pre></div>
+<p>목표:</p>
+<ol>
+<li>생활인구 파일을 읽는다.</li>
+<li><code>기준일ID</code>를 날짜로 바꾼다.</li>
+<li><code>시군구명</code>이 <code>서울시</code>인 전체 합계 행은 제외한다.</li>
+<li><code>시군구명</code>별로 아래 값을 계산한다.
+   - 관측일수: 날짜의 고유 개수
+   - 평균생활인구: <code>총생활인구수</code> 평균
+   - 평균주간인구: <code>주간인구수(09~18)</code> 평균
+   - 평균야간인구: <code>야간인구수(19~08)</code> 평균
+   - 최대생활인구: <code>일최대인구수</code> 최댓값</li>
+<li>평균생활인구 기준으로 내림차순 정렬한다.</li>
+<li>상위 10개 자치구를 출력한다.</li>
+</ol>
+<p>시작 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">living = pd.read_csv(
+    DATA / &quot;real_korean/seoul_living_pop/seoul_living_population_gu_daily.csv&quot;
+)
+
+living[&quot;기준일&quot;] = pd.to_datetime(living[&quot;기준일ID&quot;].astype(str), format=&quot;%Y%m%d&quot;)
+
+gu_living = living[living[&quot;시군구명&quot;] != &quot;서울시&quot;].copy()
+
+# 이 아래에 groupby 코드를 작성한다.
+</code></pre></div>
+<p>완료 확인:</p>
+<div class="code-scroll"><pre><code class="language-text">생활인구 파일: 77,792행, 15열
+기간: 2018-04-05 ~ 2026-06-30
+자치구 집계 결과: 25행
+평균생활인구 1위: 강남구
+강남구 관측일수: 2,992
+강남구 평균생활인구: 약 846,650
+</code></pre></div>
+<h2>자주 나는 오류</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>오류 상황</th>
+<th>원인</th>
+<th>해결</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>병합 후 행수가 20,000보다 많아짐</td>
+<td>키가 중복된 표를 잘못 붙였거나 병합 기준이 잘못됨</td>
+<td><code>on=</code>에 넣은 키와 오른쪽 표의 중복 여부 확인</td>
+</tr>
+<tr>
+<td><code>KeyError</code></td>
+<td>열 이름을 잘못 입력함</td>
+<td><code>df.columns</code>로 실제 열 이름 확인</td>
+</tr>
+<tr>
+<td><code>sales</code> 계산이 안 됨</td>
+<td>병합 전에는 <code>price</code>가 없음</td>
+<td>상품 표까지 병합한 뒤 계산</td>
+</tr>
+<tr>
+<td><code>melt</code> 결과가 너무 커짐</td>
+<td>전체 18,623행과 222개 열을 한 번에 long으로 바꿈</td>
+<td>수업에서는 서울특별시만 필터링 후 실습</td>
+</tr>
+<tr>
+<td>피벗 결과에 빈 칸이 많음</td>
+<td>해당 지역×카테고리 조합이 없음</td>
+<td><code>fill_value=0</code> 사용</td>
+</tr>
+</tbody>
+</table></div>
+</section>
+<section class="tab-panel markdown-body" data-panel="script" aria-label="강사대본">
+<h1>S13 강사대본: 그룹화·집계·재구조화</h1>
+<h2>수업 전 확인</h2>
+<ul>
+<li>강사용 환경에서 아래 명령이 통과하는지 확인한다.</li>
+</ul>
+<div class="code-scroll"><pre><code class="language-bash">python3 /mnt/d/ai-data-analysis-course/06_answers/S13_code.py
+</code></pre></div>
+<ul>
+<li>pandas 버전은 작성 시점에 3.0.3으로 확인했다.</li>
+<li>수업 데이터 파일이 아래 경로에 있는지 확인한다.</li>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/shop_orders/orders.csv</code></li>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/shop_orders/customers.csv</code></li>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/shop_orders/products.csv</code></li>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/real_korean/population_kosis/mois_legal_dong_gender_age_population_20260531.csv</code></li>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/real_korean/cafe_restaurant/seoul_commercial_food_stores_202109_github.csv</code></li>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/real_korean/seoul_living_pop/seoul_living_population_gu_daily.csv</code></li>
+</ul>
+<h2>0-5분. 도입</h2>
+<p>말할 것:</p>
+<p>오늘은 pandas에서 데이터를 요약표로 바꾸는 방법을 배운다. 엑셀로 말하면 VLOOKUP, 부분합, 피벗 테이블, 파워쿼리의 열 피벗 해제에 해당한다. 이름은 새롭지만 생각은 익숙하다.</p>
+<p>오늘의 핵심 질문은 두 가지다.</p>
+<p>첫째, 여러 표에 흩어진 정보를 어떻게 한 표로 붙일 것인가. 둘째, 길게 쌓인 거래 데이터를 어떻게 지역별, 카테고리별 요약표로 바꿀 것인가.</p>
+<p>강조:</p>
+<p>코드를 외우는 시간이 아니다. <code>merge</code>는 왜 필요한지, <code>groupby</code>는 무엇을 기준으로 묶는지, <code>melt</code>는 왜 표의 모양을 바꾸는지 계속 연결해서 설명한다.</p>
+<h2>5-15분. 주문 3개 표 읽기</h2>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">from pathlib import Path
+import pandas as pd
+
+ROOT = Path(&quot;/mnt/d/ai-data-analysis-course&quot;)
+DATA = ROOT / &quot;02_datasets&quot;
+
+orders = pd.read_csv(DATA / &quot;shop_orders/orders.csv&quot;)
+customers = pd.read_csv(DATA / &quot;shop_orders/customers.csv&quot;)
+products = pd.read_csv(DATA / &quot;shop_orders/products.csv&quot;)
+
+print(orders.shape)
+print(customers.shape)
+print(products.shape)
+print(orders.head())
+</code></pre></div>
+<p>말할 것:</p>
+<p>주문 표는 20,000행이다. 그런데 이 표만으로는 지역별 매출을 구할 수 없다. 고객ID만 있고 지역명이 없기 때문이다. 상품 카테고리별 매출도 마찬가지다. 상품ID만 있을 뿐 카테고리와 단가가 없다.</p>
+<p>이 상황은 실무에서 매우 흔하다. 한 파일에 모든 정보가 들어 있지 않고, 여러 표에 나뉘어 있다. 그래서 분석 전에 표를 붙이는 일이 필요하다.</p>
+<p>시연 포인트:</p>
+<ul>
+<li><code>orders.columns</code>, <code>customers.columns</code>, <code>products.columns</code>를 보여준다.</li>
+<li>공통 키인 <code>customer_id</code>, <code>product_id</code>를 수강생이 직접 찾게 한다.</li>
+<li><code>orders</code>에 매출 컬럼이 없다는 점을 분명히 짚는다.</li>
+</ul>
+<h2>15-27분. <code>merge</code>로 정보 붙이고 매출 계산</h2>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">merged = (
+    orders.merge(customers, on=&quot;customer_id&quot;, how=&quot;left&quot;)
+    .merge(products, on=&quot;product_id&quot;, how=&quot;left&quot;)
+)
+
+print(merged.shape)
+print(merged[[&quot;region&quot;, &quot;category&quot;, &quot;price&quot;]].isna().sum())
+</code></pre></div>
+<p>말할 것:</p>
+<p><code>merge</code>는 pandas의 VLOOKUP이라고 생각하면 된다. 주문표를 기준으로 고객표에서 지역을 가져오고, 상품표에서 카테고리와 단가를 가져온다. <code>how="left"</code>는 왼쪽 표인 주문표의 행을 유지하겠다는 뜻이다.</p>
+<p>병합을 했으면 반드시 확인할 것이 있다. 첫째, 행수가 예상대로 유지되었는가. 둘째, 새로 붙인 값에 빈 값이 생겼는가. 이번 데이터는 20,000행이 그대로 유지되고, 지역·카테고리·단가 누락값이 0개다.</p>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">merged[&quot;sales&quot;] = merged[&quot;price&quot;] * merged[&quot;qty&quot;] * (1 - merged[&quot;discount_rate&quot;])
+print(merged[&quot;sales&quot;].sum())
+</code></pre></div>
+<p>말할 것:</p>
+<p>매출은 원래 파일에 없었다. 단가는 상품표에서 왔고, 수량과 할인율은 주문표에 있었다. 여러 표를 붙인 뒤에야 매출 계산이 가능해졌다.</p>
+<h2>27-40분. <code>groupby</code>와 <code>agg</code>로 다중 집계</h2>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">region_category_summary = (
+    merged.groupby([&quot;region&quot;, &quot;category&quot;])
+    .agg(
+        주문건수=(&quot;order_id&quot;, &quot;nunique&quot;),
+        판매수량=(&quot;qty&quot;, &quot;sum&quot;),
+        매출합계=(&quot;sales&quot;, &quot;sum&quot;),
+        평균주문금액=(&quot;sales&quot;, &quot;mean&quot;),
+    )
+    .reset_index()
+    .sort_values(&quot;매출합계&quot;, ascending=False)
+)
+
+print(region_category_summary.head(10))
+</code></pre></div>
+<p>말할 것:</p>
+<p><code>groupby(["region", "category"])</code>는 지역으로 먼저 나누고, 그 안에서 카테고리로 다시 나눈다는 뜻이다. 엑셀 피벗에서 행 영역에 지역과 카테고리를 넣은 상태를 떠올리면 된다.</p>
+<p><code>agg</code>는 값 영역에 여러 계산을 넣는 부분이다. 주문건수는 주문번호의 고유 개수, 판매수량은 수량 합계, 매출합계는 매출 합계, 평균주문금액은 매출 평균이다.</p>
+<p>시연 포인트:</p>
+<ul>
+<li><code>reset_index()</code>를 빼고 한 번 실행해 인덱스가 계층처럼 보이는 모습을 보여준다.</li>
+<li><code>reset_index()</code>를 다시 붙여 일반 표처럼 다루기 쉽게 만든다고 설명한다.</li>
+<li>상위 결과가 <code>서울특별시 × 디지털</code>임을 확인한다.</li>
+</ul>
+<p>예상 결과:</p>
+<div class="code-scroll"><pre><code class="language-text">서울특별시 디지털 매출합계 210,356,387
+경기도 디지털 매출합계 188,110,354
+</code></pre></div>
+<h2>40-48분. <code>pivot_table</code>로 교차표 만들기</h2>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">pivot = pd.pivot_table(
+    merged,
+    index=&quot;region&quot;,
+    columns=&quot;category&quot;,
+    values=&quot;sales&quot;,
+    aggfunc=&quot;sum&quot;,
+    fill_value=0,
+    margins=True,
+    margins_name=&quot;합계&quot;,
+)
+
+print(pivot.round(0).astype(&quot;int64&quot;).head())
+</code></pre></div>
+<p>말할 것:</p>
+<p><code>groupby</code> 결과는 긴 표다. 그런데 지역을 행에 두고 카테고리를 열에 두면 비교가 쉬워진다. 이것이 피벗 테이블이다.</p>
+<p><code>index</code>는 행, <code>columns</code>는 열, <code>values</code>는 계산할 숫자, <code>aggfunc</code>는 계산 방식이다. <code>fill_value=0</code>은 빈 조합을 0으로 채운다. <code>margins=True</code>는 합계 행과 합계 열을 만든다.</p>
+<p>강조:</p>
+<p>피벗은 분석 결과를 보기 좋게 펼치는 방법이다. 원자료를 피벗 형태로만 저장하는 것이 항상 좋은 것은 아니다. 다음 <code>melt</code>에서 그 반대 방향을 본다.</p>
+<h2>48-58분. <code>melt</code>로 wide를 long으로 바꾸기</h2>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">pop = pd.read_csv(
+    DATA / &quot;real_korean/population_kosis/mois_legal_dong_gender_age_population_20260531.csv&quot;
+)
+
+id_cols = [&quot;법정동코드&quot;, &quot;기준연월&quot;, &quot;시도명&quot;, &quot;시군구명&quot;, &quot;읍면동명&quot;, &quot;리명&quot;]
+age_gender_cols = [
+    col
+    for col in pop.columns
+    if (col.endswith(&quot;남자&quot;) or col.endswith(&quot;여자&quot;)) and col not in [&quot;남자&quot;, &quot;여자&quot;]
+]
+
+seoul_pop = pop[pop[&quot;시도명&quot;] == &quot;서울특별시&quot;].copy()
+
+long_pop = seoul_pop.melt(
+    id_vars=id_cols,
+    value_vars=age_gender_cols,
+    var_name=&quot;연령성별&quot;,
+    value_name=&quot;인구수&quot;,
+)
+</code></pre></div>
+<p>말할 것:</p>
+<p>이 인구 파일은 18,623행, 231열이다. 열이 매우 많다. <code>0세남자</code>, <code>1세남자</code>, <code>2세남자</code>처럼 분석 기준이 열 이름 속에 들어 있다.</p>
+<p><code>melt</code>는 열 이름에 들어 있던 정보를 값으로 내리는 작업이다. 엑셀 파워쿼리의 "열 피벗 해제"와 비슷하다.</p>
+<p>이번 실습에서는 전체를 한 번에 길게 만들지 않고 서울특별시 452행만 골랐다. 그 결과 100,344행이 된다. 큰 파일에서는 먼저 필요한 지역이나 기간을 필터링하고, 그 다음 구조를 바꾸는 습관이 중요하다.</p>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">long_pop[&quot;성별&quot;] = long_pop[&quot;연령성별&quot;].str.extract(&quot;(남자|여자)$&quot;)
+long_pop[&quot;연령&quot;] = (
+    long_pop[&quot;연령성별&quot;].str.replace(&quot;(남자|여자)$&quot;, &quot;&quot;, regex=True).str.strip()
+)
+
+print(long_pop[[&quot;시군구명&quot;, &quot;읍면동명&quot;, &quot;연령&quot;, &quot;성별&quot;, &quot;인구수&quot;]].head())
+</code></pre></div>
+<p>시연 포인트:</p>
+<ul>
+<li><code>id_vars</code>는 그대로 남길 열이라고 설명한다.</li>
+<li><code>value_vars</code>는 세로로 내릴 열이라고 설명한다.</li>
+<li><code>연령성별</code>에서 <code>성별</code>과 <code>연령</code>을 다시 분리하면 이후 분석이 쉬워진다고 설명한다.</li>
+</ul>
+<h2>58-64분. 상가업소 상위 10개 집계</h2>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">stores = pd.read_csv(
+    DATA / &quot;real_korean/cafe_restaurant/seoul_commercial_food_stores_202109_github.csv&quot;
+)
+
+top10 = (
+    stores.groupby(&quot;상권업종중분류명&quot;)
+    .size()
+    .reset_index(name=&quot;업소수&quot;)
+    .sort_values(&quot;업소수&quot;, ascending=False)
+    .head(10)
+)
+
+print(top10)
+</code></pre></div>
+<p>말할 것:</p>
+<p>119,158행짜리 파일을 화면에 길게 출력하는 것은 분석이 아니다. 먼저 업종별 개수로 줄이면 한눈에 볼 수 있다. <code>groupby().size()</code>는 각 그룹에 행이 몇 개 있는지 세는 가장 단순한 집계다.</p>
+<p>예상 결과:</p>
+<div class="code-scroll"><pre><code class="language-text">한식 40,448
+커피점/카페 19,703
+유흥주점 11,693
+분식 10,199
+</code></pre></div>
+<h2>64-70분. 미션 안내</h2>
+<p>미션:</p>
+<p><code>seoul_living_population_gu_daily.csv</code>를 읽고 자치구별 생활인구 요약표를 만든다.</p>
+<p>말할 것:</p>
+<p>이 파일에는 <code>서울시</code> 전체 행과 25개 자치구 행이 함께 있다. 자치구별 비교를 하려면 <code>서울시</code> 행은 제외해야 한다. 그 다음 자치구별로 평균 생활인구, 평균 주간인구, 평균 야간인구, 최대 생활인구를 계산한다.</p>
+<p>힌트 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">living = pd.read_csv(
+    DATA / &quot;real_korean/seoul_living_pop/seoul_living_population_gu_daily.csv&quot;
+)
+living[&quot;기준일&quot;] = pd.to_datetime(living[&quot;기준일ID&quot;].astype(str), format=&quot;%Y%m%d&quot;)
+gu_living = living[living[&quot;시군구명&quot;] != &quot;서울시&quot;].copy()
+</code></pre></div>
+<p>완료 판단 체크포인트:</p>
+<p>수강생이 <code>서울시</code> 전체 행을 제외한 25개 자치구 요약표를 만들고, 평균생활인구 1위가 <code>강남구</code>, 관측일수가 <code>2,992</code>일임을 확인하면 완료로 본다.</p>
+<h2>예상 질문과 답변</h2>
+<h3>Q1. <code>merge</code>와 <code>join</code>은 같은 건가요?</h3>
+<p>비슷한 일을 하지만 오늘은 <code>merge</code>만 기억하면 된다. <code>merge</code>는 열의 값을 기준으로 두 표를 붙이는 방법이고, 엑셀의 VLOOKUP과 가장 연결하기 쉽다.</p>
+<h3>Q2. 왜 <code>how="left"</code>를 쓰나요?</h3>
+<p>주문표를 기준으로 분석하기 때문이다. 주문 20,000행을 유지한 채 고객 정보와 상품 정보를 붙이고 싶다. 만약 기준을 잘못 잡으면 행이 줄거나 늘어날 수 있다.</p>
+<h3>Q3. <code>groupby</code> 뒤에 왜 <code>reset_index()</code>를 붙이나요?</h3>
+<p><code>groupby</code> 결과의 묶음 기준은 인덱스로 들어간다. 화면으로 보기에는 괜찮지만, 이후 정렬하거나 다시 병합할 때 일반 열로 있는 편이 쉽다. 그래서 수업에서는 <code>reset_index()</code>를 붙여 표처럼 다룬다.</p>
+<h3>Q4. <code>pivot_table</code>과 <code>groupby</code>는 무엇이 다른가요?</h3>
+<p>둘 다 집계한다. <code>groupby</code>는 긴 요약표를 만들고, <code>pivot_table</code>은 행과 열이 나뉜 교차표를 만든다. 엑셀 피벗처럼 비교표를 만들고 싶으면 <code>pivot_table</code>이 편하다.</p>
+<h3>Q5. 왜 넓은 표를 굳이 긴 표로 바꾸나요?</h3>
+<p>분석 도구는 보통 "열 하나는 의미 하나"인 표를 좋아한다. <code>0세남자</code>, <code>1세남자</code>처럼 열 이름에 값이 들어 있으면 필터링과 그래프 작성이 불편하다. <code>연령</code>, <code>성별</code>, <code>인구수</code> 열로 나누면 분석하기 쉬워진다.</p>
+<h3>Q6. 큰 파일을 전부 <code>melt</code>하면 안 되나요?</h3>
+<p>가능할 때도 있지만 입문 수업에서는 먼저 줄이는 습관이 중요하다. 이번 인구 파일 전체를 222개 연령·성별 열로 <code>melt</code>하면 400만 행이 넘는다. 오늘은 서울특별시만 필터링해 100,344행으로 연습한다.</p>
+<h3>Q7. 평균 생활인구와 최대 생활인구는 어떻게 다르게 읽나요?</h3>
+<p>평균 생활인구는 기간 전체에서 보통 어느 정도 사람이 있었는지를 보여준다. 최대 생활인구는 특정일·특정 시간대의 피크를 포함한 값이므로, 일상적인 규모보다 행사나 업무지구 특성의 영향을 더 크게 받을 수 있다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="answer" aria-label="모범답안">
+<h1>S13 모범답안</h1>
+<h2>미션 목표</h2>
+<p><code>seoul_living_population_gu_daily.csv</code>를 사용해 자치구별 생활인구 요약표를 만든다.</p>
+<p>조건:</p>
+<ul>
+<li><code>서울시</code> 전체 합계 행은 제외한다.</li>
+<li><code>시군구명</code>별로 관측일수, 평균 생활인구, 평균 주간인구, 평균 야간인구, 최대 생활인구를 계산한다.</li>
+<li>평균 생활인구 기준으로 내림차순 정렬한다.</li>
+<li>결과가 25개 자치구인지 확인한다.</li>
+</ul>
+<h2>미션 모범 코드</h2>
+<div class="code-scroll"><pre><code class="language-python">from pathlib import Path
+import pandas as pd
+
+ROOT = Path(&quot;/mnt/d/ai-data-analysis-course&quot;)
+DATA = ROOT / &quot;02_datasets&quot;
+
+living = pd.read_csv(
+    DATA / &quot;real_korean/seoul_living_pop/seoul_living_population_gu_daily.csv&quot;
+)
+
+living[&quot;기준일&quot;] = pd.to_datetime(living[&quot;기준일ID&quot;].astype(str), format=&quot;%Y%m%d&quot;)
+
+gu_living = living[living[&quot;시군구명&quot;] != &quot;서울시&quot;].copy()
+
+gu_summary = (
+    gu_living.groupby(&quot;시군구명&quot;)
+    .agg(
+        관측일수=(&quot;기준일&quot;, &quot;nunique&quot;),
+        평균생활인구=(&quot;총생활인구수&quot;, &quot;mean&quot;),
+        평균주간인구=(&quot;주간인구수(09~18)&quot;, &quot;mean&quot;),
+        평균야간인구=(&quot;야간인구수(19~08)&quot;, &quot;mean&quot;),
+        최대생활인구=(&quot;일최대인구수&quot;, &quot;max&quot;),
+    )
+    .reset_index()
+    .sort_values(&quot;평균생활인구&quot;, ascending=False)
+)
+
+display = gu_summary.copy()
+for col in [&quot;평균생활인구&quot;, &quot;평균주간인구&quot;, &quot;평균야간인구&quot;, &quot;최대생활인구&quot;]:
+    display[col] = display[col].round(0).astype(&quot;int64&quot;)
+
+print(living.shape)
+print(living[&quot;기준일&quot;].min(), living[&quot;기준일&quot;].max())
+print(display.head(10))
+</code></pre></div>
+<h2>미션 실행 결과</h2>
+<p>실제 실행 결과 요약:</p>
+<div class="code-scroll"><pre><code class="language-text">생활인구 파일: 77,792행, 15열
+기간: 2018-04-05 ~ 2026-06-30
+자치구 집계 결과: 25행
+</code></pre></div>
+<p>평균생활인구 상위 10개 자치구:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>시군구명</th>
+<th style="text-align: right;">관측일수</th>
+<th style="text-align: right;">평균생활인구</th>
+<th style="text-align: right;">평균주간인구</th>
+<th style="text-align: right;">평균야간인구</th>
+<th style="text-align: right;">최대생활인구</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>강남구</td>
+<td style="text-align: right;">2,992</td>
+<td style="text-align: right;">846,650</td>
+<td style="text-align: right;">995,622</td>
+<td style="text-align: right;">740,184</td>
+<td style="text-align: right;">1,269,318</td>
+</tr>
+<tr>
+<td>송파구</td>
+<td style="text-align: right;">2,992</td>
+<td style="text-align: right;">760,200</td>
+<td style="text-align: right;">764,979</td>
+<td style="text-align: right;">756,731</td>
+<td style="text-align: right;">955,122</td>
+</tr>
+<tr>
+<td>서초구</td>
+<td style="text-align: right;">2,992</td>
+<td style="text-align: right;">591,061</td>
+<td style="text-align: right;">675,187</td>
+<td style="text-align: right;">530,928</td>
+<td style="text-align: right;">828,585</td>
+</tr>
+<tr>
+<td>강서구</td>
+<td style="text-align: right;">2,992</td>
+<td style="text-align: right;">552,962</td>
+<td style="text-align: right;">537,960</td>
+<td style="text-align: right;">563,637</td>
+<td style="text-align: right;">684,840</td>
+</tr>
+<tr>
+<td>영등포구</td>
+<td style="text-align: right;">2,992</td>
+<td style="text-align: right;">514,382</td>
+<td style="text-align: right;">563,274</td>
+<td style="text-align: right;">479,423</td>
+<td style="text-align: right;">985,953</td>
+</tr>
+<tr>
+<td>강동구</td>
+<td style="text-align: right;">2,992</td>
+<td style="text-align: right;">511,409</td>
+<td style="text-align: right;">480,815</td>
+<td style="text-align: right;">533,226</td>
+<td style="text-align: right;">724,646</td>
+</tr>
+<tr>
+<td>노원구</td>
+<td style="text-align: right;">2,992</td>
+<td style="text-align: right;">501,119</td>
+<td style="text-align: right;">472,950</td>
+<td style="text-align: right;">521,202</td>
+<td style="text-align: right;">649,191</td>
+</tr>
+<tr>
+<td>관악구</td>
+<td style="text-align: right;">2,992</td>
+<td style="text-align: right;">492,218</td>
+<td style="text-align: right;">448,839</td>
+<td style="text-align: right;">523,164</td>
+<td style="text-align: right;">605,265</td>
+</tr>
+<tr>
+<td>마포구</td>
+<td style="text-align: right;">2,992</td>
+<td style="text-align: right;">481,860</td>
+<td style="text-align: right;">504,268</td>
+<td style="text-align: right;">465,817</td>
+<td style="text-align: right;">693,437</td>
+</tr>
+<tr>
+<td>성북구</td>
+<td style="text-align: right;">2,992</td>
+<td style="text-align: right;">437,273</td>
+<td style="text-align: right;">413,772</td>
+<td style="text-align: right;">454,027</td>
+<td style="text-align: right;">718,866</td>
+</tr>
+</tbody>
+</table></div>
+<h2>해설</h2>
+<p>생활인구 파일에는 <code>서울시</code> 전체 행과 25개 자치구 행이 함께 들어 있다. 자치구별 비교를 하려면 전체 합계 행인 <code>서울시</code>를 제외해야 한다.</p>
+<div class="code-scroll"><pre><code class="language-python">gu_living = living[living[&quot;시군구명&quot;] != &quot;서울시&quot;].copy()
+</code></pre></div>
+<p>이 코드는 엑셀 필터에서 <code>서울시</code>를 체크 해제하는 것과 같다.</p>
+<p>그 다음 핵심은 <code>groupby("시군구명")</code>이다. 자치구 이름으로 행을 묶고, 각 묶음 안에서 필요한 값을 계산한다.</p>
+<div class="code-scroll"><pre><code class="language-python">.agg(
+    관측일수=(&quot;기준일&quot;, &quot;nunique&quot;),
+    평균생활인구=(&quot;총생활인구수&quot;, &quot;mean&quot;),
+    평균주간인구=(&quot;주간인구수(09~18)&quot;, &quot;mean&quot;),
+    평균야간인구=(&quot;야간인구수(19~08)&quot;, &quot;mean&quot;),
+    최대생활인구=(&quot;일최대인구수&quot;, &quot;max&quot;),
+)
+</code></pre></div>
+<p><code>관측일수</code>는 단순 행수가 아니라 날짜의 고유 개수를 세었다. 같은 기간의 자치구들을 비교하는지 확인하기 위해서다. 실제 결과에서 모든 자치구가 2,992일로 확인된다.</p>
+<p>평균생활인구 기준 1위는 <code>강남구</code>다. 강남구는 평균주간인구가 평균야간인구보다 크게 나타난다. 업무·상업 활동으로 낮 시간대 유입이 크다는 해석을 붙일 수 있다. 반대로 이 표만으로 원인을 단정하지는 않는다. 오늘의 목표는 원인 분석이 아니라 집계표를 정확히 만드는 것이다.</p>
+<h2>따라하기 실습 코드 요약</h2>
+<p>전체 검증 코드는 아래 파일에 저장되어 있다.</p>
+<div class="code-scroll"><pre><code class="language-text">/mnt/d/ai-data-analysis-course/06_answers/S13_code.py
+</code></pre></div>
+<p>실행 명령:</p>
+<div class="code-scroll"><pre><code class="language-bash">python3 /mnt/d/ai-data-analysis-course/06_answers/S13_code.py
+</code></pre></div>
+<h3>1. 주문 3표 병합과 매출 계산</h3>
+<div class="code-scroll"><pre><code class="language-python">orders = pd.read_csv(DATA / &quot;shop_orders/orders.csv&quot;)
+customers = pd.read_csv(DATA / &quot;shop_orders/customers.csv&quot;)
+products = pd.read_csv(DATA / &quot;shop_orders/products.csv&quot;)
+
+merged = (
+    orders.merge(customers, on=&quot;customer_id&quot;, how=&quot;left&quot;)
+    .merge(products, on=&quot;product_id&quot;, how=&quot;left&quot;)
+)
+
+merged[&quot;sales&quot;] = merged[&quot;price&quot;] * merged[&quot;qty&quot;] * (1 - merged[&quot;discount_rate&quot;])
+</code></pre></div>
+<p>검증 결과:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th style="text-align: right;">값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>주문 원본</td>
+<td style="text-align: right;">20,000행, 6열</td>
+</tr>
+<tr>
+<td>고객 원본</td>
+<td style="text-align: right;">3,000행, 7열</td>
+</tr>
+<tr>
+<td>상품 원본</td>
+<td style="text-align: right;">200행, 5열</td>
+</tr>
+<tr>
+<td>병합 후</td>
+<td style="text-align: right;">20,000행, 17열</td>
+</tr>
+<tr>
+<td>병합 누락값 합계</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>전체 매출 합계</td>
+<td style="text-align: right;">1,938,489,803</td>
+</tr>
+</tbody>
+</table></div>
+<h3>2. 지역×카테고리 다중 집계</h3>
+<div class="code-scroll"><pre><code class="language-python">region_category_summary = (
+    merged.groupby([&quot;region&quot;, &quot;category&quot;])
+    .agg(
+        주문건수=(&quot;order_id&quot;, &quot;nunique&quot;),
+        판매수량=(&quot;qty&quot;, &quot;sum&quot;),
+        매출합계=(&quot;sales&quot;, &quot;sum&quot;),
+        평균주문금액=(&quot;sales&quot;, &quot;mean&quot;),
+    )
+    .reset_index()
+    .sort_values(&quot;매출합계&quot;, ascending=False)
+)
+</code></pre></div>
+<p>상위 결과:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>region</th>
+<th>category</th>
+<th style="text-align: right;">주문건수</th>
+<th style="text-align: right;">판매수량</th>
+<th style="text-align: right;">매출합계</th>
+<th style="text-align: right;">평균주문금액</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>서울특별시</td>
+<td>디지털</td>
+<td style="text-align: right;">612</td>
+<td style="text-align: right;">658</td>
+<td style="text-align: right;">210,356,387</td>
+<td style="text-align: right;">343,720</td>
+</tr>
+<tr>
+<td>경기도</td>
+<td>디지털</td>
+<td style="text-align: right;">514</td>
+<td style="text-align: right;">565</td>
+<td style="text-align: right;">188,110,354</td>
+<td style="text-align: right;">365,973</td>
+</tr>
+<tr>
+<td>서울특별시</td>
+<td>패션</td>
+<td style="text-align: right;">990</td>
+<td style="text-align: right;">1,442</td>
+<td style="text-align: right;">86,206,229</td>
+<td style="text-align: right;">87,077</td>
+</tr>
+<tr>
+<td>경기도</td>
+<td>패션</td>
+<td style="text-align: right;">884</td>
+<td style="text-align: right;">1,292</td>
+<td style="text-align: right;">75,963,357</td>
+<td style="text-align: right;">85,931</td>
+</tr>
+</tbody>
+</table></div>
+<h3>3. 지역×카테고리 피벗</h3>
+<div class="code-scroll"><pre><code class="language-python">pivot = pd.pivot_table(
+    merged,
+    index=&quot;region&quot;,
+    columns=&quot;category&quot;,
+    values=&quot;sales&quot;,
+    aggfunc=&quot;sum&quot;,
+    fill_value=0,
+    margins=True,
+    margins_name=&quot;합계&quot;,
+)
+</code></pre></div>
+<p>피벗은 같은 집계를 사람이 비교하기 쉬운 가로형 표로 펼친 것이다. 지역은 행, 카테고리는 열, 값은 매출 합계다.</p>
+<h3>4. 231열 인구 파일 <code>melt</code></h3>
+<div class="code-scroll"><pre><code class="language-python">pop = pd.read_csv(
+    DATA / &quot;real_korean/population_kosis/mois_legal_dong_gender_age_population_20260531.csv&quot;
+)
+
+id_cols = [&quot;법정동코드&quot;, &quot;기준연월&quot;, &quot;시도명&quot;, &quot;시군구명&quot;, &quot;읍면동명&quot;, &quot;리명&quot;]
+age_gender_cols = [
+    col
+    for col in pop.columns
+    if (col.endswith(&quot;남자&quot;) or col.endswith(&quot;여자&quot;)) and col not in [&quot;남자&quot;, &quot;여자&quot;]
+]
+
+seoul_pop = pop[pop[&quot;시도명&quot;] == &quot;서울특별시&quot;].copy()
+
+long_pop = seoul_pop.melt(
+    id_vars=id_cols,
+    value_vars=age_gender_cols,
+    var_name=&quot;연령성별&quot;,
+    value_name=&quot;인구수&quot;,
+)
+
+long_pop[&quot;성별&quot;] = long_pop[&quot;연령성별&quot;].str.extract(&quot;(남자|여자)$&quot;)
+long_pop[&quot;연령&quot;] = (
+    long_pop[&quot;연령성별&quot;].str.replace(&quot;(남자|여자)$&quot;, &quot;&quot;, regex=True).str.strip()
+)
+</code></pre></div>
+<p>검증 결과:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th style="text-align: right;">값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>원본 인구 파일</td>
+<td style="text-align: right;">18,623행, 231열</td>
+</tr>
+<tr>
+<td>서울특별시 wide</td>
+<td style="text-align: right;">452행, 231열</td>
+</tr>
+<tr>
+<td>melt 대상 연령·성별 열</td>
+<td style="text-align: right;">222개</td>
+</tr>
+<tr>
+<td>서울특별시 long</td>
+<td style="text-align: right;">100,344행, 10열</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>long_pop["인구수"].sum()</code>은 서울특별시 wide 데이터의 <code>남자</code> 합계와 <code>여자</code> 합계를 더한 값과 일치했다.</p>
+<h3>5. 서울 음식점 상권 업종 상위 10개</h3>
+<div class="code-scroll"><pre><code class="language-python">stores = pd.read_csv(
+    DATA / &quot;real_korean/cafe_restaurant/seoul_commercial_food_stores_202109_github.csv&quot;
+)
+
+top10 = (
+    stores.groupby(&quot;상권업종중분류명&quot;)
+    .size()
+    .reset_index(name=&quot;업소수&quot;)
+    .sort_values(&quot;업소수&quot;, ascending=False)
+    .head(10)
+)
+</code></pre></div>
+<p>상위 결과:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>상권업종중분류명</th>
+<th style="text-align: right;">업소수</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>한식</td>
+<td style="text-align: right;">40,448</td>
+</tr>
+<tr>
+<td>커피점/카페</td>
+<td style="text-align: right;">19,703</td>
+</tr>
+<tr>
+<td>유흥주점</td>
+<td style="text-align: right;">11,693</td>
+</tr>
+<tr>
+<td>분식</td>
+<td style="text-align: right;">10,199</td>
+</tr>
+<tr>
+<td>일식/수산물</td>
+<td style="text-align: right;">7,985</td>
+</tr>
+<tr>
+<td>양식</td>
+<td style="text-align: right;">6,519</td>
+</tr>
+<tr>
+<td>닭/오리요리</td>
+<td style="text-align: right;">5,733</td>
+</tr>
+<tr>
+<td>패스트푸드</td>
+<td style="text-align: right;">5,361</td>
+</tr>
+<tr>
+<td>제과제빵떡케익</td>
+<td style="text-align: right;">4,815</td>
+</tr>
+<tr>
+<td>중식</td>
+<td style="text-align: right;">3,245</td>
+</tr>
+</tbody>
+</table></div>
+<h2>실행한 검증 코드</h2>
+<p>검증 코드는 아래 파일에 저장되어 있다.</p>
+<div class="code-scroll"><pre><code class="language-text">06_answers/S13_code.py
+</code></pre></div>
+<p>실제 실행 출력 요약:</p>
+<div class="code-scroll"><pre><code class="language-text">orders: 20,000행, 6열
+customers: 3,000행, 7열
+products: 200행, 5열
+병합 후: 20,000행, 17열
+병합 누락값 합계: 0
+전체 매출 합계: 1,938,489,803
+원본 인구 파일: 18,623행, 231열
+서울특별시 long: 100,344행, 10열
+상가업소 파일: 119,158행, 13열
+생활인구 파일: 77,792행, 15열
+자치구 집계 결과: 25행
+검증 통과
+</code></pre></div>
+</section>
+  </div>
+
+  <nav class="session-pager container">
+    <a class="pager-link prev" href="./S12.html"><span class="pager-direction">&larr; 이전 차시</span><span class="pager-title">S12 · 데이터 정제: 결측, 이상치, 타입, 중복, 인코딩</span></a>
+    <a class="pager-link next" href="./S14.html"><span class="pager-direction">다음 차시 &rarr;</span><span class="pager-title">S14 · 시각화 실전: matplotlib·seaborn과 BI 핸드오프</span></a>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>데이터 리터러시 with AI · S13 차시</span>
+    <a href="../index.html#curriculum">전체 커리큘럼으로</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.tab-panel');
+  function activate(key, updateHash){
+    tabs.forEach(function(btn){
+      var on = btn.getAttribute('data-tab') === key;
+      btn.classList.toggle('active', on);
+    });
+    panels.forEach(function(panel){
+      var on = panel.getAttribute('data-panel') === key;
+      panel.classList.toggle('active', on);
+    });
+    if (updateHash && history.replaceState){
+      history.replaceState(null, '', '#' + key);
+    }
+  }
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      activate(btn.getAttribute('data-tab'), true);
+    });
+  });
+  var initial = (location.hash || '').replace('#', '');
+  var valid = ['curriculum', 'handout', 'script', 'answer'];
+  if (valid.indexOf(initial) !== -1){
+    activate(initial, false);
+  }
+})();
+</script>
+
+</body>
+</html>

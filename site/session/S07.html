@@ -1,0 +1,1425 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>S07. 엑셀을 AI에 올려 자연어로 분석 · 데이터 리터러시 with AI</title>
+<meta name="description" content="S07차시: 엑셀을 AI에 올려 자연어로 분석 — 커리큘럼·핸드아웃·강사대본·모범답안." />
+<style>
+:root{
+  --canvas: #010102;
+  --surface-1: #0f1011;
+  --surface-2: #141516;
+  --surface-3: #18191a;
+  --surface-4: #191a1b;
+  --ink: #f7f8f8;
+  --ink-muted: #d0d6e0;
+  --ink-subtle: #8a8f98;
+  --ink-tertiary: #62666d;
+  --primary: #5e6ad2;
+  --primary-hover: #828fff;
+  --primary-focus: #5e69d1;
+  --hairline: #23252a;
+  --hairline-strong: #34343a;
+  --hairline-tertiary: #3e3e44;
+  --success: #27a644;
+
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  --container: 900px;
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+html{ background: var(--canvas); }
+body{
+  margin:0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.05px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a{ color: inherit; text-decoration: none; }
+ul, ol{ margin:0; padding:0; }
+h1,h2,h3,h4,p{ margin:0; }
+
+.container{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 48px);
+}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--primary-hover);
+}
+.eyebrow::before{
+  content:"";
+  width:6px; height:6px;
+  background: var(--primary);
+  border-radius: 1px;
+  flex-shrink:0;
+}
+
+/* ---------- top nav ---------- */
+.top-nav{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 64px;
+  display:flex;
+  align-items:center;
+  background: rgba(1,1,2,0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.top-nav .container{ display:flex; align-items:center; justify-content:space-between; gap: 24px; max-width: 1280px; }
+.brand{ display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:600; font-size:15px; letter-spacing:-0.01em; }
+.brand-mark{ width:20px; height:20px; border-radius: 6px; background: var(--primary); flex-shrink:0; position:relative; }
+.brand-mark::after{ content:""; position:absolute; inset:6px; border-radius:2px; background: rgba(255,255,255,0.85); }
+.back-link{ font-size:14px; color: var(--ink-subtle); display:inline-flex; align-items:center; gap:6px; transition: color .15s ease; }
+.back-link:hover{ color: var(--ink); }
+
+/* ---------- session header ---------- */
+.session-header{
+  padding: var(--space-xxl) 0 var(--space-xl);
+  background:
+    radial-gradient(ellipse 60% 50% at 82% 0%, rgba(94,106,210,0.16), transparent 60%),
+    var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+.session-header-top{
+  display:flex;
+  align-items:center;
+  gap: var(--space-md);
+  margin: var(--space-md) 0 var(--space-md);
+}
+.session-num-badge{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--primary-hover);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-xs);
+  padding: 4px 10px;
+}
+.difficulty{ display:flex; gap:4px; align-items:center; }
+.difficulty .dot{ width:6px; height:6px; border-radius:50%; background: var(--hairline-strong); }
+.difficulty .dot.filled{ background: var(--primary); }
+.difficulty-label{ font-size:12px; color: var(--ink-tertiary); margin-left:6px; }
+.session-header h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ---------- tabs ---------- */
+.tabs-bar{
+  display:flex;
+  gap: 4px;
+  padding-top: var(--space-lg);
+  border-bottom: 1px solid var(--hairline);
+  overflow-x: auto;
+}
+.tab-btn{
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-subtle);
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s ease, border-color .15s ease;
+}
+.tab-btn:hover{ color: var(--ink); }
+.tab-btn.active{ color: var(--ink); border-bottom-color: var(--primary); }
+
+.tab-panels{ padding: var(--space-xxl) 0 var(--space-xxl); }
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+/* ---------- markdown body ---------- */
+.markdown-body{ color: var(--ink-muted); font-size: 15.5px; line-height: 1.75; letter-spacing: -0.05px; overflow-wrap: anywhere; word-break: break-word; }
+.markdown-body h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--hairline);
+}
+.markdown-body h2{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+.markdown-body h3{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin: var(--space-lg) 0 var(--space-xs);
+}
+.markdown-body h4{
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+.markdown-body p{ margin: 0 0 var(--space-md); }
+.markdown-body ul, .markdown-body ol{ margin: 0 0 var(--space-md); padding-left: 1.4em; }
+.markdown-body li{ margin-bottom: 6px; }
+.markdown-body ul{ list-style: disc; }
+.markdown-body ol{ list-style: decimal; }
+.markdown-body strong{ color: var(--ink); font-weight: 600; }
+.markdown-body em{ color: var(--ink-muted); }
+.markdown-body a{ color: var(--primary-hover); text-decoration: underline; text-underline-offset: 2px; }
+.markdown-body hr{ border:none; border-top: 1px solid var(--hairline); margin: var(--space-xl) 0; }
+.markdown-body blockquote{
+  margin: 0 0 var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid var(--primary);
+  background: var(--surface-1);
+  color: var(--ink-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.markdown-body code{
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--primary-hover);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.markdown-body .code-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+}
+.markdown-body pre{
+  margin: 0;
+  padding: var(--space-md);
+  background: transparent;
+  border: none;
+}
+.markdown-body pre code{
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre;
+}
+.markdown-body .table-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+}
+.markdown-body table{
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 460px;
+  font-size: 13.5px;
+}
+.markdown-body th, .markdown-body td{
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+  white-space: nowrap;
+}
+.markdown-body thead th{
+  background: var(--surface-1);
+  color: var(--ink);
+  font-weight: 600;
+  font-family: var(--font-text);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+.markdown-body tbody tr:last-child td{ border-bottom: none; }
+.markdown-body tbody tr:hover{ background: var(--surface-1); }
+
+/* ---------- pager ---------- */
+.session-pager{
+  display:flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-xl) 0 var(--space-xxl);
+  border-top: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+.pager-link{
+  display:flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  max-width: 46%;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.pager-link:hover{ border-color: var(--primary); background: var(--surface-2); }
+.pager-link.next{ margin-left: auto; text-align: right; align-items: flex-end; }
+.pager-direction{ font-size: 12px; color: var(--ink-tertiary); font-family: var(--font-mono); }
+.pager-title{ font-size: 14px; color: var(--ink); font-weight: 500; }
+.pager-spacer{ flex: 1; }
+
+footer.site-footer{
+  border-top: 1px solid var(--hairline);
+  padding: var(--space-xl) 0;
+}
+footer.site-footer .container{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: var(--ink-tertiary);
+  font-size: 12px;
+}
+footer.site-footer a:hover{ color: var(--ink-subtle); }
+
+@media (max-width: 640px){
+  .session-header{ padding: var(--space-xl) 0 var(--space-lg); }
+  .pager-link{ max-width: 100%; }
+  .session-pager{ flex-direction: column; }
+  .pager-link.next{ margin-left: 0; text-align: left; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="container">
+    <div class="brand"><span class="brand-mark"></span>데이터 리터러시 with AI</div>
+    <a class="back-link" href="../index.html#curriculum">&larr; 커리큘럼으로</a>
+  </div>
+</nav>
+
+<header class="session-header">
+  <div class="container">
+    <div class="eyebrow">PART 03 · AI</div>
+    <div class="session-header-top">
+      <span class="session-num-badge">S07</span>
+      <div class="difficulty" title="난이도 2"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">기초</span></div>
+    </div>
+    <h1>엑셀을 AI에 올려 자연어로 분석</h1>
+  </div>
+  <div class="container">
+    <div class="tabs-bar" role="tablist">
+<button class="tab-btn active" data-tab="curriculum" role="tab" aria-selected="true">커리큘럼</button>
+<button class="tab-btn" data-tab="handout" role="tab" aria-selected="false">핸드아웃</button>
+<button class="tab-btn" data-tab="script" role="tab" aria-selected="false">강사대본</button>
+<button class="tab-btn" data-tab="answer" role="tab" aria-selected="false">모범답안</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="tab-panels container">
+<section class="tab-panel markdown-body active" data-panel="curriculum" aria-label="커리큘럼">
+<h1>S07. 엑셀을 AI에 올려 자연어로 분석</h1>
+<h2>차시 개요</h2>
+<ul>
+<li>대상: 엑셀은 쓰지만 데이터분석은 처음인 비개발자</li>
+<li>선수 차시: S03</li>
+<li>난이도: 2</li>
+<li>시간: 50분</li>
+<li>데이터: <code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_dirty.xlsx</code></li>
+<li>보조 검증 파일: <code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_dirty.csv</code></li>
+<li>시트: <code>sales</code></li>
+<li>확인된 데이터 규모: 10,439행 × 12열</li>
+</ul>
+<p>이번 차시의 핵심은 "AI에게 파일을 맡기면 분석이 끝난다"가 아니다. 엑셀 파일을 업로드한 뒤 AI에게 무엇을 어떻게 물어야 하는지, 그 방법을 익히는 것이 목표다. AI는 피벗테이블과 차트, 요약문을 순식간에 만들어 주지만, 데이터 품질을 확인하지 않고 집계 기준도 정하지 않으면 그럴듯하지만 틀린 답을 내놓기 쉽다.</p>
+<p>S03에서 수강생은 피벗테이블로 <code>store</code>, <code>category</code>, <code>hour</code>, <code>amount</code>를 요약했다. 이번에는 같은 요약을 자연어로 요청한다. 대신 이번 파일은 일부러 지저분하게 만든 <code>dirty</code> 데이터라, AI가 내놓은 답을 그대로 옮겨 적기보다 어떤 전처리 기준을 적용했는지 짚어 봐야 한다.</p>
+<h2>학습 목표</h2>
+<p>수강생은 이 차시가 끝나면 다음을 할 수 있다.</p>
+<ol>
+<li>엑셀 파일을 AI 분석 도구에 업로드하고, 분석 대상 시트를 명확히 지정할 수 있다.</li>
+<li>자연어로 데이터 요약, 월별 집계, 추세, 이상치 확인을 요청할 수 있다.</li>
+<li>AI가 만든 표와 차트를 받을 때 집계 기준과 제외 기준을 함께 확인할 수 있다.</li>
+<li>두 AI 답안을 비교해 더 믿을 만한 답을 고르고, 그 이유를 설명할 수 있다.</li>
+</ol>
+<h2>사용할 AI 도구</h2>
+<p>표준 도구로는 파일 업로드와 데이터 분석 기능을 갖춘 ChatGPT 계정을 안내한다. 계정이나 플랜에 따라 업로드가 막힐 수 있으니 강사는 수업 전에 되는지 미리 확인해 둔다.</p>
+<p>대안은 두 가지다.</p>
+<ol>
+<li>파일 업로드가 가능한 다른 AI 도구를 사용한다.</li>
+<li>업로드 도구가 없는 수강생은 강사가 제공한 샘플 답안과 자신의 AI 답안을 비교한다.</li>
+</ol>
+<p>실무 데이터에는 개인정보나 고객 정보, 내부 매출 자료가 섞여 있기 마련이다. 이번 수업은 합성 데이터만 쓴다. 실제 회사 파일은 허가 없이 외부 AI에 올리지 않는다는 원칙도 함께 일러 둔다.</p>
+<h2>데이터 이해</h2>
+<p>사용 파일은 <code>cafe_sales_dirty.xlsx</code>다. 같은 내용을 담은 CSV도 있는데, 강사용 검증은 이 CSV로 했다.</p>
+<p>주요 컬럼은 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>의미</th>
+<th>이번 차시에서 쓰는 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>order_id</code></td>
+<td>주문번호</td>
+<td>중복 주문 확인</td>
+</tr>
+<tr>
+<td><code>date</code></td>
+<td>주문 날짜</td>
+<td>월별 추세 집계</td>
+</tr>
+<tr>
+<td><code>weekday</code></td>
+<td>요일</td>
+<td>보조 해석</td>
+</tr>
+<tr>
+<td><code>hour</code></td>
+<td>주문 시간대</td>
+<td>필요 시 세부 분석</td>
+</tr>
+<tr>
+<td><code>store</code></td>
+<td>지점</td>
+<td>표기 흔들림 확인</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>상품 카테고리</td>
+<td>표기 공백 확인</td>
+</tr>
+<tr>
+<td><code>item</code></td>
+<td>상품명</td>
+<td>표기 흔들림 확인</td>
+</tr>
+<tr>
+<td><code>unit_price</code></td>
+<td>단가</td>
+<td>금액 검산</td>
+</tr>
+<tr>
+<td><code>qty</code></td>
+<td>판매수량</td>
+<td>수량 이상치 확인</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>주문금액</td>
+<td>월별 매출 집계</td>
+</tr>
+<tr>
+<td><code>payment</code></td>
+<td>결제수단</td>
+<td>결측 확인</td>
+</tr>
+<tr>
+<td><code>member</code></td>
+<td>회원 여부</td>
+<td>결측 확인</td>
+</tr>
+</tbody>
+</table></div>
+<p>실제로 확인한 데이터 품질 이슈는 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th style="text-align: right;">확인값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>전체 행 수</td>
+<td style="text-align: right;">10,439</td>
+</tr>
+<tr>
+<td>전체 열 수</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr>
+<td>완전 중복 행</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr>
+<td>중복 <code>order_id</code> 추가 행</td>
+<td style="text-align: right;">15</td>
+</tr>
+<tr>
+<td><code>payment</code> 결측</td>
+<td style="text-align: right;">313</td>
+</tr>
+<tr>
+<td><code>member</code> 결측</td>
+<td style="text-align: right;">209</td>
+</tr>
+<tr>
+<td><code>store</code> 값 <code>강남 점</code></td>
+<td style="text-align: right;">310</td>
+</tr>
+<tr>
+<td>앞 공백이 있는 <code>category</code></td>
+<td style="text-align: right;">313</td>
+</tr>
+<tr>
+<td><code>unit_price</code>에 <code>원</code>이 붙은 값</td>
+<td style="text-align: right;">157</td>
+</tr>
+<tr>
+<td><code>qty</code>가 999인 행</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td><code>amount</code>가 음수인 행</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr>
+<td>단가×수량과 주문금액이 맞지 않는 행</td>
+<td style="text-align: right;">3</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>date</code>는 <code>2025-01-01</code>, <code>2025/01/01</code>, <code>01-01-2025</code>처럼 형식이 뒤섞여 있다. 날짜 형식이 섞여 있을 수 있다고 미리 일러 주지 않으면 AI가 일부 날짜를 놓친다.</p>
+<h2>핵심 개념</h2>
+<h3>1. AI 업로드는 파일을 주는 것이고, 프롬프트는 업무 지시서다</h3>
+<p>엑셀에서는 사용자가 피벗테이블 필드를 손으로 끌어다 놓지만, AI 분석에서는 말로 지시한다. 지시가 모호하면 AI가 하는 일도 그만큼 모호해진다.</p>
+<p>예를 들어 "월별 매출 분석해 줘"라고만 하면 AI가 중복을 어떻게 처리했는지, 음수 매출을 뺐는지, 날짜 오류를 어떻게 읽었는지 알 길이 없다. 반대로 "중복 주문번호는 한 건만 남기고, 수량 999와 음수 금액은 이상치로 따로 보여 준 뒤 월별 매출에서 제외해 달라"라고 쓰면 결과를 검토할 수 있다.</p>
+<h3>2. AI는 피벗테이블을 대신 만들 수 있지만, 기준은 사용자가 줘야 한다</h3>
+<p>S03의 피벗테이블에서 했던 일은 다음과 같다.</p>
+<ul>
+<li>행: 월</li>
+<li>값: <code>amount</code> 합계</li>
+<li>보조 값: <code>order_id</code> 개수, <code>qty</code> 합계</li>
+</ul>
+<p>AI에게도 같은 말을 자연어로 해야 한다. "월별 매출 표"만 요청하지 말고, "월별 주문건수, 판매수량, 매출액, 전월대비 증감액과 증감률"처럼 필요한 열을 구체적으로 말한다.</p>
+<h3>3. 이상치는 "큰 값"만 뜻하지 않는다</h3>
+<p>입문자는 이상치를 보통 유난히 큰 매출로 생각한다. 그러나 실무에서는 다음도 이상치다.</p>
+<ul>
+<li>수량이 현실적으로 불가능하게 큰 값</li>
+<li>금액이 음수인데 환불 여부가 없는 값</li>
+<li>단가×수량과 주문금액이 맞지 않는 값</li>
+<li>같은 주문번호가 여러 번 나온 값</li>
+<li>날짜 형식이 섞여 월별 집계에서 빠질 수 있는 값</li>
+</ul>
+<p>이번 데이터에서는 일별 매출을 IQR 기준으로 보면 통계적 일별 이상치는 없었다. 그러나 행 단위에서는 수량 999, 음수 금액, 단가×수량 불일치가 있어 반드시 별도 표시해야 한다.</p>
+<h3>4. 표와 차트는 결론이 아니라 중간 산출물이다</h3>
+<p>AI가 표와 선그래프를 만들어 주면 겉보기에는 분석이 끝난 듯 느껴진다. 하지만 표와 차트는 결론 자체가 아니라 결론을 세우기 위한 재료일 뿐이다. 강사는 수강생에게 다음을 묻는다.</p>
+<ul>
+<li>어떤 행을 제외했는가?</li>
+<li>어떤 날짜 형식을 인식했는가?</li>
+<li>가장 큰 달과 가장 작은 달은 어디인가?</li>
+<li>전월대비 흐름이 결론 문장과 맞는가?</li>
+<li>이상치를 표로 따로 보여 주었는가?</li>
+</ul>
+<h2>엑셀 기능 비교</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>하고 싶은 일</th>
+<th>엑셀 방식</th>
+<th>AI 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>파일 열기</td>
+<td>엑셀에서 xlsx 열기</td>
+<td>AI 채팅창에 파일 업로드</td>
+</tr>
+<tr>
+<td>데이터 구조 확인</td>
+<td>첫 행, 필터, 상태 표시줄 확인</td>
+<td>행 수, 열 수, 컬럼 목록을 요청</td>
+</tr>
+<tr>
+<td>월별 매출 집계</td>
+<td>날짜 열에서 월 추출 후 피벗테이블</td>
+<td>"월별 주문건수, 판매수량, 매출액 표" 요청</td>
+</tr>
+<tr>
+<td>이상치 확인</td>
+<td>필터, 조건부 서식, 정렬</td>
+<td>"수량 999, 음수 금액, 중복 주문번호를 찾아라" 요청</td>
+</tr>
+<tr>
+<td>차트 만들기</td>
+<td>피벗차트 또는 선그래프 삽입</td>
+<td>"월별 매출 선그래프를 만들어라" 요청</td>
+</tr>
+<tr>
+<td>결과 검증</td>
+<td>원본 행과 피벗 기준 확인</td>
+<td>AI의 전처리 기준과 수치를 재질문</td>
+</tr>
+</tbody>
+</table></div>
+<p>AI는 작업 속도를 끌어올려 주지만 분석의 책임까지 대신 져 주지는 않는다. 입문 단계에서 익혀야 할 것은 "AI가 말한 숫자를 믿는 법"이 아니라 "AI가 그 숫자를 어떻게 만들었는지 되묻는 법"이다.</p>
+<h2>50분 수업 흐름</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;">시간</th>
+<th>내용</th>
+<th>진행 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0-5분</td>
+<td>S03 복습과 오늘의 목표 제시</td>
+<td>피벗테이블 질문을 자연어 질문으로 바꾸기</td>
+</tr>
+<tr>
+<td style="text-align: right;">5-12분</td>
+<td>AI 업로드와 보안 원칙</td>
+<td>합성 데이터만 업로드, 개인정보 업로드 금지</td>
+</tr>
+<tr>
+<td style="text-align: right;">12-22분</td>
+<td>따라하기 1: 파일 구조와 품질 확인</td>
+<td>행 수, 컬럼, 결측, 중복, 이상값 요청</td>
+</tr>
+<tr>
+<td style="text-align: right;">22-35분</td>
+<td>따라하기 2: 월별 매출 추세와 차트 요청</td>
+<td>정밀 프롬프트로 표와 선그래프 받기</td>
+</tr>
+<tr>
+<td style="text-align: right;">35-44분</td>
+<td>따라하기 3: AI 답 재질문</td>
+<td>이상치 기준, 제외 기준, 결론 문장 확인</td>
+</tr>
+<tr>
+<td style="text-align: right;">44-49분</td>
+<td>직접 해보기: 두 AI 답 비교</td>
+<td>신뢰할 답 고르기와 이유 작성</td>
+</tr>
+<tr>
+<td style="text-align: right;">49-50분</td>
+<td>정리</td>
+<td>AI 답은 기준과 함께 읽는다는 원칙 확인</td>
+</tr>
+</tbody>
+</table></div>
+<h2>수업 중 강조할 원칙</h2>
+<ol>
+<li>파일을 올리기 전에 민감 정보가 없는지 확인한다.</li>
+<li>첫 질문은 분석이 아니라 데이터 구조 확인으로 시작한다.</li>
+<li>추세 분석은 기간 단위를 명시한다. 이번 차시는 월별이다.</li>
+<li>이상치는 기준을 요구한다. "이상해 보이는 값"만으로는 부족하다.</li>
+<li>AI가 만든 차트도 원본 데이터와 전처리 기준을 확인해야 한다.</li>
+<li>두 AI 답이 다르면 더 그럴듯한 문장이 아니라 더 검증 가능한 답을 고른다.</li>
+</ol>
+<h2>차시 평가 기준</h2>
+<ul>
+<li>상: 두 AI 답안을 비교하고, 행 수·전처리 기준·월별 매출 수치·이상치 목록을 근거로 더 신뢰할 답을 고른다.</li>
+<li>중: 따라하기 프롬프트를 재현하고, 월별 매출 표와 차트를 받아 주요 흐름을 말한다.</li>
+<li>하: 파일 업로드 또는 프롬프트 입력 단계에서 막혀 월별 표를 재현하지 못한다.</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="handout" aria-label="핸드아웃">
+<h1>S07. 엑셀을 AI에 올려 자연어로 분석</h1>
+<h2>사용할 파일</h2>
+<p>AI 분석 도구에 아래 파일을 업로드한다.</p>
+<p><code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_dirty.xlsx</code></p>
+<ul>
+<li>시트 이름: <code>sales</code></li>
+<li>데이터 규모: 10,439행 × 12열</li>
+<li>주요 컬럼: <code>order_id</code>, <code>date</code>, <code>store</code>, <code>category</code>, <code>item</code>, <code>unit_price</code>, <code>qty</code>, <code>amount</code>, <code>payment</code>, <code>member</code></li>
+</ul>
+<p>업로드 기능이 없는 계정이라면 강사가 나눠 준 샘플 답안과 비교하면 된다. 실제 회사 파일이나 고객 정보, 개인정보가 담긴 파일은 허가 없이 외부 AI에 올리지 않는다.</p>
+<h2>오늘의 목표</h2>
+<p>AI에게 엑셀 파일을 업로드하고 다음 세 가지를 받아 본다.</p>
+<ol>
+<li>데이터 구조와 품질 점검</li>
+<li>월별 매출 추세 표</li>
+<li>월별 매출 선그래프와 이상치 설명</li>
+</ol>
+<p>마지막에는 두 AI 답안을 비교해 어느 답을 더 믿을 수 있는지 판단한다.</p>
+<h2>따라하기 1. 파일 업로드 후 데이터 구조 확인하기</h2>
+<h3>1단계. 파일 업로드</h3>
+<ol>
+<li>파일 업로드와 데이터 분석이 가능한 AI 채팅창을 연다.</li>
+<li><code>cafe_sales_dirty.xlsx</code> 파일을 업로드한다.</li>
+<li>업로드가 끝나면 아래 프롬프트를 그대로 입력한다.</li>
+</ol>
+<div class="code-scroll"><pre><code class="language-text">첨부한 cafe_sales_dirty.xlsx 파일의 sales 시트를 먼저 점검해 주세요.
+
+아직 결론을 내리지 말고 다음 항목만 표로 알려 주세요.
+1. 행 수와 열 수
+2. 컬럼 목록
+3. 각 컬럼의 의미를 한 줄씩 추정한 설명
+4. 결측값이 있는 컬럼과 결측 개수
+5. 중복 order_id 개수
+6. 월별 매출 분석 전에 주의해야 할 데이터 품질 이슈
+</code></pre></div>
+<h3>2단계. 확인할 결과</h3>
+<p>AI 답에서 최소한 다음 내용이 나와야 한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>확인 항목</th>
+<th style="text-align: right;">기대값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>행 수</td>
+<td style="text-align: right;">10,439</td>
+</tr>
+<tr>
+<td>열 수</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr>
+<td><code>payment</code> 결측</td>
+<td style="text-align: right;">313</td>
+</tr>
+<tr>
+<td><code>member</code> 결측</td>
+<td style="text-align: right;">209</td>
+</tr>
+<tr>
+<td>중복 <code>order_id</code> 추가 행</td>
+<td style="text-align: right;">15</td>
+</tr>
+</tbody>
+</table></div>
+<p>AI가 행 수를 말하지 않거나, 바로 매출 결론부터 말하면 다시 질문한다.</p>
+<div class="code-scroll"><pre><code class="language-text">결론보다 검증이 먼저입니다. 행 수, 열 수, 결측값, 중복 order_id, 날짜 형식 문제를 먼저 확인한 뒤 다시 답해 주세요.
+</code></pre></div>
+<h2>따라하기 2. 월별 매출 추세와 이상치 요청하기</h2>
+<p>아래 프롬프트를 그대로 입력한다. 이번 차시에서 가장 중요한 부분이다.</p>
+<div class="code-scroll"><pre><code class="language-text">이제 월별 매출 추세를 분석해 주세요.
+
+반드시 아래 기준을 적용해 주세요.
+- date는 YYYY-MM-DD, YYYY/MM/DD, MM-DD-YYYY 형식이 섞여 있을 수 있으니 모두 날짜로 해석해 주세요.
+- order_id는 주문 고유번호이므로 중복 order_id는 한 건만 남겨 주세요.
+- unit_price에 쉼표나 '원' 문자가 붙어 있으면 숫자로 바꿔 주세요.
+- amount가 0 이하인 행, qty가 20보다 큰 행, unit_price * qty와 amount가 맞지 않는 행은 이상치로 따로 보여 주고 월별 매출 집계에서는 제외해 주세요.
+- payment와 member 결측은 매출 집계에서 제외하지 마세요.
+
+결과는 다음 순서로 보여 주세요.
+1. 적용한 전처리 기준 요약
+2. 월별 주문건수, 판매수량, 매출액, 전월대비 증감액, 전월대비 증감률 표
+3. 월별 매출 선그래프
+4. 이상치로 제외한 행 목록
+5. 분석 결론 3문장
+</code></pre></div>
+<h3>2단계. AI 답에서 확인할 핵심 수치</h3>
+<p>전처리 기준을 위와 같이 적용했다면 핵심 흐름은 다음과 같아야 한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>월</th>
+<th style="text-align: right;">주문건수</th>
+<th style="text-align: right;">매출액</th>
+<th style="text-align: right;">전월대비 증감률</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2025-01</td>
+<td style="text-align: right;">1,685</td>
+<td style="text-align: right;">14,421,000</td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<td>2025-02</td>
+<td style="text-align: right;">1,523</td>
+<td style="text-align: right;">13,151,500</td>
+<td style="text-align: right;">-8.8%</td>
+</tr>
+<tr>
+<td>2025-03</td>
+<td style="text-align: right;">1,716</td>
+<td style="text-align: right;">14,735,500</td>
+<td style="text-align: right;">12.0%</td>
+</tr>
+<tr>
+<td>2025-04</td>
+<td style="text-align: right;">1,760</td>
+<td style="text-align: right;">15,257,500</td>
+<td style="text-align: right;">3.5%</td>
+</tr>
+<tr>
+<td>2025-05</td>
+<td style="text-align: right;">1,800</td>
+<td style="text-align: right;">16,094,000</td>
+<td style="text-align: right;">5.5%</td>
+</tr>
+<tr>
+<td>2025-06</td>
+<td style="text-align: right;">1,937</td>
+<td style="text-align: right;">16,816,500</td>
+<td style="text-align: right;">4.5%</td>
+</tr>
+</tbody>
+</table></div>
+<p>해석의 핵심은 다음이다.</p>
+<ul>
+<li>2025년 2월에 매출이 1월보다 줄었다.</li>
+<li>2025년 3월부터 6월까지는 매출이 매월 증가했다.</li>
+<li>2025년 6월 매출이 16,816,500원으로 가장 크다.</li>
+</ul>
+<h2>따라하기 3. 차트를 다시 요청하기</h2>
+<p>AI가 차트를 만들었더라도 축과 기준이 불분명하면 다시 요청한다.</p>
+<div class="code-scroll"><pre><code class="language-text">월별 매출액을 선그래프로 다시 만들어 주세요.
+
+차트 조건:
+- x축은 2025-01부터 2025-06까지 월입니다.
+- y축은 매출액 합계입니다.
+- 각 점에 매출액 값을 표시해 주세요.
+- 그래프 아래에 &quot;2월 하락 후 3월부터 6월까지 증가&quot;라는 해석을 붙여 주세요.
+</code></pre></div>
+<p>차트가 표와 다른 값을 가리키면 표의 전처리 기준부터 다시 확인한다. 표와 차트, 결론에 나온 숫자는 서로 어긋나선 안 된다.</p>
+<h2>따라하기 4. 이상치 설명을 요청하기</h2>
+<p>AI가 이상치를 "매출이 큰 달"만으로 설명하면 부족하다. 아래처럼 행 단위 이상치를 다시 묻는다.</p>
+<div class="code-scroll"><pre><code class="language-text">이번 분석에서 제외한 이상치 행을 order_id, date, item, unit_price, qty, amount, 제외 이유 순서로 표로 보여 주세요.
+
+또한 일별 매출 합계를 기준으로 통계적으로 유난히 높은 날이나 낮은 날이 있었는지도 확인해 주세요. 기준을 함께 설명해 주세요.
+</code></pre></div>
+<p>확인해야 할 행 단위 이상치는 다음 3건이다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;"><code>order_id</code></th>
+<th>문제</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">11496</td>
+<td><code>qty</code>가 999이고 <code>unit_price * qty</code>와 <code>amount</code>가 맞지 않음</td>
+</tr>
+<tr>
+<td style="text-align: right;">13013</td>
+<td><code>amount</code>가 -5,500원</td>
+</tr>
+<tr>
+<td style="text-align: right;">16235</td>
+<td><code>qty</code>가 999이고 <code>unit_price * qty</code>와 <code>amount</code>가 맞지 않음</td>
+</tr>
+</tbody>
+</table></div>
+<h2>직접 해보기. 두 AI 답 비교</h2>
+<p>같은 파일과 같은 질문을 두 AI에게 넣고 답을 비교한다. AI 도구가 하나뿐이라면 같은 AI에서 아래 두 프롬프트를 각각 실행해 비교한다.</p>
+<h3>비교용 프롬프트 A</h3>
+<div class="code-scroll"><pre><code class="language-text">이 파일에서 월별 매출 추세와 이상치를 분석해 줘.
+</code></pre></div>
+<h3>비교용 프롬프트 B</h3>
+<p>따라하기 2의 긴 프롬프트를 사용한다.</p>
+<h3>제출할 표</h3>
+<p>아래 표를 채운다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>비교 항목</th>
+<th>답 A</th>
+<th>답 B</th>
+<th>더 믿을 답</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>행 수와 열 수를 말했는가</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>날짜 형식 혼재를 처리했는가</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>중복 <code>order_id</code> 처리 기준을 말했는가</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>수량 999, 음수 금액을 이상치로 표시했는가</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>월별 매출 표의 최고월이 2025-06인가</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>결론이 표와 차트의 숫자와 맞는가</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<h3>제출할 결론 문장</h3>
+<p>아래 형식으로 3문장을 작성한다.</p>
+<div class="code-scroll"><pre><code class="language-text">나는 답 __를 더 신뢰한다.
+이유는 __________ 때문이다.
+이 데이터의 월별 매출은 2월에 하락한 뒤 3월부터 6월까지 증가하며, 6월 매출이 가장 크다.
+</code></pre></div>
+<h2>자주 생기는 문제</h2>
+<h3>파일 업로드 버튼이 보이지 않는 경우</h3>
+<p>계정이나 도구 설정에 따라 업로드 기능이 없을 수 있다. 그럴 때는 강사의 화면을 보며 따라가고, 직접 해보기는 강사가 나눠 준 샘플 답안과 비교한다.</p>
+<h3>AI가 차트를 만들지 못하는 경우</h3>
+<p>먼저 월별 표부터 만들게 하고, 그 표를 기준으로 선그래프를 요청한다. 차트가 끝내 안 되더라도 표만으로 추세는 충분히 읽을 수 있다.</p>
+<h3>AI 답마다 숫자가 조금 다른 경우</h3>
+<p>전처리 기준이 달라졌을 공산이 크다. 중복을 지웠는지, 이상치를 뺐는지, 날짜 형식을 빠짐없이 읽었는지 확인한다.</p>
+<h3>AI가 "이상치 없음"이라고 말하는 경우</h3>
+<p>어떤 기준의 이상치인지 물어본다. 일별 매출 합계 기준으로는 이상치가 없을 수 있지만, 행 단위에서는 수량 999와 음수 금액이 있다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="script" aria-label="강사대본">
+<h1>S07 강사대본: 엑셀을 AI에 올려 자연어로 분석</h1>
+<h2>수업 전 확인</h2>
+<ul>
+<li><code>cafe_sales_dirty.xlsx</code> 파일이 열리는지 확인한다.</li>
+<li>파일 경로: <code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_dirty.xlsx</code></li>
+<li>시트 이름이 <code>sales</code>인지 확인한다.</li>
+<li>AI 도구에서 파일 업로드와 데이터 분석 기능이 동작하는지 확인한다.</li>
+<li>수강생 계정에서 파일 업로드가 안 될 수 있으므로 강사용 시연 화면과 샘플 답안을 준비한다.</li>
+<li>실제 회사 파일, 개인정보, 고객 정보는 외부 AI에 업로드하지 않는다는 안내를 수업 초반에 한다.</li>
+</ul>
+<h2>0-5분. 도입</h2>
+<p>말할 것:</p>
+<p>지난 시간에는 피벗테이블로 질문에 답했다. 오늘은 같은 일을 AI에게 자연어로 시켜 본다. 다만 오늘의 목표는 "AI가 대신 분석해 준다"가 아니라 "AI에게 일을 제대로 시키고 그 답을 검토하는 법"에 있다.</p>
+<p>엑셀 피벗테이블은 우리가 직접 행과 열, 값을 놓아야 한다. AI에게는 이 배치를 말로 시킬 수 있다. 대신 말이 모호하면 AI의 작업 기준도 함께 흐려진다. 그래서 오늘은 좋은 프롬프트와 나쁜 프롬프트가 어떻게 다른지 직접 비교해 본다.</p>
+<h2>5-12분. 업로드와 보안 원칙</h2>
+<p>시연 포인트:</p>
+<ol>
+<li>AI 채팅창을 연다.</li>
+<li><code>cafe_sales_dirty.xlsx</code>를 업로드한다.</li>
+<li>파일명과 시트명을 확인한다.</li>
+<li>업로드 전 보안 원칙을 짚는다.</li>
+</ol>
+<p>말할 것:</p>
+<p>이번 파일은 수업용 합성 데이터다. 실제 회사의 고객명이나 전화번호, 이메일, 내부 매출 자료가 담긴 파일은 함부로 외부 AI에 올리면 안 된다. AI 분석을 배우는 일과 데이터 보안을 지키는 일은 늘 함께 간다.</p>
+<p>계정에 따라 업로드 버튼이 없을 수도 있다. 그럴 때는 강사 화면을 따라 보고, 직접 해보기는 샘플 답안 비교로 대신한다.</p>
+<h2>12-22분. 시연 1: 데이터 구조부터 확인</h2>
+<p>프롬프트:</p>
+<div class="code-scroll"><pre><code class="language-text">첨부한 cafe_sales_dirty.xlsx 파일의 sales 시트를 먼저 점검해 주세요.
+
+아직 결론을 내리지 말고 다음 항목만 표로 알려 주세요.
+1. 행 수와 열 수
+2. 컬럼 목록
+3. 각 컬럼의 의미를 한 줄씩 추정한 설명
+4. 결측값이 있는 컬럼과 결측 개수
+5. 중복 order_id 개수
+6. 월별 매출 분석 전에 주의해야 할 데이터 품질 이슈
+</code></pre></div>
+<p>말할 것:</p>
+<p>AI에게 대뜸 "결론을 말해 달라"고 하면 그럴듯한 문장부터 튀어나온다. 분석은 순서가 생명이다. 첫 질문은 언제나 이 파일이 어떤 구조이고 어디가 지저분한지부터 확인하는 것이어야 한다.</p>
+<p>확인할 값:</p>
+<ul>
+<li>전체 데이터는 10,439행 × 12열이다.</li>
+<li><code>payment</code> 결측은 313개다.</li>
+<li><code>member</code> 결측은 209개다.</li>
+<li>중복 <code>order_id</code> 추가 행은 15개다.</li>
+<li>날짜 형식이 섞여 있다.</li>
+</ul>
+<p>강조할 것:</p>
+<p>결측이 있다고 무턱대고 행을 버리지는 않는다. 오늘의 질문은 월별 매출이다. <code>payment</code>와 <code>member</code> 결측은 매출액 계산에 직접 쓰이지 않으니 집계에서 빼지 않는다. 반면 <code>date</code>, <code>order_id</code>, <code>qty</code>, <code>amount</code>, <code>unit_price</code>의 문제는 월별 매출을 곧바로 흔든다.</p>
+<h2>22-35분. 시연 2: 월별 매출 추세와 차트 요청</h2>
+<p>프롬프트:</p>
+<div class="code-scroll"><pre><code class="language-text">이제 월별 매출 추세를 분석해 주세요.
+
+반드시 아래 기준을 적용해 주세요.
+- date는 YYYY-MM-DD, YYYY/MM/DD, MM-DD-YYYY 형식이 섞여 있을 수 있으니 모두 날짜로 해석해 주세요.
+- order_id는 주문 고유번호이므로 중복 order_id는 한 건만 남겨 주세요.
+- unit_price에 쉼표나 '원' 문자가 붙어 있으면 숫자로 바꿔 주세요.
+- amount가 0 이하인 행, qty가 20보다 큰 행, unit_price * qty와 amount가 맞지 않는 행은 이상치로 따로 보여 주고 월별 매출 집계에서는 제외해 주세요.
+- payment와 member 결측은 매출 집계에서 제외하지 마세요.
+
+결과는 다음 순서로 보여 주세요.
+1. 적용한 전처리 기준 요약
+2. 월별 주문건수, 판매수량, 매출액, 전월대비 증감액, 전월대비 증감률 표
+3. 월별 매출 선그래프
+4. 이상치로 제외한 행 목록
+5. 분석 결론 3문장
+</code></pre></div>
+<p>시연 포인트:</p>
+<ol>
+<li>AI가 전처리 기준을 먼저 말하는지 확인한다.</li>
+<li>월별 표에 2025-01부터 2025-06까지 6개월이 모두 있는지 확인한다.</li>
+<li>2025-06 매출이 16,816,500원으로 가장 큰지 확인한다.</li>
+<li>2025-02 매출이 13,151,500원으로 가장 작은지 확인한다.</li>
+<li>차트가 표와 같은 값을 쓰는지 확인한다.</li>
+</ol>
+<p>말할 것:</p>
+<p>좋은 AI 답은 문장이 매끄러운 답이 아니라 검산이 되는 답이다. 지금 우리가 볼 것은 결론 문장이 아니라 표의 기준이다. 중복을 어떻게 처리했는지, 어떤 행을 이상치로 봤는지, 날짜를 빠짐없이 월로 바꿨는지를 확인한다.</p>
+<h2>35-44분. 시연 3: 이상치 재질문</h2>
+<p>프롬프트:</p>
+<div class="code-scroll"><pre><code class="language-text">이번 분석에서 제외한 이상치 행을 order_id, date, item, unit_price, qty, amount, 제외 이유 순서로 표로 보여 주세요.
+
+또한 일별 매출 합계를 기준으로 통계적으로 유난히 높은 날이나 낮은 날이 있었는지도 확인해 주세요. 기준을 함께 설명해 주세요.
+</code></pre></div>
+<p>말할 것:</p>
+<p>이상치에는 두 층위가 있다. 하나는 행 단위 이상치로, 수량 999나 음수 금액처럼 원본 행 자체가 이상한 경우다. 다른 하나는 집계 단위 이상치로, 어느 하루 매출이 다른 날보다 유난히 튀는 경우다.</p>
+<p>이번 데이터에는 행 단위 이상치가 3건 있다. <code>order_id</code> 11496과 16235는 수량이 999이고, 13013은 금액이 -5,500원이다. 반면 일별 매출 합계는 IQR 기준으로 통계적 이상치가 없었다. 그래서 "이상치 없음"이라는 답은 어떤 기준을 썼느냐에 따라 맞을 수도, 틀릴 수도 있다.</p>
+<h2>44-49분. 직접 해보기 안내</h2>
+<p>미션:</p>
+<p>같은 파일과 같은 질문을 두 AI에게 넣고 답을 비교한다. 도구가 하나뿐이면 같은 AI에서 짧은 프롬프트와 긴 프롬프트를 각각 실행해 비교한다.</p>
+<p>수강생에게 요구할 답:</p>
+<ul>
+<li>어느 답을 더 믿는지 고른다.</li>
+<li>행 수, 날짜 처리, 중복 처리, 이상치 목록, 월별 매출 표 중 최소 세 가지 근거를 쓴다.</li>
+<li>"2월 하락 후 3월부터 6월까지 증가했고, 6월 매출이 가장 크다"는 흐름을 자기 말로 설명한다.</li>
+</ul>
+<p>완료 판단 체크포인트:</p>
+<p>수강생이 AI 답의 문장 유창함이 아니라 행 수, 전처리 기준, 이상치 처리, 월별 매출 수치를 근거로 더 신뢰할 답을 고르면 완료로 본다.</p>
+<h2>49-50분. 정리</h2>
+<p>말할 것:</p>
+<p>오늘 배운 것은 AI에 파일을 올리는 기술이 아니라, 분석을 맡길 때 기준을 주고 답을 검토하는 습관이다. AI는 표와 차트를 빠르게 뽑아 주지만, 어떤 행을 뺐는지 묻지 않으면 그 숫자가 무슨 뜻인지 알 수 없다. 다음에 AI로 분석할 때는 먼저 행 수와 컬럼을 확인하고, 그다음 집계 기준을 말한 뒤, 마지막에 결론을 받는 순서를 지키자.</p>
+<h2>예상 질문과 답변</h2>
+<h3>Q1. AI가 제 답과 다른 숫자를 냈는데 틀린 건가요?</h3>
+<p>곧바로 틀렸다고 단정하지 않는다. 먼저 전처리 기준을 확인한다. 중복 <code>order_id</code>를 지웠는지, 수량 999와 음수 금액을 뺐는지, 날짜 형식을 모두 읽었는지에 따라 숫자는 얼마든지 달라진다.</p>
+<h3>Q2. 결측값이 있으면 모두 삭제해야 하나요?</h3>
+<p>아니다. 그 컬럼이 질문에 필요한지부터 본다. 월별 매출에서는 <code>date</code>와 <code>amount</code>가 중요하다. <code>payment</code>와 <code>member</code> 결측은 이번 집계에서 제외 기준으로 삼지 않는다.</p>
+<h3>Q3. AI가 "이상치 없음"이라고 했습니다. 어떻게 해야 하나요?</h3>
+<p>"어떤 기준으로 이상치가 없다고 봤는지" 되묻는다. 일별 매출 합계로 보면 이상치가 없을 수 있다. 하지만 행 단위로는 수량 999와 음수 금액이 있으니 이상치가 있다고 봐야 한다.</p>
+<h3>Q4. 차트만 보고 결론을 써도 되나요?</h3>
+<p>차트는 흐름을 훑어보기에 좋지만, 최종 결론에는 표의 숫자가 있어야 한다. 차트와 표가 같은 전처리 기준을 썼는지 확인한다.</p>
+<h3>Q5. 회사 데이터를 AI에 올려도 되나요?</h3>
+<p>허가 없이는 안 된다. 특히 개인정보나 고객 정보, 매출 원장, 계약 정보, 내부 보고서는 조직의 보안 정책부터 확인해야 한다. 오늘 수업은 합성 데이터로만 진행한다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="answer" aria-label="모범답안">
+<h1>S07. 모범답안</h1>
+<h2>미션 해설</h2>
+<p>미션은 "두 AI 답을 비교해 더 믿을 만한 답을 고르는 것"이다. 이 차시의 정답은 특정 AI 이름이 아니라, 판단 근거다. 더 믿을 만한 답은 다음 조건을 충족해야 한다.</p>
+<ol>
+<li>원본 파일의 행 수와 열 수를 먼저 확인한다.</li>
+<li>날짜 형식이 섞여 있음을 인식한다.</li>
+<li>중복 <code>order_id</code>를 어떻게 처리했는지 말한다.</li>
+<li>수량 999, 음수 금액, 단가×수량 불일치 행을 이상치로 따로 보여 준다.</li>
+<li>월별 매출 표와 차트의 숫자가 서로 맞는다.</li>
+<li>결론이 표의 숫자에서 바로 나온다.</li>
+</ol>
+<h2>기준 답안</h2>
+<p>전처리 기준:</p>
+<ul>
+<li><code>date</code>는 혼합 날짜 형식으로 변환했다.</li>
+<li><code>order_id</code>는 주문 고유번호로 보고 중복 <code>order_id</code>는 첫 행만 남겼다.</li>
+<li><code>unit_price</code>의 쉼표와 <code>원</code> 문자를 제거해 숫자로 변환했다.</li>
+<li><code>amount &lt;= 0</code>, <code>qty &gt; 20</code>, <code>unit_price * qty != amount</code>인 행은 이상치로 표시하고 월별 매출 집계에서는 제외했다.</li>
+<li><code>payment</code>, <code>member</code> 결측은 월별 매출 집계에서 제외하지 않았다.</li>
+</ul>
+<p>이 기준을 적용하면 분석용 데이터는 10,421행이다.</p>
+<h2>월별 매출 추세</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>월</th>
+<th style="text-align: right;">주문건수</th>
+<th style="text-align: right;">판매수량</th>
+<th style="text-align: right;">매출액</th>
+<th style="text-align: right;">전월대비 증감액</th>
+<th style="text-align: right;">전월대비 증감률</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2025-01</td>
+<td style="text-align: right;">1,685</td>
+<td style="text-align: right;">2,784</td>
+<td style="text-align: right;">14,421,000</td>
+<td style="text-align: right;">0</td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<td>2025-02</td>
+<td style="text-align: right;">1,523</td>
+<td style="text-align: right;">2,534</td>
+<td style="text-align: right;">13,151,500</td>
+<td style="text-align: right;">-1,269,500</td>
+<td style="text-align: right;">-8.8%</td>
+</tr>
+<tr>
+<td>2025-03</td>
+<td style="text-align: right;">1,716</td>
+<td style="text-align: right;">2,842</td>
+<td style="text-align: right;">14,735,500</td>
+<td style="text-align: right;">1,584,000</td>
+<td style="text-align: right;">12.0%</td>
+</tr>
+<tr>
+<td>2025-04</td>
+<td style="text-align: right;">1,760</td>
+<td style="text-align: right;">2,938</td>
+<td style="text-align: right;">15,257,500</td>
+<td style="text-align: right;">522,000</td>
+<td style="text-align: right;">3.5%</td>
+</tr>
+<tr>
+<td>2025-05</td>
+<td style="text-align: right;">1,800</td>
+<td style="text-align: right;">2,996</td>
+<td style="text-align: right;">16,094,000</td>
+<td style="text-align: right;">836,500</td>
+<td style="text-align: right;">5.5%</td>
+</tr>
+<tr>
+<td>2025-06</td>
+<td style="text-align: right;">1,937</td>
+<td style="text-align: right;">3,144</td>
+<td style="text-align: right;">16,816,500</td>
+<td style="text-align: right;">722,500</td>
+<td style="text-align: right;">4.5%</td>
+</tr>
+</tbody>
+</table></div>
+<p>해석:</p>
+<p>2025년 2월 매출은 1월보다 8.8% 감소했다. 이후 2025년 3월부터 6월까지 매출은 매월 증가했다. 2025년 6월 매출이 16,816,500원으로 가장 크며, 주문건수와 판매수량도 가장 많다.</p>
+<h2>이상치로 제외한 행</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;"><code>order_id</code></th>
+<th><code>date</code></th>
+<th><code>item</code></th>
+<th style="text-align: right;"><code>unit_price</code></th>
+<th style="text-align: right;"><code>qty</code></th>
+<th style="text-align: right;"><code>amount</code></th>
+<th>제외 이유</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">11496</td>
+<td>2025-01-28</td>
+<td>크로플</td>
+<td style="text-align: right;">5,500</td>
+<td style="text-align: right;">999</td>
+<td style="text-align: right;">5,500</td>
+<td>수량이 비현실적으로 크고 단가×수량과 금액이 맞지 않음</td>
+</tr>
+<tr>
+<td style="text-align: right;">13013</td>
+<td>2025-02-24</td>
+<td>복숭아아이스티</td>
+<td style="text-align: right;">5,500</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">-5,500</td>
+<td>금액이 음수이며 환불 여부를 설명하는 컬럼이 없음</td>
+</tr>
+<tr>
+<td style="text-align: right;">16235</td>
+<td>2025-04-23</td>
+<td>콜드브루</td>
+<td style="text-align: right;">5,500</td>
+<td style="text-align: right;">999</td>
+<td style="text-align: right;">5,500</td>
+<td>수량이 비현실적으로 크고 단가×수량과 금액이 맞지 않음</td>
+</tr>
+</tbody>
+</table></div>
+<p>일별 매출 합계는 IQR 기준으로 통계적 이상치가 없었다. 다만 가장 높은 일별 매출은 2025-06-21의 878,000원이었다. 이 값은 IQR 상한인 887,500원보다 낮아 통계적 이상치로 분류하지 않았다.</p>
+<h2>두 AI 답 비교 예시</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>비교 항목</th>
+<th>답 A 예시</th>
+<th>답 B 예시</th>
+<th>판단</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>행 수와 열 수</td>
+<td>말하지 않음</td>
+<td>10,439행 × 12열 제시</td>
+<td>B가 더 신뢰 가능</td>
+</tr>
+<tr>
+<td>날짜 형식 혼재</td>
+<td>언급 없음</td>
+<td>세 가지 날짜 형식을 모두 처리</td>
+<td>B가 더 신뢰 가능</td>
+</tr>
+<tr>
+<td>중복 처리</td>
+<td>기준 없음</td>
+<td>중복 <code>order_id</code> 제거 기준 제시</td>
+<td>B가 더 신뢰 가능</td>
+</tr>
+<tr>
+<td>이상치 처리</td>
+<td>"큰 매출 없음"만 언급</td>
+<td>행 단위 이상치 3건 제시</td>
+<td>B가 더 신뢰 가능</td>
+</tr>
+<tr>
+<td>월별 추세</td>
+<td>결론만 제시</td>
+<td>월별 표와 증감률 제시</td>
+<td>B가 더 신뢰 가능</td>
+</tr>
+<tr>
+<td>최종 판단</td>
+<td>근거 부족</td>
+<td>검증 가능한 숫자 포함</td>
+<td>B 선택</td>
+</tr>
+</tbody>
+</table></div>
+<p>제출 문장 예시:</p>
+<p>나는 답 B를 더 신뢰한다. 이유는 원본 행 수를 확인했고, 날짜 형식 혼재와 중복 <code>order_id</code>, 수량 999와 음수 금액을 전처리 기준에 포함했기 때문이다. 이 데이터의 월별 매출은 2월에 하락한 뒤 3월부터 6월까지 증가하며, 6월 매출이 가장 크다.</p>
+<h2>검증용 pandas 코드</h2>
+<p>아래 코드는 AI가 만든 표가 맞는지 검산하기 위한 코드다. 작성 시 실제로 실행해 결과를 확인했다.</p>
+<div class="code-scroll"><pre><code class="language-python">from pathlib import Path
+
+import pandas as pd
+
+data_path = Path(&quot;/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_dirty.csv&quot;)
+df = pd.read_csv(data_path)
+
+expected_columns = [
+    &quot;order_id&quot;,
+    &quot;date&quot;,
+    &quot;weekday&quot;,
+    &quot;hour&quot;,
+    &quot;store&quot;,
+    &quot;category&quot;,
+    &quot;item&quot;,
+    &quot;unit_price&quot;,
+    &quot;qty&quot;,
+    &quot;amount&quot;,
+    &quot;payment&quot;,
+    &quot;member&quot;,
+]
+
+assert df.shape == (10439, 12)
+assert list(df.columns) == expected_columns
+
+date_parsed = pd.to_datetime(df[&quot;date&quot;], format=&quot;mixed&quot;, errors=&quot;coerce&quot;)
+unit_price_num = pd.to_numeric(
+    df[&quot;unit_price&quot;]
+    .astype(str)
+    .str.replace(&quot;,&quot;, &quot;&quot;, regex=False)
+    .str.replace(&quot;원&quot;, &quot;&quot;, regex=False)
+    .str.strip(),
+    errors=&quot;coerce&quot;,
+)
+
+work = df.assign(
+    date_parsed=date_parsed,
+    unit_price_num=unit_price_num,
+)
+work[&quot;amount_mismatch&quot;] = work[&quot;amount&quot;] != work[&quot;unit_price_num&quot;] * work[&quot;qty&quot;]
+
+date_format_counts = {
+    &quot;YYYY-MM-DD&quot;: int(df[&quot;date&quot;].str.match(r&quot;^\d{4}-\d{2}-\d{2}$&quot;).sum()),
+    &quot;YYYY/MM/DD&quot;: int(df[&quot;date&quot;].str.match(r&quot;^\d{4}/\d{2}/\d{2}$&quot;).sum()),
+    &quot;MM-DD-YYYY&quot;: int(df[&quot;date&quot;].str.match(r&quot;^\d{2}-\d{2}-\d{4}$&quot;).sum()),
+}
+
+quality_summary = {
+    &quot;전체 행 수&quot;: len(df),
+    &quot;전체 열 수&quot;: len(df.columns),
+    &quot;완전 중복 행&quot;: int(df.duplicated().sum()),
+    &quot;중복 order_id 추가 행&quot;: int(df[&quot;order_id&quot;].duplicated().sum()),
+    &quot;payment 결측&quot;: int(df[&quot;payment&quot;].isna().sum()),
+    &quot;member 결측&quot;: int(df[&quot;member&quot;].isna().sum()),
+    &quot;store 값 '강남 점'&quot;: int((df[&quot;store&quot;] == &quot;강남 점&quot;).sum()),
+    &quot;앞 공백 category&quot;: int(df[&quot;category&quot;].str.startswith(&quot; &quot;, na=False).sum()),
+    &quot;unit_price에 원 문자 포함&quot;: int(df[&quot;unit_price&quot;].astype(str).str.contains(&quot;원&quot;, regex=False).sum()),
+    &quot;qty &gt; 20&quot;: int((df[&quot;qty&quot;] &gt; 20).sum()),
+    &quot;amount &lt;= 0&quot;: int((df[&quot;amount&quot;] &lt;= 0).sum()),
+    &quot;단가x수량과 금액 불일치&quot;: int(work[&quot;amount_mismatch&quot;].sum()),
+}
+
+analysis = work.drop_duplicates(&quot;order_id&quot;, keep=&quot;first&quot;).copy()
+
+anomaly_mask = (
+    analysis[&quot;date_parsed&quot;].isna()
+    | (analysis[&quot;qty&quot;] &gt; 20)
+    | (analysis[&quot;amount&quot;] &lt;= 0)
+    | (analysis[&quot;amount_mismatch&quot;])
+)
+
+anomalies = analysis.loc[
+    anomaly_mask,
+    [&quot;order_id&quot;, &quot;date&quot;, &quot;item&quot;, &quot;unit_price_num&quot;, &quot;qty&quot;, &quot;amount&quot;, &quot;amount_mismatch&quot;],
+].sort_values(&quot;order_id&quot;)
+
+cleaned = analysis.loc[~anomaly_mask].copy()
+cleaned[&quot;month&quot;] = cleaned[&quot;date_parsed&quot;].dt.to_period(&quot;M&quot;).astype(str)
+
+monthly = (
+    cleaned.groupby(&quot;month&quot;)
+    .agg(
+        주문건수=(&quot;order_id&quot;, &quot;count&quot;),
+        판매수량=(&quot;qty&quot;, &quot;sum&quot;),
+        매출액=(&quot;amount&quot;, &quot;sum&quot;),
+    )
+    .reset_index()
+)
+monthly[&quot;전월대비 증감액&quot;] = monthly[&quot;매출액&quot;].diff().fillna(0).astype(int)
+monthly[&quot;전월대비 증감률&quot;] = monthly[&quot;매출액&quot;].pct_change().mul(100).round(1)
+
+daily = (
+    cleaned.groupby(&quot;date_parsed&quot;)
+    .agg(
+        주문건수=(&quot;order_id&quot;, &quot;count&quot;),
+        판매수량=(&quot;qty&quot;, &quot;sum&quot;),
+        매출액=(&quot;amount&quot;, &quot;sum&quot;),
+    )
+    .reset_index()
+    .rename(columns={&quot;date_parsed&quot;: &quot;date&quot;})
+)
+
+q1 = daily[&quot;매출액&quot;].quantile(0.25)
+q3 = daily[&quot;매출액&quot;].quantile(0.75)
+iqr = q3 - q1
+lower_bound = q1 - 1.5 * iqr
+upper_bound = q3 + 1.5 * iqr
+daily_outliers = daily[(daily[&quot;매출액&quot;] &lt; lower_bound) | (daily[&quot;매출액&quot;] &gt; upper_bound)]
+top_daily = daily.sort_values(&quot;매출액&quot;, ascending=False).head(3)
+
+assert len(cleaned) == 10421
+assert int(cleaned[&quot;amount&quot;].sum()) == 90476000
+assert int(monthly.loc[monthly[&quot;month&quot;] == &quot;2025-06&quot;, &quot;매출액&quot;].iloc[0]) == 16816500
+assert len(anomalies) == 3
+assert len(daily_outliers) == 0
+
+print(&quot;데이터 행열:&quot;, df.shape)
+print(&quot;날짜 형식 수:&quot;, date_format_counts)
+print(&quot;품질 점검:&quot;, quality_summary)
+print()
+print(&quot;[월별 매출 추세]&quot;)
+print(monthly.to_string(index=False))
+print()
+print(&quot;[이상치로 제외한 행]&quot;)
+print(anomalies.to_string(index=False))
+print()
+print(&quot;일별 매출 IQR 상한:&quot;, int(upper_bound))
+print(&quot;일별 매출 이상치 수:&quot;, len(daily_outliers))
+print(&quot;[일별 매출 상위 3일]&quot;)
+print(top_daily.to_string(index=False))
+</code></pre></div>
+<h2>코드 실행 핵심 출력</h2>
+<div class="code-scroll"><pre><code class="language-text">데이터 행열: (10439, 12)
+날짜 형식 수: {'YYYY-MM-DD': 10129, 'YYYY/MM/DD': 206, 'MM-DD-YYYY': 104}
+품질 점검: {'전체 행 수': 10439, '전체 열 수': 12, '완전 중복 행': 13, '중복 order_id 추가 행': 15, 'payment 결측': 313, 'member 결측': 209, &quot;store 값 '강남 점'&quot;: 310, '앞 공백 category': 313, 'unit_price에 원 문자 포함': 157, 'qty &gt; 20': 2, 'amount &lt;= 0': 1, '단가x수량과 금액 불일치': 3}
+
+[월별 매출 추세]
+  month  주문건수  판매수량      매출액  전월대비 증감액  전월대비 증감률
+2025-01  1685  2784 14421000         0        NaN
+2025-02  1523  2534 13151500  -1269500       -8.8
+2025-03  1716  2842 14735500   1584000       12.0
+2025-04  1760  2938 15257500    522000       3.5
+2025-05  1800  2996 16094000    836500       5.5
+2025-06  1937  3144 16816500    722500       4.5
+
+[이상치로 제외한 행]
+ order_id       date    item  unit_price_num  qty  amount  amount_mismatch
+    11496 2025-01-28     크로플            5500  999    5500             True
+    13013 2025-02-24 복숭아아이스티            5500    1   -5500             True
+    16235 2025-04-23    콜드브루            5500  999    5500             True
+
+일별 매출 IQR 상한: 887500
+일별 매출 이상치 수: 0
+[일별 매출 상위 3일]
+      date  주문건수  판매수량    매출액
+2025-06-21    97   165 878000
+2025-06-28    98   161 864500
+2025-06-29    97   163 853500
+</code></pre></div>
+</section>
+  </div>
+
+  <nav class="session-pager container">
+    <a class="pager-link prev" href="./S06.html"><span class="pager-direction">&larr; 이전 차시</span><span class="pager-title">S06 · 상관 vs 인과, 심슨의 역설</span></a>
+    <a class="pager-link next" href="./S08.html"><span class="pager-direction">다음 차시 &rarr;</span><span class="pager-title">S08 · 좋은 분석 프롬프트 설계</span></a>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>데이터 리터러시 with AI · S07 차시</span>
+    <a href="../index.html#curriculum">전체 커리큘럼으로</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.tab-panel');
+  function activate(key, updateHash){
+    tabs.forEach(function(btn){
+      var on = btn.getAttribute('data-tab') === key;
+      btn.classList.toggle('active', on);
+    });
+    panels.forEach(function(panel){
+      var on = panel.getAttribute('data-panel') === key;
+      panel.classList.toggle('active', on);
+    });
+    if (updateHash && history.replaceState){
+      history.replaceState(null, '', '#' + key);
+    }
+  }
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      activate(btn.getAttribute('data-tab'), true);
+    });
+  });
+  var initial = (location.hash || '').replace('#', '');
+  var valid = ['curriculum', 'handout', 'script', 'answer'];
+  if (valid.indexOf(initial) !== -1){
+    activate(initial, false);
+  }
+})();
+</script>
+
+</body>
+</html>

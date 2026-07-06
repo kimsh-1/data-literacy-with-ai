@@ -1,0 +1,1496 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>S14. 시각화 실전: matplotlib·seaborn과 BI 핸드오프 · 데이터 리터러시 with AI</title>
+<meta name="description" content="S14차시: 시각화 실전: matplotlib·seaborn과 BI 핸드오프 — 커리큘럼·핸드아웃·강사대본·모범답안." />
+<style>
+:root{
+  --canvas: #010102;
+  --surface-1: #0f1011;
+  --surface-2: #141516;
+  --surface-3: #18191a;
+  --surface-4: #191a1b;
+  --ink: #f7f8f8;
+  --ink-muted: #d0d6e0;
+  --ink-subtle: #8a8f98;
+  --ink-tertiary: #62666d;
+  --primary: #5e6ad2;
+  --primary-hover: #828fff;
+  --primary-focus: #5e69d1;
+  --hairline: #23252a;
+  --hairline-strong: #34343a;
+  --hairline-tertiary: #3e3e44;
+  --success: #27a644;
+
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  --container: 900px;
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+html{ background: var(--canvas); }
+body{
+  margin:0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.05px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a{ color: inherit; text-decoration: none; }
+ul, ol{ margin:0; padding:0; }
+h1,h2,h3,h4,p{ margin:0; }
+
+.container{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 48px);
+}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--primary-hover);
+}
+.eyebrow::before{
+  content:"";
+  width:6px; height:6px;
+  background: var(--primary);
+  border-radius: 1px;
+  flex-shrink:0;
+}
+
+/* ---------- top nav ---------- */
+.top-nav{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 64px;
+  display:flex;
+  align-items:center;
+  background: rgba(1,1,2,0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.top-nav .container{ display:flex; align-items:center; justify-content:space-between; gap: 24px; max-width: 1280px; }
+.brand{ display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:600; font-size:15px; letter-spacing:-0.01em; }
+.brand-mark{ width:20px; height:20px; border-radius: 6px; background: var(--primary); flex-shrink:0; position:relative; }
+.brand-mark::after{ content:""; position:absolute; inset:6px; border-radius:2px; background: rgba(255,255,255,0.85); }
+.back-link{ font-size:14px; color: var(--ink-subtle); display:inline-flex; align-items:center; gap:6px; transition: color .15s ease; }
+.back-link:hover{ color: var(--ink); }
+
+/* ---------- session header ---------- */
+.session-header{
+  padding: var(--space-xxl) 0 var(--space-xl);
+  background:
+    radial-gradient(ellipse 60% 50% at 82% 0%, rgba(94,106,210,0.16), transparent 60%),
+    var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+.session-header-top{
+  display:flex;
+  align-items:center;
+  gap: var(--space-md);
+  margin: var(--space-md) 0 var(--space-md);
+}
+.session-num-badge{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--primary-hover);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-xs);
+  padding: 4px 10px;
+}
+.difficulty{ display:flex; gap:4px; align-items:center; }
+.difficulty .dot{ width:6px; height:6px; border-radius:50%; background: var(--hairline-strong); }
+.difficulty .dot.filled{ background: var(--primary); }
+.difficulty-label{ font-size:12px; color: var(--ink-tertiary); margin-left:6px; }
+.session-header h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ---------- tabs ---------- */
+.tabs-bar{
+  display:flex;
+  gap: 4px;
+  padding-top: var(--space-lg);
+  border-bottom: 1px solid var(--hairline);
+  overflow-x: auto;
+}
+.tab-btn{
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-subtle);
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s ease, border-color .15s ease;
+}
+.tab-btn:hover{ color: var(--ink); }
+.tab-btn.active{ color: var(--ink); border-bottom-color: var(--primary); }
+
+.tab-panels{ padding: var(--space-xxl) 0 var(--space-xxl); }
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+/* ---------- markdown body ---------- */
+.markdown-body{ color: var(--ink-muted); font-size: 15.5px; line-height: 1.75; letter-spacing: -0.05px; overflow-wrap: anywhere; word-break: break-word; }
+.markdown-body h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--hairline);
+}
+.markdown-body h2{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+.markdown-body h3{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin: var(--space-lg) 0 var(--space-xs);
+}
+.markdown-body h4{
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+.markdown-body p{ margin: 0 0 var(--space-md); }
+.markdown-body ul, .markdown-body ol{ margin: 0 0 var(--space-md); padding-left: 1.4em; }
+.markdown-body li{ margin-bottom: 6px; }
+.markdown-body ul{ list-style: disc; }
+.markdown-body ol{ list-style: decimal; }
+.markdown-body strong{ color: var(--ink); font-weight: 600; }
+.markdown-body em{ color: var(--ink-muted); }
+.markdown-body a{ color: var(--primary-hover); text-decoration: underline; text-underline-offset: 2px; }
+.markdown-body hr{ border:none; border-top: 1px solid var(--hairline); margin: var(--space-xl) 0; }
+.markdown-body blockquote{
+  margin: 0 0 var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid var(--primary);
+  background: var(--surface-1);
+  color: var(--ink-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.markdown-body code{
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--primary-hover);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.markdown-body .code-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+}
+.markdown-body pre{
+  margin: 0;
+  padding: var(--space-md);
+  background: transparent;
+  border: none;
+}
+.markdown-body pre code{
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre;
+}
+.markdown-body .table-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+}
+.markdown-body table{
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 460px;
+  font-size: 13.5px;
+}
+.markdown-body th, .markdown-body td{
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+  white-space: nowrap;
+}
+.markdown-body thead th{
+  background: var(--surface-1);
+  color: var(--ink);
+  font-weight: 600;
+  font-family: var(--font-text);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+.markdown-body tbody tr:last-child td{ border-bottom: none; }
+.markdown-body tbody tr:hover{ background: var(--surface-1); }
+
+/* ---------- pager ---------- */
+.session-pager{
+  display:flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-xl) 0 var(--space-xxl);
+  border-top: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+.pager-link{
+  display:flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  max-width: 46%;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.pager-link:hover{ border-color: var(--primary); background: var(--surface-2); }
+.pager-link.next{ margin-left: auto; text-align: right; align-items: flex-end; }
+.pager-direction{ font-size: 12px; color: var(--ink-tertiary); font-family: var(--font-mono); }
+.pager-title{ font-size: 14px; color: var(--ink); font-weight: 500; }
+.pager-spacer{ flex: 1; }
+
+footer.site-footer{
+  border-top: 1px solid var(--hairline);
+  padding: var(--space-xl) 0;
+}
+footer.site-footer .container{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: var(--ink-tertiary);
+  font-size: 12px;
+}
+footer.site-footer a:hover{ color: var(--ink-subtle); }
+
+@media (max-width: 640px){
+  .session-header{ padding: var(--space-xl) 0 var(--space-lg); }
+  .pager-link{ max-width: 100%; }
+  .session-pager{ flex-direction: column; }
+  .pager-link.next{ margin-left: 0; text-align: left; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="container">
+    <div class="brand"><span class="brand-mark"></span>데이터 리터러시 with AI</div>
+    <a class="back-link" href="../index.html#curriculum">&larr; 커리큘럼으로</a>
+  </div>
+</nav>
+
+<header class="session-header">
+  <div class="container">
+    <div class="eyebrow">PART 04 · 파이썬</div>
+    <div class="session-header-top">
+      <span class="session-num-badge">S14</span>
+      <div class="difficulty" title="난이도 4"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="difficulty-label">심화</span></div>
+    </div>
+    <h1>시각화 실전: matplotlib·seaborn과 BI 핸드오프</h1>
+  </div>
+  <div class="container">
+    <div class="tabs-bar" role="tablist">
+<button class="tab-btn active" data-tab="curriculum" role="tab" aria-selected="true">커리큘럼</button>
+<button class="tab-btn" data-tab="handout" role="tab" aria-selected="false">핸드아웃</button>
+<button class="tab-btn" data-tab="script" role="tab" aria-selected="false">강사대본</button>
+<button class="tab-btn" data-tab="answer" role="tab" aria-selected="false">모범답안</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="tab-panels container">
+<section class="tab-panel markdown-body active" data-panel="curriculum" aria-label="커리큘럼">
+<h1>S14. 시각화 실전: matplotlib·seaborn, 한글폰트, BI 핸드오프</h1>
+<h2>차시 개요</h2>
+<ul>
+<li>대상: 엑셀은 쓰지만 데이터분석은 처음인 비개발자</li>
+<li>선수 차시: S13 그룹화·집계·재구조화</li>
+<li>난이도: 4</li>
+<li>시간: 70분</li>
+<li>사용 데이터:</li>
+<li><code>02_datasets/real_korean/seoul_subway/seoulmetro_daily_hourly_2025.csv</code></li>
+<li><code>02_datasets/real_korean/realestate_apt/molit_apt_sale_seoul_gangnam_2024.csv</code></li>
+<li><code>02_datasets/real_korean/prices_econ/fred_korea_cpi_all_items_monthly.csv</code></li>
+<li><code>02_datasets/cafe_sales/cafe_sales_clean.csv</code></li>
+</ul>
+<p>이번 차시는 pandas로 정리한 데이터를 그래프로 바꾸는 수업이다. 엑셀에서 표를 만든 뒤 차트 삽입을 누르는 것과 비슷하지만, 파이썬에서는 차트를 만들기 전에 "어떤 질문을 어떤 표로 줄이고, 어떤 차트로 보여줄 것인가"를 코드로 분명히 적는다.</p>
+<p>수업은 한글폰트 설정에서 시작한다. 한글 데이터로 차트를 만들 때 제목과 축이 깨지면 분석 결과가 전달되지 않는다. 그래서 <code>matplotlib</code>의 <code>rcParams</code>에서 글꼴과 <code>unicode_minus</code>를 먼저 설정한다.</p>
+<p>이후에는 세 가지 실데이터를 다룬다. 서울 지하철 199,424행은 원자료를 그대로 그리지 않고 승차 데이터만 골라 역별·시간대별로 집계한 뒤 히트맵을 만든다. 강남구 아파트 실거래 3,754행은 히스토그램, 박스플롯, 산점도와 추세선으로 본다. FRED 한국 CPI 월별 데이터는 2000년 이후 287개 월로 줄여 시계열 라인차트를 만든다. 마지막 미션에서는 카페 매출 데이터를 월별로 집계해 라인차트와 CSV로 저장한다.</p>
+<h2>학습 목표</h2>
+<ol>
+<li>한글폰트를 설정하고 <code>axes.unicode_minus=False</code>가 필요한 이유를 설명할 수 있다.</li>
+<li>숫자 분포를 히스토그램과 박스플롯으로 확인할 수 있다.</li>
+<li>두 숫자 변수의 관계를 산점도와 추세선으로 표현하고, 상관계수를 보조 정보로 해석할 수 있다.</li>
+<li>대용량 데이터를 먼저 집계한 뒤 히트맵이나 라인차트로 시각화할 수 있다.</li>
+<li>차트에 사용한 정제·집계 결과를 <code>to_csv()</code>로 저장해 BI 도구에 넘길 수 있다.</li>
+</ol>
+<h2>실제 확인한 데이터</h2>
+<p><code>python3</code>와 <code>pandas 3.0.3</code>으로 실제 파일을 열어 확인한 기준이다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>데이터</th>
+<th style="text-align: right;">실제 행수</th>
+<th style="text-align: right;">실제 열수</th>
+<th>수업에서 쓰는 역할</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>seoulmetro_daily_hourly_2025.csv</code></td>
+<td style="text-align: right;">199,424</td>
+<td style="text-align: right;">26</td>
+<td>승차 기준 역별×시간대 히트맵</td>
+</tr>
+<tr>
+<td><code>molit_apt_sale_seoul_gangnam_2024.csv</code></td>
+<td style="text-align: right;">3,754</td>
+<td style="text-align: right;">20</td>
+<td>거래금액 분포, 면적구간 박스플롯, 면적-가격 산점도</td>
+</tr>
+<tr>
+<td><code>fred_korea_cpi_all_items_monthly.csv</code></td>
+<td style="text-align: right;">767</td>
+<td style="text-align: right;">2</td>
+<td>월별 CPI 시계열</td>
+</tr>
+<tr>
+<td><code>cafe_sales_clean.csv</code></td>
+<td style="text-align: right;">10,424</td>
+<td style="text-align: right;">12</td>
+<td>미션용 월별 매출 추세</td>
+</tr>
+</tbody>
+</table></div>
+<p>추가 확인값:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th style="text-align: right;">확인값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>지하철 데이터 기간</td>
+<td style="text-align: right;">2025-01-01부터 2025-12-31까지</td>
+</tr>
+<tr>
+<td>지하철 승차 행수</td>
+<td style="text-align: right;">99,645행</td>
+</tr>
+<tr>
+<td>지하철 히트맵 집계 결과</td>
+<td style="text-align: right;">상위 10개 역 × 20개 시간대 = 200행</td>
+</tr>
+<tr>
+<td>강남 아파트 분석 가능 행수</td>
+<td style="text-align: right;">3,754행</td>
+</tr>
+<tr>
+<td>전용면적과 거래금액 상관계수</td>
+<td style="text-align: right;">r = 0.806</td>
+</tr>
+<tr>
+<td>CPI 원본 기간</td>
+<td style="text-align: right;">1960-01-01부터 2023-11-01까지</td>
+</tr>
+<tr>
+<td>CPI 2000년 이후 행수</td>
+<td style="text-align: right;">287행</td>
+</tr>
+<tr>
+<td>카페 매출 기간</td>
+<td style="text-align: right;">2025-01-01부터 2025-06-30까지</td>
+</tr>
+<tr>
+<td>카페 월별 집계 행수</td>
+<td style="text-align: right;">6행</td>
+</tr>
+</tbody>
+</table></div>
+<h2>핵심 개념</h2>
+<h3>1. 차트는 표를 예쁘게 꾸미는 일이 아니라 질문에 답하는 일이다</h3>
+<p>엑셀에서는 표를 선택한 뒤 차트 종류를 고르는 방식에 익숙하다. 파이썬에서도 그래프를 그릴 수 있지만, 입문 단계에서 먼저 익혀야 할 순서는 반대에 가깝다.</p>
+<ol>
+<li>무엇을 알고 싶은지 정한다.</li>
+<li>그 질문에 필요한 열만 고른다.</li>
+<li>큰 데이터는 집계하거나 필터링한다.</li>
+<li>질문에 맞는 차트 종류를 고른다.</li>
+<li>제목, 축, 단위, 저장 파일을 확인한다.</li>
+</ol>
+<p>예를 들어 지하철 원본 199,424행을 그대로 화면에 찍는 것은 분석이 아니다. "어느 역의 어느 시간대 승차가 많은가"라는 질문으로 바꾸고, 승차 데이터만 골라 역별·시간대별 합계로 줄여야 히트맵이 의미를 가진다.</p>
+<h3>2. 한글폰트 설정은 차트의 전처리다</h3>
+<p>한글 CSV를 잘 읽었더라도 그래프 제목과 축 글자가 깨질 수 있다. 데이터가 틀린 것이 아니라 matplotlib이 한글 글꼴을 찾지 못한 상태일 수 있다.</p>
+<p>이번 차시에서는 아래 두 가지를 반드시 확인한다.</p>
+<div class="code-scroll"><pre><code class="language-python">plt.rcParams[&quot;font.family&quot;] = &quot;NanumGothic&quot;
+plt.rcParams[&quot;axes.unicode_minus&quot;] = False
+</code></pre></div>
+<p><code>font.family</code>는 한글을 표시할 글꼴을 정한다. <code>axes.unicode_minus=False</code>는 음수 부호가 네모로 깨지는 문제를 줄인다. 오늘 다루는 핵심 그래프에는 음수가 많지 않지만, 시각화 환경을 처음 잡을 때 함께 설정해두는 습관을 들이면 좋다.</p>
+<h3>3. 히스토그램과 박스플롯은 분포를 보는 도구다</h3>
+<p>히스토그램은 숫자가 어느 구간에 많이 몰려 있는지 보여준다. 엑셀의 도수분포표와 막대그래프를 합친 느낌이다. 강남구 아파트 거래금액을 히스토그램으로 보면 거래금액이 낮은 구간부터 높은 구간까지 어떻게 퍼져 있는지 볼 수 있다.</p>
+<p>박스플롯은 중앙값, 중간 50% 범위, 이상치를 한 번에 보여준다. 엑셀에서는 익숙하지 않을 수 있지만, 여러 그룹의 퍼짐을 비교할 때 유용하다. 이번 수업에서는 전용면적을 <code>40㎡ 이하</code>, <code>40-60㎡</code>, <code>60-85㎡</code>, <code>85-120㎡</code>, <code>120㎡ 초과</code>로 나누고, 면적구간별 거래금액 범위를 비교한다.</p>
+<h3>4. 산점도와 추세선은 두 숫자 사이의 관계를 본다</h3>
+<p>산점도는 한 행을 점 하나로 표현한다. x축은 전용면적, y축은 거래금액이다. 점들이 오른쪽 위로 올라가는 모양이면 전용면적이 클수록 거래금액도 높아지는 경향이 있다는 뜻이다.</p>
+<p>이번 강남구 아파트 데이터에서 전용면적과 거래금액의 상관계수는 <code>r = 0.806</code>, 강한 양의 상관이다. 다만 상관은 인과가 아니다. 같은 면적이라도 단지, 위치, 층, 연식, 거래 시점에 따라 가격이 달라질 수 있으니 "면적만이 가격을 결정한다"고 말하지는 않는다.</p>
+<h3>5. 히트맵은 행과 열이 있는 숫자표를 색으로 읽는 방법이다</h3>
+<p>히트맵은 피벗 테이블에 색을 입힌 것과 비슷하다. 엑셀의 조건부 서식 색조와도 연결해서 설명할 수 있다.</p>
+<p>이번 지하철 실습에서는 행에 역, 열에 시간대를 놓고, 값에는 연간 승차인원을 둔다. 색이 진한 칸은 해당 역과 시간대의 승차 인원이 많다는 뜻이다. 원본 파일이 크기 때문에 먼저 승차 데이터만 필터링하고, 역별·시간대별 합계로 줄인 뒤, 총 승차 상위 10개 역만 그린다.</p>
+<h3>6. 라인차트는 시간 순서가 있는 데이터에 쓴다</h3>
+<p>FRED CPI 데이터는 월별 시계열이다. 카테고리를 비교하려는 것이 아니라 시간이 흐르며 지수가 어떻게 움직였는지 보려는 것이므로 라인차트가 적합하다.</p>
+<p>카페 매출 미션도 같은 원리다. 주문 10,424행을 월별 매출 6행으로 집계한 뒤 라인차트를 그린다. 일별 매출보다 월별 매출을 쓰는 이유는 이번 차시의 미션이 "추세를 저장해 BI에 넘길 수 있는 집계표 만들기"이기 때문이다.</p>
+<h3>7. <code>to_csv()</code>는 BI로 넘기는 인수인계 파일이다</h3>
+<p>시각화 도구로 넘어갈 때 원본 전체를 넘길 수도 있지만, 처음에는 차트에 쓰인 집계 결과를 따로 저장하는 것이 안전하다.</p>
+<div class="code-scroll"><pre><code class="language-python">monthly_sales.to_csv(&quot;s14_monthly_sales.csv&quot;, index=False, encoding=&quot;utf-8-sig&quot;)
+</code></pre></div>
+<p><code>index=False</code>는 pandas 인덱스를 불필요한 열로 저장하지 않기 위한 설정이다. <code>encoding="utf-8-sig"</code>는 Excel이나 일부 BI 도구가 한글 열 이름을 더 안정적으로 읽게 해준다. 데이터 원본은 UTF-8로 정규화되어 있지만, 전달 파일은 수강생 환경의 Excel·BI 호환성까지 고려해 저장한다.</p>
+<h2>70분 수업 흐름</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;">시간</th>
+<th>내용</th>
+<th>진행 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0-5분</td>
+<td>오늘의 위치: S13 집계 결과를 차트와 BI용 파일로 넘기기</td>
+<td>강의</td>
+</tr>
+<tr>
+<td style="text-align: right;">5-12분</td>
+<td>나눔폰트 설치 확인, <code>rcParams</code>, <code>unicode_minus</code> 설정</td>
+<td>강사 시연</td>
+</tr>
+<tr>
+<td style="text-align: right;">12-25분</td>
+<td>지하철 199,424행을 승차 상위 10개 역×시간대로 집계해 히트맵</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">25-38분</td>
+<td>강남 아파트 거래금액 히스토그램, 면적구간 박스플롯</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">38-48분</td>
+<td>아파트 전용면적-거래금액 산점도와 추세선, 상관계수 해석</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">48-56분</td>
+<td>FRED CPI 2000년 이후 월별 라인차트</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">56-62분</td>
+<td>차트용 집계 결과를 CSV로 저장하고 BI 핸드오프 의미 설명</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">62-70분</td>
+<td>미션: 카페 월별 매출 추세 라인차트와 CSV 저장</td>
+<td>개인 실습</td>
+</tr>
+</tbody>
+</table></div>
+<h2>엑셀과 연결해서 설명할 지점</h2>
+<ul>
+<li><code>sns.histplot()</code>은 엑셀의 히스토그램 또는 도수분포표와 연결해서 설명한다.</li>
+<li><code>sns.boxplot()</code>은 엑셀 입문자에게 낯설 수 있으므로 "그룹별 중앙값과 퍼짐을 한 번에 보는 요약 그림"으로 설명한다.</li>
+<li><code>sns.regplot()</code>의 추세선은 엑셀 산점도에서 "추세선 추가"를 누르는 것과 비슷하다.</li>
+<li><code>sns.heatmap()</code>은 피벗 테이블에 조건부 서식 색조를 입힌 결과와 비슷하다.</li>
+<li><code>to_csv()</code>는 분석자가 BI 담당자에게 넘기는 정리된 표라고 설명한다.</li>
+<li>Power BI나 Looker Studio에서 좋은 대시보드를 만들려면 원본보다 차트용 집계표가 더 적절할 때가 있다.</li>
+</ul>
+<h2>수업 후 수강생이 말할 수 있어야 하는 문장</h2>
+<ul>
+<li>"한글 차트가 깨지면 데이터가 아니라 matplotlib 글꼴 설정을 먼저 확인한다."</li>
+<li>"큰 데이터는 원본을 바로 그리지 않고, 필터링하거나 집계해서 차트에 맞는 크기로 줄인다."</li>
+<li>"히스토그램은 분포, 박스플롯은 그룹별 퍼짐, 산점도는 두 숫자의 관계, 라인차트는 시간 흐름에 쓴다."</li>
+<li>"상관계수와 추세선은 관계를 요약하지만 원인을 증명하지는 않는다."</li>
+<li>"BI로 넘길 때는 차트에 쓴 정제·집계 결과를 <code>to_csv()</code>로 저장할 수 있다."</li>
+</ul>
+<h2>평가 미션</h2>
+<p>미션은 <code>cafe_sales_clean.csv</code>를 사용해 월별 매출 추세 라인차트를 저장하는 것이다.</p>
+<p>통과 기준:</p>
+<ul>
+<li><code>date</code>를 날짜형으로 변환한다.</li>
+<li>월별로 <code>amount</code> 합계를 집계해 6행짜리 <code>monthly_sales</code> 표를 만든다.</li>
+<li>월별 매출 라인차트를 저장한다.</li>
+<li>월별 집계 결과를 CSV로 저장한다.</li>
+<li>6월 매출이 <code>16,816,500</code>원으로 가장 높고, 2월 매출이 <code>13,157,000</code>원으로 가장 낮다는 점을 확인한다.</li>
+</ul>
+<p>완료 판단:</p>
+<p>수강생이 월별 매출 CSV와 라인차트 파일을 저장하고, 2025년 1월부터 6월까지 6개 월의 매출 추세를 말로 설명할 수 있으면 완료로 본다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="handout" aria-label="핸드아웃">
+<h1>S14 핸드아웃: 시각화 실전, 한글폰트, BI 핸드오프</h1>
+<h2>오늘 사용할 것</h2>
+<ul>
+<li>Python 3</li>
+<li>pandas</li>
+<li>matplotlib</li>
+<li>seaborn</li>
+<li>작업 루트: <code>/mnt/d/ai-data-analysis-course</code></li>
+<li>사용 데이터:</li>
+<li><code>02_datasets/real_korean/seoul_subway/seoulmetro_daily_hourly_2025.csv</code></li>
+<li><code>02_datasets/real_korean/realestate_apt/molit_apt_sale_seoul_gangnam_2024.csv</code></li>
+<li><code>02_datasets/real_korean/prices_econ/fred_korea_cpi_all_items_monthly.csv</code></li>
+<li><code>02_datasets/cafe_sales/cafe_sales_clean.csv</code></li>
+</ul>
+<p>오늘은 S13에서 배운 집계 결과를 그래프로 표현하고, BI 도구에 넘길 수 있는 CSV 파일로 저장한다. 모든 실습 코드는 한 셀씩 실행해도 되고, 하나의 <code>.py</code> 파일에 모아 실행해도 된다.</p>
+<h2>따라하기 1: 폴더, 패키지, 한글폰트 설정</h2>
+<p>먼저 공통 설정을 실행한다.</p>
+<div class="code-scroll"><pre><code class="language-python">from pathlib import Path
+
+import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
+import pandas as pd
+import seaborn as sns
+from matplotlib import font_manager
+
+ROOT = Path(&quot;/mnt/d/ai-data-analysis-course&quot;)
+DATA = ROOT / &quot;02_datasets&quot;
+OUT = ROOT / &quot;06_answers/S14_outputs&quot;
+OUT.mkdir(parents=True, exist_ok=True)
+
+font_candidates = [
+    &quot;NanumGothic&quot;,
+    &quot;NanumGothicCoding&quot;,
+    &quot;Noto Sans CJK KR&quot;,
+    &quot;Malgun Gothic&quot;,
+    &quot;AppleGothic&quot;,
+    &quot;DejaVu Sans&quot;,
+]
+
+available_fonts = {font.name for font in font_manager.fontManager.ttflist}
+selected_font = next(
+    (font for font in font_candidates if font in available_fonts),
+    &quot;DejaVu Sans&quot;,
+)
+
+sns.set_theme(style=&quot;whitegrid&quot;)
+plt.rcParams[&quot;font.family&quot;] = selected_font
+plt.rcParams[&quot;axes.unicode_minus&quot;] = False
+
+print(&quot;선택된 글꼴:&quot;, selected_font)
+</code></pre></div>
+<p>한글이 네모로 보이면 나눔폰트를 설치해야 한다. Ubuntu, WSL, Colab에서는 아래 명령을 참고한다.</p>
+<div class="code-scroll"><pre><code class="language-bash">sudo apt-get update
+sudo apt-get install -y fonts-nanum fonts-nanum-coding
+</code></pre></div>
+<p>Colab에서는 명령 앞에 <code>!</code>를 붙인다. 설치 후에도 한글이 깨지면 런타임을 다시 시작하거나 matplotlib 폰트 캐시를 지운 뒤 다시 실행한다.</p>
+<h2>따라하기 2: 서울 지하철 시간대 히트맵 만들기</h2>
+<p>원본 파일은 199,424행이다. 전체를 바로 그리지 않고 승차 데이터만 고른 뒤, 역별·시간대별 합계로 줄인다.</p>
+<div class="code-scroll"><pre><code class="language-python">subway_path = DATA / &quot;real_korean/seoul_subway/seoulmetro_daily_hourly_2025.csv&quot;
+subway = pd.read_csv(subway_path)
+
+time_cols = [
+    &quot;06시이전&quot;,
+    &quot;06-07시간대&quot;,
+    &quot;07-08시간대&quot;,
+    &quot;08-09시간대&quot;,
+    &quot;09-10시간대&quot;,
+    &quot;10-11시간대&quot;,
+    &quot;11-12시간대&quot;,
+    &quot;12-13시간대&quot;,
+    &quot;13-14시간대&quot;,
+    &quot;14-15시간대&quot;,
+    &quot;15-16시간대&quot;,
+    &quot;16-17시간대&quot;,
+    &quot;17-18시간대&quot;,
+    &quot;18-19시간대&quot;,
+    &quot;19-20시간대&quot;,
+    &quot;20-21시간대&quot;,
+    &quot;21-22시간대&quot;,
+    &quot;22-23시간대&quot;,
+    &quot;23-24시간대&quot;,
+    &quot;24시이후&quot;,
+]
+
+ride = subway[subway[&quot;승하차구분&quot;] == &quot;승차&quot;].copy()
+ride[&quot;역라벨&quot;] = ride[&quot;호선&quot;].astype(str) + &quot; &quot; + ride[&quot;역명&quot;].astype(str)
+
+station_hour = ride.groupby(&quot;역라벨&quot;)[time_cols].sum()
+top_stations = station_hour.sum(axis=1).sort_values(ascending=False).head(10).index
+heatmap_wide = station_hour.loc[top_stations, time_cols]
+
+print(subway.shape)
+print(heatmap_wide.shape)
+</code></pre></div>
+<p>확인할 결과:</p>
+<div class="code-scroll"><pre><code class="language-text">지하철 원본: 199,424행, 26열
+히트맵 데이터: 10행, 20열
+</code></pre></div>
+<p>히트맵을 그린다.</p>
+<div class="code-scroll"><pre><code class="language-python">fig, ax = plt.subplots(figsize=(13, 6))
+sns.heatmap(
+    heatmap_wide / 1_000_000,
+    cmap=&quot;Blues&quot;,
+    linewidths=0.4,
+    cbar_kws={&quot;label&quot;: &quot;연간 승차인원(백만 명)&quot;},
+    ax=ax,
+)
+
+ax.set_title(&quot;서울 지하철 주요 역의 시간대별 승차 패턴&quot;)
+ax.set_xlabel(&quot;시간대&quot;)
+ax.set_ylabel(&quot;역&quot;)
+ax.tick_params(axis=&quot;x&quot;, labelrotation=45)
+
+plt.tight_layout()
+plt.savefig(OUT / &quot;s14_subway_heatmap.png&quot;, dpi=160)
+plt.show()
+</code></pre></div>
+<p>BI에서 쓸 수 있도록 히트맵용 데이터를 긴 표로 저장한다.</p>
+<div class="code-scroll"><pre><code class="language-python">heatmap_long = (
+    heatmap_wide.reset_index()
+    .melt(id_vars=&quot;역라벨&quot;, var_name=&quot;시간대&quot;, value_name=&quot;연간승차인원&quot;)
+    .assign(연간승차인원_백만=lambda df: df[&quot;연간승차인원&quot;] / 1_000_000)
+)
+
+heatmap_long.to_csv(
+    OUT / &quot;s14_subway_station_hour_heatmap.csv&quot;,
+    index=False,
+    encoding=&quot;utf-8-sig&quot;,
+)
+
+print(heatmap_long.head())
+</code></pre></div>
+<p><code>heatmap_long</code>은 200행이다. 행 10개 역과 열 20개 시간대가 긴 표로 바뀌었기 때문이다.</p>
+<h2>따라하기 3: 강남 아파트 거래금액 히스토그램</h2>
+<p>아파트 실거래 데이터의 <code>거래금액(만원)</code>은 쉼표가 들어간 문자열이다. 숫자로 바꾼 뒤 억원 단위 열을 만든다.</p>
+<div class="code-scroll"><pre><code class="language-python">apt_path = DATA / &quot;real_korean/realestate_apt/molit_apt_sale_seoul_gangnam_2024.csv&quot;
+apt = pd.read_csv(apt_path)
+
+apt[&quot;거래금액_만원&quot;] = pd.to_numeric(
+    apt[&quot;거래금액(만원)&quot;].astype(str).str.replace(&quot;,&quot;, &quot;&quot;, regex=False),
+    errors=&quot;coerce&quot;,
+)
+apt[&quot;거래금액_억원&quot;] = apt[&quot;거래금액_만원&quot;] / 10_000
+apt[&quot;계약월&quot;] = pd.to_datetime(apt[&quot;계약년월&quot;].astype(str), format=&quot;%Y%m&quot;)
+
+apt = apt.dropna(subset=[&quot;전용면적(㎡)&quot;, &quot;거래금액_만원&quot;, &quot;계약월&quot;]).copy()
+
+print(apt.shape)
+print(apt[[&quot;전용면적(㎡)&quot;, &quot;거래금액_만원&quot;, &quot;거래금액_억원&quot;]].head())
+</code></pre></div>
+<p>확인할 결과:</p>
+<div class="code-scroll"><pre><code class="language-text">분석 가능 행수: 3,754행
+</code></pre></div>
+<p>히스토그램을 그린다.</p>
+<div class="code-scroll"><pre><code class="language-python">fig, ax = plt.subplots(figsize=(9, 5))
+sns.histplot(
+    data=apt,
+    x=&quot;거래금액_억원&quot;,
+    bins=36,
+    color=&quot;#A3BEFA&quot;,
+    edgecolor=&quot;#2E4780&quot;,
+    ax=ax,
+)
+
+ax.set_title(&quot;강남구 아파트 거래금액 분포&quot;)
+ax.set_xlabel(&quot;거래금액(억원)&quot;)
+ax.set_ylabel(&quot;거래건수&quot;)
+
+plt.tight_layout()
+plt.savefig(OUT / &quot;s14_apt_price_histogram.png&quot;, dpi=160)
+plt.show()
+</code></pre></div>
+<p>히스토그램은 "어느 가격대 거래가 많은가"를 보는 차트다. 정확한 단지별 비교가 아니라 전체 분포를 보는 데 적합하다.</p>
+<h2>따라하기 4: 면적구간별 박스플롯</h2>
+<p>전용면적을 구간으로 나눈다.</p>
+<div class="code-scroll"><pre><code class="language-python">apt[&quot;면적구간&quot;] = pd.cut(
+    apt[&quot;전용면적(㎡)&quot;],
+    bins=[0, 40, 60, 85, 120, float(&quot;inf&quot;)],
+    labels=[&quot;40㎡ 이하&quot;, &quot;40-60㎡&quot;, &quot;60-85㎡&quot;, &quot;85-120㎡&quot;, &quot;120㎡ 초과&quot;],
+)
+
+print(apt[&quot;면적구간&quot;].value_counts(sort=False))
+</code></pre></div>
+<p>박스플롯을 그린다.</p>
+<div class="code-scroll"><pre><code class="language-python">fig, ax = plt.subplots(figsize=(10, 5))
+sns.boxplot(
+    data=apt,
+    x=&quot;면적구간&quot;,
+    y=&quot;거래금액_억원&quot;,
+    color=&quot;#F5BACC&quot;,
+    ax=ax,
+)
+
+ax.set_title(&quot;면적구간별 거래금액의 범위 비교&quot;)
+ax.set_xlabel(&quot;면적구간&quot;)
+ax.set_ylabel(&quot;거래금액(억원)&quot;)
+
+plt.tight_layout()
+plt.savefig(OUT / &quot;s14_apt_area_boxplot.png&quot;, dpi=160)
+plt.show()
+</code></pre></div>
+<p>박스플롯은 그룹별 중앙값과 퍼짐을 한 번에 보여준다. 엑셀 피벗에서 그룹별 평균만 볼 때보다 분포 차이까지 함께 읽을 수 있다.</p>
+<h2>따라하기 5: 산점도와 추세선</h2>
+<p>전용면적과 거래금액의 관계를 산점도와 추세선으로 본다.</p>
+<div class="code-scroll"><pre><code class="language-python">corr = apt[&quot;전용면적(㎡)&quot;].corr(apt[&quot;거래금액_만원&quot;])
+print(f&quot;상관계수 r = {corr:.3f}&quot;)
+
+fig, ax = plt.subplots(figsize=(9, 5.5))
+sns.regplot(
+    data=apt,
+    x=&quot;전용면적(㎡)&quot;,
+    y=&quot;거래금액_억원&quot;,
+    ci=None,
+    scatter_kws={&quot;s&quot;: 28, &quot;alpha&quot;: 0.5, &quot;color&quot;: &quot;#F0986E&quot;},
+    line_kws={&quot;color&quot;: &quot;#1F2430&quot;},
+    ax=ax,
+)
+
+ax.set_title(f&quot;전용면적과 거래금액의 관계: r={corr:.3f}&quot;)
+ax.set_xlabel(&quot;전용면적(㎡)&quot;)
+ax.set_ylabel(&quot;거래금액(억원)&quot;)
+
+plt.tight_layout()
+plt.savefig(OUT / &quot;s14_apt_scatter_trend.png&quot;, dpi=160)
+plt.show()
+</code></pre></div>
+<p>확인할 결과:</p>
+<div class="code-scroll"><pre><code class="language-text">상관계수 r = 0.806
+</code></pre></div>
+<p>상관계수가 높아도 원인을 증명한 것은 아니다. 같은 면적이라도 단지, 위치, 층, 연식, 거래 시점이 가격에 영향을 줄 수 있다.</p>
+<p>아파트 차트에 쓴 데이터를 저장한다.</p>
+<div class="code-scroll"><pre><code class="language-python">apt[
+    [&quot;시군구&quot;, &quot;단지명&quot;, &quot;계약월&quot;, &quot;전용면적(㎡)&quot;, &quot;거래금액_만원&quot;, &quot;거래금액_억원&quot;, &quot;면적구간&quot;]
+].to_csv(
+    OUT / &quot;s14_apt_chart_ready.csv&quot;,
+    index=False,
+    encoding=&quot;utf-8-sig&quot;,
+)
+</code></pre></div>
+<h2>따라하기 6: FRED CPI 월별 라인차트</h2>
+<p>월별 시계열은 라인차트로 본다. 원본 767행 중 2000년 이후만 사용한다.</p>
+<div class="code-scroll"><pre><code class="language-python">cpi_path = DATA / &quot;real_korean/prices_econ/fred_korea_cpi_all_items_monthly.csv&quot;
+cpi = pd.read_csv(cpi_path)
+
+cpi[&quot;기준월&quot;] = pd.to_datetime(cpi[&quot;observation_date&quot;])
+cpi[&quot;소비자물가지수&quot;] = pd.to_numeric(cpi[&quot;KORCPIALLMINMEI&quot;], errors=&quot;coerce&quot;)
+
+cpi_recent = cpi[cpi[&quot;기준월&quot;] &gt;= &quot;2000-01-01&quot;][[&quot;기준월&quot;, &quot;소비자물가지수&quot;]].copy()
+
+print(cpi.shape)
+print(cpi_recent.shape)
+print(cpi_recent.head())
+</code></pre></div>
+<p>확인할 결과:</p>
+<div class="code-scroll"><pre><code class="language-text">CPI 원본: 767행, 2열
+2000년 이후: 287행
+</code></pre></div>
+<p>라인차트를 저장한다.</p>
+<div class="code-scroll"><pre><code class="language-python">fig, ax = plt.subplots(figsize=(10, 5))
+sns.lineplot(
+    data=cpi_recent,
+    x=&quot;기준월&quot;,
+    y=&quot;소비자물가지수&quot;,
+    color=&quot;#5477C4&quot;,
+    ax=ax,
+)
+
+ax.set_title(&quot;한국 소비자물가지수 월별 추세&quot;)
+ax.set_xlabel(&quot;기준월&quot;)
+ax.set_ylabel(&quot;소비자물가지수&quot;)
+
+plt.tight_layout()
+plt.savefig(OUT / &quot;s14_cpi_line.png&quot;, dpi=160)
+plt.show()
+
+cpi_recent.to_csv(OUT / &quot;s14_cpi_recent.csv&quot;, index=False, encoding=&quot;utf-8-sig&quot;)
+</code></pre></div>
+<h2>직접 해보기: 월별 매출 추세 라인차트 저장</h2>
+<p>사용 파일:</p>
+<div class="code-scroll"><pre><code class="language-text">/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.csv
+</code></pre></div>
+<p>목표:</p>
+<ol>
+<li><code>date</code>를 날짜형으로 변환한다.</li>
+<li>월별 <code>amount</code> 합계를 계산한다.</li>
+<li>월별 매출 라인차트를 저장한다.</li>
+<li>월별 집계표를 CSV로 저장한다.</li>
+<li>6월이 가장 높고 2월이 가장 낮은지 확인한다.</li>
+</ol>
+<p>힌트 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">cafe = pd.read_csv(DATA / &quot;cafe_sales/cafe_sales_clean.csv&quot;)
+cafe[&quot;date&quot;] = pd.to_datetime(cafe[&quot;date&quot;])
+
+monthly_sales = (
+    cafe.groupby(pd.Grouper(key=&quot;date&quot;, freq=&quot;MS&quot;))
+    .agg(매출합계=(&quot;amount&quot;, &quot;sum&quot;), 주문수=(&quot;order_id&quot;, &quot;count&quot;))
+    .reset_index()
+    .rename(columns={&quot;date&quot;: &quot;월&quot;})
+)
+
+print(monthly_sales)
+</code></pre></div>
+<p>저장할 파일 이름:</p>
+<div class="code-scroll"><pre><code class="language-text">/mnt/d/ai-data-analysis-course/06_answers/S14_outputs/s14_monthly_sales.csv
+/mnt/d/ai-data-analysis-course/06_answers/S14_outputs/s14_monthly_sales_trend.png
+</code></pre></div>
+<p>완료 기준:</p>
+<ul>
+<li><code>monthly_sales</code>가 6행이다.</li>
+<li>2025년 6월 매출이 <code>16,816,500</code>원이다.</li>
+<li>2025년 2월 매출이 <code>13,157,000</code>원이다.</li>
+<li>CSV 파일과 PNG 차트 파일이 실제로 저장되어 있다.</li>
+</ul>
+<p>이 핸드오프(정제 결과를 CSV로 저장해 BI로 넘기는 과정)는 S19 풀사이클에서 BI 입력으로 실제 재현된다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="script" aria-label="강사대본">
+<h1>S14 강사대본: 시각화 실전, 한글폰트, BI 핸드오프</h1>
+<h2>수업 전 확인</h2>
+<p>강사용 환경에서 아래 명령이 통과하는지 확인한다.</p>
+<div class="code-scroll"><pre><code class="language-bash">python3 /mnt/d/ai-data-analysis-course/06_answers/S14_code.py
+</code></pre></div>
+<p>작성 시점 실행 확인:</p>
+<div class="code-scroll"><pre><code class="language-text">pandas version: 3.0.3
+matplotlib version: 3.11.0
+seaborn version: 0.13.2
+selected font: NanumGothicCoding
+검증 통과
+</code></pre></div>
+<p>수업 데이터 파일이 아래 경로에 있는지 확인한다.</p>
+<ul>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/real_korean/seoul_subway/seoulmetro_daily_hourly_2025.csv</code></li>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/real_korean/realestate_apt/molit_apt_sale_seoul_gangnam_2024.csv</code></li>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/real_korean/prices_econ/fred_korea_cpi_all_items_monthly.csv</code></li>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.csv</code></li>
+</ul>
+<p>수업 전 생성 또는 확인할 출력 폴더:</p>
+<div class="code-scroll"><pre><code class="language-text">/mnt/d/ai-data-analysis-course/06_answers/S14_outputs
+</code></pre></div>
+<h2>0-5분. 도입</h2>
+<p>말할 것:</p>
+<p>지난 시간에는 <code>groupby</code>, <code>pivot_table</code>, <code>melt</code>로 데이터를 분석하기 좋은 표로 바꾸었다. 오늘은 그 표를 그래프로 보여주고, 다른 도구가 읽을 수 있는 CSV로 저장한다.</p>
+<p>엑셀에서도 표를 만든 뒤 차트를 넣는다. 파이썬도 비슷하다. 다만 파이썬에서는 차트가 더 명시적이다. 어떤 열을 x축에 둘지, 어떤 열을 y축에 둘지, 어떤 단위로 저장할지 코드에 남는다.</p>
+<p>오늘의 핵심은 세 가지다. 첫째, 한글이 깨지지 않게 글꼴을 설정한다. 둘째, 데이터 질문에 맞는 차트를 고른다. 셋째, 차트에 쓴 집계 결과를 CSV로 저장해 BI로 넘긴다.</p>
+<p>강조:</p>
+<p>그래프는 표를 예쁘게 꾸미는 일이 아니라 질문에 답하는 일이다. 큰 공공데이터를 그대로 그리는 대신, 먼저 필요한 크기로 줄인다.</p>
+<h2>5-12분. 한글폰트와 기본 테마 설정</h2>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">from pathlib import Path
+
+import matplotlib.pyplot as plt
+import pandas as pd
+import seaborn as sns
+from matplotlib import font_manager
+
+ROOT = Path(&quot;/mnt/d/ai-data-analysis-course&quot;)
+DATA = ROOT / &quot;02_datasets&quot;
+OUT = ROOT / &quot;06_answers/S14_outputs&quot;
+OUT.mkdir(parents=True, exist_ok=True)
+
+font_candidates = [
+    &quot;NanumGothic&quot;,
+    &quot;NanumGothicCoding&quot;,
+    &quot;Noto Sans CJK KR&quot;,
+    &quot;Malgun Gothic&quot;,
+    &quot;AppleGothic&quot;,
+    &quot;DejaVu Sans&quot;,
+]
+
+available_fonts = {font.name for font in font_manager.fontManager.ttflist}
+selected_font = next(
+    (font for font in font_candidates if font in available_fonts),
+    &quot;DejaVu Sans&quot;,
+)
+
+sns.set_theme(style=&quot;whitegrid&quot;)
+plt.rcParams[&quot;font.family&quot;] = selected_font
+plt.rcParams[&quot;axes.unicode_minus&quot;] = False
+
+print(selected_font)
+</code></pre></div>
+<p>말할 것:</p>
+<p>한글 차트에서 글자가 네모로 깨지면 데이터가 잘못된 것이 아니다. matplotlib이 한글 글꼴을 찾지 못한 것이다. 그래서 오늘은 차트를 그리기 전에 글꼴부터 잡는다.</p>
+<p><code>axes.unicode_minus=False</code>는 음수 부호가 깨지는 것을 막기 위한 설정이다. 오늘 차트에는 음수가 많지 않지만, 분석 환경을 처음 잡을 때 같이 설정해두면 좋다.</p>
+<p>시연 포인트:</p>
+<ul>
+<li><code>selected_font</code>가 <code>NanumGothic</code> 또는 <code>NanumGothicCoding</code>으로 나오는지 확인한다.</li>
+<li>수강생 환경에서 <code>DejaVu Sans</code>만 나오면 한글이 깨질 수 있다고 안내한다.</li>
+<li>Colab이나 WSL에서는 나눔폰트를 설치하고 런타임을 다시 시작해야 할 수 있다고 말한다.</li>
+</ul>
+<h2>12-25분. 지하철 시간대 히트맵</h2>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">subway = pd.read_csv(
+    DATA / &quot;real_korean/seoul_subway/seoulmetro_daily_hourly_2025.csv&quot;
+)
+
+time_cols = [
+    &quot;06시이전&quot;, &quot;06-07시간대&quot;, &quot;07-08시간대&quot;, &quot;08-09시간대&quot;,
+    &quot;09-10시간대&quot;, &quot;10-11시간대&quot;, &quot;11-12시간대&quot;, &quot;12-13시간대&quot;,
+    &quot;13-14시간대&quot;, &quot;14-15시간대&quot;, &quot;15-16시간대&quot;, &quot;16-17시간대&quot;,
+    &quot;17-18시간대&quot;, &quot;18-19시간대&quot;, &quot;19-20시간대&quot;, &quot;20-21시간대&quot;,
+    &quot;21-22시간대&quot;, &quot;22-23시간대&quot;, &quot;23-24시간대&quot;, &quot;24시이후&quot;,
+]
+
+ride = subway[subway[&quot;승하차구분&quot;] == &quot;승차&quot;].copy()
+ride[&quot;역라벨&quot;] = ride[&quot;호선&quot;].astype(str) + &quot; &quot; + ride[&quot;역명&quot;].astype(str)
+
+station_hour = ride.groupby(&quot;역라벨&quot;)[time_cols].sum()
+top_stations = station_hour.sum(axis=1).sort_values(ascending=False).head(10).index
+heatmap_wide = station_hour.loc[top_stations, time_cols]
+</code></pre></div>
+<p>말할 것:</p>
+<p>이 파일은 199,424행이다. 이 정도 데이터는 pandas로 읽을 수 있지만, 그대로 그래프로 그리면 좋은 차트가 되지 않는다. 먼저 질문을 정한다. "승차 인원이 많은 주요 역은 시간대별로 어떤 패턴을 보이는가"가 오늘의 질문이다.</p>
+<p>그래서 <code>승하차구분</code>이 <code>승차</code>인 행만 남긴다. 그 다음 역과 시간대별로 합계를 낸다. 마지막으로 총 승차 상위 10개 역만 남긴다. 이것이 큰 데이터를 차트용 표로 줄이는 과정이다.</p>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">fig, ax = plt.subplots(figsize=(13, 6))
+sns.heatmap(
+    heatmap_wide / 1_000_000,
+    cmap=&quot;Blues&quot;,
+    linewidths=0.4,
+    cbar_kws={&quot;label&quot;: &quot;연간 승차인원(백만 명)&quot;},
+    ax=ax,
+)
+ax.set_title(&quot;서울 지하철 주요 역의 시간대별 승차 패턴&quot;)
+ax.set_xlabel(&quot;시간대&quot;)
+ax.set_ylabel(&quot;역&quot;)
+ax.tick_params(axis=&quot;x&quot;, labelrotation=45)
+plt.tight_layout()
+plt.savefig(OUT / &quot;s14_subway_heatmap.png&quot;, dpi=160)
+</code></pre></div>
+<p>시연 포인트:</p>
+<ul>
+<li>히트맵은 피벗 테이블에 조건부 서식을 입힌 것과 같다고 설명한다.</li>
+<li>색이 진할수록 승차 인원이 많다는 것을 먼저 읽게 한다.</li>
+<li><code>weather</code> 데이터와 조인하지 않는다. 연도 불일치 때문에 이번 수업의 설계 대상이 아니다.</li>
+</ul>
+<p>예상 결과:</p>
+<div class="code-scroll"><pre><code class="language-text">원본 199,424행
+승차 99,645행
+히트맵 표 10행 × 20열
+상위 역 예: 2호선 잠실(송파구청), 2호선 강남, 2호선 홍대입구, 1호선 서울역
+</code></pre></div>
+<h2>25-38분. 히스토그램과 박스플롯</h2>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">apt = pd.read_csv(
+    DATA / &quot;real_korean/realestate_apt/molit_apt_sale_seoul_gangnam_2024.csv&quot;
+)
+
+apt[&quot;거래금액_만원&quot;] = pd.to_numeric(
+    apt[&quot;거래금액(만원)&quot;].astype(str).str.replace(&quot;,&quot;, &quot;&quot;, regex=False),
+    errors=&quot;coerce&quot;,
+)
+apt[&quot;거래금액_억원&quot;] = apt[&quot;거래금액_만원&quot;] / 10_000
+apt[&quot;계약월&quot;] = pd.to_datetime(apt[&quot;계약년월&quot;].astype(str), format=&quot;%Y%m&quot;)
+apt = apt.dropna(subset=[&quot;전용면적(㎡)&quot;, &quot;거래금액_만원&quot;, &quot;계약월&quot;]).copy()
+</code></pre></div>
+<p>말할 것:</p>
+<p>국토부 실거래 데이터의 거래금액은 쉼표가 들어간 문자열이다. 계산하고 그래프로 그리려면 숫자로 바꿔야 한다. 만원 단위는 숫자가 너무 커서 차트용으로 억원 단위를 함께 만든다.</p>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">fig, ax = plt.subplots(figsize=(9, 5))
+sns.histplot(data=apt, x=&quot;거래금액_억원&quot;, bins=36, ax=ax)
+ax.set_title(&quot;강남구 아파트 거래금액 분포&quot;)
+ax.set_xlabel(&quot;거래금액(억원)&quot;)
+ax.set_ylabel(&quot;거래건수&quot;)
+plt.tight_layout()
+</code></pre></div>
+<p>말할 것:</p>
+<p>히스토그램은 개별 단지를 비교하는 차트가 아니다. 값이 어느 구간에 몰려 있는지 보는 차트다. 엑셀의 도수분포표를 그래프로 표현한 것과 비슷하다.</p>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">apt[&quot;면적구간&quot;] = pd.cut(
+    apt[&quot;전용면적(㎡)&quot;],
+    bins=[0, 40, 60, 85, 120, float(&quot;inf&quot;)],
+    labels=[&quot;40㎡ 이하&quot;, &quot;40-60㎡&quot;, &quot;60-85㎡&quot;, &quot;85-120㎡&quot;, &quot;120㎡ 초과&quot;],
+)
+
+fig, ax = plt.subplots(figsize=(10, 5))
+sns.boxplot(data=apt, x=&quot;면적구간&quot;, y=&quot;거래금액_억원&quot;, ax=ax)
+ax.set_title(&quot;면적구간별 거래금액의 범위 비교&quot;)
+ax.set_xlabel(&quot;면적구간&quot;)
+ax.set_ylabel(&quot;거래금액(억원)&quot;)
+plt.tight_layout()
+</code></pre></div>
+<p>말할 것:</p>
+<p>박스플롯은 처음 보면 낯설 수 있다. 중앙의 선은 중앙값이고, 상자의 위아래는 중간 50% 범위다. 점처럼 따로 표시되는 값은 다른 거래보다 멀리 떨어진 값이다. 평균 하나만 볼 때보다 그룹별 퍼짐을 더 잘 볼 수 있다.</p>
+<h2>38-48분. 산점도와 추세선</h2>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">corr = apt[&quot;전용면적(㎡)&quot;].corr(apt[&quot;거래금액_만원&quot;])
+
+fig, ax = plt.subplots(figsize=(9, 5.5))
+sns.regplot(
+    data=apt,
+    x=&quot;전용면적(㎡)&quot;,
+    y=&quot;거래금액_억원&quot;,
+    ci=None,
+    scatter_kws={&quot;s&quot;: 28, &quot;alpha&quot;: 0.5},
+    line_kws={&quot;color&quot;: &quot;#1F2430&quot;},
+    ax=ax,
+)
+ax.set_title(f&quot;전용면적과 거래금액의 관계: r={corr:.3f}&quot;)
+ax.set_xlabel(&quot;전용면적(㎡)&quot;)
+ax.set_ylabel(&quot;거래금액(억원)&quot;)
+plt.tight_layout()
+</code></pre></div>
+<p>말할 것:</p>
+<p>산점도에서는 한 거래가 점 하나다. 오른쪽으로 갈수록 전용면적이 넓고, 위로 갈수록 거래금액이 높다. 점들이 대체로 오른쪽 위로 올라가면 양의 관계가 있다는 뜻이다.</p>
+<p>이번 데이터의 상관계수는 <code>r = 0.806</code>이다. 강한 양의 상관이다. 하지만 이 숫자는 전용면적만이 가격의 원인이라는 뜻이 아니다. 단지, 위치, 층, 연식, 거래 시점 같은 변수가 함께 작용한다.</p>
+<p>시연 포인트:</p>
+<ul>
+<li>엑셀 산점도에서 추세선을 추가하는 것과 연결한다.</li>
+<li><code>ci=None</code>은 추세선 주변의 신뢰구간 그림을 숨겨 입문자가 선과 점에 집중하게 하는 설정이라고 설명한다.</li>
+<li>산점도는 원자료 행 하나하나가 의미 있을 때 적합하다고 설명한다.</li>
+</ul>
+<h2>48-56분. CPI 월별 라인차트</h2>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">cpi = pd.read_csv(
+    DATA / &quot;real_korean/prices_econ/fred_korea_cpi_all_items_monthly.csv&quot;
+)
+cpi[&quot;기준월&quot;] = pd.to_datetime(cpi[&quot;observation_date&quot;])
+cpi[&quot;소비자물가지수&quot;] = pd.to_numeric(cpi[&quot;KORCPIALLMINMEI&quot;], errors=&quot;coerce&quot;)
+cpi_recent = cpi[cpi[&quot;기준월&quot;] &gt;= &quot;2000-01-01&quot;][[&quot;기준월&quot;, &quot;소비자물가지수&quot;]].copy()
+
+fig, ax = plt.subplots(figsize=(10, 5))
+sns.lineplot(data=cpi_recent, x=&quot;기준월&quot;, y=&quot;소비자물가지수&quot;, ax=ax)
+ax.set_title(&quot;한국 소비자물가지수 월별 추세&quot;)
+ax.set_xlabel(&quot;기준월&quot;)
+ax.set_ylabel(&quot;소비자물가지수&quot;)
+plt.tight_layout()
+plt.savefig(OUT / &quot;s14_cpi_line.png&quot;, dpi=160)
+</code></pre></div>
+<p>말할 것:</p>
+<p>시간 순서가 중요한 데이터는 라인차트가 적합하다. CPI 원본은 767행이지만, 오늘 차트는 2000년 이후 287행만 사용한다. 너무 긴 기간을 모두 보여주면 입문자는 축과 값 읽기에 집중하기 어렵다.</p>
+<p>시연 포인트:</p>
+<ul>
+<li><code>observation_date</code>를 날짜형으로 바꾸는 이유를 설명한다.</li>
+<li>라인차트는 x축 순서가 중요하므로 날짜형 변환이 중요하다고 말한다.</li>
+<li>오늘은 경제 해석 수업이 아니라 시계열 차트 만들기 수업이라고 범위를 정한다.</li>
+</ul>
+<h2>56-62분. BI 핸드오프용 CSV 저장</h2>
+<p>시연 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">heatmap_long.to_csv(
+    OUT / &quot;s14_subway_station_hour_heatmap.csv&quot;,
+    index=False,
+    encoding=&quot;utf-8-sig&quot;,
+)
+
+apt[
+    [&quot;시군구&quot;, &quot;단지명&quot;, &quot;계약월&quot;, &quot;전용면적(㎡)&quot;, &quot;거래금액_만원&quot;, &quot;거래금액_억원&quot;, &quot;면적구간&quot;]
+].to_csv(
+    OUT / &quot;s14_apt_chart_ready.csv&quot;,
+    index=False,
+    encoding=&quot;utf-8-sig&quot;,
+)
+
+cpi_recent.to_csv(OUT / &quot;s14_cpi_recent.csv&quot;, index=False, encoding=&quot;utf-8-sig&quot;)
+</code></pre></div>
+<p>말할 것:</p>
+<p>BI로 넘길 때는 원본 전체보다 차트에 쓴 집계 결과만 건네는 편이 더 명확할 때가 있다. 특히 지하철처럼 큰 파일은 원본 199,424행보다 200행짜리 히트맵용 표가 수업 목적에 맞다.</p>
+<p><code>index=False</code>는 불필요한 인덱스 열을 저장하지 않기 위한 설정이다. <code>utf-8-sig</code>는 Excel이나 일부 BI 도구가 한글 열 이름을 안정적으로 읽게 해준다.</p>
+<h2>62-70분. 미션 안내</h2>
+<p>미션:</p>
+<p><code>cafe_sales_clean.csv</code>를 읽고 월별 매출 추세 라인차트와 CSV를 저장한다.</p>
+<p>힌트 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">cafe = pd.read_csv(DATA / &quot;cafe_sales/cafe_sales_clean.csv&quot;)
+cafe[&quot;date&quot;] = pd.to_datetime(cafe[&quot;date&quot;])
+
+monthly_sales = (
+    cafe.groupby(pd.Grouper(key=&quot;date&quot;, freq=&quot;MS&quot;))
+    .agg(매출합계=(&quot;amount&quot;, &quot;sum&quot;), 주문수=(&quot;order_id&quot;, &quot;count&quot;))
+    .reset_index()
+    .rename(columns={&quot;date&quot;: &quot;월&quot;})
+)
+</code></pre></div>
+<p>말할 것:</p>
+<p>이번 미션은 새로운 문법을 많이 쓰는 문제가 아니다. 오늘 배운 순서를 스스로 반복하는 문제다. 날짜를 날짜형으로 바꾸고, 월별로 집계하고, 라인차트를 저장하고, CSV도 저장하면 된다.</p>
+<p>정답 확인값:</p>
+<div class="code-scroll"><pre><code class="language-text">월별 집계 결과: 6행
+2025년 2월 매출: 13,157,000원
+2025년 6월 매출: 16,816,500원
+</code></pre></div>
+<p>완료 판단 체크포인트 1문장:</p>
+<p>수강생이 <code>s14_monthly_sales.csv</code>와 <code>s14_monthly_sales_trend.png</code>를 저장하고, 2025년 6월 매출 <code>16,816,500</code>원이 가장 높으며 2월 매출 <code>13,157,000</code>원이 가장 낮다고 설명하면 완료로 본다.</p>
+<h2>예상 질문과 답변</h2>
+<h3>Q1. 한글이 계속 깨지면 어떻게 하나요?</h3>
+<p>A. 먼저 나눔폰트가 설치되어 있는지 확인한다. 설치 후에도 깨지면 matplotlib 폰트 캐시가 이전 상태를 기억하고 있을 수 있다. Colab에서는 런타임을 다시 시작하고, 로컬에서는 캐시 삭제 후 다시 실행한다. 수업에서는 <code>selected_font</code> 출력값이 <code>NanumGothic</code> 또는 <code>NanumGothicCoding</code>인지 확인한다.</p>
+<h3>Q2. 지하철 데이터는 왜 전체 역을 다 그리지 않나요?</h3>
+<p>A. 전체 역을 모두 그리면 글자가 겹쳐 읽을 수 없다. 좋은 시각화는 많은 데이터를 한 화면에 억지로 넣는 것이 아니라 질문에 맞게 줄이는 것이다. 오늘은 총 승차 상위 10개 역의 시간대 패턴을 보는 것이 목표다.</p>
+<h3>Q3. 산점도에 점이 너무 많이 겹치면 어떻게 하나요?</h3>
+<p>A. <code>alpha</code>로 투명도를 낮추거나, 필요한 경우 표본을 뽑거나, 구간별 집계로 바꿀 수 있다. 오늘 아파트 데이터는 3,754행이라 투명도 조정만으로도 관계를 읽을 수 있다.</p>
+<h3>Q4. 상관계수 0.806이면 전용면적이 가격의 원인인가요?</h3>
+<p>A. 아니다. 상관은 함께 움직이는 정도를 말할 뿐 원인을 증명하지 않는다. 같은 면적이라도 단지, 위치, 층, 연식, 거래 시점 등이 가격에 영향을 준다.</p>
+<h3>Q5. 왜 CSV 저장에 <code>utf-8-sig</code>를 쓰나요?</h3>
+<p>A. 원본 데이터는 UTF-8로 정규화되어 있다. 다만 수강생이 Excel이나 BI 도구에서 파일을 열 때 한글 열 이름이 깨지는 경우가 있어 전달용 CSV는 <code>utf-8-sig</code>로 저장한다. 데이터 내용이 바뀌는 것은 아니다.</p>
+<h3>Q6. Power BI에서도 같은 차트를 다시 만들 수 있나요?</h3>
+<p>A. 가능하다. 오늘 저장한 CSV는 BI에서 바로 불러올 수 있는 차트용 표다. S15 이후에는 Power BI나 Looker Studio에서 이 집계표를 불러와 대시보드 차트로 배치할 수 있다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="answer" aria-label="모범답안">
+<h1>S14 모범답안</h1>
+<h2>미션 목표</h2>
+<p><code>cafe_sales_clean.csv</code>를 사용해 월별 매출 추세 라인차트와 BI 핸드오프용 CSV를 저장한다.</p>
+<p>조건:</p>
+<ul>
+<li><code>date</code>를 날짜형으로 변환한다.</li>
+<li>월별 <code>amount</code> 합계를 계산한다.</li>
+<li>월별 주문수와 객단가도 함께 계산한다.</li>
+<li>월별 매출 라인차트를 PNG로 저장한다.</li>
+<li>월별 집계표를 CSV로 저장한다.</li>
+<li>6월 매출이 가장 높고, 2월 매출이 가장 낮은지 확인한다.</li>
+</ul>
+<h2>미션 모범 코드</h2>
+<p>아래 코드는 미션만 독립적으로 실행할 수 있는 최소 코드다. 전체 따라하기와 검증 코드는 <code>/mnt/d/ai-data-analysis-course/06_answers/S14_code.py</code>에 저장되어 있다.</p>
+<div class="code-scroll"><pre><code class="language-python">from pathlib import Path
+
+import matplotlib.pyplot as plt
+import matplotlib.ticker as mticker
+import pandas as pd
+import seaborn as sns
+from matplotlib import font_manager
+
+ROOT = Path(&quot;/mnt/d/ai-data-analysis-course&quot;)
+DATA = ROOT / &quot;02_datasets&quot;
+OUT = ROOT / &quot;06_answers/S14_outputs&quot;
+OUT.mkdir(parents=True, exist_ok=True)
+
+font_candidates = [
+    &quot;NanumGothic&quot;,
+    &quot;NanumGothicCoding&quot;,
+    &quot;Noto Sans CJK KR&quot;,
+    &quot;Malgun Gothic&quot;,
+    &quot;AppleGothic&quot;,
+    &quot;DejaVu Sans&quot;,
+]
+available_fonts = {font.name for font in font_manager.fontManager.ttflist}
+selected_font = next(
+    (font for font in font_candidates if font in available_fonts),
+    &quot;DejaVu Sans&quot;,
+)
+
+sns.set_theme(style=&quot;whitegrid&quot;)
+plt.rcParams[&quot;font.family&quot;] = selected_font
+plt.rcParams[&quot;axes.unicode_minus&quot;] = False
+
+cafe = pd.read_csv(DATA / &quot;cafe_sales/cafe_sales_clean.csv&quot;)
+cafe[&quot;date&quot;] = pd.to_datetime(cafe[&quot;date&quot;], errors=&quot;coerce&quot;)
+cafe = cafe.dropna(subset=[&quot;date&quot;, &quot;amount&quot;]).copy()
+
+monthly_sales = (
+    cafe.groupby(pd.Grouper(key=&quot;date&quot;, freq=&quot;MS&quot;))
+    .agg(매출합계=(&quot;amount&quot;, &quot;sum&quot;), 주문수=(&quot;order_id&quot;, &quot;count&quot;))
+    .reset_index()
+    .rename(columns={&quot;date&quot;: &quot;월&quot;})
+)
+monthly_sales[&quot;객단가&quot;] = monthly_sales[&quot;매출합계&quot;] / monthly_sales[&quot;주문수&quot;]
+
+monthly_sales.to_csv(
+    OUT / &quot;s14_monthly_sales.csv&quot;,
+    index=False,
+    encoding=&quot;utf-8-sig&quot;,
+)
+
+fig, ax = plt.subplots(figsize=(8.8, 5.2))
+sns.lineplot(
+    data=monthly_sales,
+    x=&quot;월&quot;,
+    y=&quot;매출합계&quot;,
+    marker=&quot;o&quot;,
+    color=&quot;#A3D576&quot;,
+    linewidth=1.2,
+    ax=ax,
+)
+
+ax.set_title(&quot;카페 월별 매출 추세&quot;)
+ax.set_xlabel(&quot;월&quot;)
+ax.set_ylabel(&quot;매출합계&quot;)
+ax.yaxis.set_major_formatter(
+    mticker.FuncFormatter(lambda x, _: f&quot;{x / 1_000_000:.1f}백만&quot;)
+)
+
+plt.tight_layout()
+plt.savefig(OUT / &quot;s14_monthly_sales_trend.png&quot;, dpi=160)
+plt.close(fig)
+
+print(&quot;선택된 글꼴:&quot;, selected_font)
+print(monthly_sales)
+print(&quot;CSV:&quot;, OUT / &quot;s14_monthly_sales.csv&quot;)
+print(&quot;차트:&quot;, OUT / &quot;s14_monthly_sales_trend.png&quot;)
+</code></pre></div>
+<h2>미션 실행 결과</h2>
+<p>실제 실행 결과 요약:</p>
+<div class="code-scroll"><pre><code class="language-text">카페 매출 원본: 10,424행, 12열
+기간: 2025-01-01 ~ 2025-06-30
+월별 집계 결과: 6행
+월별 매출 범위: 13,157,000원 ~ 16,816,500원
+</code></pre></div>
+<p>월별 매출 집계:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>월</th>
+<th style="text-align: right;">매출합계</th>
+<th style="text-align: right;">주문수</th>
+<th style="text-align: right;">객단가</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2025-01-01</td>
+<td style="text-align: right;">14,426,500</td>
+<td style="text-align: right;">1,686</td>
+<td style="text-align: right;">8,557</td>
+</tr>
+<tr>
+<td>2025-02-01</td>
+<td style="text-align: right;">13,157,000</td>
+<td style="text-align: right;">1,524</td>
+<td style="text-align: right;">8,633</td>
+</tr>
+<tr>
+<td>2025-03-01</td>
+<td style="text-align: right;">14,735,500</td>
+<td style="text-align: right;">1,716</td>
+<td style="text-align: right;">8,587</td>
+</tr>
+<tr>
+<td>2025-04-01</td>
+<td style="text-align: right;">15,263,000</td>
+<td style="text-align: right;">1,761</td>
+<td style="text-align: right;">8,667</td>
+</tr>
+<tr>
+<td>2025-05-01</td>
+<td style="text-align: right;">16,094,000</td>
+<td style="text-align: right;">1,800</td>
+<td style="text-align: right;">8,941</td>
+</tr>
+<tr>
+<td>2025-06-01</td>
+<td style="text-align: right;">16,816,500</td>
+<td style="text-align: right;">1,937</td>
+<td style="text-align: right;">8,682</td>
+</tr>
+</tbody>
+</table></div>
+<p>해석:</p>
+<p>2025년 1월부터 6월까지 월별 매출은 2월에 가장 낮고 6월에 가장 높다. 3월 이후에는 매출합계가 매월 증가한다. 이 표만으로 증가 원인을 단정하지는 않는다. 오늘 미션의 목표는 월별 집계, 라인차트 저장, BI용 CSV 저장을 정확히 수행하는 것이다.</p>
+<h2>따라하기 검증 결과</h2>
+<p>전체 검증 코드는 아래 파일에 저장되어 있다.</p>
+<div class="code-scroll"><pre><code class="language-text">/mnt/d/ai-data-analysis-course/06_answers/S14_code.py
+</code></pre></div>
+<p>실행 명령:</p>
+<div class="code-scroll"><pre><code class="language-bash">python3 /mnt/d/ai-data-analysis-course/06_answers/S14_code.py
+</code></pre></div>
+<p>실제 실행 출력 요약:</p>
+<div class="code-scroll"><pre><code class="language-text">pandas version: 3.0.3
+matplotlib version: 3.11.0
+seaborn version: 0.13.2
+selected font: NanumGothicCoding
+
+서울 지하철 원자료: 199,424행
+서울 지하철 승차 집계 heatmap CSV: 200행
+강남 아파트 원자료 및 분석 가능 행수: 3,754행 / 3,754행
+FRED CPI 원자료 및 2000년 이후 시계열: 767행 / 287행
+카페 매출 원자료 및 월별 집계: 10,424행 / 6행
+
+아파트 전용면적-거래금액 상관계수 r: 0.806
+카페 월별 매출 범위: 13,157,000원~16,816,500원
+검증 통과
+</code></pre></div>
+<h2>주요 전처리와 저장 파일</h2>
+<h3>1. 서울 지하철 시간대 히트맵</h3>
+<p>사용 파일:</p>
+<div class="code-scroll"><pre><code class="language-text">02_datasets/real_korean/seoul_subway/seoulmetro_daily_hourly_2025.csv
+</code></pre></div>
+<p>전처리:</p>
+<ul>
+<li><code>승하차구분 == "승차"</code> 행만 사용한다.</li>
+<li><code>호선 + 역명</code>으로 <code>역라벨</code>을 만든다.</li>
+<li>20개 시간대 열을 역별로 합산한다.</li>
+<li>총 승차 상위 10개 역만 히트맵에 사용한다.</li>
+<li>10개 역 × 20개 시간대를 긴 표로 바꾸어 200행 CSV로 저장한다.</li>
+</ul>
+<p>저장 파일:</p>
+<div class="code-scroll"><pre><code class="language-text">/mnt/d/ai-data-analysis-course/06_answers/S14_outputs/s14_subway_heatmap.png
+/mnt/d/ai-data-analysis-course/06_answers/S14_outputs/s14_subway_heatmap.svg
+/mnt/d/ai-data-analysis-course/06_answers/S14_outputs/s14_subway_station_hour_heatmap.csv
+</code></pre></div>
+<h3>2. 강남 아파트 실거래 차트</h3>
+<p>사용 파일:</p>
+<div class="code-scroll"><pre><code class="language-text">02_datasets/real_korean/realestate_apt/molit_apt_sale_seoul_gangnam_2024.csv
+</code></pre></div>
+<p>전처리:</p>
+<ul>
+<li><code>거래금액(만원)</code>의 쉼표를 제거하고 숫자형 <code>거래금액_만원</code>을 만든다.</li>
+<li><code>거래금액_억원 = 거래금액_만원 / 10,000</code>을 만든다.</li>
+<li><code>계약년월</code>을 날짜형 <code>계약월</code>로 변환한다.</li>
+<li>전용면적을 5개 <code>면적구간</code>으로 나눈다.</li>
+</ul>
+<p>검증 결과:</p>
+<div class="code-scroll"><pre><code class="language-text">원본: 3,754행, 20열
+분석 가능 행수: 3,754행
+전용면적 범위: 12.1㎡ ~ 273.96㎡
+거래금액 범위: 15,000만원 ~ 1,380,000만원
+전용면적-거래금액 상관계수: r = 0.806
+</code></pre></div>
+<p>저장 파일:</p>
+<div class="code-scroll"><pre><code class="language-text">/mnt/d/ai-data-analysis-course/06_answers/S14_outputs/s14_apt_price_histogram.png
+/mnt/d/ai-data-analysis-course/06_answers/S14_outputs/s14_apt_area_boxplot.png
+/mnt/d/ai-data-analysis-course/06_answers/S14_outputs/s14_apt_scatter_trend.png
+/mnt/d/ai-data-analysis-course/06_answers/S14_outputs/s14_apt_chart_ready.csv
+</code></pre></div>
+<h3>3. FRED CPI 월별 라인차트</h3>
+<p>사용 파일:</p>
+<div class="code-scroll"><pre><code class="language-text">02_datasets/real_korean/prices_econ/fred_korea_cpi_all_items_monthly.csv
+</code></pre></div>
+<p>전처리:</p>
+<ul>
+<li><code>observation_date</code>를 날짜형 <code>기준월</code>로 변환한다.</li>
+<li><code>KORCPIALLMINMEI</code>를 숫자형 <code>소비자물가지수</code>로 사용한다.</li>
+<li>2000년 1월 이후 데이터만 필터링한다.</li>
+</ul>
+<p>검증 결과:</p>
+<div class="code-scroll"><pre><code class="language-text">원본: 767행, 2열
+원본 기간: 1960-01-01 ~ 2023-11-01
+2000년 이후: 287행
+2000년 이후 기간: 2000-01-01 ~ 2023-11-01
+</code></pre></div>
+<p>저장 파일:</p>
+<div class="code-scroll"><pre><code class="language-text">/mnt/d/ai-data-analysis-course/06_answers/S14_outputs/s14_cpi_line.png
+/mnt/d/ai-data-analysis-course/06_answers/S14_outputs/s14_cpi_line.svg
+/mnt/d/ai-data-analysis-course/06_answers/S14_outputs/s14_cpi_recent.csv
+</code></pre></div>
+<h3>4. 카페 월별 매출 미션</h3>
+<p>사용 파일:</p>
+<div class="code-scroll"><pre><code class="language-text">02_datasets/cafe_sales/cafe_sales_clean.csv
+</code></pre></div>
+<p>전처리:</p>
+<ul>
+<li><code>date</code>를 날짜형으로 변환한다.</li>
+<li>월 시작일 기준 <code>pd.Grouper(key="date", freq="MS")</code>로 묶는다.</li>
+<li><code>amount</code> 합계와 <code>order_id</code> 개수를 집계한다.</li>
+<li><code>객단가 = 매출합계 / 주문수</code>를 계산한다.</li>
+</ul>
+<p>저장 파일:</p>
+<div class="code-scroll"><pre><code class="language-text">/mnt/d/ai-data-analysis-course/06_answers/S14_outputs/s14_monthly_sales.csv
+/mnt/d/ai-data-analysis-course/06_answers/S14_outputs/s14_monthly_sales_trend.png
+/mnt/d/ai-data-analysis-course/06_answers/S14_outputs/s14_monthly_sales_trend.svg
+</code></pre></div>
+<h2>완료 판단</h2>
+<p>수강생 답안은 다음 조건을 만족하면 통과로 본다.</p>
+<ul>
+<li>월별 집계 결과가 6행이다.</li>
+<li><code>s14_monthly_sales.csv</code>가 저장되어 있다.</li>
+<li><code>s14_monthly_sales_trend.png</code>가 저장되어 있다.</li>
+<li>2025년 6월 매출이 <code>16,816,500</code>원으로 가장 높다고 확인한다.</li>
+<li>2025년 2월 매출이 <code>13,157,000</code>원으로 가장 낮다고 확인한다.</li>
+</ul>
+<h2>전체 실행 코드 위치</h2>
+<p>파이썬 차시 전체 검증 코드는 아래 파일이다.</p>
+<div class="code-scroll"><pre><code class="language-text">/mnt/d/ai-data-analysis-course/06_answers/S14_code.py
+</code></pre></div>
+<p>이 파일은 따라하기 차트와 미션 차트를 모두 생성하고, CSV 파일을 저장한 뒤 검증 요약을 출력한다.</p>
+</section>
+  </div>
+
+  <nav class="session-pager container">
+    <a class="pager-link prev" href="./S13.html"><span class="pager-direction">&larr; 이전 차시</span><span class="pager-title">S13 · 그룹화·집계·재구조화</span></a>
+    <a class="pager-link next" href="./S15.html"><span class="pager-direction">다음 차시 &rarr;</span><span class="pager-title">S15 · Power BI 설치, 로드, 첫 차트</span></a>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>데이터 리터러시 with AI · S14 차시</span>
+    <a href="../index.html#curriculum">전체 커리큘럼으로</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.tab-panel');
+  function activate(key, updateHash){
+    tabs.forEach(function(btn){
+      var on = btn.getAttribute('data-tab') === key;
+      btn.classList.toggle('active', on);
+    });
+    panels.forEach(function(panel){
+      var on = panel.getAttribute('data-panel') === key;
+      panel.classList.toggle('active', on);
+    });
+    if (updateHash && history.replaceState){
+      history.replaceState(null, '', '#' + key);
+    }
+  }
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      activate(btn.getAttribute('data-tab'), true);
+    });
+  });
+  var initial = (location.hash || '').replace('#', '');
+  var valid = ['curriculum', 'handout', 'script', 'answer'];
+  if (valid.indexOf(initial) !== -1){
+    activate(initial, false);
+  }
+})();
+</script>
+
+</body>
+</html>

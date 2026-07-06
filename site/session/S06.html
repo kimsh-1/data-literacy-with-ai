@@ -1,0 +1,1011 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>S06. 상관 vs 인과, 심슨의 역설 · 데이터 리터러시 with AI</title>
+<meta name="description" content="S06차시: 상관 vs 인과, 심슨의 역설 — 커리큘럼·핸드아웃·강사대본·모범답안." />
+<style>
+:root{
+  --canvas: #010102;
+  --surface-1: #0f1011;
+  --surface-2: #141516;
+  --surface-3: #18191a;
+  --surface-4: #191a1b;
+  --ink: #f7f8f8;
+  --ink-muted: #d0d6e0;
+  --ink-subtle: #8a8f98;
+  --ink-tertiary: #62666d;
+  --primary: #5e6ad2;
+  --primary-hover: #828fff;
+  --primary-focus: #5e69d1;
+  --hairline: #23252a;
+  --hairline-strong: #34343a;
+  --hairline-tertiary: #3e3e44;
+  --success: #27a644;
+
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  --container: 900px;
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+html{ background: var(--canvas); }
+body{
+  margin:0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.05px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a{ color: inherit; text-decoration: none; }
+ul, ol{ margin:0; padding:0; }
+h1,h2,h3,h4,p{ margin:0; }
+
+.container{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 48px);
+}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--primary-hover);
+}
+.eyebrow::before{
+  content:"";
+  width:6px; height:6px;
+  background: var(--primary);
+  border-radius: 1px;
+  flex-shrink:0;
+}
+
+/* ---------- top nav ---------- */
+.top-nav{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 64px;
+  display:flex;
+  align-items:center;
+  background: rgba(1,1,2,0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.top-nav .container{ display:flex; align-items:center; justify-content:space-between; gap: 24px; max-width: 1280px; }
+.brand{ display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:600; font-size:15px; letter-spacing:-0.01em; }
+.brand-mark{ width:20px; height:20px; border-radius: 6px; background: var(--primary); flex-shrink:0; position:relative; }
+.brand-mark::after{ content:""; position:absolute; inset:6px; border-radius:2px; background: rgba(255,255,255,0.85); }
+.back-link{ font-size:14px; color: var(--ink-subtle); display:inline-flex; align-items:center; gap:6px; transition: color .15s ease; }
+.back-link:hover{ color: var(--ink); }
+
+/* ---------- session header ---------- */
+.session-header{
+  padding: var(--space-xxl) 0 var(--space-xl);
+  background:
+    radial-gradient(ellipse 60% 50% at 82% 0%, rgba(94,106,210,0.16), transparent 60%),
+    var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+.session-header-top{
+  display:flex;
+  align-items:center;
+  gap: var(--space-md);
+  margin: var(--space-md) 0 var(--space-md);
+}
+.session-num-badge{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--primary-hover);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-xs);
+  padding: 4px 10px;
+}
+.difficulty{ display:flex; gap:4px; align-items:center; }
+.difficulty .dot{ width:6px; height:6px; border-radius:50%; background: var(--hairline-strong); }
+.difficulty .dot.filled{ background: var(--primary); }
+.difficulty-label{ font-size:12px; color: var(--ink-tertiary); margin-left:6px; }
+.session-header h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ---------- tabs ---------- */
+.tabs-bar{
+  display:flex;
+  gap: 4px;
+  padding-top: var(--space-lg);
+  border-bottom: 1px solid var(--hairline);
+  overflow-x: auto;
+}
+.tab-btn{
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-subtle);
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s ease, border-color .15s ease;
+}
+.tab-btn:hover{ color: var(--ink); }
+.tab-btn.active{ color: var(--ink); border-bottom-color: var(--primary); }
+
+.tab-panels{ padding: var(--space-xxl) 0 var(--space-xxl); }
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+/* ---------- markdown body ---------- */
+.markdown-body{ color: var(--ink-muted); font-size: 15.5px; line-height: 1.75; letter-spacing: -0.05px; overflow-wrap: anywhere; word-break: break-word; }
+.markdown-body h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--hairline);
+}
+.markdown-body h2{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+.markdown-body h3{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin: var(--space-lg) 0 var(--space-xs);
+}
+.markdown-body h4{
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+.markdown-body p{ margin: 0 0 var(--space-md); }
+.markdown-body ul, .markdown-body ol{ margin: 0 0 var(--space-md); padding-left: 1.4em; }
+.markdown-body li{ margin-bottom: 6px; }
+.markdown-body ul{ list-style: disc; }
+.markdown-body ol{ list-style: decimal; }
+.markdown-body strong{ color: var(--ink); font-weight: 600; }
+.markdown-body em{ color: var(--ink-muted); }
+.markdown-body a{ color: var(--primary-hover); text-decoration: underline; text-underline-offset: 2px; }
+.markdown-body hr{ border:none; border-top: 1px solid var(--hairline); margin: var(--space-xl) 0; }
+.markdown-body blockquote{
+  margin: 0 0 var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid var(--primary);
+  background: var(--surface-1);
+  color: var(--ink-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.markdown-body code{
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--primary-hover);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.markdown-body .code-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+}
+.markdown-body pre{
+  margin: 0;
+  padding: var(--space-md);
+  background: transparent;
+  border: none;
+}
+.markdown-body pre code{
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre;
+}
+.markdown-body .table-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+}
+.markdown-body table{
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 460px;
+  font-size: 13.5px;
+}
+.markdown-body th, .markdown-body td{
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+  white-space: nowrap;
+}
+.markdown-body thead th{
+  background: var(--surface-1);
+  color: var(--ink);
+  font-weight: 600;
+  font-family: var(--font-text);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+.markdown-body tbody tr:last-child td{ border-bottom: none; }
+.markdown-body tbody tr:hover{ background: var(--surface-1); }
+
+/* ---------- pager ---------- */
+.session-pager{
+  display:flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-xl) 0 var(--space-xxl);
+  border-top: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+.pager-link{
+  display:flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  max-width: 46%;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.pager-link:hover{ border-color: var(--primary); background: var(--surface-2); }
+.pager-link.next{ margin-left: auto; text-align: right; align-items: flex-end; }
+.pager-direction{ font-size: 12px; color: var(--ink-tertiary); font-family: var(--font-mono); }
+.pager-title{ font-size: 14px; color: var(--ink); font-weight: 500; }
+.pager-spacer{ flex: 1; }
+
+footer.site-footer{
+  border-top: 1px solid var(--hairline);
+  padding: var(--space-xl) 0;
+}
+footer.site-footer .container{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: var(--ink-tertiary);
+  font-size: 12px;
+}
+footer.site-footer a:hover{ color: var(--ink-subtle); }
+
+@media (max-width: 640px){
+  .session-header{ padding: var(--space-xl) 0 var(--space-lg); }
+  .pager-link{ max-width: 100%; }
+  .session-pager{ flex-direction: column; }
+  .pager-link.next{ margin-left: 0; text-align: left; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="container">
+    <div class="brand"><span class="brand-mark"></span>데이터 리터러시 with AI</div>
+    <a class="back-link" href="../index.html#curriculum">&larr; 커리큘럼으로</a>
+  </div>
+</nav>
+
+<header class="session-header">
+  <div class="container">
+    <div class="eyebrow">PART 02 · 통계</div>
+    <div class="session-header-top">
+      <span class="session-num-badge">S06</span>
+      <div class="difficulty" title="난이도 3"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">중급</span></div>
+    </div>
+    <h1>상관 vs 인과, 심슨의 역설</h1>
+  </div>
+  <div class="container">
+    <div class="tabs-bar" role="tablist">
+<button class="tab-btn active" data-tab="curriculum" role="tab" aria-selected="true">커리큘럼</button>
+<button class="tab-btn" data-tab="handout" role="tab" aria-selected="false">핸드아웃</button>
+<button class="tab-btn" data-tab="script" role="tab" aria-selected="false">강사대본</button>
+<button class="tab-btn" data-tab="answer" role="tab" aria-selected="false">모범답안</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="tab-panels container">
+<section class="tab-panel markdown-body active" data-panel="curriculum" aria-label="커리큘럼">
+<h1>S06. 상관 vs 인과, 심슨의 역설</h1>
+<h2>차시 개요</h2>
+<ul>
+<li>대상: 엑셀은 쓰지만 데이터분석은 처음인 비개발자</li>
+<li>선수 차시: S05 중심, 산포, 분포, 박스플롯</li>
+<li>난이도: 3</li>
+<li>시간: 60분</li>
+<li>사용 데이터</li>
+<li><code>02_datasets/real_korean/realestate_apt/molit_apt_sale_seoul_gangnam_2024.csv</code></li>
+<li><code>02_datasets/hr_employees/hr_employees_clean.csv</code></li>
+</ul>
+<p>이번 차시는 숫자 두 개가 함께 움직인다는 사실과, 한쪽이 다른 한쪽의 원인이라는 주장을 구분하는 수업이다. 수강생은 강남구 아파트 실거래 데이터로 전용면적과 거래금액의 상관을 확인하고, HR 합성 데이터로 전체 평균과 그룹별 평균이 서로 반대로 보이는 심슨의 역설을 경험한다.</p>
+<h2>학습 목표</h2>
+<ol>
+<li>산점도와 상관계수로 두 수치형 변수의 관계를 읽는다.</li>
+<li>상관계수가 높아도 원인이라고 단정할 수 없음을 설명한다.</li>
+<li>전체 평균만 보면 틀릴 수 있고, 필요한 기준으로 나누어 봐야 함을 이해한다.</li>
+<li>"기온이 오르면 매출이 늘어난다" 같은 주장을 데이터 관점에서 검토하고 반박한다.</li>
+</ol>
+<h2>핵심 개념</h2>
+<h3>1. 상관계수는 두 열이 같이 움직이는 정도다</h3>
+<p>상관계수는 보통 <code>r</code>로 표시하며, 값은 -1부터 1 사이에 있다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>r의 범위</th>
+<th>읽는 법</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1에 가까움</td>
+<td>한쪽이 커질수록 다른 쪽도 커지는 경향이 강함</td>
+</tr>
+<tr>
+<td>0에 가까움</td>
+<td>두 값이 함께 움직이는 경향이 거의 없음</td>
+</tr>
+<tr>
+<td>-1에 가까움</td>
+<td>한쪽이 커질수록 다른 쪽은 작아지는 경향이 강함</td>
+</tr>
+</tbody>
+</table></div>
+<p>엑셀에서는 <code>CORREL</code> 함수로 구할 수 있고, 파이썬 pandas에서는 <code>.corr()</code>로 구한다. 둘 다 "두 숫자 열이 얼마나 같이 움직이는가"를 계산한다.</p>
+<p>강남구 아파트 실거래 데이터에서는 <code>전용면적(㎡)</code>과 숫자로 바꾼 <code>거래금액(만원)</code>의 Pearson 상관계수가 약 <code>0.806</code>으로 확인된다. 전용면적이 클수록 거래금액도 대체로 높다는 강한 양의 상관이다.</p>
+<p>단, 이 말은 "면적이 가격의 유일한 원인"이라는 뜻이 아니다. 같은 면적이라도 단지, 위치, 층, 연식, 거래 시점, 조망, 학군 같은 요소가 가격을 바꿀 수 있다.</p>
+<h3>2. 산점도는 한 행을 한 점으로 보는 차트다</h3>
+<p>엑셀 피벗테이블은 여러 행을 묶어 합계나 평균으로 보는 도구다. 산점도는 그 반대에 가깝다. 각 행을 하나의 점으로 찍어서 두 숫자 사이의 관계를 눈으로 본다.</p>
+<p>아파트 데이터에서 한 행은 한 건의 거래다.</p>
+<ul>
+<li>x축: 전용면적</li>
+<li>y축: 거래금액</li>
+<li>점 하나: 아파트 거래 한 건</li>
+</ul>
+<p>점들이 오른쪽 위로 올라가는 모양이면 양의 상관을 의심할 수 있다. 점들이 둥글게 퍼져 있으면 관계가 약하다. 점 몇 개만 멀리 떨어져 있으면 이상치나 특수 거래일 수 있으므로 따로 확인해야 한다.</p>
+<h3>3. 상관은 인과가 아니다</h3>
+<p>상관은 "같이 움직였다"는 말이고, 인과는 "A가 B를 일으켰다"는 말이다. 둘은 다르다.</p>
+<p>예를 들어 아이스크림 판매와 물놀이 사고가 함께 늘어난다면, 아이스크림이 사고를 일으킨다고 말할 수 없다. 둘 다 더운 날씨나 여름 휴가철이라는 제3의 요인과 관련될 수 있다.</p>
+<p>상관을 인과로 착각할 때 자주 생기는 문제는 세 가지다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>문제</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>제3의 요인</td>
+<td>A와 B가 같이 움직이지만 실제로는 C가 둘 다에 영향을 줄 수 있음</td>
+</tr>
+<tr>
+<td>방향 혼동</td>
+<td>A가 B를 만든 것인지, B가 A를 만든 것인지 알 수 없음</td>
+</tr>
+<tr>
+<td>우연한 동행</td>
+<td>기간을 잘라 보면 우연히 같이 움직일 수 있음</td>
+</tr>
+</tbody>
+</table></div>
+<p>검증된 참고 반례로, 배달 통화건수와 평균기온은 직관적으로 관련 있어 보일 수 있지만 실제 데이터에서는 상관계수가 약 <code>0.015</code>로 거의 0에 가깝다. 이 반례는 상관 실습의 주자료로 쓰지 않고, "그럴듯한 말도 실제로 확인해야 한다"는 설명에만 사용한다.</p>
+<h3>4. 심슨의 역설은 나누어 보면 결론이 뒤집히는 현상이다</h3>
+<p>심슨의 역설은 전체로 보면 A가 높아 보이지만, 중요한 그룹으로 나누어 보면 모든 그룹에서 B가 높게 나오는 현상이다.</p>
+<p>이번 HR 데이터에서는 전체 평균 연봉만 보면 남성 평균이 여성 평균보다 높다.</p>
+<ul>
+<li>남성 평균 연봉: 67,296,571원</li>
+<li>여성 평균 연봉: 63,910,600원</li>
+<li>남성 - 여성: 3,385,971원</li>
+</ul>
+<p>하지만 부서별로 나누면 5개 부서 모두에서 여성 평균 연봉이 남성 평균 연봉보다 높다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>부서</th>
+<th style="text-align: right;">남성 평균</th>
+<th style="text-align: right;">여성 평균</th>
+<th style="text-align: right;">여성 - 남성</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>개발본부</td>
+<td style="text-align: right;">73,541,000원</td>
+<td style="text-align: right;">76,974,286원</td>
+<td style="text-align: right;">3,433,286원</td>
+</tr>
+<tr>
+<td>고객운영팀</td>
+<td style="text-align: right;">51,497,500원</td>
+<td style="text-align: right;">54,095,000원</td>
+<td style="text-align: right;">2,597,500원</td>
+</tr>
+<tr>
+<td>데이터전략팀</td>
+<td style="text-align: right;">67,437,778원</td>
+<td style="text-align: right;">72,667,143원</td>
+<td style="text-align: right;">5,229,365원</td>
+</tr>
+<tr>
+<td>영업본부</td>
+<td style="text-align: right;">61,020,000원</td>
+<td style="text-align: right;">65,530,909원</td>
+<td style="text-align: right;">4,510,909원</td>
+</tr>
+<tr>
+<td>인사총무팀</td>
+<td style="text-align: right;">58,280,000원</td>
+<td style="text-align: right;">59,850,769원</td>
+<td style="text-align: right;">1,570,769원</td>
+</tr>
+</tbody>
+</table></div>
+<p>왜 이런 일이 생길까. 성별 자체보다 부서 구성이 평균에 큰 영향을 준다. 남성 직원이 연봉 수준이 상대적으로 높은 부서에 몰려 있고, 여성 직원이 상대적으로 낮은 부서에 몰려 있으면 전체 평균은 남성이 높아 보일 수 있다. 그러나 같은 부서 안에서 비교하면 결론이 달라진다.</p>
+<p>이 차시가 하려는 말은 "전체 평균을 믿지 말라"가 아니라 "전체 평균만 보고 결론을 끝내지 말라"이다.</p>
+<h2>60분 수업 흐름</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;">시간</th>
+<th>내용</th>
+<th>진행 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0-5분</td>
+<td>지난 시간 복습: 평균과 분포는 왜 함께 봐야 하는가</td>
+<td>질문</td>
+</tr>
+<tr>
+<td style="text-align: right;">5-15분</td>
+<td>상관계수와 산점도 개념</td>
+<td>강의</td>
+</tr>
+<tr>
+<td style="text-align: right;">15-30분</td>
+<td>강남 아파트 전용면적과 거래금액 산점도, 상관계수</td>
+<td>엑셀 따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">30-40분</td>
+<td>상관과 인과의 차이, 배달 통화건수와 기온 반례</td>
+<td>강의와 토론</td>
+</tr>
+<tr>
+<td style="text-align: right;">40-55분</td>
+<td>HR 데이터로 심슨의 역설 확인</td>
+<td>엑셀 피벗 따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">55-60분</td>
+<td>미션: 기온과 매출 주장 반박문 작성</td>
+<td>개인 실습</td>
+</tr>
+</tbody>
+</table></div>
+<h2>엑셀과 연결해서 설명할 지점</h2>
+<ul>
+<li><code>CORREL</code> 함수는 두 열의 관계를 한 숫자로 요약한다.</li>
+<li>산점도는 피벗테이블처럼 요약한 표가 아니라, 원자료의 행을 점으로 보여준다.</li>
+<li>피벗테이블은 심슨의 역설을 잡는 좋은 도구다. 전체 평균을 본 뒤 행에 <code>dept</code>를 추가하면 결론이 바뀌는 구조가 바로 보인다.</li>
+<li>데이터 분석에서 "그럴듯한 말"은 결론이 아니라 가설이다. 가설은 산점도, 상관계수, 그룹별 비교로 확인해야 한다.</li>
+</ul>
+<h2>수업 후 수강생이 말할 수 있어야 하는 문장</h2>
+<ul>
+<li>"상관계수 0.806은 강한 양의 상관이지만, 면적만이 가격의 원인이라는 뜻은 아니다."</li>
+<li>"기온과 매출이 같이 움직여도 계절, 요일, 행사, 광고 같은 다른 요인을 확인해야 한다."</li>
+<li>"전체 평균만 보면 남성이 높지만, 부서별로 나누면 모든 부서에서 여성 평균이 높으므로 전체 평균 결론은 조심해야 한다."</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="handout" aria-label="핸드아웃">
+<h1>S06 핸드아웃: 상관 vs 인과, 심슨의 역설</h1>
+<h2>오늘 사용할 파일</h2>
+<p>작업 루트는 <code>/mnt/d/ai-data-analysis-course</code>이다.</p>
+<ol>
+<li>아파트 실거래
+   - <code>02_datasets/real_korean/realestate_apt/molit_apt_sale_seoul_gangnam_2024.csv</code></li>
+<li>HR 직원 데이터
+   - <code>02_datasets/hr_employees/hr_employees_clean.csv</code></li>
+</ol>
+<h2>따라하기 1: 전용면적과 거래금액은 같이 움직일까</h2>
+<p>목표는 아파트 거래 한 건을 점 하나로 찍고, 전용면적이 클수록 거래금액도 커지는지 확인하는 것이다.</p>
+<h3>1단계. CSV 열기</h3>
+<ol>
+<li>엑셀을 연다.</li>
+<li><code>데이터</code> 탭을 누른다.</li>
+<li><code>텍스트/CSV에서</code>를 누른다.</li>
+<li>아래 파일을 선택한다.
+   - <code>02_datasets/real_korean/realestate_apt/molit_apt_sale_seoul_gangnam_2024.csv</code></li>
+<li>인코딩이 <code>UTF-8</code>로 보이는지 확인하고 <code>로드</code>를 누른다.</li>
+</ol>
+<h3>2단계. 거래금액을 숫자로 바꾸기</h3>
+<p><code>거래금액(만원)</code> 열은 쉼표가 들어간 문자처럼 읽힐 수 있다. 상관계수를 계산하려면 숫자 열을 새로 만든다.</p>
+<ol>
+<li>첫 번째 빈 열의 머리글에 <code>거래금액_만원</code>을 입력한다.</li>
+<li>첫 데이터 행에 아래 수식을 입력한다.</li>
+</ol>
+<div class="code-scroll"><pre><code class="language-excel">=VALUE(SUBSTITUTE(J2,&quot;,&quot;,&quot;&quot;))
+</code></pre></div>
+<ol start="3">
+<li>아래 행 끝까지 채운다.</li>
+<li>값이 <code>134500</code>, <code>365000</code>처럼 숫자로 보이면 정상이다.</li>
+</ol>
+<p>참고: 이 파일에서 <code>전용면적(㎡)</code>은 G열, <code>거래금액(만원)</code>은 J열이다. 엑셀에서 열 위치가 달라졌다면 머리글 이름을 기준으로 찾는다.</p>
+<h3>3단계. 산점도 만들기</h3>
+<ol>
+<li><code>전용면적(㎡)</code> 열과 새로 만든 <code>거래금액_만원</code> 열을 선택한다.</li>
+<li><code>삽입</code> 탭을 누른다.</li>
+<li><code>분산형 차트</code>를 선택한다.</li>
+<li>x축이 전용면적, y축이 거래금액인지 확인한다.</li>
+</ol>
+<p>차트가 이상하게 나오면 차트를 오른쪽 클릭한 뒤 <code>데이터 선택</code>에서 직접 지정한다.</p>
+<ul>
+<li>X값: <code>전용면적(㎡)</code> 데이터 범위</li>
+<li>Y값: <code>거래금액_만원</code> 데이터 범위</li>
+</ul>
+<h3>4단계. 상관계수 계산하기</h3>
+<p>빈 셀에 아래 수식을 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=CORREL(G2:G3755,U2:U3755)
+</code></pre></div>
+<p><code>U</code>열은 예시다. 새로 만든 <code>거래금액_만원</code> 열이 다른 열이면 범위를 바꾼다.</p>
+<p>기대 결과는 약 <code>0.806</code>이다. 1에 가까운 양수이므로 전용면적과 거래금액은 강한 양의 상관을 보인다.</p>
+<h3>5단계. 해석 문장 쓰기</h3>
+<p>아래 문장을 완성한다.</p>
+<div class="code-scroll"><pre><code class="language-text">강남구 아파트 실거래 3,754건에서 전용면적과 거래금액의 상관계수는 약 0.806이다.
+따라서 전용면적이 큰 거래일수록 거래금액도 대체로 높다.
+다만 같은 면적이라도 단지, 위치, 층, 연식 같은 요인이 있으므로 면적이 가격의 유일한 원인이라고 말할 수는 없다.
+</code></pre></div>
+<h2>따라하기 2: 전체 평균과 부서별 평균이 다를 수 있다</h2>
+<p>이번에는 HR 데이터로, 전체 평균을 먼저 본 다음 부서별로 나눴을 때 결론이 어떻게 달라지는지 확인한다.</p>
+<h3>1단계. CSV 열기</h3>
+<ol>
+<li>엑셀에서 새 통합문서를 연다.</li>
+<li><code>데이터</code> 탭에서 <code>텍스트/CSV에서</code>를 누른다.</li>
+<li>아래 파일을 선택한다.
+   - <code>02_datasets/hr_employees/hr_employees_clean.csv</code></li>
+<li><code>로드</code>를 누른다.</li>
+</ol>
+<h3>2단계. 전체 성별 평균 연봉 보기</h3>
+<ol>
+<li>표 안의 아무 셀이나 클릭한다.</li>
+<li><code>삽입</code> 탭에서 <code>피벗 테이블</code>을 선택한다.</li>
+<li>새 워크시트에 피벗테이블을 만든다.</li>
+<li>피벗 필드를 아래처럼 배치한다.
+   - 행: <code>gender</code>
+   - 값: <code>salary</code></li>
+<li>값 영역의 <code>salary</code>를 클릭하고 <code>값 필드 설정</code>에서 <code>평균</code>을 선택한다.</li>
+</ol>
+<p>기대 결과는 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>gender</th>
+<th style="text-align: right;">평균 salary</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>남성</td>
+<td style="text-align: right;">약 67,296,571원</td>
+</tr>
+<tr>
+<td>여성</td>
+<td style="text-align: right;">약 63,910,600원</td>
+</tr>
+</tbody>
+</table></div>
+<p>전체만 보면 남성 평균이 약 3,385,971원 높다.</p>
+<h3>3단계. 부서별로 나누어 보기</h3>
+<ol>
+<li>같은 피벗테이블에서 행 영역에 <code>dept</code>를 <code>gender</code> 위에 추가한다.</li>
+<li>행 영역 순서가 <code>dept</code> 다음 <code>gender</code>가 되게 한다.</li>
+<li>값은 그대로 <code>salary</code>의 평균으로 둔다.</li>
+</ol>
+<p>기대 결과는 모든 부서에서 여성 평균이 남성 평균보다 높다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>부서</th>
+<th style="text-align: right;">남성 평균</th>
+<th style="text-align: right;">여성 평균</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>개발본부</td>
+<td style="text-align: right;">약 73,541,000원</td>
+<td style="text-align: right;">약 76,974,286원</td>
+</tr>
+<tr>
+<td>고객운영팀</td>
+<td style="text-align: right;">약 51,497,500원</td>
+<td style="text-align: right;">약 54,095,000원</td>
+</tr>
+<tr>
+<td>데이터전략팀</td>
+<td style="text-align: right;">약 67,437,778원</td>
+<td style="text-align: right;">약 72,667,143원</td>
+</tr>
+<tr>
+<td>영업본부</td>
+<td style="text-align: right;">약 61,020,000원</td>
+<td style="text-align: right;">약 65,530,909원</td>
+</tr>
+<tr>
+<td>인사총무팀</td>
+<td style="text-align: right;">약 58,280,000원</td>
+<td style="text-align: right;">약 59,850,769원</td>
+</tr>
+</tbody>
+</table></div>
+<h3>4단계. 결론 바꾸기</h3>
+<p>전체 평균만 보고 쓰면 이렇게 된다.</p>
+<div class="code-scroll"><pre><code class="language-text">전체 평균 연봉은 남성이 여성보다 높다.
+</code></pre></div>
+<p>하지만 부서별로 나누면 더 정확한 문장은 이렇게 바뀐다.</p>
+<div class="code-scroll"><pre><code class="language-text">전체 평균은 남성이 높지만, 부서별로 비교하면 5개 부서 모두에서 여성 평균 연봉이 더 높다.
+따라서 성별 평균만으로 결론을 내리면 부서 구성의 영향을 놓칠 수 있다.
+</code></pre></div>
+<h2>직접 해보기: "기온이 오르면 매출이 는다"를 반박하기</h2>
+<p>아래 주장을 데이터 분석가처럼 검토하는 짧은 반박문을 작성한다.</p>
+<div class="code-scroll"><pre><code class="language-text">기온이 오르면 매출이 는다.
+</code></pre></div>
+<p>반박문에는 다음 네 가지가 들어가야 한다.</p>
+<ol>
+<li>먼저 어떤 데이터가 필요한지 말한다.</li>
+<li>산점도와 상관계수로 확인해야 한다고 말한다.</li>
+<li>상관이 있어도 원인이라고 단정할 수 없다고 말한다.</li>
+<li>요일, 계절, 행사, 광고, 매장 수, 가격 변화 같은 다른 요인을 확인해야 한다고 말한다.</li>
+</ol>
+<p>작성 예시 틀:</p>
+<div class="code-scroll"><pre><code class="language-text">이 주장을 확인하려면 날짜별 기온과 날짜별 매출을 같은 기준으로 맞춘 데이터가 필요하다.
+먼저 산점도와 상관계수로 두 값이 함께 움직이는지 확인해야 한다.
+상관계수가 높게 나오더라도 기온이 매출을 직접 올렸다고 바로 말할 수는 없다.
+계절, 요일, 휴일, 행사, 광고, 가격 변화 같은 요인이 함께 작용했을 수 있다.
+따라서 비슷한 조건의 날끼리 비교하거나 추가 변수를 통제한 뒤에야 원인에 가까운 주장을 할 수 있다.
+</code></pre></div>
+<h2>제출 기준</h2>
+<ul>
+<li>산점도와 상관계수 결과를 한 문장으로 해석했다.</li>
+<li>상관과 인과를 구분하는 문장을 썼다.</li>
+<li>HR 데이터에서 전체 평균과 부서별 평균이 뒤집히는 현상을 설명했다.</li>
+<li>직접 해보기 반박문에 "다른 요인"이 최소 2개 이상 들어갔다.</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="script" aria-label="강사대본">
+<h1>S06 강사대본: 상관 vs 인과, 심슨의 역설</h1>
+<h2>수업 전 확인</h2>
+<ul>
+<li><code>molit_apt_sale_seoul_gangnam_2024.csv</code> 파일이 열리는지 확인한다.</li>
+<li><code>hr_employees_clean.csv</code> 파일이 열리는지 확인한다.</li>
+<li>엑셀에서 CSV가 UTF-8로 정상 표시되는지 확인한다.</li>
+<li>아파트 데이터의 <code>거래금액(만원)</code>은 쉼표가 포함된 문자처럼 보일 수 있으므로 숫자 변환 시연을 반드시 한다.</li>
+</ul>
+<h2>0-5분. 도입</h2>
+<p>오늘은 숫자 두 개가 같이 움직인다는 것과, 하나가 다른 하나의 원인이라는 것을 구분한다.</p>
+<p>지난 시간에는 평균, 중앙값, 분포를 배웠다. 오늘은 한 열이 아니라 두 열을 같이 본다. 예를 들어 아파트 면적과 가격, 기온과 매출, 성별과 연봉처럼 두 값이 함께 움직이는지 보는 것이다.</p>
+<p>처음부터 결론을 조심해야 한다. 데이터 분석에서 가장 흔한 실수는 "같이 움직였다"를 "원인이다"로 바꾸어 말하는 것이다.</p>
+<h2>5-15분. 개념 설명</h2>
+<p>상관계수는 두 숫자 열이 같이 움직이는 정도다. 1에 가까우면 같이 커지는 경향이 강하고, -1에 가까우면 한쪽이 커질 때 다른 쪽은 작아지는 경향이 강하다. 0에 가까우면 같이 움직인다고 보기 어렵다.</p>
+<p>엑셀에서는 <code>CORREL</code> 함수로 구한다. 그런데 이 숫자 하나만 보면 위험하다. 먼저 산점도를 봐야 한다. 산점도는 행 하나를 점 하나로 찍는 차트다. 점들이 오른쪽 위로 올라가면 양의 상관을 의심할 수 있다.</p>
+<p>여기서 꼭 구분해야 한다. 상관은 "같이 움직였다"이고, 인과는 "A가 B를 일으켰다"이다. 상관계수가 높아도 원인은 아닐 수 있다. 중간에 다른 요인이 있을 수 있고, 방향이 반대일 수도 있고, 우연히 같은 기간에 움직였을 수도 있다.</p>
+<p>예를 들어 배달 통화건수와 평균기온은 직관적으로 관련 있을 것 같지만, 검증된 참고 데이터에서는 상관계수가 약 0.015로 거의 0이다. 그럴듯한 말도 실제 데이터로 확인해야 한다.</p>
+<h2>15-30분. 시연 1: 아파트 면적과 거래금액</h2>
+<p>파일을 연다.</p>
+<p><code>02_datasets/real_korean/realestate_apt/molit_apt_sale_seoul_gangnam_2024.csv</code></p>
+<p>말할 것:</p>
+<p>이 데이터는 서울 강남구 2024년 아파트 매매 실거래 3,754건이다. 오늘 볼 열은 두 개다. 하나는 <code>전용면적(㎡)</code>, 다른 하나는 <code>거래금액(만원)</code>이다.</p>
+<p>시연 포인트:</p>
+<ol>
+<li><code>거래금액(만원)</code>에 쉼표가 들어 있으므로 새 열 <code>거래금액_만원</code>을 만든다.</li>
+<li>첫 데이터 행에 <code>=VALUE(SUBSTITUTE(J2,",",""))</code>를 입력한다.</li>
+<li>아래로 채운다.</li>
+<li><code>전용면적(㎡)</code>과 <code>거래금액_만원</code>으로 산점도를 만든다.</li>
+<li>빈 셀에 <code>=CORREL(G2:G3755,U2:U3755)</code>를 입력한다. 새 열 위치가 다르면 U열을 실제 열로 바꾼다.</li>
+</ol>
+<p>말할 것:</p>
+<p>상관계수가 약 0.806으로 나온다. 강한 양의 상관이다. 면적이 큰 거래일수록 거래금액도 대체로 높다는 뜻이다.</p>
+<p>하지만 여기서 "면적이 가격을 결정한다"라고 끝내면 안 된다. 같은 면적이어도 단지, 층, 연식, 위치, 조망, 거래 시점이 다르다. 오늘의 올바른 문장은 "면적과 거래금액은 강한 양의 상관을 보인다. 다만 가격의 원인은 여러 가지이므로 면적만으로 인과를 단정하지 않는다"이다.</p>
+<h2>30-40분. 상관과 인과 토론</h2>
+<p>질문:</p>
+<p>"기온이 오르면 매출이 는다"라는 말을 들으면 어떤 데이터를 확인해야 할까.</p>
+<p>예상 답:</p>
+<ul>
+<li>날짜별 기온</li>
+<li>날짜별 매출</li>
+<li>요일</li>
+<li>휴일 여부</li>
+<li>행사나 광고</li>
+<li>매장 수</li>
+<li>가격 변화</li>
+</ul>
+<p>말할 것:</p>
+<p>먼저 같은 날짜 단위로 기온과 매출을 맞추어야 한다. 그다음 산점도와 상관계수를 본다. 만약 상관계수가 0에 가까우면 이 주장은 데이터로 지지되지 않는다. 상관계수가 높더라도 아직 원인이라고 말할 수는 없다. 여름이라서, 휴가철이라서, 광고를 했기 때문에, 주말이 많아서 매출이 늘었을 수도 있다.</p>
+<p>핵심은 반박의 태도다. "틀렸다"라고만 말하는 것이 아니라 "이 주장에는 어떤 확인이 빠져 있다"라고 말해야 한다.</p>
+<h2>40-55분. 시연 2: 심슨의 역설</h2>
+<p>파일을 연다.</p>
+<p><code>02_datasets/hr_employees/hr_employees_clean.csv</code></p>
+<p>말할 것:</p>
+<p>이번에는 전체 평균이 우리를 속이는 예를 본다. 전체 성별 평균 연봉을 먼저 보고, 그다음 부서별로 나누어 보겠다.</p>
+<p>시연 포인트:</p>
+<ol>
+<li>피벗테이블을 만든다.</li>
+<li>행에 <code>gender</code>, 값에 <code>salary</code>를 넣고 값 필드 설정을 <code>평균</code>으로 바꾼다.</li>
+<li>전체 평균에서 남성이 약 67,296,571원, 여성이 약 63,910,600원임을 확인한다.</li>
+<li>행 영역에 <code>dept</code>를 <code>gender</code> 위에 추가한다.</li>
+<li>5개 부서 모두에서 여성 평균이 남성 평균보다 높음을 확인한다.</li>
+</ol>
+<p>말할 것:</p>
+<p>전체만 보면 남성 평균이 높다. 그런데 부서별로 나누면 모든 부서에서 여성 평균이 높다. 이 현상을 심슨의 역설이라고 부른다.</p>
+<p>이 데이터에서는 부서 구성이 전체 평균을 좌우한다. 남성이 연봉 수준이 상대적으로 높은 부서에 몰려 있고, 여성이 상대적으로 낮은 부서에 몰려 있으면 전체 평균은 남성이 높아 보일 수 있다. 그러나 같은 부서 안에서 비교하면 결론이 바뀐다.</p>
+<p>이 사례에서 배울 점은 단순하다. 전체 평균으로 결론을 내리기 전에, 비교에 영향을 줄 만한 그룹을 나누어 봐야 한다.</p>
+<h2>55-60분. 직접 해보기 안내</h2>
+<p>미션 문장:</p>
+<p><code>기온이 오르면 매출이 는다.</code></p>
+<p>수강생에게 요구할 답:</p>
+<p>이 주장을 확인하려면 날짜별 기온과 날짜별 매출이 필요하다는 점, 산점도와 상관계수를 봐야 한다는 점, 상관이 있어도 인과는 아니라는 점, 요일과 계절과 행사 같은 다른 요인을 확인해야 한다는 점이 들어가야 한다.</p>
+<p>완료 판단 체크포인트:</p>
+<p>수강생이 <code>상관계수 0.806은 강한 양의 상관이지만 인과 단정은 아니다</code>와 <code>전체 성별 평균은 남성이 높지만 부서별 평균은 모두 여성이 높다</code>를 자기 말로 설명하면 완료로 본다.</p>
+<h2>예상 질문과 답변</h2>
+<h3>Q1. 상관계수가 0.806이면 원인이라고 봐도 되지 않나요?</h3>
+<p>아니다. 0.806은 두 값이 같이 움직이는 정도가 강하다는 뜻이다. 원인이라고 말하려면 다른 요인을 통제하거나, 시간 순서와 비교 조건을 더 따져야 한다.</p>
+<h3>Q2. 상관계수가 낮으면 아무 관계도 없다는 뜻인가요?</h3>
+<p>그 데이터와 그 방식으로는 직선적인 관계가 약하다는 뜻이다. 관계가 전혀 없다고 단정하기보다, 측정 단위가 맞는지, 기간을 잘랐을 때 달라지는지, 비선형 관계가 있는지 확인할 수 있다. 입문 단계에서는 먼저 "이 주장만으로는 부족하다"라고 판단하면 된다.</p>
+<h3>Q3. 심슨의 역설에서는 전체 평균과 부서별 평균 중 무엇을 믿어야 하나요?</h3>
+<p>질문에 따라 다르다. 전체 인건비 구조를 보려면 전체 평균도 의미가 있다. 성별 차이를 공정하게 비교하려면 부서, 직급, 연차처럼 영향을 주는 조건을 나누어 봐야 한다.</p>
+<h3>Q4. 부서별로도 여성 평균이 높으면 여성에게 유리한 회사라고 말해도 되나요?</h3>
+<p>이 데이터만으로는 부족하다. 이 데이터는 합성 데이터이며, 실제 판단에는 직급, 연차, 성과평가, 채용 시점 같은 추가 변수가 필요하다. 오늘의 목적은 결론을 내리는 것이 아니라 전체 평균이 왜 위험할 수 있는지 이해하는 것이다.</p>
+<h3>Q5. 산점도에서 점이 너무 많으면 어떻게 하나요?</h3>
+<p>이번 아파트 데이터는 3,754행이라 그대로 그려도 된다. 수만 행 이상이면 표본을 뽑거나, 구간별 평균으로 집계한 뒤 시각화한다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="answer" aria-label="모범답안">
+<h1>S06 모범답안</h1>
+<h2>미션 모범답안</h2>
+<p>주장:</p>
+<div class="code-scroll"><pre><code class="language-text">기온이 오르면 매출이 는다.
+</code></pre></div>
+<p>모범 반박:</p>
+<div class="code-scroll"><pre><code class="language-text">이 주장을 확인하려면 같은 날짜 기준의 기온 데이터와 매출 데이터가 필요하다. 먼저 날짜별 기온과 매출의 산점도를 그리고 상관계수를 계산해 두 값이 실제로 함께 움직이는지 확인해야 한다. 상관계수가 0에 가깝다면 이 주장은 데이터로 지지되지 않는다. 상관계수가 높게 나오더라도 기온이 매출을 직접 올렸다고 바로 말할 수는 없다. 계절, 요일, 휴일, 행사, 광고, 가격 변화, 매장 수 변화 같은 다른 요인이 매출에 영향을 주었을 수 있으므로 비슷한 조건끼리 비교하거나 추가 변수를 통제해야 한다.
+</code></pre></div>
+<p>좋은 답안의 조건:</p>
+<ul>
+<li>"같은 날짜 기준의 기온과 매출"처럼 비교 단위를 맞추어야 한다고 쓴다.</li>
+<li>산점도와 상관계수로 먼저 확인해야 한다고 쓴다.</li>
+<li>상관이 있어도 인과는 아니라고 쓴다.</li>
+<li>요일, 계절, 행사, 광고, 가격, 매장 수 같은 다른 요인을 2개 이상 언급한다.</li>
+</ul>
+<h2>따라하기 결과 해설</h2>
+<h3>1. 아파트 전용면적과 거래금액</h3>
+<p>검증 파일:</p>
+<p><code>02_datasets/real_korean/realestate_apt/molit_apt_sale_seoul_gangnam_2024.csv</code></p>
+<p>실제 확인 결과:</p>
+<ul>
+<li>행수: 3,754행</li>
+<li>사용 열: <code>전용면적(㎡)</code>, <code>거래금액(만원)</code></li>
+<li>전처리: <code>거래금액(만원)</code>의 쉼표를 제거하고 숫자형 <code>거래금액_만원</code>으로 변환</li>
+<li>Pearson 상관계수: <code>r = 0.806</code></li>
+</ul>
+<p>해석:</p>
+<div class="code-scroll"><pre><code class="language-text">강남구 아파트 실거래 3,754건에서 전용면적과 거래금액은 강한 양의 상관을 보인다. 전용면적이 클수록 거래금액도 대체로 높다. 그러나 같은 면적이라도 단지, 위치, 층, 연식, 거래 시점이 다르므로 전용면적만이 가격의 원인이라고 단정할 수는 없다.
+</code></pre></div>
+<h3>2. HR 데이터와 심슨의 역설</h3>
+<p>검증 파일:</p>
+<p><code>02_datasets/hr_employees/hr_employees_clean.csv</code></p>
+<p>실제 확인 결과:</p>
+<ul>
+<li>행수: 1,200행</li>
+<li>전체 평균 연봉</li>
+<li>남성: 67,296,571원</li>
+<li>여성: 63,910,600원</li>
+<li>남성 - 여성: 3,385,971원</li>
+<li>부서별 평균: 5개 부서 모두 여성 평균이 남성 평균보다 높음</li>
+</ul>
+<p>부서별 평균 연봉:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>부서</th>
+<th style="text-align: right;">남성 평균</th>
+<th style="text-align: right;">여성 평균</th>
+<th style="text-align: right;">여성 - 남성</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>개발본부</td>
+<td style="text-align: right;">73,541,000원</td>
+<td style="text-align: right;">76,974,286원</td>
+<td style="text-align: right;">3,433,286원</td>
+</tr>
+<tr>
+<td>고객운영팀</td>
+<td style="text-align: right;">51,497,500원</td>
+<td style="text-align: right;">54,095,000원</td>
+<td style="text-align: right;">2,597,500원</td>
+</tr>
+<tr>
+<td>데이터전략팀</td>
+<td style="text-align: right;">67,437,778원</td>
+<td style="text-align: right;">72,667,143원</td>
+<td style="text-align: right;">5,229,365원</td>
+</tr>
+<tr>
+<td>영업본부</td>
+<td style="text-align: right;">61,020,000원</td>
+<td style="text-align: right;">65,530,909원</td>
+<td style="text-align: right;">4,510,909원</td>
+</tr>
+<tr>
+<td>인사총무팀</td>
+<td style="text-align: right;">58,280,000원</td>
+<td style="text-align: right;">59,850,769원</td>
+<td style="text-align: right;">1,570,769원</td>
+</tr>
+</tbody>
+</table></div>
+<p>해석:</p>
+<div class="code-scroll"><pre><code class="language-text">전체 평균만 보면 남성 평균 연봉이 여성보다 높다. 그러나 부서별로 나누면 5개 부서 모두에서 여성 평균 연봉이 남성보다 높다. 이는 부서 구성의 차이가 전체 평균에 영향을 준 심슨의 역설 사례다. 따라서 성별 전체 평균만으로 결론을 내리면 중요한 그룹 차이를 놓칠 수 있다.
+</code></pre></div>
+<h3>3. 참고 반례: 배달 통화건수와 기온</h3>
+<p>참고 검증 파일:</p>
+<p><code>02_datasets/real_korean/delivery_food/food_delivery_prediction_raw_data2.csv</code></p>
+<p>실제 확인 결과:</p>
+<ul>
+<li>행수: 1,947행</li>
+<li>사용 열: <code>평균기온(°C)</code>, <code>통화건수</code></li>
+<li>Pearson 상관계수: <code>r = 0.015</code></li>
+</ul>
+<p>해석:</p>
+<div class="code-scroll"><pre><code class="language-text">배달 통화건수와 평균기온은 직관적으로 관련 있어 보일 수 있지만, 이 참고 데이터에서는 상관계수가 거의 0이다. 그러므로 &quot;추우면 배달이 늘어난다&quot; 같은 말은 실제 데이터 확인 전에는 결론으로 말할 수 없다.
+</code></pre></div>
+<p>이 참고 반례는 수업에서 상관 분석의 주자료로 쓰지 않고, 그럴듯한 주장도 확인이 필요하다는 설명에만 사용한다.</p>
+<h2>실행한 검증 코드</h2>
+<p>검증 코드는 아래 파일에 저장되어 있다.</p>
+<p><code>06_answers/S06_code.py</code></p>
+<p>실행 명령:</p>
+<div class="code-scroll"><pre><code class="language-bash">python3 06_answers/S06_code.py
+</code></pre></div>
+<p>핵심 코드:</p>
+<div class="code-scroll"><pre><code class="language-python">from pathlib import Path
+
+import pandas as pd
+
+
+ROOT = Path(__file__).resolve().parents[1]
+APT_PATH = ROOT / &quot;02_datasets/real_korean/realestate_apt/molit_apt_sale_seoul_gangnam_2024.csv&quot;
+HR_PATH = ROOT / &quot;02_datasets/hr_employees/hr_employees_clean.csv&quot;
+DELIVERY_PATH = ROOT / &quot;02_datasets/real_korean/delivery_food/food_delivery_prediction_raw_data2.csv&quot;
+
+apt = pd.read_csv(APT_PATH)
+apt[&quot;거래금액_만원&quot;] = pd.to_numeric(
+    apt[&quot;거래금액(만원)&quot;].astype(str).str.replace(&quot;,&quot;, &quot;&quot;, regex=False),
+    errors=&quot;coerce&quot;,
+)
+apt_corr = apt[&quot;전용면적(㎡)&quot;].corr(apt[&quot;거래금액_만원&quot;])
+
+hr = pd.read_csv(HR_PATH)
+hr_overall = hr.groupby(&quot;gender&quot;)[&quot;salary&quot;].mean().reindex([&quot;남성&quot;, &quot;여성&quot;])
+hr_by_dept = hr.pivot_table(index=&quot;dept&quot;, columns=&quot;gender&quot;, values=&quot;salary&quot;, aggfunc=&quot;mean&quot;)
+hr_by_dept[&quot;여성-남성&quot;] = hr_by_dept[&quot;여성&quot;] - hr_by_dept[&quot;남성&quot;]
+
+delivery = pd.read_csv(DELIVERY_PATH)
+delivery_corr = delivery[&quot;평균기온(°C)&quot;].corr(delivery[&quot;통화건수&quot;])
+
+print(f&quot;아파트 행수: {len(apt):,}&quot;)
+print(f&quot;전용면적-거래금액 상관계수: {apt_corr:.3f}&quot;)
+print(f&quot;HR 행수: {len(hr):,}&quot;)
+print(hr_overall)
+print(hr_by_dept)
+print(f&quot;배달 참고 데이터 행수: {len(delivery):,}&quot;)
+print(f&quot;평균기온-통화건수 상관계수: {delivery_corr:.3f}&quot;)
+</code></pre></div>
+<p>실제 실행 출력 요약:</p>
+<div class="code-scroll"><pre><code class="language-text">pandas version: 3.0.3
+강남구 아파트 실거래: 3,754행, 전용면적-거래금액 r = 0.806
+HR 직원 데이터: 1,200행, 전체 평균은 남성 &gt; 여성
+HR 부서별 평균: 5개 부서 모두 여성 &gt; 남성
+배달 참고 데이터: 1,947행, 평균기온-통화건수 r = 0.015
+</code></pre></div>
+</section>
+  </div>
+
+  <nav class="session-pager container">
+    <a class="pager-link prev" href="./S05.html"><span class="pager-direction">&larr; 이전 차시</span><span class="pager-title">S05 · 중심·산포·분포·박스플롯</span></a>
+    <a class="pager-link next" href="./S07.html"><span class="pager-direction">다음 차시 &rarr;</span><span class="pager-title">S07 · 엑셀을 AI에 올려 자연어로 분석</span></a>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>데이터 리터러시 with AI · S06 차시</span>
+    <a href="../index.html#curriculum">전체 커리큘럼으로</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.tab-panel');
+  function activate(key, updateHash){
+    tabs.forEach(function(btn){
+      var on = btn.getAttribute('data-tab') === key;
+      btn.classList.toggle('active', on);
+    });
+    panels.forEach(function(panel){
+      var on = panel.getAttribute('data-panel') === key;
+      panel.classList.toggle('active', on);
+    });
+    if (updateHash && history.replaceState){
+      history.replaceState(null, '', '#' + key);
+    }
+  }
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      activate(btn.getAttribute('data-tab'), true);
+    });
+  });
+  var initial = (location.hash || '').replace('#', '');
+  var valid = ['curriculum', 'handout', 'script', 'answer'];
+  if (valid.indexOf(initial) !== -1){
+    activate(initial, false);
+  }
+})();
+</script>
+
+</body>
+</html>

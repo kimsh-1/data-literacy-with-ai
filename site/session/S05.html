@@ -1,0 +1,1723 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>S05. 중심·산포·분포·박스플롯 · 데이터 리터러시 with AI</title>
+<meta name="description" content="S05차시: 중심·산포·분포·박스플롯 — 커리큘럼·핸드아웃·강사대본·모범답안." />
+<style>
+:root{
+  --canvas: #010102;
+  --surface-1: #0f1011;
+  --surface-2: #141516;
+  --surface-3: #18191a;
+  --surface-4: #191a1b;
+  --ink: #f7f8f8;
+  --ink-muted: #d0d6e0;
+  --ink-subtle: #8a8f98;
+  --ink-tertiary: #62666d;
+  --primary: #5e6ad2;
+  --primary-hover: #828fff;
+  --primary-focus: #5e69d1;
+  --hairline: #23252a;
+  --hairline-strong: #34343a;
+  --hairline-tertiary: #3e3e44;
+  --success: #27a644;
+
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  --container: 900px;
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+html{ background: var(--canvas); }
+body{
+  margin:0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.05px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a{ color: inherit; text-decoration: none; }
+ul, ol{ margin:0; padding:0; }
+h1,h2,h3,h4,p{ margin:0; }
+
+.container{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 48px);
+}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--primary-hover);
+}
+.eyebrow::before{
+  content:"";
+  width:6px; height:6px;
+  background: var(--primary);
+  border-radius: 1px;
+  flex-shrink:0;
+}
+
+/* ---------- top nav ---------- */
+.top-nav{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 64px;
+  display:flex;
+  align-items:center;
+  background: rgba(1,1,2,0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.top-nav .container{ display:flex; align-items:center; justify-content:space-between; gap: 24px; max-width: 1280px; }
+.brand{ display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:600; font-size:15px; letter-spacing:-0.01em; }
+.brand-mark{ width:20px; height:20px; border-radius: 6px; background: var(--primary); flex-shrink:0; position:relative; }
+.brand-mark::after{ content:""; position:absolute; inset:6px; border-radius:2px; background: rgba(255,255,255,0.85); }
+.back-link{ font-size:14px; color: var(--ink-subtle); display:inline-flex; align-items:center; gap:6px; transition: color .15s ease; }
+.back-link:hover{ color: var(--ink); }
+
+/* ---------- session header ---------- */
+.session-header{
+  padding: var(--space-xxl) 0 var(--space-xl);
+  background:
+    radial-gradient(ellipse 60% 50% at 82% 0%, rgba(94,106,210,0.16), transparent 60%),
+    var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+.session-header-top{
+  display:flex;
+  align-items:center;
+  gap: var(--space-md);
+  margin: var(--space-md) 0 var(--space-md);
+}
+.session-num-badge{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--primary-hover);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-xs);
+  padding: 4px 10px;
+}
+.difficulty{ display:flex; gap:4px; align-items:center; }
+.difficulty .dot{ width:6px; height:6px; border-radius:50%; background: var(--hairline-strong); }
+.difficulty .dot.filled{ background: var(--primary); }
+.difficulty-label{ font-size:12px; color: var(--ink-tertiary); margin-left:6px; }
+.session-header h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ---------- tabs ---------- */
+.tabs-bar{
+  display:flex;
+  gap: 4px;
+  padding-top: var(--space-lg);
+  border-bottom: 1px solid var(--hairline);
+  overflow-x: auto;
+}
+.tab-btn{
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-subtle);
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s ease, border-color .15s ease;
+}
+.tab-btn:hover{ color: var(--ink); }
+.tab-btn.active{ color: var(--ink); border-bottom-color: var(--primary); }
+
+.tab-panels{ padding: var(--space-xxl) 0 var(--space-xxl); }
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+/* ---------- markdown body ---------- */
+.markdown-body{ color: var(--ink-muted); font-size: 15.5px; line-height: 1.75; letter-spacing: -0.05px; overflow-wrap: anywhere; word-break: break-word; }
+.markdown-body h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--hairline);
+}
+.markdown-body h2{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+.markdown-body h3{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin: var(--space-lg) 0 var(--space-xs);
+}
+.markdown-body h4{
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+.markdown-body p{ margin: 0 0 var(--space-md); }
+.markdown-body ul, .markdown-body ol{ margin: 0 0 var(--space-md); padding-left: 1.4em; }
+.markdown-body li{ margin-bottom: 6px; }
+.markdown-body ul{ list-style: disc; }
+.markdown-body ol{ list-style: decimal; }
+.markdown-body strong{ color: var(--ink); font-weight: 600; }
+.markdown-body em{ color: var(--ink-muted); }
+.markdown-body a{ color: var(--primary-hover); text-decoration: underline; text-underline-offset: 2px; }
+.markdown-body hr{ border:none; border-top: 1px solid var(--hairline); margin: var(--space-xl) 0; }
+.markdown-body blockquote{
+  margin: 0 0 var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid var(--primary);
+  background: var(--surface-1);
+  color: var(--ink-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.markdown-body code{
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--primary-hover);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.markdown-body .code-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+}
+.markdown-body pre{
+  margin: 0;
+  padding: var(--space-md);
+  background: transparent;
+  border: none;
+}
+.markdown-body pre code{
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre;
+}
+.markdown-body .table-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+}
+.markdown-body table{
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 460px;
+  font-size: 13.5px;
+}
+.markdown-body th, .markdown-body td{
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+  white-space: nowrap;
+}
+.markdown-body thead th{
+  background: var(--surface-1);
+  color: var(--ink);
+  font-weight: 600;
+  font-family: var(--font-text);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+.markdown-body tbody tr:last-child td{ border-bottom: none; }
+.markdown-body tbody tr:hover{ background: var(--surface-1); }
+
+/* ---------- pager ---------- */
+.session-pager{
+  display:flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-xl) 0 var(--space-xxl);
+  border-top: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+.pager-link{
+  display:flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  max-width: 46%;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.pager-link:hover{ border-color: var(--primary); background: var(--surface-2); }
+.pager-link.next{ margin-left: auto; text-align: right; align-items: flex-end; }
+.pager-direction{ font-size: 12px; color: var(--ink-tertiary); font-family: var(--font-mono); }
+.pager-title{ font-size: 14px; color: var(--ink); font-weight: 500; }
+.pager-spacer{ flex: 1; }
+
+footer.site-footer{
+  border-top: 1px solid var(--hairline);
+  padding: var(--space-xl) 0;
+}
+footer.site-footer .container{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: var(--ink-tertiary);
+  font-size: 12px;
+}
+footer.site-footer a:hover{ color: var(--ink-subtle); }
+
+@media (max-width: 640px){
+  .session-header{ padding: var(--space-xl) 0 var(--space-lg); }
+  .pager-link{ max-width: 100%; }
+  .session-pager{ flex-direction: column; }
+  .pager-link.next{ margin-left: 0; text-align: left; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="container">
+    <div class="brand"><span class="brand-mark"></span>데이터 리터러시 with AI</div>
+    <a class="back-link" href="../index.html#curriculum">&larr; 커리큘럼으로</a>
+  </div>
+</nav>
+
+<header class="session-header">
+  <div class="container">
+    <div class="eyebrow">PART 02 · 통계</div>
+    <div class="session-header-top">
+      <span class="session-num-badge">S05</span>
+      <div class="difficulty" title="난이도 2"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">기초</span></div>
+    </div>
+    <h1>중심·산포·분포·박스플롯</h1>
+  </div>
+  <div class="container">
+    <div class="tabs-bar" role="tablist">
+<button class="tab-btn active" data-tab="curriculum" role="tab" aria-selected="true">커리큘럼</button>
+<button class="tab-btn" data-tab="handout" role="tab" aria-selected="false">핸드아웃</button>
+<button class="tab-btn" data-tab="script" role="tab" aria-selected="false">강사대본</button>
+<button class="tab-btn" data-tab="answer" role="tab" aria-selected="false">모범답안</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="tab-panels container">
+<section class="tab-panel markdown-body active" data-panel="curriculum" aria-label="커리큘럼">
+<h1>S05 중심·산포·분포·박스플롯</h1>
+<h2>차시 개요</h2>
+<ul>
+<li>대상: 엑셀은 사용하지만 데이터분석은 처음인 비개발자</li>
+<li>선수 차시: S03</li>
+<li>난이도: 2</li>
+<li>시간: 50분</li>
+<li>사용 데이터 1: <code>/mnt/d/ai-data-analysis-course/02_datasets/hr_employees/hr_employees_clean.xlsx</code></li>
+<li>사용 데이터 2: <code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.xlsx</code></li>
+</ul>
+<p>이번 차시는 숫자 열 하나를 제대로 읽는 법을 다룬다. S03에서 피벗테이블로 매출을 지점별, 요일별, 시간대별로 요약했다면, 이번에는 요약값이 어떤 의미를 갖는지 더 깊게 본다. 평균만 보면 전체적인 수준은 빠르게 알 수 있지만, 데이터가 얼마나 퍼져 있는지, 극단적으로 큰 값이 있는지, 보통의 값은 어디인지까지는 알 수 없다.</p>
+<p>핵심 질문은 다음과 같다.</p>
+<div class="code-scroll"><pre><code class="language-text">이 숫자들의 대표값은 무엇인가?
+값들이 얼마나 흩어져 있는가?
+평균을 그대로 믿어도 되는가?
+</code></pre></div>
+<p>따라하기에서는 HR 직원 데이터로 부서별 연봉 분포를 비교한다. 평균, 중앙값, 최빈값, 범위, 표준편차를 계산하고, 박스플롯으로 부서별 분포와 이상치를 확인한다. 직접 해보기에서는 카페 주문 데이터에서 평균 주문금액이 실제 보통 주문을 과장해 보이게 만드는 사례를 찾는다.</p>
+<h2>학습 목표</h2>
+<p>수강생은 이 차시가 끝나면 다음을 할 수 있어야 한다.</p>
+<ol>
+<li>평균, 중앙값, 최빈값의 차이를 설명할 수 있다.</li>
+<li>범위와 표준편차가 값의 퍼짐을 나타낸다는 점을 이해할 수 있다.</li>
+<li>사분위수, IQR, 이상치의 기본 의미를 말할 수 있다.</li>
+<li>박스플롯을 보고 그룹별 분포의 위치, 퍼짐, 이상치를 비교할 수 있다.</li>
+<li>평균이 왜곡될 수 있는 상황을 찾아 중앙값과 함께 해석할 수 있다.</li>
+</ol>
+<h2>데이터 이해</h2>
+<p>실제 파일 확인 결과는 다음과 같다.</p>
+<h3>HR 직원 데이터</h3>
+<ul>
+<li>파일: <code>/mnt/d/ai-data-analysis-course/02_datasets/hr_employees/hr_employees_clean.xlsx</code></li>
+<li>시트: <code>employees</code></li>
+<li>규모: 1,200행 × 9열</li>
+<li>결측값: 없음</li>
+<li>주요 컬럼: <code>dept</code>, <code>position</code>, <code>gender</code>, <code>age</code>, <code>tenure_years</code>, <code>salary</code>, <code>eval_score</code>, <code>overtime_hours</code></li>
+</ul>
+<p>부서별 직원 수는 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>부서</th>
+<th style="text-align: right;">직원 수</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>개발본부</td>
+<td style="text-align: right;">370</td>
+</tr>
+<tr>
+<td>데이터전략팀</td>
+<td style="text-align: right;">250</td>
+</tr>
+<tr>
+<td>영업본부</td>
+<td style="text-align: right;">240</td>
+</tr>
+<tr>
+<td>인사총무팀</td>
+<td style="text-align: right;">180</td>
+</tr>
+<tr>
+<td>고객운영팀</td>
+<td style="text-align: right;">160</td>
+</tr>
+</tbody>
+</table></div>
+<h3>카페 주문 데이터</h3>
+<ul>
+<li>파일: <code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.xlsx</code></li>
+<li>시트: <code>sales</code></li>
+<li>규모: 10,424행 × 12열</li>
+<li>결측값: 없음</li>
+<li>주요 컬럼: <code>date</code>, <code>weekday</code>, <code>hour</code>, <code>store</code>, <code>category</code>, <code>item</code>, <code>unit_price</code>, <code>qty</code>, <code>amount</code></li>
+</ul>
+<p>직접 해보기에서는 상품별 주문금액 <code>amount</code>의 평균과 중앙값을 비교한다.</p>
+<h2>개념 설명</h2>
+<h3>1. 평균은 전체 금액을 사람 수로 나눈 값이다</h3>
+<p>평균은 가장 익숙한 대표값이다.</p>
+<div class="code-scroll"><pre><code class="language-text">평균 = 전체 합계 ÷ 개수
+</code></pre></div>
+<p>예를 들어 한 팀의 연봉 합계를 팀원 수로 나누면 평균 연봉이 된다. 엑셀에서는 <code>AVERAGE</code> 또는 조건이 있을 때 <code>AVERAGEIF</code>로 구한다.</p>
+<p>평균의 장점은 모든 값을 빠짐없이 반영한다는 점이다. 매출, 비용, 인건비처럼 전체 규모를 나누어 볼 때 유용하다. 그러나 이 장점이 동시에 약점이 된다. 아주 큰 값이나 아주 작은 값도 평균에 그대로 들어가므로, 극단값이 있으면 평균이 보통의 느낌과 달라질 수 있다.</p>
+<h3>2. 중앙값은 줄을 세웠을 때 가운데 있는 값이다</h3>
+<p>중앙값은 값을 작은 순서부터 큰 순서로 세웠을 때 가운데에 있는 값이다. 엑셀에서는 <code>MEDIAN</code>으로 구한다.</p>
+<p>중앙값은 극단값의 영향을 평균보다 덜 받는다. 예를 들어 대부분의 주문이 6,500원인데 몇 건의 주문이 19,500원이라면 평균은 올라간다. 그러나 가운데 값이 여전히 6,500원이라면 중앙값은 보통 주문의 느낌을 더 잘 보여 줄 수 있다.</p>
+<p>입문 단계에서는 평균과 중앙값을 함께 보는 습관이 중요하다.</p>
+<div class="code-scroll"><pre><code class="language-text">평균과 중앙값이 비슷하다: 값들이 비교적 균형 있게 퍼져 있을 가능성이 있다.
+평균이 중앙값보다 크다: 큰 값 몇 개가 평균을 끌어올렸을 가능성이 있다.
+평균이 중앙값보다 작다: 작은 값들이 평균을 끌어내렸을 가능성이 있다.
+</code></pre></div>
+<h3>3. 최빈값은 가장 자주 나온 값이다</h3>
+<p>최빈값은 가장 많이 반복된 값이다. 엑셀에서는 <code>MODE.SNGL</code>로 구한다.</p>
+<p>최빈값은 가격, 등급, 점수처럼 같은 값이 반복되는 데이터에서 의미가 있다. 연봉처럼 값이 세밀하게 나뉘면 최빈값이 여러 개이거나 큰 의미가 없을 수 있다. 그래서 최빈값은 항상 써야 하는 값이 아니라, 데이터 성격을 보고 쓸지 판단한다.</p>
+<h3>4. 범위는 가장 큰 값과 가장 작은 값의 차이다</h3>
+<p>범위는 산포, 즉 값의 퍼짐을 보는 가장 단순한 지표다.</p>
+<div class="code-scroll"><pre><code class="language-text">범위 = 최댓값 - 최솟값
+</code></pre></div>
+<p>예를 들어 어떤 부서의 최저 연봉이 5,670만 원이고 최고 연봉이 9,880만 원이면 범위는 4,210만 원이다. 범위는 이해하기 쉽지만 최솟값과 최댓값 두 개에만 의존한다. 그래서 극단적인 값 하나가 있으면 범위가 크게 흔들릴 수 있다.</p>
+<h3>5. 표준편차는 평균 주변에서 얼마나 흩어져 있는지를 본다</h3>
+<p>표준편차는 값들이 평균에서 얼마나 떨어져 있는지를 요약한 수치다. 엑셀에서는 표본 표준편차를 <code>STDEV.S</code>로 계산한다.</p>
+<p>입문 단계에서는 공식보다 해석이 중요하다.</p>
+<div class="code-scroll"><pre><code class="language-text">표준편차가 작다: 값들이 평균 근처에 모여 있다.
+표준편차가 크다: 값들이 평균에서 넓게 퍼져 있다.
+</code></pre></div>
+<p>부서 평균 연봉이 비슷해도 표준편차가 다르면 이야기가 달라진다. 평균은 엇비슷한데 표준편차가 큰 부서라면, 그 안에 낮은 연봉과 높은 연봉이 함께 섞여 있는 셈이다.</p>
+<h3>6. 박스플롯은 분포를 한 장의 그림으로 접어 보여 준다</h3>
+<p>박스플롯은 숫자 목록을 다음 정보로 요약한 그림이다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>요소</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>박스의 아래쪽</td>
+<td>1사분위수, 하위 25% 지점</td>
+</tr>
+<tr>
+<td>박스 안의 선</td>
+<td>중앙값</td>
+</tr>
+<tr>
+<td>박스의 위쪽</td>
+<td>3사분위수, 상위 25% 지점</td>
+</tr>
+<tr>
+<td>박스 높이</td>
+<td>가운데 50% 값의 퍼짐</td>
+</tr>
+<tr>
+<td>수염</td>
+<td>일반적인 최솟값과 최댓값 범위</td>
+</tr>
+<tr>
+<td>따로 찍힌 점</td>
+<td>이상치 후보</td>
+</tr>
+</tbody>
+</table></div>
+<p>박스플롯은 평균 하나보다 많은 정보를 준다. 부서별 연봉을 박스플롯으로 보면 어느 부서의 중앙값이 높은지, 어느 부서의 연봉 폭이 넓은지, 높은 쪽 이상치가 있는지를 한눈에 비교할 수 있다.</p>
+<h2>엑셀 비교</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>하고 싶은 일</th>
+<th>엑셀 함수 또는 기능</th>
+<th>이번 차시에서의 사용</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>평균 구하기</td>
+<td><code>AVERAGE</code>, <code>AVERAGEIF</code></td>
+<td>부서별 평균 연봉</td>
+</tr>
+<tr>
+<td>중앙값 구하기</td>
+<td><code>MEDIAN</code></td>
+<td>부서별 중앙 연봉</td>
+</tr>
+<tr>
+<td>최빈값 구하기</td>
+<td><code>MODE.SNGL</code></td>
+<td>가장 자주 나오는 연봉 또는 주문금액</td>
+</tr>
+<tr>
+<td>최솟값·최댓값</td>
+<td><code>MINIFS</code>, <code>MAXIFS</code></td>
+<td>부서별 연봉 범위</td>
+</tr>
+<tr>
+<td>표준편차</td>
+<td><code>STDEV.S</code></td>
+<td>부서별 연봉 산포</td>
+</tr>
+<tr>
+<td>사분위수</td>
+<td><code>QUARTILE.INC</code></td>
+<td>박스플롯을 해석하기 위한 기준</td>
+</tr>
+<tr>
+<td>분포 시각화</td>
+<td>상자 수염 그림</td>
+<td>부서별 연봉 분포 비교</td>
+</tr>
+</tbody>
+</table></div>
+<p>엑셀에서 평균은 버튼 하나로 쉽게 구할 수 있다. 그러나 분석에서는 평균을 구했다는 사실보다 평균을 어떻게 해석할지가 더 중요하다. 평균만 보고 결론을 내리면 보통의 값, 값의 퍼짐, 이상치 여부를 놓칠 수 있다.</p>
+<h2>50분 수업 흐름</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;">시간</th>
+<th>내용</th>
+<th>진행 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0-5분</td>
+<td>도입</td>
+<td>평균만으로 판단했을 때 생기는 문제 제시</td>
+</tr>
+<tr>
+<td style="text-align: right;">5-13분</td>
+<td>중심값 개념</td>
+<td>평균, 중앙값, 최빈값을 월급 봉투와 줄 세우기 비유로 설명</td>
+</tr>
+<tr>
+<td style="text-align: right;">13-20분</td>
+<td>산포 개념</td>
+<td>범위와 표준편차를 비교하며 퍼짐의 의미 설명</td>
+</tr>
+<tr>
+<td style="text-align: right;">20-32분</td>
+<td>따라하기 1</td>
+<td>HR 데이터에서 부서별 연봉 요약표 작성</td>
+</tr>
+<tr>
+<td style="text-align: right;">32-40분</td>
+<td>따라하기 2</td>
+<td>부서별 연봉 박스플롯 만들고 이상치 해석</td>
+</tr>
+<tr>
+<td style="text-align: right;">40-47분</td>
+<td>직접 해보기</td>
+<td>카페 주문 데이터에서 평균 왜곡 사례 찾기</td>
+</tr>
+<tr>
+<td style="text-align: right;">47-50분</td>
+<td>정리</td>
+<td>평균, 중앙값, 산포, 박스플롯을 함께 보는 습관 강조</td>
+</tr>
+</tbody>
+</table></div>
+<h2>수업의 핵심 메시지</h2>
+<p>평균은 중요하지만 혼자서는 부족하다. 전체 수준은 평균이 빠르게 짚어 주고, 보통의 위치는 중앙값이, 값이 얼마나 퍼져 있는지는 표준편차와 박스플롯이 알려 준다. 그러니 대표값 하나를 정답처럼 내세우기보다, 중심과 산포를 함께 보고 그 숫자가 어떤 상황을 설명하는지 말해야 한다.</p>
+<h2>차시 평가 기준</h2>
+<ul>
+<li>상: 부서별 연봉 요약표와 박스플롯을 만들고, 평균과 중앙값의 차이 및 이상치 여부를 자기 말로 해석한다.</li>
+<li>중: 따라하기 결과를 재현하고, 평균과 중앙값 중 어떤 값이 보통의 값을 더 잘 설명하는지 부분적으로 말한다.</li>
+<li>하: 평균 계산은 했지만 중앙값, 표준편차, 박스플롯 해석으로 연결하지 못한다.</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="handout" aria-label="핸드아웃">
+<h1>S05 핸드아웃: 중심·산포·분포·박스플롯(상자 수염 그림)</h1>
+<h2>사용할 파일</h2>
+<p>따라하기에서는 아래 파일을 사용한다.</p>
+<div class="code-scroll"><pre><code class="language-text">/mnt/d/ai-data-analysis-course/02_datasets/hr_employees/hr_employees_clean.xlsx
+</code></pre></div>
+<ul>
+<li>시트 이름: <code>employees</code></li>
+<li>데이터 규모: 1,200행 × 9열</li>
+<li>사용할 컬럼: <code>dept</code>, <code>salary</code></li>
+</ul>
+<p>직접 해보기에서는 아래 파일을 사용한다.</p>
+<div class="code-scroll"><pre><code class="language-text">/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.xlsx
+</code></pre></div>
+<ul>
+<li>시트 이름: <code>sales</code></li>
+<li>데이터 규모: 10,424행 × 12열</li>
+<li>사용할 컬럼: <code>item</code>, <code>qty</code>, <code>amount</code></li>
+</ul>
+<h2>오늘의 목표</h2>
+<p>이번 실습에서는 직원 연봉 데이터로 부서별 분포를 비교한다. 평균만 구하고 끝내지 않고 중앙값, 최빈값, 범위, 표준편차까지 함께 구한 뒤 박스플롯으로 분포를 확인한다. 마지막에는 카페 주문 데이터에서 평균이 보통 주문금액을 과장해 보이게 만드는 사례를 찾는다.</p>
+<h2>따라하기 1. 부서별 연봉 요약표 만들기</h2>
+<h3>1단계. 파일 열고 컬럼 확인하기</h3>
+<ol>
+<li><code>hr_employees_clean.xlsx</code>를 연다.</li>
+<li><code>employees</code> 시트를 확인한다.</li>
+<li>다음 컬럼을 찾는다.</li>
+</ol>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>컬럼</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dept</code></td>
+<td>부서</td>
+</tr>
+<tr>
+<td><code>salary</code></td>
+<td>연봉</td>
+</tr>
+</tbody>
+</table></div>
+<p>이 파일은 1행이 제목이고, 실제 데이터는 2행부터 1,201행까지 있다. <code>dept</code>는 B열, <code>salary</code>는 G열이다.</p>
+<h3>2단계. 요약 시트 만들기</h3>
+<ol>
+<li>새 시트를 만든다.</li>
+<li>시트 이름을 <code>dept_salary_summary</code>로 바꾼다.</li>
+<li>A1:O1에 아래 제목을 입력한다.</li>
+</ol>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>셀</th>
+<th>제목</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A1</td>
+<td><code>dept</code></td>
+</tr>
+<tr>
+<td>B1</td>
+<td><code>count</code></td>
+</tr>
+<tr>
+<td>C1</td>
+<td><code>mean</code></td>
+</tr>
+<tr>
+<td>D1</td>
+<td><code>median</code></td>
+</tr>
+<tr>
+<td>E1</td>
+<td><code>mode</code></td>
+</tr>
+<tr>
+<td>F1</td>
+<td><code>min</code></td>
+</tr>
+<tr>
+<td>G1</td>
+<td><code>max</code></td>
+</tr>
+<tr>
+<td>H1</td>
+<td><code>range</code></td>
+</tr>
+<tr>
+<td>I1</td>
+<td><code>std_dev</code></td>
+</tr>
+<tr>
+<td>J1</td>
+<td><code>q1</code></td>
+</tr>
+<tr>
+<td>K1</td>
+<td><code>q3</code></td>
+</tr>
+<tr>
+<td>L1</td>
+<td><code>iqr</code></td>
+</tr>
+<tr>
+<td>M1</td>
+<td><code>lower_fence</code></td>
+</tr>
+<tr>
+<td>N1</td>
+<td><code>upper_fence</code></td>
+</tr>
+<tr>
+<td>O1</td>
+<td><code>outlier_count</code></td>
+</tr>
+</tbody>
+</table></div>
+<ol start="4">
+<li>A2:A6에 부서명을 입력한다.</li>
+</ol>
+<div class="code-scroll"><pre><code class="language-text">개발본부
+데이터전략팀
+영업본부
+인사총무팀
+고객운영팀
+</code></pre></div>
+<h3>3단계. 직원 수와 중심값 계산하기</h3>
+<p>B2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=COUNTIF(employees!$B$2:$B$1201,A2)
+</code></pre></div>
+<p>C2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=AVERAGEIF(employees!$B$2:$B$1201,A2,employees!$G$2:$G$1201)
+</code></pre></div>
+<p>D2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=MEDIAN(FILTER(employees!$G$2:$G$1201,employees!$B$2:$B$1201=A2))
+</code></pre></div>
+<p>E2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=MODE.SNGL(FILTER(employees!$G$2:$G$1201,employees!$B$2:$B$1201=A2))
+</code></pre></div>
+<p>B2:E2를 6행까지 채운다.</p>
+<p>뜻은 다음과 같다.</p>
+<ul>
+<li><code>count</code>: 부서별 직원 수</li>
+<li><code>mean</code>: 부서별 평균 연봉</li>
+<li><code>median</code>: 부서별 중앙 연봉</li>
+<li><code>mode</code>: 부서별 가장 자주 나오는 연봉</li>
+</ul>
+<h3>4단계. 범위와 표준편차 계산하기</h3>
+<p>F2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=MINIFS(employees!$G$2:$G$1201,employees!$B$2:$B$1201,A2)
+</code></pre></div>
+<p>G2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=MAXIFS(employees!$G$2:$G$1201,employees!$B$2:$B$1201,A2)
+</code></pre></div>
+<p>H2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=G2-F2
+</code></pre></div>
+<p>I2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=STDEV.S(FILTER(employees!$G$2:$G$1201,employees!$B$2:$B$1201=A2))
+</code></pre></div>
+<p>F2:I2를 6행까지 채운다.</p>
+<p>뜻은 다음과 같다.</p>
+<ul>
+<li><code>min</code>: 최저 연봉</li>
+<li><code>max</code>: 최고 연봉</li>
+<li><code>range</code>: 최고 연봉과 최저 연봉의 차이</li>
+<li><code>std_dev</code>: 평균 주변에서 값이 흩어진 정도</li>
+</ul>
+<h3>5단계. 사분위수와 이상치 기준 계산하기</h3>
+<p>J2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=QUARTILE.INC(FILTER(employees!$G$2:$G$1201,employees!$B$2:$B$1201=A2),1)
+</code></pre></div>
+<p>K2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=QUARTILE.INC(FILTER(employees!$G$2:$G$1201,employees!$B$2:$B$1201=A2),3)
+</code></pre></div>
+<p>L2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=K2-J2
+</code></pre></div>
+<p>M2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=J2-1.5*L2
+</code></pre></div>
+<p>N2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=K2+1.5*L2
+</code></pre></div>
+<p>O2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=COUNTIFS(employees!$B$2:$B$1201,A2,employees!$G$2:$G$1201,&quot;&lt;&quot;&amp;M2)+COUNTIFS(employees!$B$2:$B$1201,A2,employees!$G$2:$G$1201,&quot;&gt;&quot;&amp;N2)
+</code></pre></div>
+<p>J2:O2를 6행까지 채운다.</p>
+<p><code>FILTER</code> 함수가 없는 엑셀을 사용하는 경우에는 중앙값, 최빈값, 표준편차, 사분위수 계산을 다음 방식으로 대체한다.</p>
+<ol>
+<li><code>employees</code> 시트의 <code>dept</code>, <code>salary</code> 열을 빈 보조 영역에 복사한다.</li>
+<li>보조 영역을 <code>dept</code> 기준으로 정렬해 같은 부서의 <code>salary</code>가 연속되게 만든다. 또는 <code>dept</code> 필터로 한 부서만 보이게 한 뒤 보이는 <code>salary</code> 값을 보조열에 복사한다.</li>
+<li>각 부서의 <code>salary</code> 범위를 직접 참조해 <code>=MEDIAN(범위)</code>, <code>=MODE.SNGL(범위)</code>, <code>=STDEV.S(범위)</code>, <code>=QUARTILE.INC(범위,1)</code>, <code>=QUARTILE.INC(범위,3)</code>을 입력한다.</li>
+<li>예를 들어 개발본부 <code>salary</code>가 보조열 Q2:Q371에 있으면 D2에는 <code>=MEDIAN($Q$2:$Q$371)</code>, E2에는 <code>=MODE.SNGL($Q$2:$Q$371)</code>, I2에는 <code>=STDEV.S($Q$2:$Q$371)</code>, J2에는 <code>=QUARTILE.INC($Q$2:$Q$371,1)</code>, K2에는 <code>=QUARTILE.INC($Q$2:$Q$371,3)</code>을 입력한다.</li>
+</ol>
+<p>이상치 기준은 입문 단계에서 다음처럼 이해하면 된다.</p>
+<div class="code-scroll"><pre><code class="language-text">IQR = Q3 - Q1
+아래쪽 이상치 후보 = Q1 - 1.5 × IQR 보다 작은 값
+위쪽 이상치 후보 = Q3 + 1.5 × IQR 보다 큰 값
+</code></pre></div>
+<h3>6단계. 검산값 확인하기</h3>
+<p>아래 값과 큰 흐름이 맞으면 요약표가 정상적으로 만들어진 것이다. 평균과 표준편차는 소수 없이 반올림해 확인한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>부서</th>
+<th style="text-align: right;">직원 수</th>
+<th style="text-align: right;">평균</th>
+<th style="text-align: right;">중앙값</th>
+<th style="text-align: right;">범위</th>
+<th style="text-align: right;">표준편차</th>
+<th style="text-align: right;">이상치 수</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>개발본부</td>
+<td style="text-align: right;">370</td>
+<td style="text-align: right;">74,190,541</td>
+<td style="text-align: right;">73,950,000</td>
+<td style="text-align: right;">42,100,000</td>
+<td style="text-align: right;">8,094,278</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr>
+<td>데이터전략팀</td>
+<td style="text-align: right;">250</td>
+<td style="text-align: right;">68,902,000</td>
+<td style="text-align: right;">68,450,000</td>
+<td style="text-align: right;">47,500,000</td>
+<td style="text-align: right;">8,955,824</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td>영업본부</td>
+<td style="text-align: right;">240</td>
+<td style="text-align: right;">63,087,500</td>
+<td style="text-align: right;">62,700,000</td>
+<td style="text-align: right;">44,900,000</td>
+<td style="text-align: right;">8,070,936</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr>
+<td>인사총무팀</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: right;">59,414,444</td>
+<td style="text-align: right;">59,100,000</td>
+<td style="text-align: right;">47,500,000</td>
+<td style="text-align: right;">8,771,463</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr>
+<td>고객운영팀</td>
+<td style="text-align: right;">160</td>
+<td style="text-align: right;">53,445,625</td>
+<td style="text-align: right;">53,300,000</td>
+<td style="text-align: right;">36,900,000</td>
+<td style="text-align: right;">8,456,056</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table></div>
+<h2>따라하기 2. 부서별 연봉 박스플롯 만들기</h2>
+<h3>1단계. 박스플롯용 시트 만들기</h3>
+<ol>
+<li>새 시트를 만든다.</li>
+<li>시트 이름을 <code>dept_boxplot</code>으로 바꾼다.</li>
+<li>A1:E1에 부서명을 입력한다.</li>
+</ol>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>셀</th>
+<th>제목</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A1</td>
+<td><code>개발본부</code></td>
+</tr>
+<tr>
+<td>B1</td>
+<td><code>데이터전략팀</code></td>
+</tr>
+<tr>
+<td>C1</td>
+<td><code>영업본부</code></td>
+</tr>
+<tr>
+<td>D1</td>
+<td><code>인사총무팀</code></td>
+</tr>
+<tr>
+<td>E1</td>
+<td><code>고객운영팀</code></td>
+</tr>
+</tbody>
+</table></div>
+<h3>2단계. 부서별 연봉을 열로 펼치기</h3>
+<p>A2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=FILTER(employees!$G$2:$G$1201,employees!$B$2:$B$1201=A$1)
+</code></pre></div>
+<p>A2 셀의 수식을 E2까지 복사한다.</p>
+<p>각 부서의 연봉이 아래쪽으로 자동으로 펼쳐진다. 부서마다 직원 수가 다르므로 열마다 채워지는 길이가 다를 수 있다.</p>
+<p><code>FILTER</code> 함수가 없는 엑셀을 사용하는 경우에는 다음 방식으로 대체한다.</p>
+<ol>
+<li><code>employees</code> 시트에서 <code>dept</code> 열에 필터를 건다.</li>
+<li><code>개발본부</code>만 선택한다.</li>
+<li>보이는 <code>salary</code> 값을 복사해 <code>dept_boxplot</code> 시트 A열에 붙여넣는다.</li>
+<li>나머지 부서도 B열부터 E열까지 같은 방식으로 붙여넣는다.</li>
+</ol>
+<h3>3단계. 박스플롯 삽입하기</h3>
+<ol>
+<li><code>dept_boxplot</code> 시트에서 A1:E371 범위를 선택한다.</li>
+<li>상단 메뉴에서 <code>삽입</code>을 클릭한다.</li>
+<li><code>통계 차트 삽입</code>을 클릭한다.</li>
+<li><code>박스플롯</code>을 선택한다.</li>
+<li>차트 제목을 <code>부서별 연봉 분포</code>로 바꾼다.</li>
+</ol>
+<p>차트에서 따로 찍힌 점은 이상치 후보로 본다. 이 실습 데이터에서는 개발본부, 데이터전략팀, 영업본부, 인사총무팀에 위쪽 이상치 후보가 있고, 고객운영팀에는 IQR 기준 이상치가 없다.</p>
+<h3>4단계. 결과 해석하기</h3>
+<p>아래 문장을 참고해 자기 말로 해석한다.</p>
+<div class="code-scroll"><pre><code class="language-text">개발본부는 평균과 중앙값이 가장 높다. 고객운영팀은 평균과 중앙값이 가장 낮다. 데이터전략팀과 인사총무팀은 범위가 47,500,000원으로 넓고, 박스플롯에서도 연봉이 넓게 퍼진 모습을 확인할 수 있다. 개발본부에는 위쪽 이상치 후보가 6건 있다.
+</code></pre></div>
+<h2>직접 해보기. 평균 왜곡 사례 찾기</h2>
+<h3>미션</h3>
+<p><code>cafe_sales_clean.xlsx</code>의 <code>sales</code> 시트에서 상품별 주문금액 <code>amount</code>를 비교한다. 평균이 중앙값보다 많이 높은 상품을 찾아, 평균만 보면 왜 보통 주문금액을 잘못 이해할 수 있는지 설명한다.</p>
+<h3>조건</h3>
+<ol>
+<li><code>cafe_sales_clean.xlsx</code>를 연다.</li>
+<li>새 시트를 만들고 이름을 <code>item_amount_summary</code>로 바꾼다.</li>
+<li>상품별로 주문 건수, 평균, 중앙값, 최빈값, 최솟값, 최댓값, 범위, 표준편차를 계산한다.</li>
+<li><code>mean_minus_median</code>을 만든다.</li>
+<li><code>mean_minus_median</code>이 가장 큰 상품을 찾는다.</li>
+<li>그 상품의 <code>qty</code> 분포를 확인해 왜 평균이 올라갔는지 설명한다.</li>
+</ol>
+<h3>계산표 만들기</h3>
+<p>A1:K1에 아래 제목을 입력한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>셀</th>
+<th>제목</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A1</td>
+<td><code>item</code></td>
+</tr>
+<tr>
+<td>B1</td>
+<td><code>count</code></td>
+</tr>
+<tr>
+<td>C1</td>
+<td><code>mean</code></td>
+</tr>
+<tr>
+<td>D1</td>
+<td><code>median</code></td>
+</tr>
+<tr>
+<td>E1</td>
+<td><code>mode</code></td>
+</tr>
+<tr>
+<td>F1</td>
+<td><code>min</code></td>
+</tr>
+<tr>
+<td>G1</td>
+<td><code>max</code></td>
+</tr>
+<tr>
+<td>H1</td>
+<td><code>range</code></td>
+</tr>
+<tr>
+<td>I1</td>
+<td><code>std_dev</code></td>
+</tr>
+<tr>
+<td>J1</td>
+<td><code>mean_minus_median</code></td>
+</tr>
+<tr>
+<td>K1</td>
+<td><code>mean_to_median_ratio</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>A2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=SORT(UNIQUE(sales!$G$2:$G$10425))
+</code></pre></div>
+<p><code>SORT</code>와 <code>UNIQUE</code> 함수가 없는 엑셀을 사용하는 경우에는 다음 방식으로 상품 목록을 만든다.</p>
+<ol>
+<li><code>sales</code> 시트의 <code>item</code> 열을 빈 보조열에 복사한다.</li>
+<li>보조열에서 중복된 항목을 제거해 고유 상품 목록만 남긴다.</li>
+<li>남은 상품 목록을 오름차순으로 정렬한 뒤 <code>item_amount_summary</code> 시트 A2부터 붙여넣는다.</li>
+<li>또는 <code>sales</code> 시트를 <code>item</code> 기준으로 정렬한 뒤 상품명이 바뀌는 첫 행의 상품명만 A2부터 복사한다.</li>
+</ol>
+<p>B2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=COUNTIF(sales!$G$2:$G$10425,A2)
+</code></pre></div>
+<p>C2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=AVERAGEIF(sales!$G$2:$G$10425,A2,sales!$J$2:$J$10425)
+</code></pre></div>
+<p>D2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=MEDIAN(FILTER(sales!$J$2:$J$10425,sales!$G$2:$G$10425=A2))
+</code></pre></div>
+<p>E2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=MODE.SNGL(FILTER(sales!$J$2:$J$10425,sales!$G$2:$G$10425=A2))
+</code></pre></div>
+<p>F2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=MINIFS(sales!$J$2:$J$10425,sales!$G$2:$G$10425,A2)
+</code></pre></div>
+<p>G2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=MAXIFS(sales!$J$2:$J$10425,sales!$G$2:$G$10425,A2)
+</code></pre></div>
+<p>H2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=G2-F2
+</code></pre></div>
+<p>I2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=STDEV.S(FILTER(sales!$J$2:$J$10425,sales!$G$2:$G$10425=A2))
+</code></pre></div>
+<p>J2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=C2-D2
+</code></pre></div>
+<p>K2 셀에 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-excel">=C2/D2
+</code></pre></div>
+<p>B2:K2를 상품 목록 마지막 행까지 채운다. 그 다음 J열을 기준으로 내림차순 정렬한다.</p>
+<p><code>FILTER</code> 함수가 없는 엑셀에서는 <code>sales</code> 시트를 <code>item</code> 기준으로 정렬해 상품별 <code>amount</code> 범위를 직접 참조한다. 또는 <code>item</code> 필터로 한 상품만 보이게 한 뒤 보이는 <code>amount</code> 값을 보조열에 복사하고, 그 범위로 <code>MEDIAN</code>, <code>MODE.SNGL</code>, <code>STDEV.S</code>를 계산한다.</p>
+<h3>제출할 답</h3>
+<p>아래 형식으로 한 문장을 작성한다.</p>
+<div class="code-scroll"><pre><code class="language-text">평균 왜곡 사례로 볼 수 있는 상품은 ______이다. 이 상품의 평균 주문금액은 ______원이고 중앙값은 ______원이다. 평균이 더 큰 이유는 ______ 때문이다. 따라서 보통 주문금액을 말할 때는 평균만 말하기보다 중앙값과 최빈값도 함께 봐야 한다.
+</code></pre></div>
+<h2>제출 전 확인</h2>
+<p>따라하기 결과에서 아래 값이 맞는지 확인한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th style="text-align: right;">기준값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>HR 데이터 행수</td>
+<td style="text-align: right;">1,200</td>
+</tr>
+<tr>
+<td>카페 주문 데이터 행수</td>
+<td style="text-align: right;">10,424</td>
+</tr>
+<tr>
+<td>개발본부 평균 연봉</td>
+<td style="text-align: right;">74,190,541</td>
+</tr>
+<tr>
+<td>고객운영팀 평균 연봉</td>
+<td style="text-align: right;">53,445,625</td>
+</tr>
+<tr>
+<td>개발본부 이상치 수</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr>
+<td>고객운영팀 이상치 수</td>
+<td style="text-align: right;">0</td>
+</tr>
+<tr>
+<td>평균 왜곡 미션 1위 상품</td>
+<td style="text-align: right;">치즈케이크</td>
+</tr>
+<tr>
+<td>치즈케이크 평균 주문금액</td>
+<td style="text-align: right;">10,740.92</td>
+</tr>
+<tr>
+<td>치즈케이크 중앙값</td>
+<td style="text-align: right;">6,500</td>
+</tr>
+</tbody>
+</table></div>
+</section>
+<section class="tab-panel markdown-body" data-panel="script" aria-label="강사대본">
+<h1>S05 강사대본: 중심·산포·분포·박스플롯</h1>
+<h2>수업 전 준비</h2>
+<ul>
+<li>파일 확인: <code>/mnt/d/ai-data-analysis-course/02_datasets/hr_employees/hr_employees_clean.xlsx</code></li>
+<li>시트 확인: <code>employees</code></li>
+<li>실제 데이터 행수: 1,200행</li>
+<li>파일 확인: <code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.xlsx</code></li>
+<li>시트 확인: <code>sales</code></li>
+<li>실제 데이터 행수: 10,424행</li>
+<li>엑셀에서 <code>FILTER</code>, <code>UNIQUE</code>, <code>SORT</code> 함수가 동작하는지 확인한다. 동작하지 않는 환경에서는 필터 후 복사 방식으로 대체한다.</li>
+<li>박스플롯 메뉴 위치를 미리 확인한다. 엑셀에서는 보통 <code>삽입</code> &gt; <code>통계 차트 삽입</code> &gt; <code>상자 수염 그림</code>에 있다.</li>
+</ul>
+<h2>도입: 0-5분</h2>
+<p>오늘은 숫자 한 열을 제대로 읽는 방법을 다룬다.</p>
+<p>지난 시간에는 피벗테이블로 지점별 매출, 요일별 매출처럼 데이터를 요약했다. 그런데 요약표를 만들고 나면 다음 질문이 생긴다. 평균이 높으면 정말 그 그룹이 전체적으로 높은 것인지, 아니면 몇 개의 큰 값이 평균을 끌어올린 것인지 확인해야 한다.</p>
+<p>예를 들어 어떤 상품의 평균 주문금액이 10,000원이라고 해도 대부분의 손님이 10,000원을 쓰는 것은 아닐 수 있다. 6,500원 주문이 많고, 19,500원 주문이 일부 있으면 평균은 10,000원 근처로 올라갈 수 있다. 그래서 평균과 함께 중앙값, 최빈값, 퍼짐을 같이 봐야 한다.</p>
+<p>오늘의 핵심 문장은 이것이다.</p>
+<div class="code-scroll"><pre><code class="language-text">평균은 중요하지만 혼자서는 부족하다.
+</code></pre></div>
+<h2>중심값 설명: 5-13분</h2>
+<p>말할 내용:</p>
+<p>대표값은 숫자 목록을 한 숫자로 요약하려는 시도다. 그중 가장 익숙한 것이 평균, 곧 합계를 개수로 나눈 값이다. 회사의 평균 연봉, 매장의 평균 주문금액, 고객의 평균 만족도처럼 실무에서 늘 쓴다.</p>
+<p>하지만 평균은 큰 값과 작은 값에 민감하다. 한 사람이 아주 높은 연봉을 받거나, 어떤 주문이 평소보다 큰 금액이면 평균이 올라간다.</p>
+<p>중앙값은 줄을 세웠을 때 가운데 값이다. 극단값이 있어도 가운데 위치가 크게 바뀌지 않으므로 보통의 값을 설명할 때 유용하다. 최빈값은 가장 자주 나온 값이다. 가격이나 주문금액처럼 같은 값이 반복되는 데이터에서는 최빈값도 해석에 도움이 된다.</p>
+<p>화이트보드 또는 말로 예시:</p>
+<div class="code-scroll"><pre><code class="language-text">6,500 / 6,500 / 6,500 / 13,000 / 19,500
+</code></pre></div>
+<p>이 값들의 중앙값은 6,500원이다. 그러나 평균은 10,400원이다. 대부분의 주문이 6,500원인데 평균만 말하면 보통 주문이 더 비싼 것처럼 보일 수 있다.</p>
+<h2>산포 설명: 13-20분</h2>
+<p>말할 내용:</p>
+<p>대표값은 중심을 말한다. 그러나 중심만으로는 충분하지 않다. 두 부서의 평균 연봉이 같아도 한 부서는 모두 비슷하게 받고, 다른 부서는 낮은 연봉과 높은 연봉이 섞여 있을 수 있다. 이 차이를 보는 것이 산포다.</p>
+<p>범위는 최댓값에서 최솟값을 뺀 값이다. 가장 이해하기 쉽지만 양끝 값 두 개에만 의존한다. 표준편차는 평균 주변에서 값들이 얼마나 흩어져 있는지 보는 지표다. 입문 단계에서는 표준편차의 계산식보다 해석을 기억하면 된다.</p>
+<div class="code-scroll"><pre><code class="language-text">표준편차가 작으면 평균 근처에 모여 있다.
+표준편차가 크면 평균에서 넓게 퍼져 있다.
+</code></pre></div>
+<h2>따라하기 1: 부서별 연봉 요약표: 20-32분</h2>
+<p>시연 포인트:</p>
+<ol>
+<li><code>hr_employees_clean.xlsx</code>를 연다.</li>
+<li><code>employees</code> 시트에서 <code>dept</code>가 B열, <code>salary</code>가 G열임을 확인한다.</li>
+<li>새 시트 <code>dept_salary_summary</code>를 만든다.</li>
+<li>부서별 직원 수, 평균, 중앙값, 최빈값, 최솟값, 최댓값, 범위, 표준편차를 계산한다.</li>
+<li>사분위수, IQR, 이상치 기준을 계산한다.</li>
+</ol>
+<p>입력할 핵심 공식:</p>
+<div class="code-scroll"><pre><code class="language-excel">=COUNTIF(employees!$B$2:$B$1201,A2)
+</code></pre></div>
+<div class="code-scroll"><pre><code class="language-excel">=AVERAGEIF(employees!$B$2:$B$1201,A2,employees!$G$2:$G$1201)
+</code></pre></div>
+<div class="code-scroll"><pre><code class="language-excel">=MEDIAN(FILTER(employees!$G$2:$G$1201,employees!$B$2:$B$1201=A2))
+</code></pre></div>
+<div class="code-scroll"><pre><code class="language-excel">=STDEV.S(FILTER(employees!$G$2:$G$1201,employees!$B$2:$B$1201=A2))
+</code></pre></div>
+<p>말할 내용:</p>
+<p>개발본부의 평균 연봉은 약 7,419만 원이고 중앙값은 약 7,395만 원이다. 고객운영팀의 평균은 약 5,345만 원이고 중앙값은 약 5,330만 원이다. 평균과 중앙값이 크게 다르지는 않지만, 부서 간 수준 차이는 분명하다.</p>
+<p>표준편차를 보면 데이터전략팀이 약 895만 원으로 가장 크다. 평균 수준뿐 아니라 부서 안에서 연봉이 얼마나 넓게 퍼져 있는지도 봐야 한다.</p>
+<p>사분위수는 박스플롯을 이해하기 위한 준비다. Q1은 하위 25% 지점, Q3는 상위 25% 지점이다. Q3에서 Q1을 뺀 값이 IQR이다. 보통 Q1보다 <code>1.5 × IQR</code>만큼 더 낮거나, Q3보다 <code>1.5 × IQR</code>만큼 더 높은 값을 이상치 후보로 본다.</p>
+<p>검산값:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>부서</th>
+<th style="text-align: right;">직원 수</th>
+<th style="text-align: right;">평균</th>
+<th style="text-align: right;">중앙값</th>
+<th style="text-align: right;">표준편차</th>
+<th style="text-align: right;">이상치 수</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>개발본부</td>
+<td style="text-align: right;">370</td>
+<td style="text-align: right;">74,190,541</td>
+<td style="text-align: right;">73,950,000</td>
+<td style="text-align: right;">8,094,278</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr>
+<td>데이터전략팀</td>
+<td style="text-align: right;">250</td>
+<td style="text-align: right;">68,902,000</td>
+<td style="text-align: right;">68,450,000</td>
+<td style="text-align: right;">8,955,824</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td>영업본부</td>
+<td style="text-align: right;">240</td>
+<td style="text-align: right;">63,087,500</td>
+<td style="text-align: right;">62,700,000</td>
+<td style="text-align: right;">8,070,936</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr>
+<td>인사총무팀</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: right;">59,414,444</td>
+<td style="text-align: right;">59,100,000</td>
+<td style="text-align: right;">8,771,463</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr>
+<td>고객운영팀</td>
+<td style="text-align: right;">160</td>
+<td style="text-align: right;">53,445,625</td>
+<td style="text-align: right;">53,300,000</td>
+<td style="text-align: right;">8,456,056</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table></div>
+<h2>따라하기 2: 박스플롯 만들기: 32-40분</h2>
+<p>시연 포인트:</p>
+<ol>
+<li>새 시트 <code>dept_boxplot</code>을 만든다.</li>
+<li>A1:E1에 부서명을 넣는다.</li>
+<li>A2에 <code>FILTER</code> 수식을 넣고 E2까지 복사한다.</li>
+<li>A1:E371 범위를 선택한다.</li>
+<li><code>삽입</code> &gt; <code>통계 차트 삽입</code> &gt; <code>상자 수염 그림</code>을 선택한다.</li>
+</ol>
+<p>입력 공식:</p>
+<div class="code-scroll"><pre><code class="language-excel">=FILTER(employees!$G$2:$G$1201,employees!$B$2:$B$1201=A$1)
+</code></pre></div>
+<p>말할 내용:</p>
+<p>박스플롯은 평균을 그리는 차트가 아니다. 가운데 선은 중앙값이고, 박스는 가운데 50%의 값이다. 박스가 위쪽에 있으면 전반적인 수준이 높고, 박스가 길면 값들이 넓게 퍼져 있다는 뜻이다. 따로 찍힌 점은 이상치 후보다.</p>
+<p>이 데이터에서는 개발본부의 박스가 다른 부서보다 위쪽에 있다. 고객운영팀은 아래쪽에 있다. 개발본부에는 위쪽 이상치 후보가 6건 있고, 고객운영팀에는 IQR 기준 이상치가 없다.</p>
+<p>강조할 점:</p>
+<p>이상치는 무조건 삭제할 값이 아니라 먼저 확인할 값이다. 실제로 높은 연봉을 받는 임원이나 고성과자일 수도 있고, 입력 오류일 수도 있다. 오늘은 깨끗한 합성 데이터이므로 삭제하지 않고 분포 해석에만 사용한다.</p>
+<h2>직접 해보기 안내: 40-47분</h2>
+<p>미션:</p>
+<p><code>cafe_sales_clean.xlsx</code>의 <code>sales</code> 시트에서 상품별 주문금액의 평균과 중앙값을 비교한다. 평균이 중앙값보다 가장 많이 높은 상품을 찾고, 왜 평균만 보면 보통 주문금액을 과장할 수 있는지 설명한다.</p>
+<p>힌트로 말할 내용:</p>
+<p>상품명은 <code>item</code> 컬럼이고 G열에 있다. 주문금액은 <code>amount</code> 컬럼이고 J열에 있다. 상품별 평균은 <code>AVERAGEIF</code>로 구할 수 있고, 상품별 중앙값은 <code>MEDIAN(FILTER(...))</code>로 구할 수 있다.</p>
+<p>추가 힌트:</p>
+<p>평균과 중앙값의 차이를 보려면 <code>mean_minus_median</code> 열을 만든다. 이 열이 클수록 평균이 중앙값보다 많이 높다는 뜻이다.</p>
+<p>정답 방향:</p>
+<p>가장 큰 사례는 치즈케이크다. 치즈케이크의 평균 주문금액은 10,740.92원이고 중앙값은 6,500원이다. 치즈케이크 주문 633건 중 331건은 1개 주문이라 6,500원이다. 그러나 2개 주문 191건, 3개 주문 111건이 평균을 끌어올린다. 따라서 보통 주문금액을 말할 때 평균만 말하면 1개 주문이 많은 현실을 놓칠 수 있다.</p>
+<h2>정리: 47-50분</h2>
+<p>말할 내용:</p>
+<p>오늘 배운 것은 계산 함수 목록이 아니라 숫자를 읽는 태도다. 평균은 전체 수준을 빠르게 짚어 주고, 중앙값은 보통의 위치를, 최빈값은 가장 자주 나온 값을 알려 준다. 범위와 표준편차는 값이 얼마나 퍼져 있는지를 말해 주고, 박스플롯은 이 모두를 한 장의 그림으로 접어 보여 준다.</p>
+<p>실무에서 평균을 말할 때는 가능하면 중앙값과 표준편차 또는 박스플롯을 함께 확인해야 한다. 그래야 "평균은 높은데 실제 보통 값은 낮은" 상황을 놓치지 않는다.</p>
+<h2>예상 질문과 답변</h2>
+<h3>Q1. 평균과 중앙값 중 무엇이 더 정확한가요?</h3>
+<p>둘 중 하나가 항상 더 정확한 것은 아니다. 평균은 전체 합계가 중요할 때 좋고, 중앙값은 보통의 값을 설명할 때 좋다. 극단값이 있거나 분포가 한쪽으로 치우치면 중앙값을 함께 보는 것이 안전하다.</p>
+<h3>Q2. 최빈값은 왜 필요한가요?</h3>
+<p>가장 자주 나온 값을 알고 싶을 때 필요하다. 주문금액처럼 같은 금액이 반복되는 데이터에서는 "가장 흔한 주문금액"을 말할 수 있다. 반대로 값이 거의 모두 다른 데이터에서는 최빈값의 의미가 약할 수 있다.</p>
+<h3>Q3. 표준편차 숫자가 크면 나쁜 건가요?</h3>
+<p>나쁘다는 뜻은 아니다. 값들이 넓게 퍼져 있다는 뜻이다. 연봉 데이터에서 표준편차가 크면 같은 부서 안에서도 낮은 연봉과 높은 연봉이 섞여 있다는 의미일 수 있다. 해석은 업무 맥락과 함께 해야 한다.</p>
+<h3>Q4. 박스플롯의 점은 삭제해야 하나요?</h3>
+<p>아니다. 점은 이상치 후보일 뿐이다. 실제로 의미 있는 높은 값일 수도 있고 입력 오류일 수도 있다. 먼저 원본 행을 확인하고, 삭제 여부는 분석 목적에 따라 결정한다.</p>
+<h3>Q5. <code>FILTER</code> 함수가 안 됩니다.</h3>
+<p>엑셀 버전에 따라 <code>FILTER</code>가 없을 수 있다. 이 경우 원본 시트에서 부서 또는 상품으로 필터를 걸고, 보이는 숫자만 복사해 별도 열에 붙여넣은 뒤 <code>MEDIAN</code>, <code>STDEV.S</code>, 박스플롯을 만들면 된다.</p>
+<h2>완료 판단 체크포인트</h2>
+<p>수강생이 부서별 연봉 요약표와 박스플롯을 만들고, <code>개발본부 평균 연봉은 74,190,541원이며 이상치 후보는 6건</code>, <code>치즈케이크는 평균 10,740.92원보다 중앙값 6,500원이 보통 주문금액을 더 잘 설명한다</code>를 자기 말로 설명하면 완료로 판단한다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="answer" aria-label="모범답안">
+<h1>S05 모범답안: 평균 왜곡 사례 찾기</h1>
+<h2>미션</h2>
+<p><code>cafe_sales_clean.xlsx</code>의 <code>sales</code> 시트에서 상품별 주문금액 <code>amount</code>를 비교한다. 평균이 중앙값보다 많이 높은 상품을 찾아, 평균만 보면 왜 보통 주문금액을 잘못 이해할 수 있는지 설명한다.</p>
+<h2>모범답안</h2>
+<p>평균 왜곡 사례로 볼 수 있는 상품은 <code>치즈케이크</code>다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th style="text-align: right;">값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>주문 건수</td>
+<td style="text-align: right;">633</td>
+</tr>
+<tr>
+<td>평균 주문금액</td>
+<td style="text-align: right;">10,740.92</td>
+</tr>
+<tr>
+<td>중앙값</td>
+<td style="text-align: right;">6,500</td>
+</tr>
+<tr>
+<td>최빈값</td>
+<td style="text-align: right;">6,500</td>
+</tr>
+<tr>
+<td>최솟값</td>
+<td style="text-align: right;">6,500</td>
+</tr>
+<tr>
+<td>최댓값</td>
+<td style="text-align: right;">19,500</td>
+</tr>
+<tr>
+<td>평균 - 중앙값</td>
+<td style="text-align: right;">4,240.92</td>
+</tr>
+<tr>
+<td>평균 / 중앙값</td>
+<td style="text-align: right;">1.65</td>
+</tr>
+</tbody>
+</table></div>
+<p>해석:</p>
+<div class="code-scroll"><pre><code class="language-text">치즈케이크의 평균 주문금액은 10,740.92원이지만 중앙값과 최빈값은 6,500원이다. 주문 633건 중 331건은 1개 주문이라 6,500원이고, 2개 주문 191건과 3개 주문 111건이 평균을 끌어올린다. 따라서 &quot;보통 치즈케이크 주문은 얼마인가&quot;를 말할 때 평균만 사용하면 실제로 가장 흔한 6,500원 주문을 과장해 볼 수 있다. 매출 계획에는 평균이 유용하지만, 보통 주문금액 설명에는 중앙값과 최빈값을 함께 보는 것이 좋다.
+</code></pre></div>
+<h2>상위 평균 왜곡 후보</h2>
+<p>상품별 <code>평균 - 중앙값</code>을 내림차순으로 정렬하면 상위 후보는 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>상품</th>
+<th style="text-align: right;">주문 건수</th>
+<th style="text-align: right;">평균</th>
+<th style="text-align: right;">중앙값</th>
+<th style="text-align: right;">평균 - 중앙값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>치즈케이크</td>
+<td style="text-align: right;">633</td>
+<td style="text-align: right;">10,740.92</td>
+<td style="text-align: right;">6,500</td>
+<td style="text-align: right;">4,240.92</td>
+</tr>
+<tr>
+<td>레몬에이드</td>
+<td style="text-align: right;">644</td>
+<td style="text-align: right;">9,940.99</td>
+<td style="text-align: right;">6,000</td>
+<td style="text-align: right;">3,940.99</td>
+</tr>
+<tr>
+<td>크로플</td>
+<td style="text-align: right;">609</td>
+<td style="text-align: right;">9,112.48</td>
+<td style="text-align: right;">5,500</td>
+<td style="text-align: right;">3,612.48</td>
+</tr>
+<tr>
+<td>바닐라라떼</td>
+<td style="text-align: right;">1,151</td>
+<td style="text-align: right;">9,098.18</td>
+<td style="text-align: right;">5,500</td>
+<td style="text-align: right;">3,598.18</td>
+</tr>
+<tr>
+<td>복숭아아이스티</td>
+<td style="text-align: right;">652</td>
+<td style="text-align: right;">9,051.38</td>
+<td style="text-align: right;">5,500</td>
+<td style="text-align: right;">3,551.38</td>
+</tr>
+</tbody>
+</table></div>
+<h2>치즈케이크 수량 분포</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;">주문 수량</th>
+<th style="text-align: right;">주문 건수</th>
+<th style="text-align: right;">주문금액</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">331</td>
+<td style="text-align: right;">6,500</td>
+</tr>
+<tr>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">191</td>
+<td style="text-align: right;">13,000</td>
+</tr>
+<tr>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">111</td>
+<td style="text-align: right;">19,500</td>
+</tr>
+</tbody>
+</table></div>
+<p>치즈케이크는 1개 주문이 절반 이상이므로 중앙값과 최빈값이 6,500원이다. 그러나 2개와 3개 주문이 302건 있어 평균은 10,740.92원까지 올라간다. 이 사례는 데이터 오류가 아니라 평균의 성격 때문에 생기는 해석상 주의점이다.</p>
+<h2>따라하기 결과 해설</h2>
+<h3>HR 직원 데이터</h3>
+<p>검증 파일:</p>
+<p><code>/mnt/d/ai-data-analysis-course/02_datasets/hr_employees/hr_employees_clean.csv</code></p>
+<p>실제 확인 결과:</p>
+<ul>
+<li>행수: 1,200행</li>
+<li>열수: 9열</li>
+<li>결측값: 없음</li>
+<li>사용 열: <code>dept</code>, <code>salary</code></li>
+</ul>
+<p>부서별 연봉 요약:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>부서</th>
+<th style="text-align: right;">직원 수</th>
+<th style="text-align: right;">평균</th>
+<th style="text-align: right;">중앙값</th>
+<th style="text-align: right;">최빈값</th>
+<th style="text-align: right;">최솟값</th>
+<th style="text-align: right;">최댓값</th>
+<th style="text-align: right;">범위</th>
+<th style="text-align: right;">표준편차</th>
+<th style="text-align: right;">이상치 수</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>개발본부</td>
+<td style="text-align: right;">370</td>
+<td style="text-align: right;">74,190,541</td>
+<td style="text-align: right;">73,950,000</td>
+<td style="text-align: right;">67,900,000</td>
+<td style="text-align: right;">56,700,000</td>
+<td style="text-align: right;">98,800,000</td>
+<td style="text-align: right;">42,100,000</td>
+<td style="text-align: right;">8,094,278</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr>
+<td>데이터전략팀</td>
+<td style="text-align: right;">250</td>
+<td style="text-align: right;">68,902,000</td>
+<td style="text-align: right;">68,450,000</td>
+<td style="text-align: right;">63,300,000</td>
+<td style="text-align: right;">49,700,000</td>
+<td style="text-align: right;">97,200,000</td>
+<td style="text-align: right;">47,500,000</td>
+<td style="text-align: right;">8,955,824</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr>
+<td>영업본부</td>
+<td style="text-align: right;">240</td>
+<td style="text-align: right;">63,087,500</td>
+<td style="text-align: right;">62,700,000</td>
+<td style="text-align: right;">57,900,000</td>
+<td style="text-align: right;">47,200,000</td>
+<td style="text-align: right;">92,100,000</td>
+<td style="text-align: right;">44,900,000</td>
+<td style="text-align: right;">8,070,936</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr>
+<td>인사총무팀</td>
+<td style="text-align: right;">180</td>
+<td style="text-align: right;">59,414,444</td>
+<td style="text-align: right;">59,100,000</td>
+<td style="text-align: right;">62,300,000</td>
+<td style="text-align: right;">39,900,000</td>
+<td style="text-align: right;">87,400,000</td>
+<td style="text-align: right;">47,500,000</td>
+<td style="text-align: right;">8,771,463</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr>
+<td>고객운영팀</td>
+<td style="text-align: right;">160</td>
+<td style="text-align: right;">53,445,625</td>
+<td style="text-align: right;">53,300,000</td>
+<td style="text-align: right;">44,900,000</td>
+<td style="text-align: right;">36,700,000</td>
+<td style="text-align: right;">73,600,000</td>
+<td style="text-align: right;">36,900,000</td>
+<td style="text-align: right;">8,456,056</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table></div>
+<p>해석:</p>
+<div class="code-scroll"><pre><code class="language-text">개발본부는 평균과 중앙값이 가장 높다. 고객운영팀은 평균과 중앙값이 가장 낮다. 데이터전략팀은 표준편차가 가장 커서 부서 안 연봉의 퍼짐이 비교적 크다. 개발본부에는 IQR 기준 위쪽 이상치 후보가 6건 있고, 고객운영팀에는 이상치 후보가 없다.
+</code></pre></div>
+<h3>카페 주문 데이터</h3>
+<p>검증 파일:</p>
+<p><code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.csv</code></p>
+<p>실제 확인 결과:</p>
+<ul>
+<li>행수: 10,424행</li>
+<li>열수: 12열</li>
+<li>결측값: 없음</li>
+<li>사용 열: <code>item</code>, <code>qty</code>, <code>amount</code></li>
+</ul>
+<p>전체 주문금액 요약:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th style="text-align: right;">값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>평균</td>
+<td style="text-align: right;">8,681.17</td>
+</tr>
+<tr>
+<td>중앙값</td>
+<td style="text-align: right;">6,500</td>
+</tr>
+<tr>
+<td>최빈값</td>
+<td style="text-align: right;">5,500</td>
+</tr>
+<tr>
+<td>최솟값</td>
+<td style="text-align: right;">3,000</td>
+</tr>
+<tr>
+<td>최댓값</td>
+<td style="text-align: right;">19,500</td>
+</tr>
+<tr>
+<td>표준편차</td>
+<td style="text-align: right;">4,231.60</td>
+</tr>
+</tbody>
+</table></div>
+<p>전체 주문금액에서도 평균 8,681.17원이 중앙값 6,500원보다 높다. 주문 수량이 2개 또는 3개인 행이 평균을 끌어올리기 때문이다.</p>
+<h2>엑셀 풀이 요약</h2>
+<p><code>item_amount_summary</code> 시트에서 상품별 요약표를 만든다.</p>
+<p>상품 목록:</p>
+<div class="code-scroll"><pre><code class="language-excel">=SORT(UNIQUE(sales!$G$2:$G$10425))
+</code></pre></div>
+<p>주문 건수:</p>
+<div class="code-scroll"><pre><code class="language-excel">=COUNTIF(sales!$G$2:$G$10425,A2)
+</code></pre></div>
+<p>평균:</p>
+<div class="code-scroll"><pre><code class="language-excel">=AVERAGEIF(sales!$G$2:$G$10425,A2,sales!$J$2:$J$10425)
+</code></pre></div>
+<p>중앙값:</p>
+<div class="code-scroll"><pre><code class="language-excel">=MEDIAN(FILTER(sales!$J$2:$J$10425,sales!$G$2:$G$10425=A2))
+</code></pre></div>
+<p>최빈값:</p>
+<div class="code-scroll"><pre><code class="language-excel">=MODE.SNGL(FILTER(sales!$J$2:$J$10425,sales!$G$2:$G$10425=A2))
+</code></pre></div>
+<p>평균과 중앙값의 차이:</p>
+<div class="code-scroll"><pre><code class="language-excel">=C2-D2
+</code></pre></div>
+<p><code>평균 - 중앙값</code> 열을 내림차순으로 정렬하면 <code>치즈케이크</code>가 1위다.</p>
+<h2>강사용 검증 코드</h2>
+<p>아래 코드는 엑셀 풀이와 같은 계산을 pandas로 재현해 검산한 코드다. 이 차시는 엑셀 차시이므로 수강생 실습용 코드는 엑셀 공식이며, 별도 <code>S05_code.py</code> 산출물은 만들지 않는다.</p>
+<div class="code-scroll"><pre><code class="language-python">from pathlib import Path
+
+import pandas as pd
+
+
+ROOT = Path(&quot;/mnt/d/ai-data-analysis-course&quot;)
+HR_PATH = ROOT / &quot;02_datasets/hr_employees/hr_employees_clean.csv&quot;
+CAFE_PATH = ROOT / &quot;02_datasets/cafe_sales/cafe_sales_clean.csv&quot;
+
+hr = pd.read_csv(HR_PATH)
+cafe = pd.read_csv(CAFE_PATH)
+
+
+def first_mode(values: pd.Series):
+    modes = values.mode()
+    return modes.iloc[0] if not modes.empty else pd.NA
+
+
+def outlier_count(values: pd.Series) -&gt; int:
+    q1 = values.quantile(0.25)
+    q3 = values.quantile(0.75)
+    iqr = q3 - q1
+    lower = q1 - 1.5 * iqr
+    upper = q3 + 1.5 * iqr
+    return int(((values &lt; lower) | (values &gt; upper)).sum())
+
+
+dept_summary = (
+    hr.groupby(&quot;dept&quot;)
+    .agg(
+        count=(&quot;salary&quot;, &quot;count&quot;),
+        mean=(&quot;salary&quot;, &quot;mean&quot;),
+        median=(&quot;salary&quot;, &quot;median&quot;),
+        mode=(&quot;salary&quot;, first_mode),
+        min=(&quot;salary&quot;, &quot;min&quot;),
+        max=(&quot;salary&quot;, &quot;max&quot;),
+        std_dev=(&quot;salary&quot;, &quot;std&quot;),
+        q1=(&quot;salary&quot;, lambda s: s.quantile(0.25)),
+        q3=(&quot;salary&quot;, lambda s: s.quantile(0.75)),
+    )
+    .assign(
+        range=lambda d: d[&quot;max&quot;] - d[&quot;min&quot;],
+        iqr=lambda d: d[&quot;q3&quot;] - d[&quot;q1&quot;],
+    )
+)
+dept_summary[&quot;outlier_count&quot;] = hr.groupby(&quot;dept&quot;)[&quot;salary&quot;].apply(outlier_count)
+dept_summary = dept_summary.sort_values(&quot;mean&quot;, ascending=False)
+
+item_summary = (
+    cafe.groupby(&quot;item&quot;)
+    .agg(
+        count=(&quot;order_id&quot;, &quot;count&quot;),
+        unit_price=(&quot;unit_price&quot;, &quot;first&quot;),
+        mean=(&quot;amount&quot;, &quot;mean&quot;),
+        median=(&quot;amount&quot;, &quot;median&quot;),
+        mode=(&quot;amount&quot;, first_mode),
+        min=(&quot;amount&quot;, &quot;min&quot;),
+        max=(&quot;amount&quot;, &quot;max&quot;),
+        std_dev=(&quot;amount&quot;, &quot;std&quot;),
+    )
+    .assign(
+        range=lambda d: d[&quot;max&quot;] - d[&quot;min&quot;],
+        mean_minus_median=lambda d: d[&quot;mean&quot;] - d[&quot;median&quot;],
+        mean_to_median_ratio=lambda d: d[&quot;mean&quot;] / d[&quot;median&quot;],
+    )
+    .sort_values(&quot;mean_minus_median&quot;, ascending=False)
+)
+
+cheesecake_qty = (
+    cafe.loc[cafe[&quot;item&quot;] == &quot;치즈케이크&quot;]
+    .groupby(&quot;qty&quot;)
+    .agg(count=(&quot;order_id&quot;, &quot;count&quot;), amount=(&quot;amount&quot;, &quot;first&quot;))
+)
+
+print(f&quot;pandas version: {pd.__version__}&quot;)
+print(f&quot;HR rows: {len(hr):,}, columns: {hr.shape[1]}&quot;)
+print(f&quot;Cafe rows: {len(cafe):,}, columns: {cafe.shape[1]}&quot;)
+print(&quot;\nDepartment salary summary&quot;)
+print(
+    dept_summary[
+        [&quot;count&quot;, &quot;mean&quot;, &quot;median&quot;, &quot;mode&quot;, &quot;min&quot;, &quot;max&quot;, &quot;range&quot;, &quot;std_dev&quot;, &quot;outlier_count&quot;]
+    ].to_string(float_format=lambda x: f&quot;{x:.2f}&quot;)
+)
+print(&quot;\nTop mean distortion candidates&quot;)
+print(
+    item_summary[
+        [&quot;count&quot;, &quot;mean&quot;, &quot;median&quot;, &quot;mode&quot;, &quot;mean_minus_median&quot;, &quot;mean_to_median_ratio&quot;]
+    ]
+    .head(5)
+    .to_string(float_format=lambda x: f&quot;{x:.2f}&quot;)
+)
+print(&quot;\nCheesecake quantity distribution&quot;)
+print(cheesecake_qty.to_string())
+</code></pre></div>
+<p>실제 실행 출력 요약:</p>
+<div class="code-scroll"><pre><code class="language-text">pandas version: 3.0.3
+HR rows: 1,200, columns: 9
+Cafe rows: 10,424, columns: 12
+
+Department salary summary
+        count        mean      median      mode       min       max     range    std_dev  outlier_count
+dept
+개발본부      370 74190540.54  73950000.00  67900000  56700000  98800000  42100000 8094277.96              6
+데이터전략팀    250 68902000.00  68450000.00  63300000  49700000  97200000  47500000 8955823.98              2
+영업본부      240 63087500.00  62700000.00  57900000  47200000  92100000  44900000 8070936.16              3
+인사총무팀     180 59414444.44  59100000.00  62300000  39900000  87400000  47500000 8771462.88              3
+고객운영팀     160 53445625.00  53300000.00  44900000  36700000  73600000  36900000 8456056.20              0
+
+Top mean distortion candidates
+         count     mean  median   mode  mean_minus_median  mean_to_median_ratio
+item
+치즈케이크      633 10740.92 6500.00   6500             4240.92                  1.65
+레몬에이드      644  9940.99 6000.00   6000             3940.99                  1.66
+크로플        609  9112.48 5500.00   5500             3612.48                  1.66
+바닐라라떼     1151  9098.18 5500.00   5500             3598.18                  1.65
+복숭아아이스티    652  9051.38 5500.00   5500             3551.38                  1.65
+
+Cheesecake quantity distribution
+     count  amount
+qty
+1      331    6500
+2      191   13000
+3      111   19500
+</code></pre></div>
+</section>
+  </div>
+
+  <nav class="session-pager container">
+    <a class="pager-link prev" href="./S04.html"><span class="pager-direction">&larr; 이전 차시</span><span class="pager-title">S04 · 실무 함수: VLOOKUP·XLOOKUP과 조건부 집계</span></a>
+    <a class="pager-link next" href="./S06.html"><span class="pager-direction">다음 차시 &rarr;</span><span class="pager-title">S06 · 상관 vs 인과, 심슨의 역설</span></a>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>데이터 리터러시 with AI · S05 차시</span>
+    <a href="../index.html#curriculum">전체 커리큘럼으로</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.tab-panel');
+  function activate(key, updateHash){
+    tabs.forEach(function(btn){
+      var on = btn.getAttribute('data-tab') === key;
+      btn.classList.toggle('active', on);
+    });
+    panels.forEach(function(panel){
+      var on = panel.getAttribute('data-panel') === key;
+      panel.classList.toggle('active', on);
+    });
+    if (updateHash && history.replaceState){
+      history.replaceState(null, '', '#' + key);
+    }
+  }
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      activate(btn.getAttribute('data-tab'), true);
+    });
+  });
+  var initial = (location.hash || '').replace('#', '');
+  var valid = ['curriculum', 'handout', 'script', 'answer'];
+  if (valid.indexOf(initial) !== -1){
+    activate(initial, false);
+  }
+})();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1564 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>S17. 시각화·상호작용·DAX 기초 · 데이터 리터러시 with AI</title>
+<meta name="description" content="S17차시: 시각화·상호작용·DAX 기초 — 커리큘럼·핸드아웃·강사대본·모범답안." />
+<style>
+:root{
+  --canvas: #010102;
+  --surface-1: #0f1011;
+  --surface-2: #141516;
+  --surface-3: #18191a;
+  --surface-4: #191a1b;
+  --ink: #f7f8f8;
+  --ink-muted: #d0d6e0;
+  --ink-subtle: #8a8f98;
+  --ink-tertiary: #62666d;
+  --primary: #5e6ad2;
+  --primary-hover: #828fff;
+  --primary-focus: #5e69d1;
+  --hairline: #23252a;
+  --hairline-strong: #34343a;
+  --hairline-tertiary: #3e3e44;
+  --success: #27a644;
+
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  --container: 900px;
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+html{ background: var(--canvas); }
+body{
+  margin:0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.05px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a{ color: inherit; text-decoration: none; }
+ul, ol{ margin:0; padding:0; }
+h1,h2,h3,h4,p{ margin:0; }
+
+.container{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 48px);
+}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--primary-hover);
+}
+.eyebrow::before{
+  content:"";
+  width:6px; height:6px;
+  background: var(--primary);
+  border-radius: 1px;
+  flex-shrink:0;
+}
+
+/* ---------- top nav ---------- */
+.top-nav{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 64px;
+  display:flex;
+  align-items:center;
+  background: rgba(1,1,2,0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.top-nav .container{ display:flex; align-items:center; justify-content:space-between; gap: 24px; max-width: 1280px; }
+.brand{ display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:600; font-size:15px; letter-spacing:-0.01em; }
+.brand-mark{ width:20px; height:20px; border-radius: 6px; background: var(--primary); flex-shrink:0; position:relative; }
+.brand-mark::after{ content:""; position:absolute; inset:6px; border-radius:2px; background: rgba(255,255,255,0.85); }
+.back-link{ font-size:14px; color: var(--ink-subtle); display:inline-flex; align-items:center; gap:6px; transition: color .15s ease; }
+.back-link:hover{ color: var(--ink); }
+
+/* ---------- session header ---------- */
+.session-header{
+  padding: var(--space-xxl) 0 var(--space-xl);
+  background:
+    radial-gradient(ellipse 60% 50% at 82% 0%, rgba(94,106,210,0.16), transparent 60%),
+    var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+.session-header-top{
+  display:flex;
+  align-items:center;
+  gap: var(--space-md);
+  margin: var(--space-md) 0 var(--space-md);
+}
+.session-num-badge{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--primary-hover);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-xs);
+  padding: 4px 10px;
+}
+.difficulty{ display:flex; gap:4px; align-items:center; }
+.difficulty .dot{ width:6px; height:6px; border-radius:50%; background: var(--hairline-strong); }
+.difficulty .dot.filled{ background: var(--primary); }
+.difficulty-label{ font-size:12px; color: var(--ink-tertiary); margin-left:6px; }
+.session-header h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ---------- tabs ---------- */
+.tabs-bar{
+  display:flex;
+  gap: 4px;
+  padding-top: var(--space-lg);
+  border-bottom: 1px solid var(--hairline);
+  overflow-x: auto;
+}
+.tab-btn{
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-subtle);
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s ease, border-color .15s ease;
+}
+.tab-btn:hover{ color: var(--ink); }
+.tab-btn.active{ color: var(--ink); border-bottom-color: var(--primary); }
+
+.tab-panels{ padding: var(--space-xxl) 0 var(--space-xxl); }
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+/* ---------- markdown body ---------- */
+.markdown-body{ color: var(--ink-muted); font-size: 15.5px; line-height: 1.75; letter-spacing: -0.05px; overflow-wrap: anywhere; word-break: break-word; }
+.markdown-body h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--hairline);
+}
+.markdown-body h2{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+.markdown-body h3{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin: var(--space-lg) 0 var(--space-xs);
+}
+.markdown-body h4{
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+.markdown-body p{ margin: 0 0 var(--space-md); }
+.markdown-body ul, .markdown-body ol{ margin: 0 0 var(--space-md); padding-left: 1.4em; }
+.markdown-body li{ margin-bottom: 6px; }
+.markdown-body ul{ list-style: disc; }
+.markdown-body ol{ list-style: decimal; }
+.markdown-body strong{ color: var(--ink); font-weight: 600; }
+.markdown-body em{ color: var(--ink-muted); }
+.markdown-body a{ color: var(--primary-hover); text-decoration: underline; text-underline-offset: 2px; }
+.markdown-body hr{ border:none; border-top: 1px solid var(--hairline); margin: var(--space-xl) 0; }
+.markdown-body blockquote{
+  margin: 0 0 var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid var(--primary);
+  background: var(--surface-1);
+  color: var(--ink-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.markdown-body code{
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--primary-hover);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.markdown-body .code-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+}
+.markdown-body pre{
+  margin: 0;
+  padding: var(--space-md);
+  background: transparent;
+  border: none;
+}
+.markdown-body pre code{
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre;
+}
+.markdown-body .table-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+}
+.markdown-body table{
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 460px;
+  font-size: 13.5px;
+}
+.markdown-body th, .markdown-body td{
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+  white-space: nowrap;
+}
+.markdown-body thead th{
+  background: var(--surface-1);
+  color: var(--ink);
+  font-weight: 600;
+  font-family: var(--font-text);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+.markdown-body tbody tr:last-child td{ border-bottom: none; }
+.markdown-body tbody tr:hover{ background: var(--surface-1); }
+
+/* ---------- pager ---------- */
+.session-pager{
+  display:flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-xl) 0 var(--space-xxl);
+  border-top: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+.pager-link{
+  display:flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  max-width: 46%;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.pager-link:hover{ border-color: var(--primary); background: var(--surface-2); }
+.pager-link.next{ margin-left: auto; text-align: right; align-items: flex-end; }
+.pager-direction{ font-size: 12px; color: var(--ink-tertiary); font-family: var(--font-mono); }
+.pager-title{ font-size: 14px; color: var(--ink); font-weight: 500; }
+.pager-spacer{ flex: 1; }
+
+footer.site-footer{
+  border-top: 1px solid var(--hairline);
+  padding: var(--space-xl) 0;
+}
+footer.site-footer .container{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: var(--ink-tertiary);
+  font-size: 12px;
+}
+footer.site-footer a:hover{ color: var(--ink-subtle); }
+
+@media (max-width: 640px){
+  .session-header{ padding: var(--space-xl) 0 var(--space-lg); }
+  .pager-link{ max-width: 100%; }
+  .session-pager{ flex-direction: column; }
+  .pager-link.next{ margin-left: 0; text-align: left; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="container">
+    <div class="brand"><span class="brand-mark"></span>데이터 리터러시 with AI</div>
+    <a class="back-link" href="../index.html#curriculum">&larr; 커리큘럼으로</a>
+  </div>
+</nav>
+
+<header class="session-header">
+  <div class="container">
+    <div class="eyebrow">PART 05 · BI</div>
+    <div class="session-header-top">
+      <span class="session-num-badge">S17</span>
+      <div class="difficulty" title="난이도 4"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="difficulty-label">심화</span></div>
+    </div>
+    <h1>시각화·상호작용·DAX 기초</h1>
+  </div>
+  <div class="container">
+    <div class="tabs-bar" role="tablist">
+<button class="tab-btn active" data-tab="curriculum" role="tab" aria-selected="true">커리큘럼</button>
+<button class="tab-btn" data-tab="handout" role="tab" aria-selected="false">핸드아웃</button>
+<button class="tab-btn" data-tab="script" role="tab" aria-selected="false">강사대본</button>
+<button class="tab-btn" data-tab="answer" role="tab" aria-selected="false">모범답안</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="tab-panels container">
+<section class="tab-panel markdown-body active" data-panel="curriculum" aria-label="커리큘럼">
+<h1>S17. 시각화·상호작용·DAX 기초</h1>
+<h2>차시 개요</h2>
+<ul>
+<li>대상: 엑셀은 쓰지만 데이터분석은 처음인 비개발자</li>
+<li>선수 차시: S16 BI 모델링과 날짜테이블</li>
+<li>난이도: 4</li>
+<li>시간: 70분</li>
+<li>사용 데이터: S16에서 저장한 Power BI 파일(<code>.pbix</code>) 또는 <code>02_datasets/shop_orders/shop_orders_clean.xlsx</code>의 <code>orders</code>, <code>customers</code>, <code>products</code> 시트</li>
+<li>핵심 도구: Power BI Desktop</li>
+</ul>
+<blockquote>
+<p>안내: Power BI Desktop은 Windows 전용이다. Mac 수강생은 Looker Studio로 개념을 학습한다. 전월대비 시간지능은 Power BI 전용이며, Looker는 기간비교 필드로 근사해 해석한다.</p>
+</blockquote>
+<p>이번 차시는 S16에서 만든 관계형 모델을 실제로 움직이는 대시보드로 바꿔 보는 시간이다. 수강생은 슬라이서로 원하는 고객 등급을 골라 보고, 막대그래프에서 카테고리를 누르면 다른 시각화까지 함께 바뀌는 모습을 직접 확인한다. 그런 다음 DAX 측정값으로 총매출과 매출비중, 전월대비 성장률을 만든다.</p>
+<p>엑셀 사용자의 감각으로 옮겨 보면, 피벗테이블 여러 개와 슬라이서를 한 화면에 늘어놓고 그 피벗 값의 계산식을 좀 더 정교하게 다듬는 수업이다. 차이가 있다면 Power BI에서는 계산식이 셀에 들어가지 않고 모델 안의 측정값으로 저장된다는 점이다. 덕분에 같은 측정값을 카드와 선그래프, 표, 막대그래프에서 몇 번이고 다시 꺼내 쓸 수 있다.</p>
+<h2>실제 데이터 확인</h2>
+<p>자료 작성 전 pandas 3.0.3으로 지정 파일을 열어 확인했다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>시트</th>
+<th style="text-align: right;">실제 행수</th>
+<th>주요 컬럼</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>orders</code></td>
+<td style="text-align: right;">20,000</td>
+<td><code>order_id</code>, <code>customer_id</code>, <code>product_id</code>, <code>order_date</code>, <code>qty</code>, <code>discount_rate</code></td>
+</tr>
+<tr>
+<td><code>customers</code></td>
+<td style="text-align: right;">3,000</td>
+<td><code>customer_id</code>, <code>region</code>, <code>grade</code>, <code>join_date</code></td>
+</tr>
+<tr>
+<td><code>products</code></td>
+<td style="text-align: right;">200</td>
+<td><code>product_id</code>, <code>category</code>, <code>price</code>, <code>cost</code></td>
+</tr>
+</tbody>
+</table></div>
+<p>주문 기간은 2024년 1월 1일부터 2024년 12월 31일까지로, 열두 달이 빠짐없이 들어 있다. <code>orders</code>를 <code>customers</code>, <code>products</code>와 조인했을 때 짝이 맞지 않는 고객이나 상품은 하나도 없었다(누락 0건). 주문 테이블에는 매출 컬럼이 따로 없어서, 매출은 아래 공식으로 직접 계산해야 한다.</p>
+<div class="code-scroll"><pre><code class="language-text">매출 = 상품 단가 × 주문 수량 × (1 - 할인율)
+</code></pre></div>
+<p>검증 기준 전체 매출은 1,938,489,803원이다. 월별 매출이 가장 큰 달은 2024년 12월 225,576,457원이며, 2024년 11월의 전월대비 성장률은 40.43%로 가장 크다.</p>
+<h2>학습 목표</h2>
+<ol>
+<li>슬라이서, 드릴다운, 시각화 간 상호작용의 역할을 설명할 수 있다.</li>
+<li>Power BI 모델에서 DAX 측정값을 만들고 카드·차트·표에 재사용할 수 있다.</li>
+<li><code>SUMX</code>, <code>DIVIDE</code>, <code>CALCULATE</code>의 입문 수준 용도를 이해한다.</li>
+<li><code>날짜테이블</code>을 사용해 <code>SAMEPERIODLASTMONTH</code> 기반 전월대비 매출과 성장률을 계산할 수 있다.</li>
+<li>고객 등급 슬라이서와 월별 KPI를 포함한 시계열 대시보드를 만들고 결과를 해석할 수 있다.</li>
+</ol>
+<h2>핵심 개념</h2>
+<h3>1. 슬라이서는 화면 위에 놓는 필터 버튼이다</h3>
+<p>엑셀 피벗테이블의 슬라이서를 써본 사람이라면 Power BI의 슬라이서도 같은 감각으로 이해할 수 있다. 예를 들어 <code>customers[grade]</code>를 슬라이서로 놓으면 VIP, 골드, 실버, 브론즈 중 원하는 등급만 눌러 볼 수 있다.</p>
+<p>다만 Power BI의 슬라이서는 한 시각화만 바꾸는 것이 아니라 같은 모델에 연결된 여러 시각화를 동시에 바꾼다. 고객 등급을 <code>VIP</code>로 선택하면 총매출 카드, 월별 선그래프, 카테고리 막대그래프가 모두 VIP 고객 기준으로 다시 계산된다.</p>
+<h3>2. 드릴다운은 큰 묶음에서 작은 항목으로 내려가는 기능이다</h3>
+<p>드릴다운은 엑셀 피벗에서 연도 옆의 더하기 버튼을 눌러 월을 펼치는 상황과 비슷하다. Power BI에서는 축에 여러 필드를 순서대로 올려 계층을 만든다.</p>
+<p>예를 들어 막대그래프 축에 <code>products[category]</code>와 <code>products[product_name]</code>을 순서대로 넣으면 처음에는 카테고리별 매출이 보인다. 드릴다운을 켜고 디지털 막대를 누르면 디지털 카테고리 안의 상품별 매출로 내려간다.</p>
+<p>드릴다운은 "전체에서 어디가 큰가"를 본 뒤 "그 안에서 무엇이 큰가"를 이어서 볼 때 유용하다.</p>
+<h3>3. 상호작용은 차트끼리 서로 영향을 주는 방식이다</h3>
+<p>Power BI에서는 한 차트를 클릭하면 다른 차트가 필터링되거나 강조된다. 예를 들어 카테고리 막대그래프에서 <code>디지털</code>을 누르면 월별 선그래프가 디지털 상품만의 월별 매출로 바뀐다.</p>
+<p>편리한 기능이지만, 처음 배우는 사람에게는 "왜 숫자가 갑자기 바뀌었지" 하는 혼란을 줄 수도 있다. 그래서 대시보드를 짤 때는 어떤 차트가 어떤 차트를 필터링할지 처음부터 의도적으로 정해 두어야 한다. 이번 차시에서는 <code>서식 &gt; 상호 작용 편집</code>에서 필터, 강조, 없음이 어떻게 다른지 직접 눌러 본다.</p>
+<h3>4. DAX 측정값은 피벗 값 영역에 넣는 계산식이다</h3>
+<p>엑셀에서는 셀에 <code>=SUM(...)</code> 같은 수식을 쓰고, 피벗테이블에서는 값 영역에 합계나 평균, 개수 같은 계산을 넣는다. Power BI의 DAX 측정값은 이 둘을 합쳐 놓은 느낌이다. 계산식을 모델 안에 한 번 저장해 두고, 필요한 시각화마다 꺼내 쓴다.</p>
+<p>이번 차시의 기본 측정값은 아래와 같다.</p>
+<div class="code-scroll"><pre><code class="language-DAX">총매출 =
+SUMX(
+    orders,
+    RELATED(products[price]) * orders[qty] * (1 - orders[discount_rate])
+)
+</code></pre></div>
+<p><code>SUMX</code>는 주문 행을 한 줄씩 보면서 매출을 계산한 뒤 모두 더한다. 주문 테이블에 매출 컬럼이 없고 상품 단가가 <code>products</code> 테이블에 있기 때문에 <code>RELATED(products[price])</code>로 연결된 상품 단가를 가져온다.</p>
+<h3>5. 비율은 나눗셈보다 <code>DIVIDE</code>로 만든다</h3>
+<p>비율은 분자와 분모가 있어야 한다. 예를 들어 카테고리별 매출비중은 현재 카테고리 매출을 전체 카테고리 매출로 나눈 값이다.</p>
+<div class="code-scroll"><pre><code class="language-DAX">매출비중 =
+DIVIDE(
+    [총매출],
+    CALCULATE([총매출], ALL(products[category]))
+)
+</code></pre></div>
+<p><code>DIVIDE</code>는 분모가 0이거나 비어 있을 때 오류를 줄여 준다. 입문 단계에서는 DAX에서 비율을 만들 때 <code>/</code>보다 <code>DIVIDE</code>를 우선 사용한다고 기억하면 된다.</p>
+<h3>6. <code>날짜테이블</code>은 시간 계산의 기준 달력이다</h3>
+<p>주문 테이블의 <code>order_date</code>만 가지고도 월별 그래프는 얼마든지 그릴 수 있다. 문제는 전월대비, 전년동월대비, 누계처럼 시간을 다루는 계산이다. 이런 계산을 흔들림 없이 하려면 별도의 날짜 테이블이 있어야 한다.</p>
+<p>엑셀 매출표 옆에 2024년 달력을 한 장 펼쳐 놓고 주문일이 그 달력의 날짜에 하나씩 걸린다고 상상하면 쉽다. Power BI의 시간 지능 함수는 이 달력을 기준으로 삼아 "이 날짜의 전월은 어디인가"를 되짚어 찾는다.</p>
+<p>이번 차시에서는 S16의 <code>날짜테이블</code>을 사용하되, 없을 경우 아래와 같이 2024년 전체 날짜를 가진 테이블을 만든다.</p>
+<div class="code-scroll"><pre><code class="language-DAX">날짜테이블 =
+ADDCOLUMNS(
+    CALENDAR(MIN(orders[order_date]), MAX(orders[order_date])),
+    &quot;연도&quot;, YEAR([Date]),
+    &quot;월번호&quot;, MONTH([Date]),
+    &quot;연월&quot;, FORMAT([Date], &quot;yyyy-MM&quot;),
+    &quot;연월정렬&quot;, YEAR([Date]) * 100 + MONTH([Date])
+)
+</code></pre></div>
+<p>2024년은 윤년이므로 <code>날짜테이블</code>은 366행이다.</p>
+<h3>7. 전월대비는 현재 필터 맥락이 있어야 해석된다</h3>
+<p>전월대비 성장률은 현재 보고 있는 달의 매출과 바로 전 달 매출을 비교한다.</p>
+<div class="code-scroll"><pre><code class="language-DAX">전월매출 =
+CALCULATE(
+    [총매출],
+    SAMEPERIODLASTMONTH('날짜테이블'[Date])
+)
+
+전월대비성장률 =
+DIVIDE([총매출] - [전월매출], [전월매출])
+</code></pre></div>
+<p>여기서 열쇠가 되는 말은 "현재 보고 있는 달"이다. 월별 선그래프라면 각 점마다 1월, 2월 하는 월 필터가 저절로 걸린다. 반면 카드 하나만 덩그러니 놓아 두면 지금 어느 달을 말하는지가 모호해진다. 그래서 카드로 전월대비 성장률을 보여줄 때는 월 슬라이서에서 한 달을 고르게 하거나, 표나 선그래프처럼 월별 맥락이 살아 있는 시각화에 넣는 편이 낫다.</p>
+<h2>70분 수업 흐름</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;">시간</th>
+<th>내용</th>
+<th>진행 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0-7분</td>
+<td>S16 모델 복습, 관계와 <code>날짜테이블</code> 확인</td>
+<td>강사 시연</td>
+</tr>
+<tr>
+<td style="text-align: right;">7-17분</td>
+<td>총매출·주문건수·평균주문금액 측정값 만들기</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">17-27분</td>
+<td>카테고리 매출비중 측정값 만들기</td>
+<td>강사 시연 후 따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">27-40분</td>
+<td>카드, 막대그래프, 선그래프, 등급 슬라이서 구성</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">40-50분</td>
+<td>드릴다운과 상호작용 편집</td>
+<td>시연과 짧은 실습</td>
+</tr>
+<tr>
+<td style="text-align: right;">50-60분</td>
+<td><code>날짜테이블</code> 기반 전월매출·전월대비 성장률 만들기</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">60-68분</td>
+<td>직접 해보기: 시계열 KPI 대시보드 완성</td>
+<td>개인 실습</td>
+</tr>
+<tr>
+<td style="text-align: right;">68-70분</td>
+<td>체크포인트 확인과 해석 문장 공유</td>
+<td>마무리</td>
+</tr>
+</tbody>
+</table></div>
+<h2>엑셀과 연결해서 설명할 지점</h2>
+<ul>
+<li>슬라이서는 피벗테이블 슬라이서와 비슷하지만, 여러 차트를 동시에 바꿀 수 있다.</li>
+<li>드릴다운은 피벗테이블에서 연도 아래 월, 카테고리 아래 상품을 펼치는 기능과 비슷하다.</li>
+<li>DAX 측정값은 셀 수식이 아니라 모델에 저장하는 계산식이다.</li>
+<li><code>SUMX</code>는 행마다 계산한 뒤 합계를 내는 방식으로, 엑셀의 보조열 계산과 합계를 한 번에 하는 느낌이다.</li>
+<li><code>날짜테이블</code>은 시간 계산을 위한 기준 달력이다. 주문이 없는 날짜도 달력에는 있어야 한다.</li>
+<li>전월대비는 현재 보고 있는 달이라는 필터 맥락이 있어야 올바르게 읽힌다.</li>
+</ul>
+<h2>수업 후 수강생이 말할 수 있어야 하는 문장</h2>
+<ul>
+<li>"슬라이서는 대시보드 전체를 바꾸는 필터다."</li>
+<li>"DAX 측정값은 시각화에서 반복해서 쓰는 계산식이다."</li>
+<li>"주문 테이블에 매출 컬럼이 없으면 단가와 수량, 할인율로 측정값을 만들어야 한다."</li>
+<li>"전월대비 계산에는 <code>날짜테이블</code>과 주문일 관계가 필요하다."</li>
+<li>"차트를 클릭했을 때 다른 차트가 바뀌는 것은 상호작용 설정 때문이다."</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="handout" aria-label="핸드아웃">
+<h1>S17 핸드아웃: 시각화·상호작용·DAX 기초</h1>
+<h2>오늘 사용할 파일</h2>
+<p>S16에서 저장해 둔 Power BI 파일(<code>.pbix</code>)이 있다면 그 파일을 그대로 이어서 쓴다. 처음부터 다시 시작해야 한다면, S16과 똑같이 <code>shop_orders</code> 세 표가 담긴 Excel 통합 문서(<code>shop_orders_clean.xlsx</code>)를 연다.</p>
+<p>작업 루트 기준 경로는 다음과 같다.</p>
+<div class="code-scroll"><pre><code class="language-text">02_datasets/shop_orders/shop_orders_clean.xlsx
+</code></pre></div>
+<p>Power BI Desktop에서 직접 열 때의 Windows 경로는 다음과 같다.</p>
+<div class="code-scroll"><pre><code class="language-text">D:\ai-data-analysis-course\02_datasets\shop_orders\shop_orders_clean.xlsx
+</code></pre></div>
+<blockquote>
+<p>안내: Power BI Desktop은 Windows 전용이다. Mac 수강생은 Looker Studio로 개념을 학습한다. 전월대비 시간지능은 Power BI 전용이며, Looker는 기간비교 필드로 근사해 해석한다.</p>
+</blockquote>
+<h2>오늘 만들 결과물</h2>
+<p>한 페이지 대시보드에 아래 요소를 만든다.</p>
+<ul>
+<li>총매출 카드</li>
+<li>주문건수 카드</li>
+<li>평균주문금액 카드</li>
+<li>전월대비 성장률 카드</li>
+<li>월별 총매출 선그래프</li>
+<li>카테고리별 매출 막대그래프</li>
+<li>카테고리별 매출비중 표</li>
+<li>고객 등급 슬라이서</li>
+<li>월 슬라이서</li>
+<li>카테고리에서 상품명으로 내려가는 드릴다운</li>
+</ul>
+<h2>따라하기 1: 데이터 불러오기와 관계 확인</h2>
+<h3>1단계. S16 파일 열기 또는 Excel 파일 불러오기</h3>
+<ol>
+<li>S16에서 저장한 Power BI 파일(<code>.pbix</code>)이 있으면 그 파일을 열고 2단계로 이동한다.</li>
+<li>새로 시작한다면 Power BI Desktop을 연다.</li>
+<li><code>홈 &gt; 데이터 가져오기 &gt; Excel 통합 문서</code>를 누른다.</li>
+<li><code>shop_orders_clean.xlsx</code> 파일을 연다.</li>
+<li>탐색기 창에서 아래 시트를 모두 선택한다.</li>
+</ol>
+<div class="code-scroll"><pre><code class="language-text">orders
+customers
+products
+</code></pre></div>
+<ol start="6">
+<li>미리보기에서 한글과 날짜가 정상으로 보이면 <code>로드</code>를 누른다.</li>
+</ol>
+<h3>2단계. 데이터 형식 확인</h3>
+<p>왼쪽의 <code>데이터 보기</code> 또는 <code>모델 보기</code>에서 형식을 확인한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>테이블</th>
+<th>컬럼</th>
+<th>형식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>orders</code></td>
+<td><code>order_date</code></td>
+<td>날짜</td>
+</tr>
+<tr>
+<td><code>orders</code></td>
+<td><code>qty</code></td>
+<td>정수</td>
+</tr>
+<tr>
+<td><code>orders</code></td>
+<td><code>discount_rate</code></td>
+<td>십진수</td>
+</tr>
+<tr>
+<td><code>products</code></td>
+<td><code>price</code></td>
+<td>정수 또는 통화</td>
+</tr>
+<tr>
+<td><code>customers</code></td>
+<td><code>grade</code></td>
+<td>텍스트</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>order_date</code>가 날짜가 아니라 텍스트로 보이면 해당 열을 선택하고 <code>열 도구 &gt; 데이터 형식 &gt; 날짜</code>로 바꾼다.</p>
+<h3>3단계. 관계 확인</h3>
+<p><code>모델 보기</code>에서 아래 관계가 있는지 확인한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>1쪽 테이블</th>
+<th>다쪽 테이블</th>
+<th>관계</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>customers[customer_id]</code></td>
+<td><code>orders[customer_id]</code></td>
+<td>1 대 다</td>
+</tr>
+<tr>
+<td><code>products[product_id]</code></td>
+<td><code>orders[product_id]</code></td>
+<td>1 대 다</td>
+</tr>
+</tbody>
+</table></div>
+<p>관계가 없다면 <code>customer_id</code>끼리, <code>product_id</code>끼리 드래그해서 연결한다. 필터 방향은 기본값인 단일 방향으로 둔다.</p>
+<h2>따라하기 2: 날짜테이블 만들기</h2>
+<p>S16에서 <code>날짜테이블</code>을 이미 만들어 두었다면 제대로 있는지 확인만 하고 넘어간다. 아직 없다면 아래 순서대로 만든다.</p>
+<ol>
+<li>상단 메뉴에서 <code>모델링 &gt; 새 테이블</code>을 누른다.</li>
+<li>수식 입력창에 아래 DAX를 붙여 넣는다.</li>
+</ol>
+<div class="code-scroll"><pre><code class="language-DAX">날짜테이블 =
+ADDCOLUMNS(
+    CALENDAR(MIN(orders[order_date]), MAX(orders[order_date])),
+    &quot;연도&quot;, YEAR([Date]),
+    &quot;월번호&quot;, MONTH([Date]),
+    &quot;연월&quot;, FORMAT([Date], &quot;yyyy-MM&quot;),
+    &quot;연월정렬&quot;, YEAR([Date]) * 100 + MONTH([Date])
+)
+</code></pre></div>
+<ol start="3">
+<li><code>날짜테이블[Date]</code>와 <code>orders[order_date]</code>를 연결한다.</li>
+<li><code>날짜테이블</code>을 선택하고 <code>테이블 도구 &gt; 날짜 테이블로 표시</code>를 누른다.</li>
+<li>날짜 열은 <code>Date</code>를 선택한다.</li>
+<li><code>날짜테이블[연월]</code> 열을 선택하고 <code>열 도구 &gt; 열 기준 정렬</code>에서 <code>연월정렬</code>을 선택한다.</li>
+</ol>
+<p>확인할 것:</p>
+<div class="code-scroll"><pre><code class="language-text">날짜테이블 행 수: 366
+주문 기간: 2024-01-01 ~ 2024-12-31
+</code></pre></div>
+<h2>따라하기 3: 기본 측정값 만들기</h2>
+<p>측정값은 <code>orders</code> 테이블에 만들어도 되고, 측정값만 모으는 별도 테이블에 만들어도 된다. 오늘은 나중에 찾기 쉽도록 <code>orders</code> 테이블을 선택한 상태에서 만든다.</p>
+<h3>1단계. 총매출</h3>
+<p><code>모델링 &gt; 새 측정값</code>을 누르고 아래 수식을 입력한다.</p>
+<div class="code-scroll"><pre><code class="language-DAX">총매출 =
+SUMX(
+    orders,
+    RELATED(products[price]) * orders[qty] * (1 - orders[discount_rate])
+)
+</code></pre></div>
+<p>형식은 <code>통화</code> 또는 <code>천 단위 구분 기호가 있는 정수</code>로 바꾼다.</p>
+<p>검증값:</p>
+<div class="code-scroll"><pre><code class="language-text">총매출: 1,938,489,803
+</code></pre></div>
+<h3>2단계. 주문건수와 총수량</h3>
+<p>새 측정값을 두 개 더 만든다.</p>
+<div class="code-scroll"><pre><code class="language-DAX">주문건수 =
+DISTINCTCOUNT(orders[order_id])
+</code></pre></div>
+<div class="code-scroll"><pre><code class="language-DAX">총수량 =
+SUM(orders[qty])
+</code></pre></div>
+<p>검증값:</p>
+<div class="code-scroll"><pre><code class="language-text">주문건수: 20,000
+총수량: 29,535
+</code></pre></div>
+<h3>3단계. 평균주문금액</h3>
+<div class="code-scroll"><pre><code class="language-DAX">평균주문금액 =
+DIVIDE([총매출], [주문건수])
+</code></pre></div>
+<p>검증값:</p>
+<div class="code-scroll"><pre><code class="language-text">평균주문금액: 약 96,924
+</code></pre></div>
+<h2>따라하기 4: 매출비중 만들기</h2>
+<p>카테고리별 매출비중을 만들기 위해 새 측정값을 추가한다.</p>
+<div class="code-scroll"><pre><code class="language-DAX">매출비중 =
+DIVIDE(
+    [총매출],
+    CALCULATE([총매출], ALL(products[category]))
+)
+</code></pre></div>
+<p>이 측정값은 표나 막대그래프에서 <code>products[category]</code>와 나란히 놓고 볼 때라야 뜻이 산다. 형식은 <code>백분율</code>로 두고, 소수 자릿수는 1자리나 2자리로 맞춘다.</p>
+<p>상위 카테고리 검증값:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>카테고리</th>
+<th style="text-align: right;">매출</th>
+<th style="text-align: right;">매출비중</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>디지털</td>
+<td style="text-align: right;">673,862,749</td>
+<td style="text-align: right;">34.76%</td>
+</tr>
+<tr>
+<td>패션</td>
+<td style="text-align: right;">281,835,909</td>
+<td style="text-align: right;">14.54%</td>
+</tr>
+<tr>
+<td>스포츠</td>
+<td style="text-align: right;">217,531,145</td>
+<td style="text-align: right;">11.22%</td>
+</tr>
+</tbody>
+</table></div>
+<h2>따라하기 5: 기본 시각화 만들기</h2>
+<h3>1단계. KPI 카드 만들기</h3>
+<ol>
+<li>보고서 보기로 이동한다.</li>
+<li><code>카드</code> 시각화를 추가한다.</li>
+<li>필드에 <code>[총매출]</code>을 넣는다.</li>
+<li>같은 방식으로 <code>[주문건수]</code>, <code>[평균주문금액]</code> 카드를 만든다.</li>
+</ol>
+<p>권장 제목:</p>
+<div class="code-scroll"><pre><code class="language-text">총매출
+주문건수
+평균주문금액
+</code></pre></div>
+<h3>2단계. 월별 매출 선그래프 만들기</h3>
+<ol>
+<li><code>꺾은선형 차트</code>를 추가한다.</li>
+<li>X축에 <code>날짜테이블[연월]</code>을 넣는다.</li>
+<li>Y축에 <code>[총매출]</code>을 넣는다.</li>
+<li>X축이 2024-01부터 2024-12 순서로 보이는지 확인한다.</li>
+</ol>
+<p>검증값:</p>
+<div class="code-scroll"><pre><code class="language-text">2024-01 매출: 131,088,708
+2024-12 매출: 225,576,457
+</code></pre></div>
+<h3>3단계. 카테고리별 매출 막대그래프 만들기</h3>
+<ol>
+<li><code>묶은 세로 막대형 차트</code> 또는 <code>묶은 가로 막대형 차트</code>를 추가한다.</li>
+<li>축에 <code>products[category]</code>를 넣는다.</li>
+<li>값에 <code>[총매출]</code>을 넣는다.</li>
+<li>매출 내림차순으로 정렬한다.</li>
+</ol>
+<p>디지털 카테고리가 가장 위에 오면 정상이다.</p>
+<h3>4단계. 카테고리별 매출비중 표 만들기</h3>
+<ol>
+<li><code>테이블</code> 시각화를 추가한다.</li>
+<li>필드에 <code>products[category]</code>, <code>[총매출]</code>, <code>[매출비중]</code>을 넣는다.</li>
+<li><code>[총매출]</code> 내림차순으로 정렬한다.</li>
+</ol>
+<h2>따라하기 6: 고객 등급 슬라이서 만들기</h2>
+<ol>
+<li><code>슬라이서</code> 시각화를 추가한다.</li>
+<li>필드에 <code>customers[grade]</code>를 넣는다.</li>
+<li>슬라이서 형식은 목록 또는 타일 중 편한 방식으로 둔다.</li>
+<li><code>VIP</code>를 눌러 전체 시각화가 VIP 고객 기준으로 바뀌는지 확인한다.</li>
+</ol>
+<p>등급별 총매출 검증값:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>등급</th>
+<th style="text-align: right;">총매출</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>실버</td>
+<td style="text-align: right;">603,583,519</td>
+</tr>
+<tr>
+<td>골드</td>
+<td style="text-align: right;">547,524,985</td>
+</tr>
+<tr>
+<td>브론즈</td>
+<td style="text-align: right;">393,948,369</td>
+</tr>
+<tr>
+<td>VIP</td>
+<td style="text-align: right;">393,432,930</td>
+</tr>
+</tbody>
+</table></div>
+<h2>따라하기 7: 드릴다운 만들기</h2>
+<p>카테고리에서 상품명으로 내려가는 드릴다운을 만든다.</p>
+<ol>
+<li>카테고리별 매출 막대그래프를 선택한다.</li>
+<li>축 영역에 <code>products[category]</code> 아래로 <code>products[product_name]</code>을 추가한다.</li>
+<li>시각화 상단의 드릴다운 아이콘을 켠다.</li>
+<li><code>디지털</code> 막대를 클릭한다.</li>
+<li>디지털 카테고리 안의 상품별 매출로 내려가는지 확인한다.</li>
+<li>위로 올라가기 아이콘을 눌러 다시 카테고리 수준으로 돌아온다.</li>
+</ol>
+<p>드릴다운은 한마디로 대분류에서 세부 상품으로 한 단계 내려가는 동작이라고 보면 된다.</p>
+<h2>따라하기 8: 상호작용 편집하기</h2>
+<ol>
+<li>카테고리별 매출 막대그래프를 선택한다.</li>
+<li>상단 메뉴에서 <code>서식 &gt; 상호 작용 편집</code>을 누른다.</li>
+<li>월별 선그래프 위에 표시되는 아이콘을 확인한다.</li>
+<li><code>필터</code>, <code>강조</code>, <code>없음</code>을 각각 눌러 차이를 본다.</li>
+<li>오늘 실습에서는 카테고리 막대그래프가 월별 선그래프와 KPI 카드를 필터링하도록 둔다.</li>
+</ol>
+<p>해석:</p>
+<ul>
+<li>필터: 선택한 항목만 남긴다.</li>
+<li>강조: 선택한 항목의 비중을 진하게 보여준다.</li>
+<li>없음: 다른 시각화에 영향을 주지 않는다.</li>
+</ul>
+<h2>따라하기 9: 전월대비 DAX 만들기</h2>
+<h3>1단계. 전월매출</h3>
+<p>새 측정값을 만든다.</p>
+<div class="code-scroll"><pre><code class="language-DAX">전월매출 =
+CALCULATE(
+    [총매출],
+    SAMEPERIODLASTMONTH('날짜테이블'[Date])
+)
+</code></pre></div>
+<h3>2단계. 전월대비 증감액</h3>
+<div class="code-scroll"><pre><code class="language-DAX">전월대비증감액 =
+[총매출] - [전월매출]
+</code></pre></div>
+<h3>3단계. 전월대비 성장률</h3>
+<div class="code-scroll"><pre><code class="language-DAX">전월대비성장률 =
+DIVIDE([전월대비증감액], [전월매출])
+</code></pre></div>
+<p>형식은 <code>백분율</code>, 소수 자릿수는 2자리로 설정한다.</p>
+<h3>4단계. 월별 표로 검증하기</h3>
+<ol>
+<li><code>테이블</code> 시각화를 추가한다.</li>
+<li>필드에 <code>날짜테이블[연월]</code>, <code>[총매출]</code>, <code>[전월매출]</code>, <code>[전월대비성장률]</code>을 넣는다.</li>
+<li>2024-01은 전월매출이 비어 있어야 한다.</li>
+<li>2024-12의 전월대비 성장률이 1.14%인지 확인한다.</li>
+</ol>
+<p>주요 검증값:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>연월</th>
+<th style="text-align: right;">총매출</th>
+<th style="text-align: right;">전월매출</th>
+<th style="text-align: right;">전월대비 성장률</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2024-01</td>
+<td style="text-align: right;">131,088,708</td>
+<td style="text-align: right;">비어 있음</td>
+<td style="text-align: right;">비어 있음</td>
+</tr>
+<tr>
+<td>2024-11</td>
+<td style="text-align: right;">223,024,439</td>
+<td style="text-align: right;">158,810,201</td>
+<td style="text-align: right;">40.43%</td>
+</tr>
+<tr>
+<td>2024-12</td>
+<td style="text-align: right;">225,576,457</td>
+<td style="text-align: right;">223,024,439</td>
+<td style="text-align: right;">1.14%</td>
+</tr>
+</tbody>
+</table></div>
+<h3>5단계. 월 슬라이서와 성장률 카드 만들기</h3>
+<ol>
+<li><code>슬라이서</code> 시각화를 추가한다.</li>
+<li>필드에 <code>날짜테이블[연월]</code>을 넣는다.</li>
+<li>슬라이서에서 <code>2024-12</code>를 선택한다.</li>
+<li><code>카드</code> 시각화를 추가하고 <code>[전월대비성장률]</code>을 넣는다.</li>
+</ol>
+<p>카드에 1.14%가 뜨면 제대로 된 것이다. 여러 달을 한꺼번에 선택하면 전월대비 카드가 무엇을 가리키는지 읽기 애매해지니, 입문 단계에서는 한 달씩만 골라서 읽는다.</p>
+<h2>직접 해보기: 시계열 KPI 대시보드</h2>
+<p>아래 조건을 만족하는 대시보드 한 페이지를 완성한다.</p>
+<p>목표:</p>
+<ol>
+<li>월별 총매출 선그래프를 만든다.</li>
+<li>총매출, 주문건수, 평균주문금액, 전월대비 성장률 카드를 만든다.</li>
+<li>고객 등급 슬라이서를 만든다.</li>
+<li>월 슬라이서를 만들고 <code>2024-12</code>를 선택했을 때 전월대비 성장률 1.14%가 보이게 한다.</li>
+<li>카테고리별 매출 막대그래프에서 상품명 수준으로 드릴다운할 수 있게 한다.</li>
+<li>카테고리별 매출비중 표를 만든다.</li>
+<li>상호작용 편집으로 카테고리 막대그래프가 월별 선그래프와 KPI 카드를 필터링하도록 둔다.</li>
+<li>대시보드 아래쪽 또는 별도 텍스트 상자에 해석 문장 2개를 적는다.</li>
+</ol>
+<p>해석 문장 예시:</p>
+<div class="code-scroll"><pre><code class="language-text">2024년 전체 매출은 1,938,489,803원이다.
+2024년 11월은 전월대비 성장률이 40.43%로 가장 높고, 2024년 6월은 -16.26%로 가장 낮다.
+</code></pre></div>
+<p>제출 전 체크:</p>
+<ul>
+<li>총매출 카드가 전체 선택 상태에서 1,938,489,803을 보여주는가.</li>
+<li>월 슬라이서에서 2024-12만 선택하면 전월대비 성장률 카드가 1.14%를 보여주는가.</li>
+<li>고객 등급 슬라이서를 누르면 모든 시각화가 함께 바뀌는가.</li>
+<li>카테고리 막대그래프에서 상품명으로 드릴다운할 수 있는가.</li>
+<li>2024-01의 전월매출이 비어 있는 것을 오류로 오해하지 않았는가.</li>
+</ul>
+</section>
+<section class="tab-panel markdown-body" data-panel="script" aria-label="강사대본">
+<h1>S17 강사대본: 시각화·상호작용·DAX 기초</h1>
+<h2>수업 전 확인</h2>
+<ul>
+<li>강사용 PC에 Power BI Desktop이 설치되어 있는지 확인한다.</li>
+<li><code>02_datasets/shop_orders/orders.csv</code>, <code>customers.csv</code>, <code>products.csv</code>가 열리는지 확인한다.</li>
+<li>Power BI에서 세 파일을 불러온 예비 PBIX를 하나 준비해 둔다.</li>
+<li>S16에서 만든 날짜테이블이 있는 파일이 있으면 그 파일로 시작한다.</li>
+<li>수강생 PC에서 Power BI Desktop 사용이 어려운 경우 강사 화면 중심으로 진행한다. Mac 수강생은 Windows 전용 제한을 다시 안내한다.</li>
+</ul>
+<p>자료 작성 전 pandas로 확인한 기준값:</p>
+<div class="code-scroll"><pre><code class="language-text">orders: 20,000행
+customers: 3,000행
+products: 200행
+주문 기간: 2024-01-01 ~ 2024-12-31
+날짜테이블 필요 행수: 366행
+전체 매출: 1,938,489,803
+2024-12 매출: 225,576,457
+2024-12 전월대비 성장률: 1.14%
+</code></pre></div>
+<h2>0-7분. 도입과 S16 모델 복습</h2>
+<p>말할 것:</p>
+<p>지난 시간에는 여러 테이블을 하나의 모델로 엮었다. 오늘은 그 모델을 대시보드로 펼쳐 보이고, 클릭하면 숫자가 함께 움직이도록 만든다. 엑셀로 치면 피벗테이블 여러 개를 한 화면에 늘어놓고 슬라이서로 묶는 작업이다.</p>
+<p>오늘 눈여겨볼 차이는 계산식이 어디에 놓이느냐다. 엑셀은 셀에 수식을 적지만, Power BI는 모델 안에 측정값을 만들어 둔다. 이 측정값 하나를 카드와 표, 그래프에서 두고두고 다시 쓴다.</p>
+<p>시연:</p>
+<ol>
+<li><code>orders</code>, <code>customers</code>, <code>products</code>가 불러와져 있는지 확인한다.</li>
+<li>모델 보기에서 <code>customers[customer_id]</code>와 <code>orders[customer_id]</code> 관계를 확인한다.</li>
+<li><code>products[product_id]</code>와 <code>orders[product_id]</code> 관계를 확인한다.</li>
+<li>날짜테이블과 <code>orders[order_date]</code> 관계를 확인한다.</li>
+</ol>
+<p>강조:</p>
+<p>주문 테이블에는 매출 컬럼이 아예 없다. 매출은 상품 단가와 수량, 할인율을 조합해 직접 만들어 내야 한다. 바로 이 지점이 오늘 DAX를 꺼내 드는 이유다.</p>
+<h2>7-17분. 기본 측정값 만들기</h2>
+<p>시연 DAX:</p>
+<div class="code-scroll"><pre><code class="language-DAX">총매출 =
+SUMX(
+    orders,
+    RELATED(products[price]) * orders[qty] * (1 - orders[discount_rate])
+)
+</code></pre></div>
+<p>말할 것:</p>
+<p><code>SUMX</code>는 주문 행을 한 줄씩 훑으며 계산하고, 맨 끝에서 그 값을 전부 더한다. 엑셀에서 보조열에 행별 매출을 만들어 두고 합계를 내던 일을 한 번에 처리한다고 보면 된다.</p>
+<p><code>RELATED(products[price])</code>는 지금 이 주문의 상품ID와 연결된 상품 테이블에서 단가를 끌어온다는 뜻이다. 그러니 모델 관계가 먼저 잡혀 있어야 한다.</p>
+<p>시연:</p>
+<ol>
+<li><code>orders</code> 테이블을 선택한다.</li>
+<li><code>모델링 &gt; 새 측정값</code>을 누른다.</li>
+<li>총매출 측정값을 입력한다.</li>
+<li>카드 시각화에 넣어 1,938,489,803이 나오는지 확인한다.</li>
+</ol>
+<p>이어 만들 측정값:</p>
+<div class="code-scroll"><pre><code class="language-DAX">주문건수 =
+DISTINCTCOUNT(orders[order_id])
+</code></pre></div>
+<div class="code-scroll"><pre><code class="language-DAX">총수량 =
+SUM(orders[qty])
+</code></pre></div>
+<div class="code-scroll"><pre><code class="language-DAX">평균주문금액 =
+DIVIDE([총매출], [주문건수])
+</code></pre></div>
+<p>말할 것:</p>
+<p>나눗셈은 웬만하면 <code>DIVIDE</code>로 처리한다. 분모가 비어 있거나 0이어도 오류를 덜 낸다. 입문 단계에서는 비율이든 평균이든 <code>DIVIDE</code>로 만든다고 외워 두면 된다.</p>
+<h2>17-27분. 매출비중 측정값</h2>
+<p>시연 DAX:</p>
+<div class="code-scroll"><pre><code class="language-DAX">매출비중 =
+DIVIDE(
+    [총매출],
+    CALCULATE([총매출], ALL(products[category]))
+)
+</code></pre></div>
+<p>말할 것:</p>
+<p>카테고리별 매출비중은 지금 카테고리의 매출을 전체 카테고리 매출로 나눈 값이다. 표에서 디지털 행을 짚고 있다면 분자는 디지털 매출, 분모는 모든 카테고리를 합친 매출이 된다.</p>
+<p><code>CALCULATE</code>는 계산 맥락 자체를 바꿔 주는 함수다. 오늘은 여기까지만 하고 깊이 파고들지 않는다. 지금은 "분모를 전체 카테고리 기준으로 다시 계산한다" 정도로만 잡아 두면 충분하다.</p>
+<p>시연:</p>
+<ol>
+<li>테이블 시각화를 만든다.</li>
+<li><code>products[category]</code>, <code>[총매출]</code>, <code>[매출비중]</code>을 넣는다.</li>
+<li>매출 내림차순으로 정렬한다.</li>
+<li>디지털 34.76%가 나오는지 확인한다.</li>
+</ol>
+<h2>27-40분. 카드, 선그래프, 막대그래프, 등급 슬라이서</h2>
+<p>시연:</p>
+<ol>
+<li>카드 3개를 만든다. 총매출, 주문건수, 평균주문금액을 배치한다.</li>
+<li>꺾은선형 차트를 만들고 X축에 <code>날짜테이블[연월]</code>, Y축에 <code>[총매출]</code>을 넣는다.</li>
+<li>막대그래프를 만들고 축에 <code>products[category]</code>, 값에 <code>[총매출]</code>을 넣는다.</li>
+<li>슬라이서를 만들고 <code>customers[grade]</code>를 넣는다.</li>
+</ol>
+<p>말할 것:</p>
+<p>슬라이서는 화면 위에 얹어 놓는 필터 버튼이다. 등급에서 VIP를 누르면 모든 시각화가 VIP 고객 기준으로 새로 계산된다. 여기서 놓치면 안 되는 것은, 숫자가 그냥 가려지는 게 아니라 측정값이 그 필터 조건 아래에서 처음부터 다시 계산된다는 점이다.</p>
+<p>확인 질문:</p>
+<p>VIP를 눌렀을 때 총매출 카드가 393,432,930 언저리로 바뀌는지 함께 보자. 실버로 바꾸면 603,583,519 근처가 나온다. 이 값이 안 맞으면 관계가 끊겼거나, 슬라이서가 엉뚱한 필드를 보고 있을 공산이 크다.</p>
+<h2>40-50분. 드릴다운과 상호작용 편집</h2>
+<p>시연:</p>
+<ol>
+<li>카테고리 막대그래프의 축에 <code>products[product_name]</code>을 두 번째 필드로 추가한다.</li>
+<li>드릴다운 아이콘을 켠다.</li>
+<li><code>디지털</code> 막대를 눌러 상품명 수준으로 내려간다.</li>
+<li>위로 올라가기 아이콘으로 돌아온다.</li>
+</ol>
+<p>말할 것:</p>
+<p>드릴다운은 큰 묶음에서 작은 항목으로 한 칸 내려가는 기능이다. 전체 카테고리를 훑고 나서 디지털 안쪽에서 어떤 상품이 큰지 곧바로 이어 보는 흐름이다.</p>
+<p>상호작용 시연:</p>
+<ol>
+<li>카테고리 막대그래프를 선택한다.</li>
+<li><code>서식 &gt; 상호 작용 편집</code>을 누른다.</li>
+<li>월별 선그래프에 필터, 강조, 없음 아이콘이 나타나는 것을 보여준다.</li>
+<li>필터와 강조의 차이를 클릭해 보여준다.</li>
+</ol>
+<p>말할 것:</p>
+<p>대시보드는 한 곳을 클릭하면 다른 차트가 따라 바뀐다. 이 연동은 기본값으로 알아서 생기지만, 잘 만든 대시보드는 여기에 그냥 맡기지 않고 어디를 어디에 걸지 직접 정해 둔다. 오늘은 카테고리를 누르면 월별 선그래프와 KPI 카드가 그 카테고리 기준으로 바뀌도록 잡아 둔다.</p>
+<h2>50-60분. 전월대비 DAX</h2>
+<p>말할 것:</p>
+<p>이제 시간 계산으로 넘어간다. 전월대비는 그냥 바로 위 행을 빼는 게 아니라, 날짜테이블을 기준 삼아 현재 달의 전월이 어디인지 찾아 계산한다. S16에서 날짜테이블을 미리 만들어 둔 이유가 여기에 있다.</p>
+<p>시연 DAX:</p>
+<div class="code-scroll"><pre><code class="language-DAX">전월매출 =
+CALCULATE(
+    [총매출],
+    SAMEPERIODLASTMONTH('날짜테이블'[Date])
+)
+</code></pre></div>
+<div class="code-scroll"><pre><code class="language-DAX">전월대비증감액 =
+[총매출] - [전월매출]
+</code></pre></div>
+<div class="code-scroll"><pre><code class="language-DAX">전월대비성장률 =
+DIVIDE([전월대비증감액], [전월매출])
+</code></pre></div>
+<p>시연:</p>
+<ol>
+<li>월별 테이블을 만든다.</li>
+<li><code>날짜테이블[연월]</code>, <code>[총매출]</code>, <code>[전월매출]</code>, <code>[전월대비성장률]</code>을 넣는다.</li>
+<li>2024-01은 전월매출이 비어 있음을 보여준다.</li>
+<li>2024-11 성장률 40.43%, 2024-12 성장률 1.14%를 확인한다.</li>
+</ol>
+<p>말할 것:</p>
+<p>1월의 전월매출이 비어 있는 건 오류가 아니다. 이 데이터에도, 날짜테이블에도 2023년 12월이 아예 없어서 그렇다. 알 수 없는 값을 억지로 0으로 메우기보다, 비어 있는 채로 두는 편이 오히려 정직하다.</p>
+<p>카드 시연:</p>
+<ol>
+<li>월 슬라이서를 만든다.</li>
+<li><code>2024-12</code>를 선택한다.</li>
+<li>전월대비 성장률 카드를 만들고 1.14%가 표시되는지 확인한다.</li>
+</ol>
+<p>강조:</p>
+<p>전월대비 카드는 지금 어느 달을 보고 있는지가 정해져야 비로소 읽힌다. 그래서 월 슬라이서와 짝지어 쓰는 편이 안전하다.</p>
+<h2>60-68분. 직접 해보기 안내</h2>
+<p>미션:</p>
+<p>시계열 KPI 대시보드 한 페이지를 완성한다.</p>
+<p>수강생에게 안내할 조건:</p>
+<ul>
+<li>총매출, 주문건수, 평균주문금액, 전월대비 성장률 카드가 있어야 한다.</li>
+<li>월별 총매출 선그래프가 있어야 한다.</li>
+<li>고객 등급 슬라이서가 있어야 한다.</li>
+<li>월 슬라이서에서 2024-12를 선택하면 전월대비 성장률 1.14%가 보여야 한다.</li>
+<li>카테고리별 매출 막대그래프는 상품명으로 드릴다운되어야 한다.</li>
+<li>카테고리별 매출비중 표가 있어야 한다.</li>
+<li>해석 문장 2개를 적어야 한다.</li>
+</ul>
+<p>돌아다니며 볼 것:</p>
+<ul>
+<li><code>orders[order_date]</code>가 날짜 형식인지 확인한다.</li>
+<li>날짜테이블과 주문일 관계가 연결되어 있는지 확인한다.</li>
+<li><code>[총매출]</code>을 계산열이 아니라 측정값으로 만들었는지 확인한다.</li>
+<li>전월대비 성장률 형식이 백분율인지 확인한다.</li>
+<li>슬라이서가 <code>customers[grade]</code>를 보고 있는지 확인한다.</li>
+</ul>
+<h2>68-70분. 마무리</h2>
+<p>말할 것:</p>
+<p>오늘 만든 대시보드는 그냥 예쁜 그림이 아니다. 관계형 모델 위에 측정값을 올리고, 그 측정값이 필터 맥락에 따라 스스로 다시 계산되도록 짜 놓은 결과물이다. 슬라이서를 누르든 막대를 클릭하든, 같은 측정값이 매번 다른 조건에서 새로 계산된다.</p>
+<p>다음 단계에서는 이 대시보드를 남들과 나눠 보기 쉬운 형태로 다듬고, Power BI를 쓰기 힘든 환경을 위해 Looker Studio 경로도 함께 짚어 본다.</p>
+<p>완료 판단 체크포인트:</p>
+<p>수강생이 월 슬라이서에서 2024-12를 선택했을 때 전월대비 성장률 1.14%를 표시하고, 등급 슬라이서와 카테고리 드릴다운이 함께 작동하는 시계열 KPI 대시보드를 완성하면 완료로 본다.</p>
+<h2>예상 질문과 답</h2>
+<p>질문: 날짜테이블 없이 <code>orders[order_date]</code>만 써도 월별 그래프가 나오는데 왜 날짜테이블이 필요한가.</p>
+<p>답: 월별 합계만 보려면 주문일만으로도 된다. 하지만 전월대비나 전년동월대비, 누계 같은 시간 계산은 주문이 없는 날짜까지 채운 기준 달력이 있어야 흔들림 없이 돌아간다. 날짜테이블을 굳이 따로 두는 이유가 그것이다.</p>
+<p>질문: 2024-01의 전월매출이 비어 있는 것은 잘못된 것인가.</p>
+<p>답: 잘못된 게 아니다. 데이터도 날짜테이블도 2024년부터 시작하니 2023년 12월 값 자체가 없다. 견줄 대상이 없어서 비어 있는 것이니, 이게 정상이다.</p>
+<p>질문: 전월대비 성장률 카드가 이상하게 보인다.</p>
+<p>답: 카드는 현재 월이라는 맥락이 있어야 제대로 나온다. 월 슬라이서에서 한 달만 고르거나, 월별 표나 선그래프처럼 월이 축으로 들어간 시각화에서 확인한다.</p>
+<p>질문: <code>SUM</code> 대신 왜 <code>SUMX</code>를 쓰는가.</p>
+<p>답: 주문 테이블에 매출 컬럼이 없어서다. 행마다 상품 단가와 수량, 할인율을 곱해 매출을 먼저 만든 뒤 합쳐야 하니 <code>SUMX</code>가 필요하다.</p>
+<p>질문: <code>RELATED</code>가 오류가 난다.</p>
+<p>답: <code>orders[product_id]</code>와 <code>products[product_id]</code> 관계가 아예 없거나 엉뚱하게 이어졌을 가능성이 크다. 모델 보기에서 관계부터 확인한다.</p>
+<p>질문: 슬라이서를 눌러도 어떤 차트는 바뀌지 않는다.</p>
+<p>답: 그 차트의 상호작용이 <code>없음</code>으로 잡혀 있거나, 슬라이서와 이어지지 않은 테이블만 바라보고 있을 수 있다. <code>서식 &gt; 상호 작용 편집</code>과 모델 관계를 함께 확인한다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="answer" aria-label="모범답안">
+<h1>S17 모범답안</h1>
+<h2>미션 요약</h2>
+<p>미션은 <code>shop_orders</code> 데이터로 시계열 KPI 대시보드 한 페이지를 만드는 것이다. 완성 대시보드는 월별 총매출 흐름, 고객 등급 슬라이서, 카테고리 드릴다운, 전월대비 성장률을 함께 보여주어야 한다.</p>
+<p>Power BI 파일 자체를 자동 생성하지는 않는다. 대신 아래 DAX 측정값과 검증값을 기준으로 수강생 화면을 확인한다.</p>
+<h2>데이터 검증 결과</h2>
+<p>pandas 3.0.3으로 실제 파일을 열어 확인했다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>파일</th>
+<th style="text-align: right;">실제 행수</th>
+<th style="text-align: right;">열수</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>02_datasets/shop_orders/orders.csv</code></td>
+<td style="text-align: right;">20,000</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr>
+<td><code>02_datasets/shop_orders/customers.csv</code></td>
+<td style="text-align: right;">3,000</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr>
+<td><code>02_datasets/shop_orders/products.csv</code></td>
+<td style="text-align: right;">200</td>
+<td style="text-align: right;">5</td>
+</tr>
+</tbody>
+</table></div>
+<p>추가 확인:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th style="text-align: right;">값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>주문 기간</td>
+<td style="text-align: right;">2024-01-01 ~ 2024-12-31</td>
+</tr>
+<tr>
+<td>주문 월수</td>
+<td style="text-align: right;">12개월</td>
+</tr>
+<tr>
+<td>날짜테이블 행수</td>
+<td style="text-align: right;">366</td>
+</tr>
+<tr>
+<td>고객 조인 누락</td>
+<td style="text-align: right;">0건</td>
+</tr>
+<tr>
+<td>상품 조인 누락</td>
+<td style="text-align: right;">0건</td>
+</tr>
+<tr>
+<td>전체 주문건수</td>
+<td style="text-align: right;">20,000</td>
+</tr>
+<tr>
+<td>전체 판매수량</td>
+<td style="text-align: right;">29,535</td>
+</tr>
+<tr>
+<td>전체 매출</td>
+<td style="text-align: right;">1,938,489,803</td>
+</tr>
+<tr>
+<td>평균주문금액</td>
+<td style="text-align: right;">96,924.49</td>
+</tr>
+</tbody>
+</table></div>
+<p>매출 계산식:</p>
+<div class="code-scroll"><pre><code class="language-text">매출 = products[price] × orders[qty] × (1 - orders[discount_rate])
+</code></pre></div>
+<h2>모델 관계 정답</h2>
+<p>Power BI 모델 보기에서 아래 관계가 있어야 한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>1쪽</th>
+<th>다쪽</th>
+<th>방향</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>customers[customer_id]</code></td>
+<td><code>orders[customer_id]</code></td>
+<td>단일</td>
+</tr>
+<tr>
+<td><code>products[product_id]</code></td>
+<td><code>orders[product_id]</code></td>
+<td>단일</td>
+</tr>
+<tr>
+<td><code>날짜테이블[Date]</code></td>
+<td><code>orders[order_date]</code></td>
+<td>단일</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>날짜테이블</code>은 날짜 테이블로 표시하고, 날짜 열은 <code>Date</code>로 지정한다.</p>
+<h2>날짜테이블 DAX</h2>
+<p>S16 날짜테이블이 없을 때는 아래 DAX로 만든다.</p>
+<div class="code-scroll"><pre><code class="language-DAX">날짜테이블 =
+ADDCOLUMNS(
+    CALENDAR(DATE(2024, 1, 1), DATE(2024, 12, 31)),
+    &quot;연도&quot;, YEAR([Date]),
+    &quot;월번호&quot;, MONTH([Date]),
+    &quot;연월&quot;, FORMAT([Date], &quot;yyyy-MM&quot;),
+    &quot;연월정렬&quot;, YEAR([Date]) * 100 + MONTH([Date])
+)
+</code></pre></div>
+<p>생성 후 <code>날짜테이블[연월]</code>은 <code>날짜테이블[연월정렬]</code> 기준으로 정렬한다.</p>
+<h2>측정값 모범답안</h2>
+<h3>총매출</h3>
+<div class="code-scroll"><pre><code class="language-DAX">총매출 =
+SUMX(
+    orders,
+    RELATED(products[price]) * orders[qty] * (1 - orders[discount_rate])
+)
+</code></pre></div>
+<p>검증값:</p>
+<div class="code-scroll"><pre><code class="language-text">1,938,489,803
+</code></pre></div>
+<h3>주문건수</h3>
+<div class="code-scroll"><pre><code class="language-DAX">주문건수 =
+DISTINCTCOUNT(orders[order_id])
+</code></pre></div>
+<p>검증값:</p>
+<div class="code-scroll"><pre><code class="language-text">20,000
+</code></pre></div>
+<h3>총수량</h3>
+<div class="code-scroll"><pre><code class="language-DAX">총수량 =
+SUM(orders[qty])
+</code></pre></div>
+<p>검증값:</p>
+<div class="code-scroll"><pre><code class="language-text">29,535
+</code></pre></div>
+<h3>평균주문금액</h3>
+<div class="code-scroll"><pre><code class="language-DAX">평균주문금액 =
+DIVIDE([총매출], [주문건수])
+</code></pre></div>
+<p>검증값:</p>
+<div class="code-scroll"><pre><code class="language-text">96,924.49
+</code></pre></div>
+<h3>매출비중</h3>
+<div class="code-scroll"><pre><code class="language-DAX">매출비중 =
+DIVIDE(
+    [총매출],
+    CALCULATE([총매출], ALL(products[category]))
+)
+</code></pre></div>
+<p>카테고리별 주요 검증값:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>카테고리</th>
+<th style="text-align: right;">매출</th>
+<th style="text-align: right;">매출비중</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>디지털</td>
+<td style="text-align: right;">673,862,749</td>
+<td style="text-align: right;">34.76%</td>
+</tr>
+<tr>
+<td>패션</td>
+<td style="text-align: right;">281,835,909</td>
+<td style="text-align: right;">14.54%</td>
+</tr>
+<tr>
+<td>스포츠</td>
+<td style="text-align: right;">217,531,145</td>
+<td style="text-align: right;">11.22%</td>
+</tr>
+<tr>
+<td>뷰티</td>
+<td style="text-align: right;">179,845,362</td>
+<td style="text-align: right;">9.28%</td>
+</tr>
+<tr>
+<td>생활용품</td>
+<td style="text-align: right;">178,042,374</td>
+<td style="text-align: right;">9.18%</td>
+</tr>
+</tbody>
+</table></div>
+<h3>전월매출</h3>
+<div class="code-scroll"><pre><code class="language-DAX">전월매출 =
+CALCULATE(
+    [총매출],
+    SAMEPERIODLASTMONTH('날짜테이블'[Date])
+)
+</code></pre></div>
+<h3>전월대비 증감액</h3>
+<div class="code-scroll"><pre><code class="language-DAX">전월대비증감액 =
+[총매출] - [전월매출]
+</code></pre></div>
+<h3>전월대비 성장률</h3>
+<div class="code-scroll"><pre><code class="language-DAX">전월대비성장률 =
+DIVIDE([전월대비증감액], [전월매출])
+</code></pre></div>
+<h2>월별 KPI 정답</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>연월</th>
+<th style="text-align: right;">주문건수</th>
+<th style="text-align: right;">판매수량</th>
+<th style="text-align: right;">총매출</th>
+<th style="text-align: right;">전월매출</th>
+<th style="text-align: right;">전월대비 성장률</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2024-01</td>
+<td style="text-align: right;">1,403</td>
+<td style="text-align: right;">2,088</td>
+<td style="text-align: right;">131,088,708</td>
+<td style="text-align: right;"></td>
+<td style="text-align: right;"></td>
+</tr>
+<tr>
+<td>2024-02</td>
+<td style="text-align: right;">1,317</td>
+<td style="text-align: right;">1,983</td>
+<td style="text-align: right;">128,361,174</td>
+<td style="text-align: right;">131,088,708</td>
+<td style="text-align: right;">-2.08%</td>
+</tr>
+<tr>
+<td>2024-03</td>
+<td style="text-align: right;">1,504</td>
+<td style="text-align: right;">2,234</td>
+<td style="text-align: right;">135,686,515</td>
+<td style="text-align: right;">128,361,174</td>
+<td style="text-align: right;">5.71%</td>
+</tr>
+<tr>
+<td>2024-04</td>
+<td style="text-align: right;">1,580</td>
+<td style="text-align: right;">2,281</td>
+<td style="text-align: right;">152,837,005</td>
+<td style="text-align: right;">135,686,515</td>
+<td style="text-align: right;">12.64%</td>
+</tr>
+<tr>
+<td>2024-05</td>
+<td style="text-align: right;">1,631</td>
+<td style="text-align: right;">2,411</td>
+<td style="text-align: right;">164,426,614</td>
+<td style="text-align: right;">152,837,005</td>
+<td style="text-align: right;">7.58%</td>
+</tr>
+<tr>
+<td>2024-06</td>
+<td style="text-align: right;">1,526</td>
+<td style="text-align: right;">2,284</td>
+<td style="text-align: right;">137,684,249</td>
+<td style="text-align: right;">164,426,614</td>
+<td style="text-align: right;">-16.26%</td>
+</tr>
+<tr>
+<td>2024-07</td>
+<td style="text-align: right;">1,682</td>
+<td style="text-align: right;">2,465</td>
+<td style="text-align: right;">168,414,635</td>
+<td style="text-align: right;">137,684,249</td>
+<td style="text-align: right;">22.32%</td>
+</tr>
+<tr>
+<td>2024-08</td>
+<td style="text-align: right;">1,687</td>
+<td style="text-align: right;">2,492</td>
+<td style="text-align: right;">162,095,281</td>
+<td style="text-align: right;">168,414,635</td>
+<td style="text-align: right;">-3.75%</td>
+</tr>
+<tr>
+<td>2024-09</td>
+<td style="text-align: right;">1,688</td>
+<td style="text-align: right;">2,481</td>
+<td style="text-align: right;">150,484,525</td>
+<td style="text-align: right;">162,095,281</td>
+<td style="text-align: right;">-7.16%</td>
+</tr>
+<tr>
+<td>2024-10</td>
+<td style="text-align: right;">1,720</td>
+<td style="text-align: right;">2,508</td>
+<td style="text-align: right;">158,810,201</td>
+<td style="text-align: right;">150,484,525</td>
+<td style="text-align: right;">5.53%</td>
+</tr>
+<tr>
+<td>2024-11</td>
+<td style="text-align: right;">2,162</td>
+<td style="text-align: right;">3,142</td>
+<td style="text-align: right;">223,024,439</td>
+<td style="text-align: right;">158,810,201</td>
+<td style="text-align: right;">40.43%</td>
+</tr>
+<tr>
+<td>2024-12</td>
+<td style="text-align: right;">2,100</td>
+<td style="text-align: right;">3,166</td>
+<td style="text-align: right;">225,576,457</td>
+<td style="text-align: right;">223,024,439</td>
+<td style="text-align: right;">1.14%</td>
+</tr>
+</tbody>
+</table></div>
+<p>해석:</p>
+<p>2024년 전체 매출은 1,938,489,803원이다. 2024년 12월 매출은 225,576,457원으로 월별 매출이 가장 크지만, 전월대비 성장률이 가장 높은 달은 2024년 11월이다. 2024년 11월은 10월 대비 40.43% 증가했고, 2024년 6월은 5월 대비 16.26% 감소했다.</p>
+<h2>등급 슬라이서 검증값</h2>
+<p>고객 등급 슬라이서에서 등급을 하나씩 선택했을 때 총매출 카드가 아래 값과 맞는지 확인한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>등급</th>
+<th style="text-align: right;">고객수</th>
+<th style="text-align: right;">주문건수</th>
+<th style="text-align: right;">총매출</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>실버</td>
+<td style="text-align: right;">1,030</td>
+<td style="text-align: right;">6,373</td>
+<td style="text-align: right;">603,583,519</td>
+</tr>
+<tr>
+<td>골드</td>
+<td style="text-align: right;">538</td>
+<td style="text-align: right;">5,433</td>
+<td style="text-align: right;">547,524,985</td>
+</tr>
+<tr>
+<td>브론즈</td>
+<td style="text-align: right;">1,125</td>
+<td style="text-align: right;">4,437</td>
+<td style="text-align: right;">393,948,369</td>
+</tr>
+<tr>
+<td>VIP</td>
+<td style="text-align: right;">210</td>
+<td style="text-align: right;">3,757</td>
+<td style="text-align: right;">393,432,930</td>
+</tr>
+</tbody>
+</table></div>
+<h2>미션 대시보드 구성 정답</h2>
+<p>권장 배치:</p>
+<ol>
+<li>상단: 총매출, 주문건수, 평균주문금액, 전월대비 성장률 카드</li>
+<li>왼쪽: 고객 등급 슬라이서, 월 슬라이서</li>
+<li>가운데: 월별 총매출 선그래프</li>
+<li>오른쪽: 카테고리별 매출 막대그래프</li>
+<li>하단: 카테고리별 매출비중 표와 해석 문장</li>
+</ol>
+<p>필수 동작:</p>
+<ul>
+<li>월 슬라이서에서 <code>2024-12</code>를 선택하면 전월대비 성장률 카드가 1.14%를 표시한다.</li>
+<li>고객 등급 슬라이서에서 <code>VIP</code>를 선택하면 총매출 카드가 393,432,930을 표시한다.</li>
+<li>카테고리 막대그래프에서 <code>디지털</code>을 클릭하면 다른 시각화가 디지털 기준으로 필터링된다.</li>
+<li>카테고리 막대그래프는 <code>products[category]</code>에서 <code>products[product_name]</code>으로 드릴다운된다.</li>
+</ul>
+<h2>검증 코드</h2>
+<p>Power BI DAX 자체는 이 환경에서 실행하지 않는다. 대신 같은 계산을 pandas로 재현해 DAX 검증값을 확인했다. 검증 코드는 아래 파일에 저장했다.</p>
+<div class="code-scroll"><pre><code class="language-text">06_answers/S17_code.py
+</code></pre></div>
+<p>실행 명령:</p>
+<div class="code-scroll"><pre><code class="language-bash">python3 06_answers/S17_code.py
+</code></pre></div>
+<p>실제 실행 출력 요약:</p>
+<div class="code-scroll"><pre><code class="language-text">pandas: 3.0.3
+orders: 20,000행, customers: 3,000행, products: 200행
+주문 기간: 2024-01-01 ~ 2024-12-31
+날짜테이블: 366행
+조인 누락: 고객 0건, 상품 0건
+전체 매출: 1,938,489,803
+2024-12 매출: 225,576,457
+2024-12 전월대비 성장률: 1.14%
+검증 통과
+</code></pre></div>
+</section>
+  </div>
+
+  <nav class="session-pager container">
+    <a class="pager-link prev" href="./S16.html"><span class="pager-direction">&larr; 이전 차시</span><span class="pager-title">S16 · 데이터 모델링: 관계, 스타 스키마, 날짜 차원</span></a>
+    <a class="pager-link next" href="./S18.html"><span class="pager-direction">다음 차시 &rarr;</span><span class="pager-title">S18 · 배포와 공유: Looker Studio, Power BI Copilot 선택</span></a>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>데이터 리터러시 with AI · S17 차시</span>
+    <a href="../index.html#curriculum">전체 커리큘럼으로</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.tab-panel');
+  function activate(key, updateHash){
+    tabs.forEach(function(btn){
+      var on = btn.getAttribute('data-tab') === key;
+      btn.classList.toggle('active', on);
+    });
+    panels.forEach(function(panel){
+      var on = panel.getAttribute('data-panel') === key;
+      panel.classList.toggle('active', on);
+    });
+    if (updateHash && history.replaceState){
+      history.replaceState(null, '', '#' + key);
+    }
+  }
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      activate(btn.getAttribute('data-tab'), true);
+    });
+  });
+  var initial = (location.hash || '').replace('#', '');
+  var valid = ['curriculum', 'handout', 'script', 'answer'];
+  if (valid.indexOf(initial) !== -1){
+    activate(initial, false);
+  }
+})();
+</script>
+
+</body>
+</html>

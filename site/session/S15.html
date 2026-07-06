@@ -1,0 +1,1260 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>S15. Power BI 설치, 로드, 첫 차트 · 데이터 리터러시 with AI</title>
+<meta name="description" content="S15차시: Power BI 설치, 로드, 첫 차트 — 커리큘럼·핸드아웃·강사대본·모범답안." />
+<style>
+:root{
+  --canvas: #010102;
+  --surface-1: #0f1011;
+  --surface-2: #141516;
+  --surface-3: #18191a;
+  --surface-4: #191a1b;
+  --ink: #f7f8f8;
+  --ink-muted: #d0d6e0;
+  --ink-subtle: #8a8f98;
+  --ink-tertiary: #62666d;
+  --primary: #5e6ad2;
+  --primary-hover: #828fff;
+  --primary-focus: #5e69d1;
+  --hairline: #23252a;
+  --hairline-strong: #34343a;
+  --hairline-tertiary: #3e3e44;
+  --success: #27a644;
+
+  --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+
+  --space-xxs: 4px;
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-xxl: 48px;
+
+  --container: 900px;
+}
+
+*, *::before, *::after{ box-sizing: border-box; }
+html{ background: var(--canvas); }
+body{
+  margin:0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: var(--font-text);
+  font-size: 16px;
+  line-height: 1.5;
+  letter-spacing: -0.05px;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a{ color: inherit; text-decoration: none; }
+ul, ol{ margin:0; padding:0; }
+h1,h2,h3,h4,p{ margin:0; }
+
+.container{
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 48px);
+}
+
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.4px;
+  color: var(--primary-hover);
+}
+.eyebrow::before{
+  content:"";
+  width:6px; height:6px;
+  background: var(--primary);
+  border-radius: 1px;
+  flex-shrink:0;
+}
+
+/* ---------- top nav ---------- */
+.top-nav{
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  height: 64px;
+  display:flex;
+  align-items:center;
+  background: rgba(1,1,2,0.82);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--hairline);
+}
+.top-nav .container{ display:flex; align-items:center; justify-content:space-between; gap: 24px; max-width: 1280px; }
+.brand{ display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:600; font-size:15px; letter-spacing:-0.01em; }
+.brand-mark{ width:20px; height:20px; border-radius: 6px; background: var(--primary); flex-shrink:0; position:relative; }
+.brand-mark::after{ content:""; position:absolute; inset:6px; border-radius:2px; background: rgba(255,255,255,0.85); }
+.back-link{ font-size:14px; color: var(--ink-subtle); display:inline-flex; align-items:center; gap:6px; transition: color .15s ease; }
+.back-link:hover{ color: var(--ink); }
+
+/* ---------- session header ---------- */
+.session-header{
+  padding: var(--space-xxl) 0 var(--space-xl);
+  background:
+    radial-gradient(ellipse 60% 50% at 82% 0%, rgba(94,106,210,0.16), transparent 60%),
+    var(--canvas);
+  border-bottom: 1px solid var(--hairline);
+}
+.session-header-top{
+  display:flex;
+  align-items:center;
+  gap: var(--space-md);
+  margin: var(--space-md) 0 var(--space-md);
+}
+.session-num-badge{
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--primary-hover);
+  border: 1px solid var(--hairline-strong);
+  border-radius: var(--radius-xs);
+  padding: 4px 10px;
+}
+.difficulty{ display:flex; gap:4px; align-items:center; }
+.difficulty .dot{ width:6px; height:6px; border-radius:50%; background: var(--hairline-strong); }
+.difficulty .dot.filled{ background: var(--primary); }
+.difficulty-label{ font-size:12px; color: var(--ink-tertiary); margin-left:6px; }
+.session-header h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(26px, 4vw, 38px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+}
+
+/* ---------- tabs ---------- */
+.tabs-bar{
+  display:flex;
+  gap: 4px;
+  padding-top: var(--space-lg);
+  border-bottom: 1px solid var(--hairline);
+  overflow-x: auto;
+}
+.tab-btn{
+  appearance: none;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: var(--ink-subtle);
+  font-family: var(--font-text);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 12px 16px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color .15s ease, border-color .15s ease;
+}
+.tab-btn:hover{ color: var(--ink); }
+.tab-btn.active{ color: var(--ink); border-bottom-color: var(--primary); }
+
+.tab-panels{ padding: var(--space-xxl) 0 var(--space-xxl); }
+.tab-panel{ display:none; }
+.tab-panel.active{ display:block; }
+
+/* ---------- markdown body ---------- */
+.markdown-body{ color: var(--ink-muted); font-size: 15.5px; line-height: 1.75; letter-spacing: -0.05px; overflow-wrap: anywhere; word-break: break-word; }
+.markdown-body h1{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 26px;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin: 0 0 var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid var(--hairline);
+}
+.markdown-body h2{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: var(--space-xl) 0 var(--space-sm);
+}
+.markdown-body h3{
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 17px;
+  color: var(--ink);
+  margin: var(--space-lg) 0 var(--space-xs);
+}
+.markdown-body h4{
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--ink);
+  margin: var(--space-md) 0 var(--space-xs);
+}
+.markdown-body p{ margin: 0 0 var(--space-md); }
+.markdown-body ul, .markdown-body ol{ margin: 0 0 var(--space-md); padding-left: 1.4em; }
+.markdown-body li{ margin-bottom: 6px; }
+.markdown-body ul{ list-style: disc; }
+.markdown-body ol{ list-style: decimal; }
+.markdown-body strong{ color: var(--ink); font-weight: 600; }
+.markdown-body em{ color: var(--ink-muted); }
+.markdown-body a{ color: var(--primary-hover); text-decoration: underline; text-underline-offset: 2px; }
+.markdown-body hr{ border:none; border-top: 1px solid var(--hairline); margin: var(--space-xl) 0; }
+.markdown-body blockquote{
+  margin: 0 0 var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  border-left: 2px solid var(--primary);
+  background: var(--surface-1);
+  color: var(--ink-subtle);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+.markdown-body code{
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--surface-2);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 1px 6px;
+  color: var(--primary-hover);
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+.markdown-body .code-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-md);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--hairline);
+  background: var(--surface-2);
+}
+.markdown-body pre{
+  margin: 0;
+  padding: var(--space-md);
+  background: transparent;
+  border: none;
+}
+.markdown-body pre code{
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--ink-muted);
+  font-size: 13px;
+  line-height: 1.6;
+  white-space: pre;
+}
+.markdown-body .table-scroll{
+  overflow-x: auto;
+  margin: 0 0 var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+}
+.markdown-body table{
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 460px;
+  font-size: 13.5px;
+}
+.markdown-body th, .markdown-body td{
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--hairline);
+  text-align: left;
+  white-space: nowrap;
+}
+.markdown-body thead th{
+  background: var(--surface-1);
+  color: var(--ink);
+  font-weight: 600;
+  font-family: var(--font-text);
+  font-size: 12.5px;
+  letter-spacing: 0.02em;
+}
+.markdown-body tbody tr:last-child td{ border-bottom: none; }
+.markdown-body tbody tr:hover{ background: var(--surface-1); }
+
+/* ---------- pager ---------- */
+.session-pager{
+  display:flex;
+  justify-content: space-between;
+  gap: var(--space-md);
+  padding: var(--space-xl) 0 var(--space-xxl);
+  border-top: 1px solid var(--hairline);
+  flex-wrap: wrap;
+}
+.pager-link{
+  display:flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: var(--space-md) var(--space-lg);
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  background: var(--surface-1);
+  max-width: 46%;
+  transition: border-color .2s ease, background-color .2s ease;
+}
+.pager-link:hover{ border-color: var(--primary); background: var(--surface-2); }
+.pager-link.next{ margin-left: auto; text-align: right; align-items: flex-end; }
+.pager-direction{ font-size: 12px; color: var(--ink-tertiary); font-family: var(--font-mono); }
+.pager-title{ font-size: 14px; color: var(--ink); font-weight: 500; }
+.pager-spacer{ flex: 1; }
+
+footer.site-footer{
+  border-top: 1px solid var(--hairline);
+  padding: var(--space-xl) 0;
+}
+footer.site-footer .container{
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: var(--ink-tertiary);
+  font-size: 12px;
+}
+footer.site-footer a:hover{ color: var(--ink-subtle); }
+
+@media (max-width: 640px){
+  .session-header{ padding: var(--space-xl) 0 var(--space-lg); }
+  .pager-link{ max-width: 100%; }
+  .session-pager{ flex-direction: column; }
+  .pager-link.next{ margin-left: 0; text-align: left; align-items: flex-start; }
+}
+</style>
+</head>
+<body>
+
+<nav class="top-nav">
+  <div class="container">
+    <div class="brand"><span class="brand-mark"></span>데이터 리터러시 with AI</div>
+    <a class="back-link" href="../index.html#curriculum">&larr; 커리큘럼으로</a>
+  </div>
+</nav>
+
+<header class="session-header">
+  <div class="container">
+    <div class="eyebrow">PART 05 · BI</div>
+    <div class="session-header-top">
+      <span class="session-num-badge">S15</span>
+      <div class="difficulty" title="난이도 3"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">중급</span></div>
+    </div>
+    <h1>Power BI 설치, 로드, 첫 차트</h1>
+  </div>
+  <div class="container">
+    <div class="tabs-bar" role="tablist">
+<button class="tab-btn active" data-tab="curriculum" role="tab" aria-selected="true">커리큘럼</button>
+<button class="tab-btn" data-tab="handout" role="tab" aria-selected="false">핸드아웃</button>
+<button class="tab-btn" data-tab="script" role="tab" aria-selected="false">강사대본</button>
+<button class="tab-btn" data-tab="answer" role="tab" aria-selected="false">모범답안</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="tab-panels container">
+<section class="tab-panel markdown-body active" data-panel="curriculum" aria-label="커리큘럼">
+<h1>S15. Power BI 설치, 로드, 첫 차트</h1>
+<h2>차시 개요</h2>
+<ul>
+<li>대상: 엑셀은 쓰지만 데이터분석은 처음인 비개발자</li>
+<li>선수 차시: S03 피벗테이블과 기본 집계</li>
+<li>난이도: 3</li>
+<li>시간: 60분</li>
+<li>사용 데이터: <code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.csv</code></li>
+<li>보조 데이터 파일: <code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.xlsx</code></li>
+</ul>
+<p>이번 차시는 BI 도구를 처음 열어 보는 시간이다. BI는 무언가를 새로 계산해 주는 도구가 아니다. 이미 정리된 표를 화면에 배치해, 다른 사람이 계속 들여다볼 수 있는 대시보드로 바꿔 준다. 엑셀 피벗테이블이 "내가 빠르게 집계해 보는 작업장"이라면, Power BI는 "다른 사람이 필터를 바꿔 가며 보는 보고 화면"에 가깝다.</p>
+<p>수강생은 Power BI Desktop을 설치하거나 실행하고, 정제된 카페 매출 CSV를 불러온 뒤, 첫 페이지에 총매출 카드, 카테고리별 매출 막대그래프, 일자별 매출 꺾은선그래프를 만든다. Mac 수강생은 Power BI Desktop 설치 대신 화면 구조와 개념을 따라오고, S18에서 Looker Studio 경로로 직접 실습한다.</p>
+<h2>학습 목표</h2>
+<ol>
+<li>Power BI Desktop이 Windows용 보고서 제작 도구라는 점을 알고 설치 또는 실행할 수 있다.</li>
+<li>CSV 파일과 엑셀 파일을 Power BI에 불러오는 경로를 설명할 수 있다.</li>
+<li>필드 목록, 시각화 패널, 캔버스의 역할을 엑셀 피벗테이블과 비교해 이해한다.</li>
+<li><code>category</code>, <code>date</code>, <code>amount</code> 필드를 사용해 막대그래프와 꺾은선그래프를 만들 수 있다.</li>
+<li><code>amount</code>의 합계를 KPI 카드로 표시하고, 표시 단위를 조정해 총매출을 확인할 수 있다.</li>
+</ol>
+<h2>데이터 확인 결과</h2>
+<p><code>python3</code>와 <code>pandas 3.0.3</code>으로 실제 파일을 열어 확인한 기준이다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th style="text-align: right;">확인값</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>행 수</td>
+<td style="text-align: right;">10,424</td>
+</tr>
+<tr>
+<td>열 수</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr>
+<td>기간</td>
+<td style="text-align: right;">2025-01-01부터 2025-06-30까지</td>
+</tr>
+<tr>
+<td>총매출 <code>amount</code> 합계</td>
+<td style="text-align: right;">90,492,500</td>
+</tr>
+<tr>
+<td>주문수</td>
+<td style="text-align: right;">10,424</td>
+</tr>
+<tr>
+<td>수량 <code>qty</code> 합계</td>
+<td style="text-align: right;">17,241</td>
+</tr>
+<tr>
+<td>결측값 총합</td>
+<td style="text-align: right;">0</td>
+</tr>
+</tbody>
+</table></div>
+<p>주요 열은 다음과 같다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>열 이름</th>
+<th>의미</th>
+<th>Power BI에서 주로 쓰는 위치</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>date</code></td>
+<td>주문일</td>
+<td>꺾은선그래프의 X축</td>
+</tr>
+<tr>
+<td><code>category</code></td>
+<td>상품군</td>
+<td>막대그래프의 X축</td>
+</tr>
+<tr>
+<td><code>amount</code></td>
+<td>주문금액</td>
+<td>그래프 값, KPI 카드 값</td>
+</tr>
+<tr>
+<td><code>store</code></td>
+<td>지점</td>
+<td>선택 필터 또는 범례</td>
+</tr>
+<tr>
+<td><code>order_id</code></td>
+<td>주문 번호</td>
+<td>주문 건수 확인</td>
+</tr>
+</tbody>
+</table></div>
+<h2>핵심 개념 1. Power BI Desktop은 보고서 제작 도구이다</h2>
+<p>Power BI라는 이름은 여러 형태로 등장한다. 입문자가 처음에 헷갈리는 지점도 대개 여기다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>구분</th>
+<th>이번 차시에서의 의미</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Power BI Desktop</td>
+<td>Windows PC에 설치해 보고서 파일을 만드는 프로그램</td>
+</tr>
+<tr>
+<td><code>.pbix</code> 파일</td>
+<td>Power BI Desktop에서 저장하는 보고서 파일</td>
+</tr>
+<tr>
+<td>Power BI Service</td>
+<td>웹에 게시하고 공유하는 서비스. S18에서 공유 개념을 다룬다</td>
+</tr>
+<tr>
+<td>Power BI Pro, Fabric, Copilot</td>
+<td>조직 공유와 고급 기능에 필요한 유료 또는 조직 환경. 오늘은 쓰지 않는다</td>
+</tr>
+</tbody>
+</table></div>
+<p>이번 차시는 Power BI Desktop에서 로컬 파일을 열고 보고서 한 페이지를 만드는 데 집중한다. 계정 공유, 게시, 권한 관리는 오늘의 목표가 아니다.</p>
+<p>Power BI Desktop은 Windows용 도구다. Microsoft 공식 다운로드 페이지도 Windows용 Desktop 설치만 안내하고, 강의 환경은 Windows 10이나 Windows 11 PC를 기준으로 잡는다. Mac 사용자는 억지로 우회 설치할 필요 없이 S18에서 Looker Studio로 대체 실습한다.</p>
+<h2>핵심 개념 2. 로드는 표를 Power BI 안으로 가져오는 일이다</h2>
+<p>엑셀은 파일을 열면 바로 셀이 보인다. Power BI는 그렇지 않다. 데이터를 먼저 가져와야 하고, 이 과정을 로드라고 부른다.</p>
+<p>데이터를 가져오는 감각은 피벗테이블을 만들기 전에 원본 표를 지정하던 일과 비슷하다. 차이가 있다면, Power BI는 원본을 그대로 펼쳐 보여주는 프로그램이 아니라 그 표를 바탕으로 시각화 화면을 짜는 프로그램이라는 점이다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>엑셀에서의 감각</th>
+<th>Power BI에서의 감각</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>엑셀 파일 열기</td>
+<td>데이터 가져오기</td>
+</tr>
+<tr>
+<td>표 범위 선택</td>
+<td>CSV 또는 엑셀 시트 선택</td>
+</tr>
+<tr>
+<td>피벗테이블 필드 목록</td>
+<td>데이터 패널의 필드 목록</td>
+</tr>
+<tr>
+<td>행, 열, 값 영역</td>
+<td>X축, Y축, 값, 범례 영역</td>
+</tr>
+<tr>
+<td>피벗 차트</td>
+<td>시각화 개체</td>
+</tr>
+</tbody>
+</table></div>
+<p>오늘 다루는 <code>cafe_sales_clean</code>은 이미 깨끗하게 정리돼 있다. 덕분에 Power Query에서 손대는 정제 작업은 없다. 대신 <code>date</code>가 날짜로, <code>amount</code>가 숫자로 제대로 인식되는지만 확인하면 된다.</p>
+<h2>핵심 개념 3. 시각화는 필드를 놓는 방식으로 만든다</h2>
+<p>화면 가운데 흰 영역이 캔버스다. 카드, 막대그래프, 꺾은선그래프 같은 시각화 개체를 여기에 올린다. 오른쪽에는 시각화 패널과 데이터 패널이 붙어 있다.</p>
+<p>시각화는 대체로 세 가지 질문에서 출발한다.</p>
+<ol>
+<li>무엇을 비교할 것인가: <code>category</code>, <code>store</code>, <code>date</code></li>
+<li>어떤 숫자를 볼 것인가: <code>amount</code>, <code>qty</code>, <code>order_id</code></li>
+<li>어떤 모양이 적절한가: 카드, 막대, 꺾은선</li>
+</ol>
+<p>막대그래프는 항목을 나란히 견줄 때 좋다. 카테고리별 매출이 그렇다. <code>category</code>마다 <code>amount</code> 합계를 세워 비교한다. 시간 흐름에는 꺾은선그래프가 맞다. 일자별 매출이라면 <code>date</code> 순서대로 <code>amount</code> 합계를 이어 본다. KPI 카드는 핵심 숫자 하나를 크게 보여줄 자리이니, 총매출이 여기에 어울린다.</p>
+<h2>핵심 개념 4. KPI 카드는 큰 셀 하나라고 생각한다</h2>
+<p>엑셀에서 <code>=SUM(매출범위)</code>를 큰 글씨로 박아 두면 보고받는 사람이 제일 먼저 보는 숫자가 된다. Power BI의 카드도 딱 그 역할이다.</p>
+<p>이번 미션은 <code>amount</code> 합계를 카드로 띄우는 것이고, 맞는 값은 총매출 <code>90,492,500</code>이다. Power BI는 기본값에서 이 숫자를 <code>90M</code>이나 <code>90.49M</code>처럼 줄여 보여줄 때가 있다. 정확히 검산하려면 표시 단위를 <code>없음(None)</code>으로 바꾸고 소수 자릿수를 <code>0</code>으로 맞춘다.</p>
+<h2>60분 수업 흐름</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th style="text-align: right;">시간</th>
+<th>내용</th>
+<th>진행 방식</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">0-8분</td>
+<td>BI 도구의 역할과 Part 5 목표 정리</td>
+<td>강의</td>
+</tr>
+<tr>
+<td style="text-align: right;">8-18분</td>
+<td>Power BI Desktop 설치 경로와 화면 구성 확인</td>
+<td>강사 시연</td>
+</tr>
+<tr>
+<td style="text-align: right;">18-28분</td>
+<td>CSV 로드, 엑셀 로드 경로 비교</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">28-38분</td>
+<td>카테고리별 매출 막대그래프 만들기</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">38-48분</td>
+<td>일자별 매출 꺾은선그래프 만들기</td>
+<td>따라하기</td>
+</tr>
+<tr>
+<td style="text-align: right;">48-56분</td>
+<td>총매출 KPI 카드 만들기</td>
+<td>미션</td>
+</tr>
+<tr>
+<td style="text-align: right;">56-60분</td>
+<td>저장, 검산, 다음 차시 연결</td>
+<td>정리</td>
+</tr>
+</tbody>
+</table></div>
+<h2>엑셀과 연결해서 설명할 지점</h2>
+<ul>
+<li>Power BI의 데이터 패널은 피벗테이블 필드 목록과 비슷하다.</li>
+<li>막대그래프의 X축은 피벗테이블의 행 영역처럼 비교 기준을 놓는 자리이다.</li>
+<li>막대그래프의 Y축 또는 값 영역은 피벗테이블의 값 영역처럼 합계나 개수를 놓는 자리이다.</li>
+<li>KPI 카드는 엑셀에서 <code>SUM</code> 결과를 크게 보여주는 셀과 비슷하다.</li>
+<li>Power BI는 화면을 만드는 도구이므로, 원본 데이터를 고치는 일은 엑셀 정제, Power Query, 파이썬과 역할을 나누어 생각한다.</li>
+</ul>
+<h2>수업 후 수강생이 말할 수 있어야 하는 문장</h2>
+<ul>
+<li>"Power BI Desktop은 Windows에서 보고서를 만드는 프로그램이고, Mac은 Looker Studio로 대체한다."</li>
+<li>"CSV와 엑셀 파일은 데이터 가져오기 메뉴에서 불러온다."</li>
+<li>"막대그래프는 항목 비교, 꺾은선그래프는 시간 흐름, 카드는 핵심 숫자에 쓴다."</li>
+<li>"<code>amount</code>를 카드에 넣고 합계로 요약하면 총매출을 볼 수 있다."</li>
+</ul>
+<h2>완료 판단</h2>
+<p>수강생이 <code>cafe_sales_clean.csv</code>를 Power BI에 불러와 총매출 KPI 카드를 <code>90,492,500</code>원에 맞추고, 같은 페이지에 카테고리별 매출 막대그래프와 일자별 매출 꺾은선그래프까지 배치했다면 완료로 본다.</p>
+</section>
+<section class="tab-panel markdown-body" data-panel="handout" aria-label="핸드아웃">
+<h1>S15 핸드아웃: Power BI 설치, 로드, 첫 차트</h1>
+<h2>오늘 사용할 것</h2>
+<ul>
+<li>Windows PC</li>
+<li>Power BI Desktop</li>
+<li>데이터 파일</li>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.csv</code></li>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.xlsx</code></li>
+</ul>
+<p>Power BI Desktop은 Windows용 프로그램이다. Mac 수강생은 오늘 화면 구조와 개념만 눈으로 따라오면 되고, 실습은 S18의 Looker Studio에서 이어 간다.</p>
+<p>공식 설치 경로:</p>
+<ul>
+<li>Microsoft Power BI 다운로드: <code>https://www.microsoft.com/en-us/power-platform/products/power-bi/downloads</code></li>
+<li>Microsoft Store Power BI Desktop: <code>https://apps.microsoft.com/detail/9ntxr16hnw1t</code></li>
+</ul>
+<p>실습 기준은 <code>cafe_sales_clean.csv</code>다. 엑셀 파일은 같은 데이터를 담은 보조 파일로, 엑셀 로드 경로를 확인할 때만 쓴다. 한 Power BI 파일에 CSV와 엑셀을 동시에 불러오지는 않는다.</p>
+<h2>따라하기 1: Power BI Desktop 열기</h2>
+<h3>1단계. 설치 확인</h3>
+<ol>
+<li>Windows 시작 메뉴를 연다.</li>
+<li><code>Power BI Desktop</code>을 검색한다.</li>
+<li>프로그램이 있으면 실행한다.</li>
+<li>프로그램이 없으면 강사의 안내에 따라 Microsoft Store 또는 Microsoft 공식 다운로드 페이지에서 설치한다.</li>
+</ol>
+<p>처음 실행하면 로그인 화면이 뜰 수 있다. 오늘은 로컬 파일로 보고서를 만드는 실습이니, 강사 안내에 맞춰 닫거나 건너뛰면 된다. 조직 PC라면 보안 정책 탓에 설치나 로그인이 막히기도 한다.</p>
+<h3>2단계. 빈 보고서 화면 확인</h3>
+<p>Power BI Desktop을 열면 다음 영역을 확인한다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>화면 영역</th>
+<th>볼 것</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>가운데 흰 영역</td>
+<td>차트를 놓는 캔버스</td>
+</tr>
+<tr>
+<td>오른쪽 데이터 패널</td>
+<td>불러온 표와 열 목록</td>
+</tr>
+<tr>
+<td>오른쪽 시각화 패널</td>
+<td>막대그래프, 꺾은선그래프, 카드 선택</td>
+</tr>
+<tr>
+<td>위쪽 리본 메뉴</td>
+<td>데이터 가져오기, 저장, 새 시각적 개체</td>
+</tr>
+</tbody>
+</table></div>
+<h2>따라하기 2: CSV 파일 불러오기</h2>
+<h3>1단계. 데이터 가져오기</h3>
+<ol>
+<li>위쪽 메뉴에서 <code>홈(Home)</code>을 누른다.</li>
+<li><code>데이터 가져오기(Get data)</code>를 누른다.</li>
+<li><code>텍스트/CSV(Text/CSV)</code>를 선택한다.</li>
+<li>아래 파일을 선택한다.</li>
+</ol>
+<div class="code-scroll"><pre><code class="language-text">/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.csv
+</code></pre></div>
+<ol start="5">
+<li>미리보기 화면이 열리면 열 이름을 확인한다.</li>
+<li><code>로드(Load)</code>를 누른다.</li>
+</ol>
+<h3>2단계. 데이터 패널 확인</h3>
+<p>오른쪽 데이터 패널에 <code>cafe_sales_clean</code> 표가 생겼는지 확인한다. 표를 펼쳐 아래 열이 보이면 정상이다.</p>
+<div class="code-scroll"><pre><code class="language-text">order_id
+date
+weekday
+hour
+store
+category
+item
+unit_price
+qty
+amount
+payment
+member
+</code></pre></div>
+<p>확인할 것:</p>
+<ul>
+<li><code>amount</code>는 숫자 열이어야 한다.</li>
+<li><code>date</code>는 날짜 열로 인식되는 것이 좋다.</li>
+<li>오늘은 정제 실습이 아니므로 복잡한 변환은 하지 않는다.</li>
+</ul>
+<p><code>date</code>가 날짜로 인식되지 않으면, 강사 화면을 따라 <code>변환 데이터(Transform data)</code>에서 형식을 날짜로 바꾼 뒤 <code>닫기 및 적용(Close &amp; Apply)</code>을 누른다.</p>
+<h2>따라하기 3: 엑셀 파일 로드 경로 확인하기</h2>
+<p>이 단계는 경로만 눈에 익히는 용도다. 이미 CSV를 불러온 파일에는 엑셀을 덧붙이지 않는다.</p>
+<p>새 Power BI 파일에서 엑셀을 불러올 때는 다음 순서를 따른다.</p>
+<ol>
+<li><code>홈(Home)</code>을 누른다.</li>
+<li><code>데이터 가져오기(Get data)</code>를 누른다.</li>
+<li><code>Excel 통합 문서(Excel workbook)</code>를 선택한다.</li>
+<li>아래 파일을 선택한다.</li>
+</ol>
+<div class="code-scroll"><pre><code class="language-text">/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.xlsx
+</code></pre></div>
+<ol start="5">
+<li>탐색기(Navigator)에서 <code>sales</code> 시트를 선택한다.</li>
+<li><code>로드(Load)</code>를 누른다.</li>
+</ol>
+<p>CSV와 엑셀은 같은 데이터다. 실습 결과를 맞추기 위해, 이후 단계는 CSV로 불러온 <code>cafe_sales_clean</code> 표를 기준으로 삼는다.</p>
+<h2>따라하기 4: 카테고리별 매출 막대그래프 만들기</h2>
+<h3>1단계. 막대그래프 추가</h3>
+<ol>
+<li>시각화 패널에서 <code>묶은 세로 막대형 차트(Clustered column chart)</code>를 선택한다.</li>
+<li>캔버스에 빈 막대그래프가 생기면 오른쪽 필드 영역을 본다.</li>
+<li>데이터 패널에서 <code>category</code>를 <code>X축(X-axis)</code>으로 끌어다 놓는다.</li>
+<li>데이터 패널에서 <code>amount</code>를 <code>Y축(Y-axis)</code> 또는 <code>값(Values)</code>으로 끌어다 놓는다.</li>
+</ol>
+<h3>2단계. 집계 방식 확인</h3>
+<p><code>amount</code>가 <code>합계(Sum)</code>로 들어갔는지 확인한다. 평균이나 개수로 잡히면 총매출 비교가 어긋난다.</p>
+<p>그래프 제목을 아래처럼 바꾼다.</p>
+<div class="code-scroll"><pre><code class="language-text">카테고리별 매출
+</code></pre></div>
+<p>예상되는 카테고리별 매출 합계:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>category</th>
+<th style="text-align: right;">amount 합계</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>커피</td>
+<td style="text-align: right;">45,606,000</td>
+</tr>
+<tr>
+<td>음료</td>
+<td style="text-align: right;">25,550,000</td>
+</tr>
+<tr>
+<td>디저트</td>
+<td style="text-align: right;">19,336,500</td>
+</tr>
+</tbody>
+</table></div>
+<p>화면의 표시 단위에 따라 <code>45.61M</code>처럼 줄여 보이기도 한다.</p>
+<h2>따라하기 5: 일자별 매출 꺾은선그래프 만들기</h2>
+<h3>1단계. 꺾은선그래프 추가</h3>
+<ol>
+<li>캔버스의 빈 공간을 클릭한다.</li>
+<li>시각화 패널에서 <code>꺾은선형 차트(Line chart)</code>를 선택한다.</li>
+<li><code>date</code>를 <code>X축(X-axis)</code>으로 끌어다 놓는다.</li>
+<li><code>amount</code>를 <code>Y축(Y-axis)</code> 또는 <code>값(Values)</code>으로 끌어다 놓는다.</li>
+</ol>
+<h3>2단계. 날짜 축 확인</h3>
+<p>Power BI가 <code>date</code>를 <code>날짜 계층 구조(Date hierarchy)</code>로 넣을 때가 있다. 일자별 흐름을 보려면 X축 필드의 드롭다운을 눌러 <code>date</code> 자체를 고른다. 화면이나 버전에 따라 메뉴 이름은 조금씩 다르다.</p>
+<p>그래프 제목을 아래처럼 바꾼다.</p>
+<div class="code-scroll"><pre><code class="language-text">일자별 매출
+</code></pre></div>
+<p>데이터 기간은 <code>2025-01-01</code>부터 <code>2025-06-30</code>까지이다.</p>
+<h2>따라하기 6: 페이지 정리와 저장</h2>
+<ol>
+<li>총매출 카드는 위쪽에 크게 둘 자리를 비워 둔다.</li>
+<li>막대그래프는 왼쪽 또는 아래쪽에 놓는다.</li>
+<li>꺾은선그래프는 오른쪽 또는 아래쪽에 놓는다.</li>
+<li><code>파일(File)</code>을 누른다.</li>
+<li><code>저장(Save)</code>을 누른다.</li>
+<li>파일 이름을 아래처럼 저장한다.</li>
+</ol>
+<div class="code-scroll"><pre><code class="language-text">S15_cafe_sales_first_dashboard.pbix
+</code></pre></div>
+<h2>직접 해보기: 총매출 KPI 카드 만들기</h2>
+<p>목표:</p>
+<p><code>amount</code>의 합계를 카드로 표시하고, 총매출이 <code>90,492,500</code>원과 일치하게 만든다.</p>
+<h3>수행 조건</h3>
+<ol>
+<li>캔버스의 빈 공간을 클릭한다.</li>
+<li>시각화 패널에서 <code>카드(Card)</code> 또는 <code>카드(새)(Card new)</code>를 선택한다.</li>
+<li>데이터 패널에서 <code>amount</code>를 카드의 값 영역에 끌어다 놓는다.</li>
+<li>값이 <code>합계(Sum of amount)</code>인지 확인한다.</li>
+<li>카드 제목을 아래처럼 설정한다.</li>
+</ol>
+<div class="code-scroll"><pre><code class="language-text">총매출
+</code></pre></div>
+<ol start="6">
+<li>서식에서 표시 단위(Display units)를 <code>없음(None)</code>으로 바꾼다.</li>
+<li>소수 자릿수(Decimal places)를 <code>0</code>으로 바꾼다.</li>
+</ol>
+<h3>정답 기준</h3>
+<p>카드 값이 아래 숫자와 일치해야 한다.</p>
+<div class="code-scroll"><pre><code class="language-text">90,492,500
+</code></pre></div>
+<p>Power BI가 원 단위를 자동으로 붙여 주지 않으면, 제목을 <code>총매출(원)</code>으로 적어 두면 된다.</p>
+<h2>제출 또는 확인할 화면</h2>
+<p>한 페이지에 다음 세 가지가 있으면 된다.</p>
+<ol>
+<li>총매출 KPI 카드: <code>90,492,500</code></li>
+<li>카테고리별 매출 막대그래프</li>
+<li>일자별 매출 꺾은선그래프</li>
+</ol>
+<h2>막혔을 때 확인할 것</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>증상</th>
+<th>확인할 것</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>amount</code> 합계가 이상하다</td>
+<td><code>amount</code>가 숫자 열인지, 집계 방식이 합계인지 확인한다</td>
+</tr>
+<tr>
+<td>카드가 <code>10,424</code>처럼 보인다</td>
+<td><code>amount</code>가 아니라 <code>order_id</code> 개수가 들어갔을 수 있다</td>
+</tr>
+<tr>
+<td>날짜 축이 한 점만 보인다</td>
+<td>X축에 <code>date</code> 자체가 아니라 연도 계층만 들어갔는지 확인한다</td>
+</tr>
+<tr>
+<td>그래프가 비어 있다</td>
+<td>시각화 개체를 선택한 상태에서 필드를 넣었는지 확인한다</td>
+</tr>
+<tr>
+<td>CSV가 깨져 보인다</td>
+<td>수업 배포본은 UTF-8 정규화 파일이어야 한다. 파일 경로를 다시 확인한다</td>
+</tr>
+</tbody>
+</table></div>
+</section>
+<section class="tab-panel markdown-body" data-panel="script" aria-label="강사대본">
+<h1>S15 강사대본: Power BI 설치, 로드, 첫 차트</h1>
+<h2>수업 전 확인</h2>
+<ul>
+<li>강사용 PC가 Windows인지 확인한다.</li>
+<li>Power BI Desktop이 실행되는지 확인한다.</li>
+<li>설치가 안 된 경우 Microsoft Store 또는 Microsoft 공식 다운로드 페이지에 접속 가능한지 확인한다.</li>
+<li>파일이 존재하는지 확인한다.</li>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.csv</code></li>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.xlsx</code></li>
+<li><code>cafe_sales_clean.csv</code>의 실제 확인값을 칠판이나 강사용 메모에 적어 둔다.</li>
+<li>행 수: 10,424</li>
+<li>열 수: 12</li>
+<li>기간: 2025-01-01부터 2025-06-30까지</li>
+<li>총매출: 90,492,500</li>
+<li>Mac 수강생에게 Power BI Desktop은 Windows용이며, S18에서 Looker Studio로 직접 대체 실습한다고 먼저 안내한다.</li>
+</ul>
+<h2>0-8분. 도입</h2>
+<p>말할 것:</p>
+<p>오늘부터 BI 도구를 다룬다. 엑셀과 AI, 파이썬을 거쳐 왔는데, 보고할 때마다 파일을 열고 피벗테이블을 다시 만지는 건 여간 번거로운 일이 아니다. BI는 데이터를 한 번 연결해 두고, 중요한 숫자와 그래프를 한 화면에 모아 두는 도구다.</p>
+<p>Power BI Desktop은 Windows에서 보고서를 만드는 프로그램이다. 오늘은 공유나 게시까지 가지 않고, 내 PC에서 첫 보고서 파일을 만드는 데까지만 집중한다. Mac 사용자는 설치를 따라오지 않아도 된다. 화면 구조와 용어만 익혀 두면, S18에서 Looker Studio로 같은 개념을 실습한다.</p>
+<p>엑셀과 연결해서 설명:</p>
+<p>엑셀 피벗테이블에서 행, 열, 값 영역을 채웠던 기억을 떠올려 보자. Power BI에서는 그 자리가 X축, Y축, 값, 범례로 이름만 바뀔 뿐, 원리는 똑같다. 비교 기준을 놓고, 볼 숫자를 놓고, 어떤 모양으로 보여줄지 고른다.</p>
+<h2>8-18분. 설치와 화면 구성</h2>
+<p>시연:</p>
+<ol>
+<li>Windows 시작 메뉴에서 <code>Power BI Desktop</code>을 검색한다.</li>
+<li>실행한다.</li>
+<li>로그인 화면이 나오면 오늘은 로컬 보고서 작성 실습이라는 점을 말하고, 강사 PC 환경에 맞게 닫거나 건너뛴다.</li>
+<li>빈 보고서 화면에서 캔버스, 데이터 패널, 시각화 패널, 리본 메뉴를 차례로 가리킨다.</li>
+</ol>
+<p>말할 것:</p>
+<p>가운데 흰 화면이 보고서 캔버스다. 차트는 여기에 올린다. 오른쪽 데이터 패널은 엑셀 피벗테이블 필드 목록과 비슷하고, 그 옆 시각화 패널은 차트 종류를 고르는 자리다.</p>
+<p>주의:</p>
+<p>수강생 화면이 영어로 떠 있을 수 있다. 메뉴를 짚을 때는 한국어와 영어를 나란히 불러 준다. 이를테면 <code>데이터 가져오기</code>와 괄호 속 <code>Get data</code>를 같이 말하는 식이다.</p>
+<h2>18-28분. CSV 로드와 엑셀 로드 경로 비교</h2>
+<p>시연 코드가 아니라 클릭 경로:</p>
+<ol>
+<li><code>홈(Home)</code>을 누른다.</li>
+<li><code>데이터 가져오기(Get data)</code>를 누른다.</li>
+<li><code>텍스트/CSV(Text/CSV)</code>를 선택한다.</li>
+<li><code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.csv</code>를 선택한다.</li>
+<li>미리보기에서 열 이름을 확인한다.</li>
+<li><code>로드(Load)</code>를 누른다.</li>
+</ol>
+<p>말할 것:</p>
+<p>오늘 데이터는 깨끗해서 바로 로드한다. 다만 현업이라면 이 단계에서 열 이름과 날짜 형식, 숫자 형식을 하나씩 확인해야 한다. 오늘 파일은 10,424행, 12열에 결측값이 없는 것으로 확인했다.</p>
+<p>데이터 패널에서 읽을 열:</p>
+<p><code>order_id</code>, <code>date</code>, <code>weekday</code>, <code>hour</code>, <code>store</code>, <code>category</code>, <code>item</code>, <code>unit_price</code>, <code>qty</code>, <code>amount</code>, <code>payment</code>, <code>member</code></p>
+<p>말할 것:</p>
+<p>오늘 가장 중요한 열은 <code>amount</code>다. 총매출 카드도, 두 그래프의 값도 모두 이 열에서 나온다. <code>category</code>는 막대그래프의 비교 기준, <code>date</code>는 꺾은선그래프의 시간 기준이 된다.</p>
+<p>엑셀 경로 비교 시연:</p>
+<p>같은 데이터의 엑셀 파일도 있다. 새 파일에서 불러온다면 <code>데이터 가져오기</code>, <code>Excel 통합 문서</code>, <code>cafe_sales_clean.xlsx</code>, <code>sales</code> 시트 순서로 고른다. 하지만 지금 보고서에는 CSV만 쓴다. 같은 데이터를 두 번 불러오면 숫자가 헷갈리기 쉽다.</p>
+<h2>28-38분. 카테고리별 매출 막대그래프</h2>
+<p>시연:</p>
+<ol>
+<li>시각화 패널에서 <code>묶은 세로 막대형 차트(Clustered column chart)</code>를 선택한다.</li>
+<li><code>category</code>를 X축에 넣는다.</li>
+<li><code>amount</code>를 Y축 또는 값에 넣는다.</li>
+<li><code>amount</code>가 합계로 들어갔는지 확인한다.</li>
+<li>제목을 <code>카테고리별 매출</code>로 바꾼다.</li>
+</ol>
+<p>말할 것:</p>
+<p>막대그래프는 항목을 비교할 때 쓴다. 여기서는 커피, 음료, 디저트의 매출을 견준다. 엑셀 피벗테이블로 치면 <code>category</code>를 행에, <code>amount</code>를 값에 넣고 차트로 본 것과 같다.</p>
+<p>검산용 숫자:</p>
+<ul>
+<li>커피: 45,606,000</li>
+<li>음료: 25,550,000</li>
+<li>디저트: 19,336,500</li>
+</ul>
+<p>시연 포인트:</p>
+<p>Power BI가 값을 <code>45.61M</code>처럼 줄여 보여줘도 틀린 게 아니라, 표시 단위가 자동으로 잡힌 것뿐이다. 오늘 미션의 카드에서는 이 표시 단위를 바꿔 정확한 숫자를 띄운다.</p>
+<h2>38-48분. 일자별 매출 꺾은선그래프</h2>
+<p>시연:</p>
+<ol>
+<li>캔버스 빈 곳을 클릭한다.</li>
+<li><code>꺾은선형 차트(Line chart)</code>를 선택한다.</li>
+<li><code>date</code>를 X축에 넣는다.</li>
+<li><code>amount</code>를 Y축 또는 값에 넣는다.</li>
+<li>제목을 <code>일자별 매출</code>로 바꾼다.</li>
+</ol>
+<p>말할 것:</p>
+<p>꺾은선그래프는 시간 흐름을 볼 때 쓴다. 오늘 데이터는 2025년 1월 1일부터 6월 30일까지의 주문 기록이라, <code>date</code>를 축에 놓으면 날짜별 매출의 오르내림이 그대로 드러난다.</p>
+<p>날짜 축 문제 대응:</p>
+<p>Power BI가 <code>date</code>를 날짜 계층 구조로 넣으면 연도, 분기, 월, 일 단위가 딸려 나온다. 오늘은 일자별 흐름을 보려는 것이니, X축 필드의 드롭다운에서 <code>date</code> 자체를 고르도록 안내한다. 수강생 화면마다 조금씩 다르니 강사 화면을 천천히 짚어 준다.</p>
+<h2>48-56분. 직접 해보기: 총매출 KPI 카드</h2>
+<p>미션 안내:</p>
+<p>이제 총매출을 카드로 만들어 본다. 카드는 큰 숫자 하나를 보여주는 시각화로, 엑셀에서 <code>SUM</code> 결과를 큰 글씨로 적어 둔 것과 같다.</p>
+<p>수강생 수행:</p>
+<ol>
+<li>캔버스 빈 곳을 클릭한다.</li>
+<li><code>카드(Card)</code> 또는 <code>카드(새)(Card new)</code>를 선택한다.</li>
+<li><code>amount</code>를 값 영역에 넣는다.</li>
+<li>집계 방식이 합계인지 확인한다.</li>
+<li>제목을 <code>총매출</code> 또는 <code>총매출(원)</code>으로 바꾼다.</li>
+<li>표시 단위를 <code>없음(None)</code>으로 바꾼다.</li>
+<li>소수 자릿수를 0으로 맞춘다.</li>
+</ol>
+<p>기대 결과:</p>
+<p>카드 값이 <code>90,492,500</code>이면 맞다.</p>
+<p>돌아다니며 볼 것:</p>
+<ul>
+<li>수강생이 <code>amount</code> 대신 <code>order_id</code>를 넣지 않았는지 확인한다.</li>
+<li>카드 값이 <code>10,424</code>로 보이면 주문 건수를 넣었을 가능성이 높다.</li>
+<li>카드 값이 <code>90.49M</code>으로 보이면 표시 단위만 바꾸면 된다.</li>
+<li>값이 평균으로 들어가면 약 <code>8,681</code> 수준으로 보일 수 있다. 집계를 합계로 바꾸게 한다.</li>
+</ul>
+<p>완료 판단 체크포인트:</p>
+<p>수강생이 총매출 카드에 <code>90,492,500</code>을 띄우고, 같은 페이지에 카테고리별 매출 막대그래프와 일자별 매출 꺾은선그래프까지 배치했다면 이번 차시는 완료로 본다.</p>
+<h2>56-60분. 저장과 다음 차시 연결</h2>
+<p>시연:</p>
+<ol>
+<li><code>파일(File)</code>을 누른다.</li>
+<li><code>저장(Save)</code>을 누른다.</li>
+<li>파일 이름을 <code>S15_cafe_sales_first_dashboard.pbix</code>로 저장한다.</li>
+</ol>
+<p>말할 것:</p>
+<p>오늘은 표 하나로 보고서 한 페이지를 완성했다. 다음 BI 차시에서는 여러 표를 연결하는 모델링으로 넘어간다. 엑셀에서 VLOOKUP으로 붙이던 일을 Power BI는 관계로 처리한다. 그러니 오늘은 "필드를 놓아 차트를 만든다"까지만 확실히 익히면 충분하다.</p>
+<h2>예상 질문과 답변</h2>
+<h3>Q1. Power BI Desktop은 꼭 설치해야 하나요?</h3>
+<p>A. Windows에서 직접 실습하려면 필요하다. Mac 수강생은 설치 없이 S18의 Looker Studio 경로로 대신한다. 오늘 중요한 건 BI 화면 구조와 필드 배치 개념을 몸에 익히는 일이다.</p>
+<h3>Q2. Power BI와 엑셀 차트는 무엇이 다른가요?</h3>
+<p>A. 엑셀 차트는 파일 안에서 빠르게 그려 보기 좋다. Power BI는 여러 시각화를 한 페이지에 모으고 필터와 상호작용을 얹어, 반복해서 들여다보는 보고서에 강하다.</p>
+<h3>Q3. 로그인해야 하나요?</h3>
+<p>A. 오늘 실습은 로컬 CSV를 불러와 Desktop에서 보고서를 만드는 과정이다. 공유나 게시를 하지 않으니 조직 계정 기능은 건드리지 않는다. 다만 설치 방식이나 회사 PC 정책에 따라 로그인 화면이 뜰 수는 있다.</p>
+<h3>Q4. CSV와 엑셀 중 무엇을 써야 하나요?</h3>
+<p>A. 오늘 결과를 맞추기 위해 CSV를 기준으로 삼는다. 엑셀 파일도 같은 데이터라 <code>sales</code> 시트를 고르면 불러올 수 있다. 다만 한 보고서에 둘을 함께 넣으면 같은 데이터가 겹치니 피한다.</p>
+<h3>Q5. 카드 숫자가 정답보다 작게 보입니다.</h3>
+<p>A. 세 가지를 짚어 본다. 값에 <code>amount</code>가 들어갔는지, 집계가 합계인지, 그리고 표시 단위가 저절로 <code>M</code>으로 축약돼 있지는 않은지다.</p>
+<h3>Q6. 날짜 그래프가 이상합니다.</h3>
+<p>A. 먼저 <code>date</code>가 날짜로 인식됐는지 본다. X축에 날짜 계층 구조가 들어가면 연도나 월 단위로 접혀 보이기도 한다. 일자별로 펴 보려면 X축에서 <code>date</code> 자체를 고른다.</p>
+<h2>평가 루브릭</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>수준</th>
+<th>판단 기준</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>상</td>
+<td>CSV를 직접 로드하고, 카드 값이 <code>90,492,500</code>임을 확인하며, 막대와 꺾은선그래프의 의미를 설명한다</td>
+</tr>
+<tr>
+<td>중</td>
+<td>강사 절차를 따라 세 시각화를 만들지만, 표시 단위나 집계 방식 검산은 도움을 받아 수정한다</td>
+</tr>
+<tr>
+<td>하</td>
+<td>파일 로드 또는 필드 배치 단계에서 멈추며, 총매출 카드 값을 확인하지 못한다</td>
+</tr>
+</tbody>
+</table></div>
+</section>
+<section class="tab-panel markdown-body" data-panel="answer" aria-label="모범답안">
+<h1>S15 모범답안: 총매출 KPI 카드</h1>
+<h2>미션 정답</h2>
+<p>미션은 <code>cafe_sales_clean.csv</code>를 Power BI Desktop에 불러온 뒤, <code>amount</code>의 합계를 KPI 카드로 표시하는 것이다.</p>
+<p>정답 카드 값:</p>
+<div class="code-scroll"><pre><code class="language-text">90,492,500
+</code></pre></div>
+<p>Power BI에서 카드가 <code>90.49M</code> 또는 <code>90M</code>처럼 보이면 계산이 틀린 것이 아니라 표시 단위가 자동 축약된 것이다. 카드 서식에서 표시 단위(Display units)를 <code>없음(None)</code>, 소수 자릿수(Decimal places)를 <code>0</code>으로 바꾸면 <code>90,492,500</code>으로 확인할 수 있다.</p>
+<h2>올바른 Power BI 설정</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>항목</th>
+<th>설정</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>데이터 원본</td>
+<td><code>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.csv</code></td>
+</tr>
+<tr>
+<td>표 이름</td>
+<td><code>cafe_sales_clean</code></td>
+</tr>
+<tr>
+<td>시각화</td>
+<td>카드(Card) 또는 카드(새)(Card new)</td>
+</tr>
+<tr>
+<td>값 필드</td>
+<td><code>amount</code></td>
+</tr>
+<tr>
+<td>집계 방식</td>
+<td>합계(Sum)</td>
+</tr>
+<tr>
+<td>제목</td>
+<td><code>총매출</code> 또는 <code>총매출(원)</code></td>
+</tr>
+<tr>
+<td>표시 단위</td>
+<td>없음(None)</td>
+</tr>
+<tr>
+<td>소수 자릿수</td>
+<td>0</td>
+</tr>
+</tbody>
+</table></div>
+<p>카드에 <code>10,424</code>가 보이면 <code>order_id</code> 개수나 행 개수가 들어갔을 가능성이 높다. 카드에 약 <code>8,681</code>이 보이면 <code>amount</code> 평균이 들어갔을 가능성이 높다. 미션의 기준은 <code>amount</code> 합계이다.</p>
+<h2>함께 완성되어야 하는 첫 페이지</h2>
+<p>첫 페이지에는 다음 세 시각화가 있으면 된다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>시각화</th>
+<th>필드 배치</th>
+<th>목적</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>총매출 KPI 카드</td>
+<td><code>amount</code> 합계</td>
+<td>핵심 숫자 확인</td>
+</tr>
+<tr>
+<td>카테고리별 매출 막대그래프</td>
+<td>X축 <code>category</code>, Y축 <code>amount</code> 합계</td>
+<td>상품군별 매출 비교</td>
+</tr>
+<tr>
+<td>일자별 매출 꺾은선그래프</td>
+<td>X축 <code>date</code>, Y축 <code>amount</code> 합계</td>
+<td>기간 흐름 확인</td>
+</tr>
+</tbody>
+</table></div>
+<p>카테고리별 매출 검산값:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>category</th>
+<th style="text-align: right;">amount 합계</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>커피</td>
+<td style="text-align: right;">45,606,000</td>
+</tr>
+<tr>
+<td>음료</td>
+<td style="text-align: right;">25,550,000</td>
+</tr>
+<tr>
+<td>디저트</td>
+<td style="text-align: right;">19,336,500</td>
+</tr>
+</tbody>
+</table></div>
+<p>월별 매출 참고값:</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>월</th>
+<th style="text-align: right;">amount 합계</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2025-01</td>
+<td style="text-align: right;">14,426,500</td>
+</tr>
+<tr>
+<td>2025-02</td>
+<td style="text-align: right;">13,157,000</td>
+</tr>
+<tr>
+<td>2025-03</td>
+<td style="text-align: right;">14,735,500</td>
+</tr>
+<tr>
+<td>2025-04</td>
+<td style="text-align: right;">15,263,000</td>
+</tr>
+<tr>
+<td>2025-05</td>
+<td style="text-align: right;">16,094,000</td>
+</tr>
+<tr>
+<td>2025-06</td>
+<td style="text-align: right;">16,816,500</td>
+</tr>
+</tbody>
+</table></div>
+<h2>검증용 Python 코드</h2>
+<p>S15는 Power BI 차시이므로 별도 <code>S15_code.py</code> 파일을 요구하지 않는다. 아래 코드는 모범답안 수치 검증을 위해 <code>python3</code>와 <code>pandas 3.0.3</code>으로 실제 실행한 코드이다.</p>
+<div class="code-scroll"><pre><code class="language-python">from pathlib import Path
+import pandas as pd
+
+path = Path(&quot;/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.csv&quot;)
+df = pd.read_csv(path)
+
+print(&quot;shape:&quot;, df.shape)
+print(&quot;date_min:&quot;, df[&quot;date&quot;].min())
+print(&quot;date_max:&quot;, df[&quot;date&quot;].max())
+print(&quot;total_amount:&quot;, int(df[&quot;amount&quot;].sum()))
+print(&quot;order_count:&quot;, len(df))
+print(&quot;null_total:&quot;, int(df.isna().sum().sum()))
+
+category_summary = (
+    df.groupby(&quot;category&quot;, as_index=False)[&quot;amount&quot;]
+    .sum()
+    .sort_values(&quot;amount&quot;, ascending=False)
+)
+print(category_summary.to_string(index=False))
+
+df[&quot;date_dt&quot;] = pd.to_datetime(df[&quot;date&quot;])
+monthly = df.groupby(df[&quot;date_dt&quot;].dt.to_period(&quot;M&quot;))[&quot;amount&quot;].sum().reset_index()
+monthly[&quot;date_dt&quot;] = monthly[&quot;date_dt&quot;].astype(str)
+print(monthly.to_string(index=False))
+</code></pre></div>
+<p>실행 확인 결과:</p>
+<div class="code-scroll"><pre><code class="language-text">shape: (10424, 12)
+date_min: 2025-01-01
+date_max: 2025-06-30
+total_amount: 90492500
+order_count: 10424
+null_total: 0
+
+category   amount
+      커피 45606000
+      음료 25550000
+     디저트 19336500
+
+date_dt   amount
+2025-01 14426500
+2025-02 13157000
+2025-03 14735500
+2025-04 15263000
+2025-05 16094000
+2025-06 16816500
+</code></pre></div>
+<h2>제출 예시 설명</h2>
+<p>제출 화면을 말로 설명하면 다음과 같다.</p>
+<p>상단에는 <code>총매출(원)</code> 카드가 있고 값은 <code>90,492,500</code>이다. 왼쪽에는 <code>카테고리별 매출</code> 막대그래프가 있으며 커피가 가장 높고, 음료, 디저트 순서로 보인다. 오른쪽 또는 아래에는 <code>일자별 매출</code> 꺾은선그래프가 있으며 2025년 1월 1일부터 6월 30일까지의 매출 흐름이 보인다.</p>
+<h2>흔한 오답과 수정</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>오답 상태</th>
+<th>원인</th>
+<th>수정</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>카드 값이 <code>10,424</code></td>
+<td>주문 건수 또는 행 개수를 표시함</td>
+<td><code>amount</code>를 값에 넣고 합계로 바꾼다</td>
+</tr>
+<tr>
+<td>카드 값이 약 <code>8,681</code></td>
+<td><code>amount</code> 평균을 표시함</td>
+<td>집계 방식을 합계로 바꾼다</td>
+</tr>
+<tr>
+<td>카드 값이 <code>90.49M</code></td>
+<td>표시 단위가 자동 축약됨</td>
+<td>표시 단위를 없음으로 바꾼다</td>
+</tr>
+<tr>
+<td>막대그래프 값이 카테고리 개수처럼 보임</td>
+<td><code>amount</code>가 아니라 <code>category</code> 개수가 값에 들어감</td>
+<td>Y축 또는 값에 <code>amount</code> 합계를 넣는다</td>
+</tr>
+<tr>
+<td>꺾은선그래프가 연도 한 점만 보임</td>
+<td>날짜 계층 구조의 연도 수준만 표시됨</td>
+<td>X축에서 <code>date</code> 자체를 선택하거나 날짜 계층을 일 수준으로 펼친다</td>
+</tr>
+</tbody>
+</table></div>
+<h2>완료 기준</h2>
+<p>총매출 카드가 <code>90,492,500</code>으로 검산되고, 같은 페이지에 카테고리별 매출 막대그래프와 일자별 매출 꺾은선그래프가 함께 있으면 미션 완료이다.</p>
+</section>
+  </div>
+
+  <nav class="session-pager container">
+    <a class="pager-link prev" href="./S14.html"><span class="pager-direction">&larr; 이전 차시</span><span class="pager-title">S14 · 시각화 실전: matplotlib·seaborn과 BI 핸드오프</span></a>
+    <a class="pager-link next" href="./S16.html"><span class="pager-direction">다음 차시 &rarr;</span><span class="pager-title">S16 · 데이터 모델링: 관계, 스타 스키마, 날짜 차원</span></a>
+  </nav>
+</main>
+
+<footer class="site-footer">
+  <div class="container">
+    <span>데이터 리터러시 with AI · S15 차시</span>
+    <a href="../index.html#curriculum">전체 커리큘럼으로</a>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var tabs = document.querySelectorAll('.tab-btn');
+  var panels = document.querySelectorAll('.tab-panel');
+  function activate(key, updateHash){
+    tabs.forEach(function(btn){
+      var on = btn.getAttribute('data-tab') === key;
+      btn.classList.toggle('active', on);
+    });
+    panels.forEach(function(panel){
+      var on = panel.getAttribute('data-panel') === key;
+      panel.classList.toggle('active', on);
+    });
+    if (updateHash && history.replaceState){
+      history.replaceState(null, '', '#' + key);
+    }
+  }
+  tabs.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      activate(btn.getAttribute('data-tab'), true);
+    });
+  });
+  var initial = (location.hash || '').replace('#', '');
+  var valid = ['curriculum', 'handout', 'script', 'answer'];
+  if (valid.indexOf(initial) !== -1){
+    activate(initial, false);
+  }
+})();
+</script>
+
+</body>
+</html>
