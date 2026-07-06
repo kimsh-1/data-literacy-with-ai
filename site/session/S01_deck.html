@@ -100,6 +100,22 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 .img-box .lbl{position:absolute;top:-1.9em;left:-2px;white-space:nowrap;
   background:var(--primary);color:#fff;font-size:0.8rem;font-weight:600;
   padding:2px 8px;border-radius:6px;}
+/* --- 공냥 설명 블록(초보자용 설명) --- */
+.explain{margin-top:1.4rem;max-width:66ch;color:var(--ink-muted);
+  font-size:clamp(1.02rem,1.45vw,1.32rem);line-height:1.68;letter-spacing:-0.1px;}
+.explain p{margin:0 0 0.7rem;}
+.explain p:last-child{margin-bottom:0;}
+.explain b{color:var(--ink);font-weight:640;}
+.explain .term{color:var(--primary-hover);font-weight:560;
+  border-bottom:1px dashed var(--hairline-strong);cursor:help;}
+/* 설명이 붙는 시각 슬라이드는 시각 높이를 제한해 설명 공간 확보 */
+.slide.has-explain .viz svg{max-height:38vh;}
+.slide.has-explain .img-wrap{max-width:64ch;}
+.slide.has-explain .img-wrap img{max-height:40vh;object-fit:contain;}
+.slide-note .slide-inner{max-width:70ch;}
+.slide-note .explain{font-size:clamp(1.08rem,1.6vw,1.44rem);margin-top:1.6rem;}
+.cont-tag{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:1px;
+  color:var(--ink-tertiary);text-transform:uppercase;margin-left:0.6rem;}
 /* chrome */
 .progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
 .hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
@@ -129,7 +145,7 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <div class="progress"></div>
 <div class="brand">데이터 리터러시 with AI</div>
 <div class="hud">
-  <span class="counter"><span class="cur">1</span> / 14</span>
+  <span class="counter"><span class="cur">1</span> / 21</span>
   <a class="back" href="./S01.html">자료로 돌아가기</a>
 </div>
 <div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
@@ -141,45 +157,56 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <ul class="obj-grid"><li>표의 열로 답할 수 있는 질문을 구분한다</li>
 <li>엑셀, AI, 파이썬, BI의 역할을 설명한다</li>
 <li>수업 환경과 데이터 파일을 확인한다</li></ul></div></section>
-<section id="s3" class="slide slide-image"><div class="slide-inner"><h2>분석 도구의 큰 그림</h2>
+<section id="s3" class="slide slide-image has-explain"><div class="slide-inner"><h2>분석 도구의 큰 그림</h2>
 <div class="img-wrap"><img src="../images/deck/hero.png" alt="AI 시대 데이터 분석 작업 흐름 인포그래픽"/></div>
-<div class="viz-cap">엑셀, AI, 파이썬, BI가 한 흐름으로 이어진다.</div></div></section>
-<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<div class="viz-cap">엑셀, AI, 파이썬, BI가 한 흐름으로 이어진다.</div><div class="explain"><p>이 그림은 데이터 분석을 한 가지 도구로 끝내는 일이 아니라, 여러 도구를 이어서 쓰는 흐름으로 보여 줍니다. 엑셀은 표를 눈으로 보고 빠르게 확인하는 데 좋고, AI는 질문을 정리하거나 분석 방향을 잡는 데 도움을 줍니다. 파이썬은 같은 분석을 다시 실행할 수 있게 기록으로 남기고, BI는 결과를 대시보드 화면으로 공유할 때 쓰입니다.</p><p>여기서 도구 이름을 외우려고 하기보다, 일이 어떤 순서로 흘러가는지 보시면 됩니다. 먼저 표를 열어 무엇이 들어 있는지 봅니다. 그다음 질문을 세우고, 계산하거나 집계하고, 마지막에는 다른 사람이 이해할 수 있게 보여 줍니다. 지도에서 출발지와 목적지를 보는 것처럼, 오늘은 전체 길을 먼저 잡아 보는 시간입니다.</p></div></div></section>
+<section id="s4" class="slide slide-note"><div class="slide-inner"><h2>분석 도구의 큰 그림<span class="cont-tag">이어서</span></h2><div class="explain"><p>AI가 등장했다고 해서 엑셀이나 파이썬, BI가 사라지는 것은 아닙니다. AI가 말해 준 숫자는 맞는지 확인해야 하고, 반복되는 작업은 기록으로 남겨야 하며, 보고할 결과는 보기 좋게 공유해야 합니다. 그래서 이 수업에서는 도구를 경쟁시키지 않고, 같은 질문을 다루는 서로 다른 역할로 봅니다.</p></div></div></section>
+<section id="s5" class="slide slide-concept has-explain"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
 <h2>분석은 질문을 번역하는 일이다</h2>
 <p class="body">데이터 분석은 어려운 프로그램을 익히는 일이 아니라 표에 담긴 관찰값으로 업무 질문에 답하는 일이다.</p>
 <ul class="bullets"><li>표에 있는 열로 답할 수 있는지 먼저 본다.</li>
-<li>없는 열이 필요하면 질문을 좁히거나 데이터를 추가한다.</li></ul></div></section>
-<section id="s5" class="slide slide-table"><div class="slide-inner"><h2>표로 답할 수 있는 질문</h2>
-<table class="deck-table"><thead><tr><th>질문</th><th>판단</th><th>근거</th></tr></thead><tbody><tr><td>지점별 총매출</td><td>가능</td><td>store, amount</td></tr><tr><td>카테고리별 수량</td><td>가능</td><td>category, qty</td></tr><tr><td>시간대별 매출</td><td>가능</td><td>hour, amount</td></tr><tr><td>메뉴 선택 이유</td><td>어려움</td><td>이유 열 없음</td></tr><tr><td>매장 만족도</td><td>어려움</td><td>만족도 열 없음</td></tr></tbody></table>
-<p class="note">질문이 이 표의 열로 답할 수 있는지 먼저 본다.</p></div></section>
-<section id="s6" class="slide slide-table"><div class="slide-inner"><h2>오늘 데이터의 구조</h2>
-<table class="deck-table"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>행수</td><td>10,424행</td></tr><tr><td>열수</td><td>12열</td></tr><tr><td>기간</td><td>2025.01.01-06.30</td></tr><tr><td>결측값</td><td>0개</td></tr><tr><td>주요 단위</td><td>주문 1건</td></tr></tbody></table>
-<p class="note">한 행은 주문 한 건, 한 열은 주문의 속성이다.</p></div></section>
-<section id="s7" class="slide slide-table"><div class="slide-inner"><h2>요약 숫자부터 확인한다</h2>
+<li>없는 열이 필요하면 질문을 좁히거나 데이터를 추가한다.</li></ul><div class="explain"><p>데이터 분석은 막연한 궁금증을 표에서 확인할 수 있는 말로 바꾸는 일입니다. 예를 들어 “어느 지점이 잘 팔렸나요?”라는 질문은 그대로는 조금 흐립니다. 표 안에서는 “지점별 주문 금액 합계가 어떻게 다른가요?”처럼 바꿔야 계산할 수 있습니다.</p><p>표는 관찰한 내용을 줄과 칸으로 적어 둔 장부라고 보면 됩니다. 한 줄에는 주문 한 건이 들어 있고, 열에는 주문일, 지점, 상품 카테고리, 수량, 주문 금액 같은 속성이 들어 있습니다. 키를 재려면 줄자가 있어야 하듯이, 질문에 답하려면 그 질문에 필요한 열이 표 안에 있어야 합니다.</p><p>표에 없는 내용을 묻는 질문은 나쁜 질문이 아닙니다. 다만 지금 가진 표만으로 바로 답하기 어렵다는 뜻입니다. 그럴 때는 질문을 좁히거나, 필요한 열을 새로 모아야 합니다. 분석을 시작하기 전에 “이 질문은 어떤 열을 보면 답할 수 있나요?”라고 꼭 물어보세요.</p></div></div></section>
+<section id="s6" class="slide slide-table has-explain"><div class="slide-inner"><h2>표로 답할 수 있는 질문</h2>
+<table class="deck-table"><thead><tr><th>질문</th><th>판단</th><th>근거</th></tr></thead><tbody><tr><td>지점별 총매출</td><td>가능</td><td>지점, 주문 금액</td></tr><tr><td>카테고리별 수량</td><td>가능</td><td>상품 카테고리, 수량</td></tr><tr><td>시간대별 매출</td><td>가능</td><td>시간대, 주문 금액</td></tr></tbody></table>
+<p class="note">질문이 이 표의 열로 답할 수 있는지 먼저 본다.</p><div class="explain"><p>이 표는 질문을 보고 “지금 가진 데이터로 답할 수 있는가?”를 판단하는 연습입니다. 왼쪽에는 궁금한 질문이 있고, 가운데에는 가능한지 어려운지가 적혀 있습니다. 오른쪽 근거 칸에는 그 판단을 한 이유, 즉 어떤 열이 필요하거나 어떤 열이 없는지가 들어 있습니다.</p><p>지점별 총매출은 지점과 주문 금액을 보면 계산할 수 있습니다. 카테고리별 수량은 상품 카테고리와 수량을 보면 됩니다. 시간대별 매출도 시간대와 주문 금액이 있으면 계산할 수 있죠. 사전에서 단어를 찾듯이, 질문에 필요한 열을 표 안에서 찾는다고 생각하면 쉽습니다.</p><p>반대로 메뉴 선택 이유나 매장 만족도는 현재 표만으로는 어렵습니다. 주문 기록에는 무엇을 샀는지는 있어도, 왜 샀는지나 얼마나 만족했는지는 들어 있지 않기 때문입니다. 이런 질문은 설문 응답이나 리뷰처럼 다른 데이터가 필요합니다.</p></div></div></section>
+<section id="s7" class="slide slide-table"><div class="slide-inner"><h2>표로 답할 수 있는 질문 (이어서)</h2>
+<table class="deck-table"><thead><tr><th>질문</th><th>판단</th><th>근거</th></tr></thead><tbody><tr><td>메뉴 선택 이유</td><td>어려움</td><td>이유 열 없음</td></tr><tr><td>매장 만족도</td><td>어려움</td><td>만족도 열 없음</td></tr></tbody></table></div></section>
+<section id="s8" class="slide slide-table has-explain"><div class="slide-inner"><h2>오늘 데이터의 구조</h2>
+<table class="deck-table"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>행수</td><td>10,424행</td></tr><tr><td>열수</td><td>12열</td></tr><tr><td>기간</td><td>2025.01.01-06.30</td></tr></tbody></table>
+<p class="note">한 행은 주문 한 건, 한 열은 주문의 속성이다.</p><div class="explain"><p>이 표는 오늘 실습할 카페 매출 데이터가 어떤 모양인지 보여 줍니다. 행은 가로로 한 줄씩 쌓인 기록이고, 열은 세로로 나뉜 항목입니다. 오늘 데이터는 10,424행, 12열입니다. 다시 말해 주문 기록이 10,424개 있고, 각 주문마다 12가지 속성이 적혀 있다는 뜻입니다.</p><p>기간은 2025.01.01-06.30입니다. 그래서 이 데이터로는 2025년 1월부터 6월까지의 주문은 볼 수 있지만, 그 뒤의 주문을 실제 기록처럼 볼 수는 없습니다. 7월 매출을 말하려면 예측이나 추가 데이터가 필요합니다.</p><p>결측값 0개라는 말은 비어 있는 칸이 없다는 뜻입니다. 엑셀 표에서 어떤 칸이 빈칸이면 계산이 꼬일 수 있는데, 오늘 자료는 그런 빈칸이 0개로 확인되어 있습니다. 주요 단위가 주문 1건이라는 점도 중요합니다. 한 줄은 손님 한 명이 아니라 주문 한 건이라고 읽어야 합니다.</p></div></div></section>
+<section id="s9" class="slide slide-table"><div class="slide-inner"><h2>오늘 데이터의 구조 (이어서)</h2>
+<table class="deck-table"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>결측값</td><td>0개</td></tr><tr><td>주요 단위</td><td>주문 1건</td></tr></tbody></table></div></section>
+<section id="s10" class="slide slide-table has-explain"><div class="slide-inner"><h2>요약 숫자부터 확인한다</h2>
 <table class="deck-table"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>주문 건수</td><td>10,424건</td></tr><tr><td>총매출</td><td>90,492,500원</td></tr><tr><td>평균 주문 금액</td><td>8,681.2원</td></tr></tbody></table>
-<p class="note">이 숫자가 이후 집계 결과의 기준점이다.</p></div></section>
-<section id="s8" class="slide slide-chart"><div class="slide-inner"><h2>지점 매출은 강남점이 높다</h2>
+<p class="note">이 숫자가 이후 집계 결과의 기준점이다.</p><div class="explain"><p>분석을 시작할 때는 자세한 그래프를 보기 전에 큰 숫자부터 확인합니다. 여기서는 주문 건수 10,424건, 총매출 90,492,500원, 평균 주문 금액 8,681.2원을 봅니다. 저울에 올리기 전에 물건이 몇 개인지 세어 보는 것과 비슷합니다.</p><p>주문 건수는 표에 들어 있는 주문 기록의 개수입니다. 총매출은 모든 주문 금액을 더한 값입니다. 평균 주문 금액은 주문 한 건당 보통 얼마 정도 팔렸는지 보는 숫자입니다.</p><p>이 숫자들은 뒤에서 지점별, 카테고리별로 쪼개 볼 때 기준점이 됩니다. 예를 들어 지점별 매출을 더했을 때 총매출 90,492,500원과 맞아야 합니다. 숫자가 맞지 않으면 계산 범위나 필터를 다시 봐야 합니다.</p></div></div></section>
+<section id="s11" class="slide slide-chart has-explain"><div class="slide-inner"><h2>지점 매출은 강남점이 높다</h2>
 <div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="200" y="46" width="150" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="275" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">53,425,000원</text><text x="275" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">강남점</text><rect x="670" y="154" width="150" height="244" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="745" y="142" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">37,067,500원</text><text x="745" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">홍대점</text><line x1="924" y1="88" x2="275" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="275" cy="40" r="4" fill="#828fff"/><rect x="877" y="46" width="95" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="924" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">1위 지점</text></svg></div>
-<div class="result-line"><span class="lead">결과</span>강남점이 홍대점보다 <b>16,357,500원</b> 많다.</div></div></section>
-<section id="s9" class="slide slide-chart"><div class="slide-inner"><h2>카테고리 매출은 커피가 1위다</h2>
+<div class="result-line"><span class="lead">결과</span>강남점이 홍대점보다 <b>16,357,500원</b> 많다.</div><div class="explain"><p>이 막대그래프는 지점별 총매출을 비교한 그림입니다. 막대 하나가 지점 하나를 뜻하고, 막대가 길수록 그 지점의 매출이 큽니다. 단위는 원입니다.</p><p>왼쪽의 강남점 막대는 53,425,000원이고, 홍대점 막대는 37,067,500원입니다. 표시가 붙은 1위 지점은 강남점입니다. 막대의 길이를 눈으로만 봐도 강남점이 더 길고, 숫자로 봐도 강남점이 더 큽니다.</p></div></div></section>
+<section id="s12" class="slide slide-note"><div class="slide-inner"><h2>지점 매출은 강남점이 높다<span class="cont-tag">이어서</span></h2><div class="explain"><p>두 지점의 차이는 16,357,500원입니다. 그래서 “강남점이 더 잘 팔렸다”고 말하려면 그냥 느낌으로 말하는 것이 아니라, 2025년 1월부터 6월까지의 주문 금액 합계를 기준으로 강남점이 홍대점보다 16,357,500원 많다고 말하면 됩니다.</p></div></div></section>
+<section id="s13" class="slide slide-chart has-explain"><div class="slide-inner"><h2>카테고리 매출은 커피가 1위다</h2>
 <div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="122" y="46" width="150" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="197" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">45,606,000원</text><text x="197" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">커피</text><rect x="435" y="201" width="150" height="197" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="189" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">25,550,000원</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">음료</text><rect x="748" y="249" width="150" height="149" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="823" y="237" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">19,336,500원</text><text x="823" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">디저트</text><line x1="924" y1="88" x2="197" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="197" cy="40" r="4" fill="#828fff"/><rect x="877" y="46" width="95" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="924" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">최대 매출</text></svg></div>
-<div class="result-line"><span class="lead">결과</span>커피 매출이 <b>45,606,000원</b>으로 가장 크다.</div></div></section>
-<section id="s10" class="slide slide-table"><div class="slide-inner"><h2>도구별 역할은 다르다</h2>
-<table class="deck-table"><thead><tr><th>도구</th><th>강점</th><th>주의</th></tr></thead><tbody><tr><td>엑셀</td><td>빠른 필터·피벗</td><td>손작업 누적</td></tr><tr><td>AI</td><td>질문 정리·코드</td><td>숫자 검증 필요</td></tr><tr><td>파이썬</td><td>재현 가능한 기록</td><td>초반 낯섦</td></tr><tr><td>BI</td><td>대시보드 공유</td><td>설치·계정 확인</td></tr></tbody></table>
-<p class="note">도구는 경쟁 관계가 아니라 같은 질문을 다루는 서로 다른 방법이다.</p></div></section>
-<section id="s11" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<div class="result-line"><span class="lead">결과</span>커피 매출이 <b>45,606,000원</b>으로 가장 크다.</div><div class="explain"><p>이 막대그래프는 상품 카테고리별 총매출을 보여 줍니다. 커피, 음료, 디저트 세 묶음으로 나누어 주문 금액을 더한 그림입니다. 막대의 길이는 각 카테고리가 벌어들인 매출 크기입니다.</p><p>커피는 45,606,000원, 음료는 25,550,000원, 디저트는 19,336,500원입니다. 가장 긴 막대는 커피이고, 그래서 최대 매출 표시도 커피에 붙어 있습니다. 표를 눈으로 훑을 때는 가장 긴 막대와 가장 짧은 막대를 먼저 보면 흐름이 빨리 잡힙니다.</p></div></div></section>
+<section id="s14" class="slide slide-note"><div class="slide-inner"><h2>카테고리 매출은 커피가 1위다<span class="cont-tag">이어서</span></h2><div class="explain"><p>이 결과는 “커피가 제일 많이 팔렸다”라고만 말하면 조금 애매할 수 있습니다. 수량 기준인지, 금액 기준인지가 빠져 있기 때문입니다. 여기서는 금액 기준입니다. 따라서 “카테고리별 주문 금액 합계를 보면 커피 매출이 45,606,000원으로 가장 크다”라고 말하는 것이 정확합니다.</p></div></div></section>
+<section id="s15" class="slide slide-table has-explain"><div class="slide-inner"><h2>도구별 역할은 다르다</h2>
+<table class="deck-table"><thead><tr><th>도구</th><th>강점</th><th>주의</th></tr></thead><tbody><tr><td>엑셀</td><td>빠른 필터·피벗</td><td>손작업 누적</td></tr><tr><td>AI</td><td>질문 정리·코드</td><td>숫자 검증 필요</td></tr></tbody></table>
+<p class="note">도구는 경쟁 관계가 아니라 같은 질문을 다루는 서로 다른 방법이다.</p><div class="explain"><p>이 표는 분석 도구를 용도별로 나누어 보여 줍니다. 도구 이름만 보면 어렵게 느껴질 수 있지만, 결국 같은 표를 놓고 질문에 답하는 방법이 조금씩 다른 것입니다. 가위, 칼, 자가 모두 도구지만 쓰임이 다른 것과 같습니다.</p><p>엑셀은 이미 익숙한 표 화면에서 빠르게 필터를 걸고 피벗으로 합계를 보는 데 좋습니다. 다만 손으로 클릭한 과정이 많아지면 나중에 똑같이 반복하기 어려울 수 있습니다. AI는 질문을 다듬고 코드나 설명을 만드는 데 도움을 주지만, 숫자는 반드시 확인해야 합니다. 그럴듯하게 말해도 틀릴 수 있기 때문입니다.</p><p>파이썬은 처음에는 낯설지만, 분석 과정을 코드로 남겨서 다시 실행하기 좋습니다. BI는 Business Intelligence의 줄임말로, 여러 사람이 볼 수 있는 대시보드를 만드는 도구라고 생각하면 됩니다. 회의나 보고에서 필터를 바꿔 가며 결과를 볼 때 유용합니다.</p></div></div></section>
+<section id="s16" class="slide slide-table"><div class="slide-inner"><h2>도구별 역할은 다르다 (이어서)</h2>
+<table class="deck-table"><thead><tr><th>도구</th><th>강점</th><th>주의</th></tr></thead><tbody><tr><td>파이썬</td><td>재현 가능한 기록</td><td>초반 낯섦</td></tr><tr><td>BI</td><td>대시보드 공유</td><td>설치·계정 확인</td></tr></tbody></table></div></section>
+<section id="s17" class="slide slide-concept has-explain"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
 <h2>좋은 질문의 형태</h2>
 <p class="body">대상, 기준, 집계값, 기간을 정하면 막연한 궁금증이 표의 열 이름과 연결된다.</p>
 <ul class="bullets"><li>대상: 카페 주문</li>
 <li>기준: 지점별</li>
-<li>집계: amount 합계</li>
-<li>기간: 2025년 1-6월</li></ul></div></section>
-<section id="s12" class="slide slide-table"><div class="slide-inner"><h2>환경은 오늘 점검한다</h2>
-<table class="deck-table"><thead><tr><th>항목</th><th>확인</th><th>비고</th></tr></thead><tbody><tr><td>운영체제</td><td>Windows 또는 Mac</td><td>기록</td></tr><tr><td>Power BI</td><td>Windows 가능</td><td>Mac은 대체</td></tr><tr><td>Google 계정</td><td>준비</td><td>S10 Colab</td></tr><tr><td>AI 계정</td><td>접속 가능</td><td>유료 기능 주의</td></tr><tr><td>데이터 파일</td><td>존재 확인</td><td>clean.csv</td></tr></tbody></table>
-<p class="note">Colab과 pandas는 S10부터 다룬다.</p></div></section>
-<section id="s13" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<li>집계: 주문 금액 합계</li>
+<li>기간: 2025년 1-6월</li></ul><div class="explain"><p>좋은 분석 질문은 계산할 수 있는 모양을 갖고 있습니다. 대상은 무엇을 볼 것인지, 기준은 무엇으로 나눌 것인지, 집계값은 어떤 숫자를 더하거나 평균 낼 것인지, 기간은 어느 범위까지 볼 것인지를 말합니다.</p><p>예를 들어 “매출이 어떤가요?”는 너무 넓습니다. “2025년 1-6월 카페 주문에서 지점별 주문 금액 합계는 어떻게 다른가요?”라고 바꾸면 훨씬 분명해집니다. 카페 주문이 대상이고, 지점별이 기준이고, 주문 금액 합계가 집계값이고, 2025년 1-6월이 기간입니다.</p><p>집계값은 여러 줄에 흩어진 숫자를 하나로 모은 값입니다. 주문 금액을 더하면 총매출이 되고, 주문 건수로 나누면 평균 주문 금액이 됩니다. 분석 질문을 만들 때는 “무엇을 기준으로 나누고, 어떤 숫자를 볼까요?”라고 스스로 물어보세요.</p></div></div></section>
+<section id="s18" class="slide slide-table has-explain"><div class="slide-inner"><h2>환경은 오늘 점검한다</h2>
+<table class="deck-table"><thead><tr><th>항목</th><th>확인</th><th>비고</th></tr></thead><tbody><tr><td>운영체제</td><td>Windows 또는 Mac</td><td>기록</td></tr><tr><td>Power BI</td><td>Windows 가능</td><td>Mac은 대체</td></tr><tr><td>Google 계정</td><td>준비</td><td>S10 Colab</td></tr></tbody></table>
+<p class="note">Colab과 pandas는 S10부터 다룬다.</p><div class="explain"><p>이 표는 오늘 바로 분석을 많이 하자는 뜻이 아니라, 앞으로 수업을 따라가기 위한 준비 상태를 확인하는 체크리스트입니다. 운영체제가 Windows인지 Mac인지 기록하고, 계정과 자료가 준비되어 있는지 보는 단계입니다.</p><p>Power BI Desktop은 Windows에서 사용할 수 있습니다. Mac을 쓰는 분은 수업을 못 듣는 것이 아니라, 뒤쪽 BI 파트에서 대체 도구 경로를 사용합니다. Google 계정은 S10에서 Colab을 쓸 때 필요합니다. Colab은 인터넷 브라우저에서 파이썬을 실행하는 작업실이라고 생각하면 됩니다.</p><p>AI 계정은 접속이 되는지 확인하되, 파일 업로드나 데이터 분석 기능이 유료일 수 있다는 점을 같이 봅니다. 카페 매출 파일은 수업 자료 페이지에서 받은 실습용 표 파일입니다. 오늘은 이 파일이 있는지, 엑셀에서 열리는지, 열 이름을 볼 수 있는지만 확인해 보세요.</p></div></div></section>
+<section id="s19" class="slide slide-table"><div class="slide-inner"><h2>환경은 오늘 점검한다 (이어서)</h2>
+<table class="deck-table"><thead><tr><th>항목</th><th>확인</th><th>비고</th></tr></thead><tbody><tr><td>AI 계정</td><td>접속 가능</td><td>유료 기능 주의</td></tr><tr><td>카페 매출 파일</td><td>존재 확인</td><td>수업 자료 페이지에서 받은 파일</td></tr></tbody></table></div></section>
+<section id="s20" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
 <div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 카페 질문 3개</div><div class="m-desc">기간, 기준, 집계값, 필요한 열을 적는다.</div></div><div class="mission-card"><div class="m-label">미션 2. 내 업무 표 질문 만들기</div><div class="m-desc">자주 보는 표 1개를 답할 질문으로 바꾼다.</div></div></div></div></section>
-<section id="s14" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<section id="s21" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
 <ul class="bullets"><li>질문은 먼저 표의 열로 번역한다.</li>
 <li>10,424건 주문은 지점·카테고리 집계로 읽는다.</li>
 <li>AI가 낸 숫자는 다른 도구로 검증한다.</li></ul>

@@ -380,13 +380,13 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 <li>난이도: 4</li>
 <li>시간: 70분</li>
 <li>사용 데이터</li>
-<li><code>02_datasets/cafe_sales/cafe_sales_dirty.csv</code></li>
-<li><code>02_datasets/real_korean/delivery_food/food_delivery_prediction_raw_data2_ORIGINAL_cp949.csv</code></li>
+<li>수업 홈의 데이터 받기 페이지에서 내려받은 카페 매출 파일. CSV는 엑셀로도 열리는 표 파일입니다. 초보자는 같은 내용의 엑셀 파일(.xlsx)로 받아도 됩니다.</li>
+<li>수업 홈의 데이터 받기 페이지에서 내려받은 배달 음식 파일. 한글 인코딩 문제를 확인하기 위한 원본 데이터입니다.</li>
 </ul>
-<p>이번 차시는 pandas로 데이터를 읽은 뒤, 분석 전에 반드시 거쳐야 하는 정제 과정을 다룬다. 엑셀에서는 빈칸을 필터로 찾고, 쉼표가 들어간 숫자를 직접 바꾸고, 중복 제거 버튼을 누른다. pandas에서는 같은 일을 <code>isna</code>, <code>fillna</code>, <code>dropna</code>, <code>to_numeric</code>, <code>drop_duplicates</code>, <code>.str</code>, <code>to_datetime</code> 같은 명령으로 재현한다.</p>
-<p>수업의 핵심은 "정제는 예쁘게 다듬는 일이 아니라, 계산 가능한 표로 만드는 일"이라는 점이다. 잘못된 수량 999, 음수 매출, 같은 주문번호 중복, 문자로 섞인 단가를 그대로 두면 피벗테이블과 그래프가 모두 흔들린다.</p>
+<p>pandas로 데이터를 읽은 뒤에는 바로 평균을 내거나 그래프를 그리기 전에 표를 먼저 점검해야 합니다. 엑셀에서 빈칸을 필터로 찾고, 쉼표가 들어간 숫자를 손으로 고치고, 중복 제거 버튼을 누르는 일이 있죠? pandas에서도 같은 일을 합니다. 다만 손으로 하나씩 고치는 대신 <code>isna</code>, <code>fillna</code>, <code>dropna</code>, <code>to_numeric</code>, <code>drop_duplicates</code>, <code>.str</code>, <code>to_datetime</code> 같은 명령으로 한 열 전체를 한 번에 정리합니다.</p>
+<p>정제는 데이터를 보기 좋게 꾸미는 일이 아닙니다. 계산할 수 있는 표로 만드는 일입니다. 예를 들어 수량에 999가 들어 있거나, 매출이 음수로 들어 있거나, 같은 주문번호가 두 번 들어 있거나, 단가가 숫자가 아니라 문자로 섞여 있으면 어떻게 될까요? 피벗테이블의 합계도 흔들리고, 그래프도 잘못된 방향을 보여 줍니다. 키를 재기 전에 줄자가 제대로 놓였는지 확인하듯이, 분석 전에 데이터가 계산 가능한 상태인지 확인해야 합니다.</p>
 <h2>실제 데이터 확인 결과</h2>
-<p>수업 자료 작성 전 <code>python3</code>와 pandas 3.0.3으로 실제 파일을 확인했다.</p>
+<p>수업 자료를 만들기 전에 <code>python3</code>와 pandas 3.0.3으로 실제 데이터를 열어 확인했습니다. 표에 보이는 파일 이름은 강사용 확인 이름입니다. 학생은 수업 홈의 데이터 받기 페이지에서 카페 매출 파일과 배달 음식 파일을 내려받아 사용하면 됩니다.</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -413,7 +413,7 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 </tr>
 </tbody>
 </table></div>
-<p><code>cafe_sales_dirty.csv</code>에서 확인한 주요 문제는 다음과 같다.</p>
+<p>카페 매출 파일을 열어 보니, 분석 전에 고쳐야 할 문제가 여러 곳에 있었습니다. 여기서 중요한 것은 “틀린 값이 있구나”에서 멈추지 않는 것입니다. 어떤 문제가 몇 건 있는지 세어야 합니다. 숫자로 세어야 나중에 정제 전후가 얼마나 달라졌는지 설명할 수 있습니다.</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -470,18 +470,19 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 </table></div>
 <h2>학습 목표</h2>
 <ol>
-<li><code>isna</code>, <code>fillna</code>, <code>dropna</code>로 결측값을 찾고 처리한다.</li>
-<li><code>to_numeric</code>, <code>astype</code>, <code>to_datetime</code>으로 계산 가능한 타입을 만든다.</li>
-<li><code>drop_duplicates</code>로 중복 행과 중복 키를 구분한다.</li>
-<li><code>.str.strip</code>, <code>.str.replace</code>, <code>replace</code>로 문자열 표기 흔들림을 정리한다.</li>
-<li>IQR 기준으로 수량 이상치를 찾아 제거한다.</li>
-<li>cp949 한글 CSV를 <code>encoding=</code> 옵션으로 다시 읽고, 날짜 문자열을 datetime으로 바꾼다.</li>
-<li>정제 전후의 행수와 통계가 어떻게 달라졌는지 설명한다.</li>
+<li><code>isna</code>, <code>fillna</code>, <code>dropna</code>를 사용해 결측값을 찾고, 의미에 맞게 채우거나 제외합니다.</li>
+<li><code>to_numeric</code>, <code>astype</code>, <code>to_datetime</code>으로 문자처럼 들어온 값을 계산 가능한 타입으로 바꿉니다.</li>
+<li><code>drop_duplicates</code>로 완전히 같은 행과 같은 거래 키가 반복된 행을 구분합니다.</li>
+<li><code>.str.strip</code>, <code>.str.replace</code>, <code>replace</code>로 문자열 표기가 흔들리는 문제를 정리합니다.</li>
+<li>IQR 기준으로 수량 이상치를 찾고, 왜 제거하는지 설명합니다.</li>
+<li>cp949 한글 CSV를 <code>encoding=</code> 옵션으로 다시 읽고, 날짜 문자열을 datetime으로 바꿉니다.</li>
+<li>정제 전후의 행수와 통계가 어떻게 달라졌는지 자기 말로 설명합니다.</li>
 </ol>
-<h2>핵심 개념</h2>
-<h3>1. 결측값은 빈칸이 아니라 의사결정 대상이다</h3>
-<p>엑셀에서 빈칸을 보면 보통 "비어 있다"고 말한다. pandas에서는 이를 결측값이라고 부르고, <code>isna()</code>로 찾는다. 결측값은 무조건 지우지 않는다. 어떤 빈칸은 "모름"으로 채워야 하고, 어떤 빈칸은 분석에서 제외해야 한다.</p>
-<p>이번 데이터에서는 <code>payment</code> 결측을 <code>미확인</code>으로 채운다. 결제수단을 모른다고 해서 주문 자체를 버릴 필요는 없기 때문이다. <code>member</code> 결측은 이번 실습에서는 <code>False</code>로 채운다. 멤버십 여부가 기록되지 않은 주문을 비회원으로 처리한다는 수업용 기준을 명시하고 진행한다.</p>
+<h2>꼭 이해할 개념</h2>
+<h3>1. 결측값은 빈칸이 아니라 의사결정 대상입니다</h3>
+<p>엑셀에서 빈칸을 보면 보통 “값이 비어 있다”고 말합니다. pandas에서는 이런 빈칸을 결측값이라고 부릅니다. 결측값은 아직 값이 없거나, 기록이 빠졌거나, 알 수 없는 상태를 뜻합니다. pandas에서는 <code>isna()</code>로 결측값을 찾습니다.</p>
+<p>결측값은 무조건 삭제하면 안 됩니다. 어떤 빈칸은 “모름”이라고 채워 두는 편이 맞고, 어떤 빈칸은 분석에서 제외해야 합니다. 예를 들어 결제수단이 비어 있다고 해서 주문 자체가 사라지는 것은 아닙니다. 주문금액과 메뉴 정보가 살아 있다면 매출 분석에는 사용할 수 있겠죠. 그래서 카페 매출 파일에서는 <code>payment</code> 결측을 <code>미확인</code>으로 채웁니다.</p>
+<p><code>member</code> 결측은 이번 실습에서는 <code>False</code>로 채웁니다. 여기서 <code>False</code>는 비회원이라는 뜻입니다. 다만 이것은 현실의 유일한 정답이 아니라 수업용 기준입니다. “기록되지 않은 멤버십 여부를 이번 분석에서는 비회원으로 본다”라고 기준을 세우고 진행하는 것입니다. 데이터 정제에서는 이렇게 기준을 말로 설명할 수 있어야 합니다.</p>
 <p>엑셀 비교:</p>
 <div class="table-scroll"><table>
 <thead>
@@ -505,24 +506,31 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 </tr>
 </tbody>
 </table></div>
-<h3>2. 숫자로 보여도 숫자가 아닐 수 있다</h3>
-<p><code>4,500원</code>은 사람 눈에는 단가지만, 컴퓨터에는 문자다. 문자로 된 숫자는 합계나 평균, 상관계수를 구할 때 문제가 된다. 쉼표와 원 표시를 지운 뒤 <code>pd.to_numeric</code>으로 바꿔 주면 된다.</p>
-<p>엑셀의 <code>VALUE(SUBSTITUTE(A2,"원",""))</code>와 같은 생각이다. pandas에서는 한 열 전체에 한 번에 적용한다.</p>
-<h3>3. 중복은 "완전히 같은 행"과 "같은 거래 키"로 나누어 본다</h3>
-<p>엑셀의 중복 제거는 선택한 열 기준으로 작동한다. pandas도 같다. 모든 열이 똑같은 행만 중복으로 볼 수도 있고, <code>order_id</code>가 같은 행을 같은 주문의 중복으로 볼 수도 있다.</p>
-<p>이번 수업에서는 거래 1건을 식별하는 키가 <code>order_id</code>이므로 <code>drop_duplicates(subset=["order_id"])</code>를 사용한다.</p>
-<h3>4. 문자열 표기는 피벗테이블의 그룹을 쪼갠다</h3>
-<p><code>강남점</code>과 <code>강남 점</code>은 사람에게는 같은 지점이지만, pandas와 엑셀에는 다른 값이다. <code>커피</code>와 <code>커피</code>도 다른 값이다. 이런 표기 흔들림을 그대로 두면 피벗테이블에서 그룹이 나뉘고, 매출 합계가 흩어진다.</p>
-<p>이번 수업에서는 <code>.str.strip()</code>으로 앞뒤 공백을 제거하고, <code>.str.replace(" ", "")</code>로 지점명 내부 공백을 정리한다. 메뉴명은 <code>아메리카</code>, <code>Americano</code>, <code>아메 리카노</code>를 <code>아메리카노</code>로 통일한다.</p>
-<h3>5. 이상치는 "나쁜 값"이 아니라 "확인해야 할 값"이다</h3>
-<p>이상치는 평균과 합계를 크게 흔드는 값이다. 이번 데이터의 <code>qty=999</code>는 카페 주문 수량으로 보기 어렵다. 단순히 "큰 값이라 삭제"하는 것이 아니라 IQR 기준으로 확인한다.</p>
-<p>IQR은 1사분위수(Q1)와 3사분위수(Q3)의 차이다. 이번 데이터의 수량은 Q1=1, Q3=2, IQR=1이라 정상범위가 -0.5부터 3.5까지로 잡힌다. <code>qty=999</code>는 이 범위를 한참 벗어난다.</p>
-<h3>6. 인코딩은 글자를 숫자로 저장하는 약속이다</h3>
-<p>CSV 파일은 표처럼 보이지만 실제로는 텍스트 파일이다. 글자를 저장하는 약속이 UTF-8인지 cp949인지에 따라 한글이 깨지거나 파일이 열리지 않을 수 있다.</p>
-<p>이번 과정의 대부분 CSV는 UTF-8로 정규화되어 있다. 다만 S12에서는 인코딩 사례를 배우기 위해 cp949 원본 파일 1개를 보존해 사용한다. 기본값으로 읽으면 <code>UnicodeDecodeError</code>가 나고, <code>pd.read_csv(path, encoding="cp949")</code>로 다시 읽으면 정상 로드된다.</p>
-<h3>7. 날짜는 문자열에서 datetime으로 바꾸어야 한다</h3>
-<p><code>2025-03-23</code>은 날짜처럼 보이지만, CSV에서 읽으면 문자열인 경우가 많다. 날짜가 문자열이면 월별로 묶거나 요일을 계산하고 기간으로 거르는 일이 까다로워진다. <code>pd.to_datetime</code>으로 datetime 타입으로 바꿔 두면 월 추출과 기간 비교, 시계열 정렬을 할 수 있다.</p>
-<p>이번 <code>cafe_sales_dirty.csv</code>에는 <code>2025-03-23</code>, <code>2025/03/23</code>, <code>03-23-2025</code>처럼 날짜 형식이 섞여 있다. pandas 3.0.3에서는 <code>pd.to_datetime(..., format="mixed")</code>로 섞인 형식을 처리한다.</p>
+<h3>2. 숫자로 보여도 숫자가 아닐 수 있습니다</h3>
+<p><code>4,500원</code>은 사람 눈에는 단가로 보입니다. 하지만 컴퓨터 입장에서는 숫자 4500이 아니라 글자입니다. 쉼표와 <code>원</code>이라는 글자가 붙어 있기 때문입니다. 글자로 된 숫자는 합계, 평균, 상관계수처럼 계산이 필요한 작업에서 문제를 일으킵니다.</p>
+<p>이럴 때는 먼저 쉼표와 원 표시를 지우고, 그다음 <code>pd.to_numeric</code>으로 숫자 타입으로 바꿉니다. 타입은 값의 종류를 뜻합니다. 사람에게는 둘 다 단가로 보여도, pandas에게는 숫자 타입인지 문자 타입인지가 완전히 다릅니다.</p>
+<p>엑셀에서 <code>VALUE(SUBSTITUTE(A2,"원",""))</code>처럼 문자에서 불필요한 기호를 지우고 숫자로 바꾸는 것과 같은 생각입니다. pandas에서는 이 과정을 한 셀씩 하지 않고 한 열 전체에 한 번에 적용합니다. 그래서 데이터가 많을수록 정제 명령의 힘이 커집니다.</p>
+<h3>3. 중복은 “완전히 같은 행”과 “같은 거래 키”로 나누어 봅니다</h3>
+<p>중복이라고 해서 모두 같은 뜻은 아닙니다. 한 행의 모든 값이 완전히 똑같이 반복된 경우가 있고, 주문번호처럼 거래를 식별하는 값만 같은 경우가 있습니다. 엑셀의 중복 제거도 선택한 열 기준으로 작동하죠. pandas도 마찬가지입니다.</p>
+<p>모든 열이 똑같은 행만 중복으로 볼 수도 있고, <code>order_id</code>가 같은 행을 같은 주문의 중복으로 볼 수도 있습니다. 여기서 <code>order_id</code>는 주문 1건을 구분하는 이름표라고 보면 됩니다. 사전에서 단어를 찾을 때 표제어를 기준으로 찾듯이, 거래 데이터에서는 주문번호 같은 키를 기준으로 같은 거래인지 판단합니다.</p>
+<p>이번 수업에서는 거래 1건을 식별하는 키가 <code>order_id</code>입니다. 그래서 <code>drop_duplicates(subset=["order_id"])</code>를 사용합니다. 이 명령은 <code>order_id</code>가 같은 행이 여러 개 있을 때 하나만 남기고 나머지를 제거합니다.</p>
+<h3>4. 문자열 표기는 피벗테이블의 그룹을 쪼갭니다</h3>
+<p><code>강남점</code>과 <code>강남 점</code>은 사람에게는 같은 지점으로 보입니다. 하지만 pandas와 엑셀은 둘을 다른 값으로 봅니다. 중간에 공백이 하나 들어갔기 때문입니다. <code>커피</code>와 <code>커피</code>도 마찬가지입니다. 앞뒤에 빈칸이 숨어 있으면 사람 눈에는 잘 안 보이지만 컴퓨터는 다른 값으로 처리합니다.</p>
+<p>이런 표기 흔들림을 그대로 두면 피벗테이블에서 그룹이 나뉩니다. 원래는 강남점 매출로 합쳐져야 할 값이 <code>강남점</code>과 <code>강남 점</code>으로 갈라지고, 커피 매출도 <code>커피</code>와 <code>커피</code>로 흩어집니다. 결과적으로 합계가 틀렸다기보다, 합쳐야 할 것을 못 합친 상태가 됩니다.</p>
+<p>이번 수업에서는 <code>.str.strip()</code>으로 앞뒤 공백을 제거합니다. <code>strip</code>은 양끝을 닦아 낸다고 생각하면 됩니다. 그리고 <code>.str.replace(" ", "")</code>로 지점명 내부 공백을 정리합니다. 메뉴명은 <code>아메리카</code>, <code>Americano</code>, <code>아메 리카노</code>를 <code>아메리카노</code>로 통일합니다. 같은 메뉴는 같은 이름을 가져야 제대로 묶입니다.</p>
+<h3>5. 이상치는 “나쁜 값”이 아니라 “확인해야 할 값”입니다</h3>
+<p>이상치는 다른 값들과 너무 멀리 떨어져 있는 값입니다. 이상치가 있다고 해서 바로 나쁜 값이라고 단정하면 안 됩니다. 실제로 큰 주문일 수도 있기 때문입니다. 하지만 평균과 합계를 크게 흔들 수 있으므로 반드시 확인해야 합니다.</p>
+<p>카페 매출 데이터에서 <code>qty=999</code>는 카페 주문 수량으로 보기 어렵습니다. 커피 999잔을 한 번에 주문한 기록처럼 보이기 때문입니다. 그래서 단순히 “큰 값이니까 삭제”하는 것이 아니라 IQR 기준으로 확인합니다.</p>
+<p>IQR은 1사분위수(Q1)와 3사분위수(Q3)의 차이입니다. 사분위수는 데이터를 작은 값부터 큰 값까지 줄 세웠을 때 위치를 나누어 보는 값입니다. 키를 잴 때 보통 범위를 벗어난 값을 다시 확인하듯이, IQR은 일반적인 범위를 정해 이상하게 큰 값이나 작은 값을 찾는 데 씁니다.</p>
+<p>이번 데이터의 수량은 Q1=1, Q3=2, IQR=1입니다. 그래서 정상범위가 -0.5부터 3.5까지로 잡힙니다. <code>qty=999</code>는 이 범위를 한참 벗어납니다. 이 값은 분석에 그대로 넣으면 판매수량 합계를 크게 부풀리므로 제거하고 분석합니다.</p>
+<h3>6. 인코딩은 글자를 숫자로 저장하는 약속입니다</h3>
+<p>CSV 파일은 표처럼 보이지만 실제로는 텍스트 파일입니다. 컴퓨터는 글자를 그대로 저장하는 것이 아니라 숫자로 바꾸어 저장합니다. 이때 어떤 약속으로 바꾸었는지를 인코딩이라고 부릅니다. 대표적으로 UTF-8과 cp949 같은 방식이 있습니다.</p>
+<p>인코딩 약속이 맞지 않으면 한글이 깨지거나 파일이 열리지 않습니다. 예를 들어 파일은 cp949 방식으로 저장되어 있는데 pandas가 UTF-8이라고 생각하고 읽으면 <code>UnicodeDecodeError</code>가 날 수 있습니다. 이 오류는 “글자를 해석하는 약속이 맞지 않는다”는 신호입니다.</p>
+<p>수업에서 다루는 표 파일 대부분은 UTF-8로 정리되어 있습니다. 다만 S12에서는 인코딩 문제를 직접 확인하기 위해 cp949 원본 파일 1개를 사용합니다. 기본값으로 읽으면 오류가 나고, <code>pd.read_csv(path, encoding="cp949")</code>로 다시 읽으면 정상적으로 열립니다. 여기서 <code>encoding="cp949"</code>는 “이 파일은 cp949 약속으로 읽어 주세요”라고 pandas에게 알려 주는 말입니다.</p>
+<h3>7. 날짜는 문자열에서 datetime으로 바꾸어야 합니다</h3>
+<p><code>2025-03-23</code>은 사람 눈에는 날짜로 보입니다. 하지만 CSV에서 읽으면 문자열인 경우가 많습니다. 문자열은 글자입니다. 글자로 된 날짜는 보기에는 날짜 같아도, 월별로 묶거나 요일을 계산하거나 특정 기간만 골라내는 작업이 까다롭습니다.</p>
+<p>그래서 날짜는 <code>pd.to_datetime</code>으로 datetime 타입으로 바꿉니다. datetime은 pandas가 날짜와 시간으로 알아볼 수 있는 타입입니다. 이렇게 바꿔 두면 월을 추출하고, 기간을 비교하고, 시간순으로 정렬하는 작업을 자연스럽게 할 수 있습니다.</p>
+<p>카페 매출 파일에는 <code>2025-03-23</code>, <code>2025/03/23</code>, <code>03-23-2025</code>처럼 날짜 형식이 섞여 있습니다. 같은 날짜라도 쓰는 방식이 다르면 컴퓨터는 헷갈릴 수 있습니다. pandas 3.0.3에서는 <code>pd.to_datetime(..., format="mixed")</code>를 사용해 섞인 날짜 형식을 처리합니다.</p>
 <h2>70분 수업 흐름</h2>
 <div class="table-scroll"><table>
 <thead>
@@ -576,6 +584,7 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 </tbody>
 </table></div>
 <h2>엑셀과 연결해서 설명할 지점</h2>
+<p>엑셀을 써 본 사람이라면 정제가 완전히 낯선 일이 아닙니다. 이미 필터로 빈칸을 찾고, 찾기/바꾸기로 글자를 고치고, 중복 제거 버튼을 눌러 본 경험이 있을 수 있습니다. pandas는 그 작업을 코드로 기록해 두고 반복 실행할 수 있게 해 줍니다.</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -627,6 +636,7 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 </tr>
 </tbody>
 </table></div>
+<p>여기서 뭐가 보이시나요? 엑셀에서 하던 일을 pandas에서도 거의 같은 순서로 합니다. 차이는 손으로 클릭하느냐, 명령으로 남기느냐입니다. 명령으로 남기면 같은 정제 과정을 다음 데이터에도 다시 적용할 수 있습니다.</p>
 <h2>수업 후 수강생이 말할 수 있어야 하는 문장</h2>
 <ul>
 <li>"결측값은 무조건 삭제하지 않고, 의미에 따라 채우거나 제외한다."</li>
@@ -638,23 +648,31 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 </section>
 <section class="tab-panel markdown-body" data-panel="handout" aria-label="핸드아웃">
 <h1>S12 핸드아웃: 데이터 정제</h1>
-<h2>오늘 사용할 파일</h2>
-<p>작업 루트는 <code>/mnt/d/ai-data-analysis-course</code>이다.</p>
+<h2>오늘 사용할 데이터</h2>
+<p>CSV는 엑셀로도 열리는 표 파일입니다. Python으로 실습할 때는 CSV 파일을 사용하고, 먼저 눈으로 표를 확인하고 싶은 분은 엑셀 파일(.xlsx)을 받아도 됩니다.</p>
+<p>오늘은 수업 홈의 데이터 받기 페이지에서 두 가지 파일을 내려받아 사용합니다.</p>
 <ol>
-<li>카페 매출 dirty 데이터
-   - <code>02_datasets/cafe_sales/cafe_sales_dirty.csv</code></li>
-<li>cp949 인코딩 실습 파일
-   - <code>02_datasets/real_korean/delivery_food/food_delivery_prediction_raw_data2_ORIGINAL_cp949.csv</code></li>
+<li>
+<p>카페 매출 dirty 데이터<br />
+   일부러 문제가 섞여 있는 카페 매출 파일입니다. 결측값, 중복, 날짜 형식, 금액 오류를 찾아 정리합니다.</p>
+</li>
+<li>
+<p>cp949 인코딩 실습 파일<br />
+   한글이 들어 있는 배달 음식 데이터입니다. 파일을 읽을 때 글자가 깨지거나 오류가 나는 상황을 확인해 봅니다.</p>
+</li>
 </ol>
+<p>데이터 정제는 표를 예쁘게 꾸미는 일이 아닙니다. 계산할 수 있는 표로 고치는 일입니다. 키를 재기 전에 줄자가 맞는지 확인하듯이, 분석 전에 값이 제대로 들어 있는지 먼저 확인해야 합니다.</p>
 <h2>따라하기 1: dirty 데이터 열고 문제 찾기</h2>
-<p>바로 분석에 들어가지 않고, 이 데이터에 어떤 문제가 있는지부터 살펴본다.</p>
-<h3>1단계. 작업 폴더에서 Python 실행 준비</h3>
-<p>터미널에서 아래 명령을 실행한다.</p>
+<p>바로 합계나 그래프를 만들지 않습니다. 먼저 이 표에 어떤 문제가 숨어 있는지 살펴봅니다. 병원에서 진단부터 하고 치료를 정하듯이, 데이터도 문제를 먼저 봐야 정리 방법을 고를 수 있습니다.</p>
+<h3>1단계. 데이터 받기 페이지에서 카페 매출 파일을 내려받고 Python 실행 준비</h3>
+<p>수업 홈의 데이터 받기 페이지에서 카페 매출 dirty 데이터를 내려받습니다. 이 단계는 실습할 데이터를 Python에서 읽을 수 있는 상태로 준비하기 위해 필요합니다.</p>
+<p>터미널에서 아래 명령을 실행합니다.</p>
 <div class="code-scroll"><pre><code class="language-bash">cd /mnt/d/ai-data-analysis-course
 python3
 </code></pre></div>
-<p>Python 화면이 열리면 아래 코드를 한 블록씩 실행한다. Colab을 쓰는 경우에는 코드 셀에 같은 내용을 넣어 실행한다.</p>
+<p>Python 화면이 열리면 아래 코드를 한 블록씩 실행해 보세요. Colab을 쓰는 경우에는 코드 셀에 같은 내용을 넣어 실행하면 됩니다.</p>
 <h3>2단계. CSV 읽기</h3>
+<p>파일을 읽어야 표의 크기, 열 이름, 값의 모양을 확인할 수 있습니다. 처음에는 분석보다 “제대로 열렸는지”를 보는 것이 먼저입니다.</p>
 <div class="code-scroll"><pre><code class="language-python">from pathlib import Path
 import pandas as pd
 
@@ -668,21 +686,23 @@ print(df.shape)
 print(df.head())
 print(df.info())
 </code></pre></div>
-<p>확인할 값:</p>
+<p>확인할 값입니다.</p>
 <ul>
-<li>pandas 버전: 버전이 출력되면 통과, 2.x여도 무방</li>
-<li>데이터 크기: <code>10,439행 x 12열</code></li>
-<li>주요 컬럼: <code>order_id</code>, <code>date</code>, <code>store</code>, <code>category</code>, <code>item</code>, <code>unit_price</code>, <code>qty</code>, <code>amount</code>, <code>payment</code>, <code>member</code></li>
+<li>pandas 버전이 출력되면 잘 열린 것입니다. 2.x여도 괜찮습니다.</li>
+<li>데이터 크기는 <code>10,439행 x 12열</code>이어야 합니다. 행은 주문 기록의 개수, 열은 날짜·금액처럼 항목의 종류라고 보면 됩니다.</li>
+<li>주요 컬럼으로 <code>order_id</code>, <code>date</code>, <code>store</code>, <code>category</code>, <code>item</code>, <code>unit_price</code>, <code>qty</code>, <code>amount</code>, <code>payment</code>, <code>member</code>가 보이는지 확인해 보세요.</li>
 </ul>
 <h3>3단계. 결측값 확인</h3>
+<p>결측값은 비어 있거나 알 수 없는 값입니다. 빈칸을 그대로 두면 평균이나 집계가 흔들릴 수 있으므로 먼저 어디에 빈칸이 있는지 봅니다.</p>
 <div class="code-scroll"><pre><code class="language-python">df.isna().sum()
 </code></pre></div>
-<p>기대 결과:</p>
+<p>기대 결과입니다.</p>
 <div class="code-scroll"><pre><code class="language-text">payment    313
 member     209
 </code></pre></div>
-<p>다른 열은 결측이 없어야 한다.</p>
+<p>다른 열은 결측이 없어야 합니다. 여기서 <code>payment</code>는 결제수단, <code>member</code>는 회원 여부입니다. 주문 자체가 없는 것은 아니고, 일부 정보만 비어 있는 상태라고 보면 됩니다.</p>
 <h3>4단계. 중복과 표기 문제 확인</h3>
+<p>중복은 같은 주문이 여러 번 들어간 경우입니다. 표기 문제는 사람 눈에는 같아 보여도 컴퓨터가 다르게 보는 값입니다. 예를 들어 <code>강남점</code>과 <code>강남 점</code>은 사람에게는 같은 지점처럼 보이지만, Python은 다른 글자로 봅니다.</p>
 <div class="code-scroll"><pre><code class="language-python">print(&quot;중복 order_id 행:&quot;, df.duplicated(&quot;order_id&quot;).sum())
 print(&quot;완전 동일 중복 행:&quot;, df.duplicated().sum())
 
@@ -690,14 +710,16 @@ print(df[&quot;store&quot;].value_counts(dropna=False))
 print(df[&quot;category&quot;].value_counts(dropna=False))
 print(df[&quot;item&quot;].value_counts(dropna=False).head(20))
 </code></pre></div>
-<p>확인할 점:</p>
+<p>확인할 점입니다.</p>
 <ul>
-<li><code>order_id</code> 중복 행은 15행이다.</li>
-<li><code>강남점</code>과 <code>강남 점</code>이 따로 존재한다.</li>
-<li><code>커피</code>와 <code>커피</code>처럼 앞뒤 공백이 있는 값이 있다.</li>
-<li><code>아메리카노</code>, <code>아메리카</code>, <code>Americano</code>, <code>아메 리카노</code>가 섞여 있다.</li>
+<li><code>order_id</code> 중복 행은 15행입니다.</li>
+<li><code>강남점</code>과 <code>강남 점</code>이 따로 존재합니다.</li>
+<li><code>커피</code>와 <code>커피</code>처럼 앞뒤 공백이 있는 값이 있습니다.</li>
+<li><code>아메리카노</code>, <code>아메리카</code>, <code>Americano</code>, <code>아메 리카노</code>가 섞여 있습니다.</li>
 </ul>
+<p>이 값들이 따로 남아 있으면 피벗테이블에서 그룹이 쪼개집니다. 같은 메뉴 매출이 여러 줄로 흩어지는 셈입니다.</p>
 <h3>5단계. 날짜, 단가, 수량, 금액 점검</h3>
+<p>날짜와 숫자는 보기에는 멀쩡해도 실제로는 문자일 수 있습니다. <code>4,500원</code>은 사람에게는 금액이지만, 컴퓨터에는 글자입니다. 계산하려면 쉼표와 <code>원</code>을 빼고 숫자로 바꿔야 합니다.</p>
 <div class="code-scroll"><pre><code class="language-python">unit_price_num = pd.to_numeric(
     df[&quot;unit_price&quot;].astype(&quot;string&quot;)
     .str.replace(&quot;,&quot;, &quot;&quot;, regex=False)
@@ -716,7 +738,7 @@ print(&quot;qty 최대값:&quot;, qty_num.max())
 print(&quot;amount 최소값:&quot;, amount_num.min())
 print(&quot;단가 x 수량과 금액 불일치:&quot;, ((unit_price_num * qty_num) != amount_num).sum())
 </code></pre></div>
-<p>확인할 값:</p>
+<p>확인할 값입니다.</p>
 <ul>
 <li>날짜 <code>/</code> 포함: 206건</li>
 <li>날짜 <code>MM-DD-YYYY</code>: 104건</li>
@@ -726,8 +748,9 @@ print(&quot;단가 x 수량과 금액 불일치:&quot;, ((unit_price_num * qty_n
 <li><code>amount</code> 최소값: -5,500</li>
 <li>단가 x 수량과 금액 불일치: 3건</li>
 </ul>
+<p>여기서 뭐가 보이시나요? 날짜 형식이 섞여 있고, 단가에는 문자가 섞여 있으며, 수량 999와 음수 금액도 있습니다. 카페 주문에서 수량 999는 일반적인 주문으로 보기 어렵습니다.</p>
 <h2>따라하기 2: 문자열, 타입, 결측값 정리</h2>
-<p>이제 계산 가능한 표로 만들 차례다. 원본 <code>df</code>는 그대로 두고 <code>cleaned</code>라는 복사본을 만든다.</p>
+<p>이제 계산 가능한 표로 만들 차례입니다. 원본 <code>df</code>는 그대로 두고 <code>cleaned</code>라는 복사본을 만듭니다. 원본을 남겨 두면 정제 전후를 비교할 수 있습니다. 지우개로 바로 지우는 대신, 원본 종이를 복사해 놓고 고치는 느낌입니다.</p>
 <div class="code-scroll"><pre><code class="language-python">cleaned = df.copy()
 
 cleaned[&quot;store&quot;] = cleaned[&quot;store&quot;].astype(&quot;string&quot;).str.strip().str.replace(&quot; &quot;, &quot;&quot;, regex=False)
@@ -746,13 +769,14 @@ cleaned[&quot;item&quot;] = (
 cleaned[&quot;payment&quot;] = cleaned[&quot;payment&quot;].astype(&quot;string&quot;).str.strip().fillna(&quot;미확인&quot;)
 cleaned[&quot;member&quot;] = cleaned[&quot;member&quot;].astype(&quot;boolean&quot;).fillna(False)
 </code></pre></div>
-<p>해석:</p>
+<p>이 코드는 세 가지 일을 합니다.</p>
 <ul>
-<li><code>store</code>, <code>category</code>, <code>item</code>은 그룹명이 흔들리지 않게 정리한다.</li>
-<li><code>payment</code> 빈칸은 주문을 버리지 않고 <code>미확인</code>으로 채운다.</li>
-<li><code>member</code> 빈칸은 이번 실습 기준으로 비회원 <code>False</code>로 채운다.</li>
+<li><code>store</code>, <code>category</code>, <code>item</code>은 그룹명이 흔들리지 않게 정리합니다. 같은 지점과 같은 메뉴가 한 그룹으로 모이게 하려는 작업입니다.</li>
+<li><code>payment</code> 빈칸은 주문을 버리지 않고 <code>미확인</code>으로 채웁니다. 결제수단을 모른다고 해서 매출 기록 전체를 버리면 손실이 커집니다.</li>
+<li><code>member</code> 빈칸은 이번 실습 기준으로 비회원 <code>False</code>로 채웁니다. 실제 업무에서는 담당자와 기준을 정해야 하지만, 오늘은 수업 기준을 명확히 두고 진행합니다.</li>
 </ul>
 <h2>따라하기 3: 숫자와 날짜 타입 바꾸기</h2>
+<p>타입은 값의 종류입니다. 숫자처럼 보이는 문자를 진짜 숫자로 바꾸고, 날짜처럼 보이는 문자를 진짜 날짜로 바꿉니다. 그래야 합계, 평균, 월별 집계가 제대로 됩니다.</p>
 <div class="code-scroll"><pre><code class="language-python">cleaned[&quot;unit_price&quot;] = pd.to_numeric(
     cleaned[&quot;unit_price&quot;].astype(&quot;string&quot;)
     .str.replace(&quot;,&quot;, &quot;&quot;, regex=False)
@@ -765,12 +789,14 @@ cleaned[&quot;date&quot;] = pd.to_datetime(cleaned[&quot;date&quot;], format=&qu
 
 cleaned.dtypes
 </code></pre></div>
-<p>확인할 점:</p>
+<p>확인할 점입니다.</p>
 <ul>
-<li><code>date</code>가 <code>datetime64</code> 계열로 바뀐다.</li>
-<li><code>unit_price</code>, <code>qty</code>, <code>amount</code>가 숫자형으로 바뀐다.</li>
+<li><code>date</code>가 <code>datetime64</code> 계열로 바뀝니다. 이제 월별, 요일별, 기간별 분석을 할 수 있습니다.</li>
+<li><code>unit_price</code>, <code>qty</code>, <code>amount</code>가 숫자형으로 바뀝니다. 이제 더하기와 평균 계산이 가능합니다.</li>
 </ul>
+<p><code>errors="coerce"</code>는 바꿀 수 없는 값이 나오면 오류로 멈추지 않고 결측값으로 표시하라는 뜻입니다. 문제 값을 찾아내기 위한 안전장치라고 보면 됩니다.</p>
 <h2>따라하기 4: 중복, 결측, 이상치 제거</h2>
+<p>이 단계에서는 분석에 방해되는 행을 제거합니다. 중복 주문은 한 번만 남기고, 꼭 필요한 값이 비어 있는 행은 제외합니다.</p>
 <div class="code-scroll"><pre><code class="language-python">before = len(cleaned)
 cleaned = cleaned.drop_duplicates(subset=[&quot;order_id&quot;], keep=&quot;first&quot;).copy()
 print(&quot;중복 제거 행수:&quot;, before - len(cleaned))
@@ -781,13 +807,14 @@ cleaned = cleaned.dropna(
 ).copy()
 print(&quot;필수값 결측으로 제거한 행수:&quot;, before - len(cleaned))
 </code></pre></div>
-<p>기대 결과:</p>
+<p>기대 결과입니다.</p>
 <ul>
 <li>중복 <code>order_id</code> 제거: 15행</li>
 <li>필수값 결측으로 제거: 0행</li>
 </ul>
-<p>이번 데이터에서는 필수값 결측으로 삭제되는 행이 없다. 그래도 <code>dropna(subset=...)</code> 패턴은 중요하다. 실제 업무에서는 날짜나 금액이 비어 있는 행이 자주 나온다.</p>
+<p>이번 데이터에서는 필수값 결측으로 삭제되는 행이 없습니다. 그래도 <code>dropna(subset=...)</code> 패턴은 중요합니다. 실제 업무에서는 날짜나 금액이 비어 있는 행이 자주 나오기 때문입니다.</p>
 <h3>IQR로 수량 이상치 찾기</h3>
+<p>이상치는 다른 값들과 너무 멀리 떨어진 값입니다. 무조건 나쁜 값이라는 뜻은 아니고, 확인해야 할 값이라는 뜻입니다. IQR은 가운데 50% 값의 범위를 이용해 너무 튀는 값을 찾는 방법입니다.</p>
 <div class="code-scroll"><pre><code class="language-python">q1 = cleaned[&quot;qty&quot;].quantile(0.25)
 q3 = cleaned[&quot;qty&quot;].quantile(0.75)
 iqr = q3 - q1
@@ -799,15 +826,16 @@ print(q1, q3, iqr, lower, upper)
 qty_outlier = ~cleaned[&quot;qty&quot;].between(lower, upper)
 cleaned.loc[qty_outlier, [&quot;order_id&quot;, &quot;date&quot;, &quot;store&quot;, &quot;item&quot;, &quot;qty&quot;, &quot;amount&quot;]]
 </code></pre></div>
-<p>기대 결과:</p>
+<p>기대 결과입니다.</p>
 <ul>
 <li>Q1: 1.0</li>
 <li>Q3: 2.0</li>
 <li>IQR: 1.0</li>
 <li>정상범위: -0.5 ~ 3.5</li>
-<li><code>qty=999</code>인 2행이 이상치로 잡힌다.</li>
+<li><code>qty=999</code>인 2행이 이상치로 잡힙니다.</li>
 </ul>
-<p>이상치와 음수 금액을 제거한다.</p>
+<p>수량 999는 정상범위 -0.5 ~ 3.5에서 크게 벗어납니다. 카페에서 한 주문에 999개를 산 것으로 보기 어렵기 때문에 이번 실습에서는 제거합니다.</p>
+<p>이상치와 음수 금액을 제거합니다. 이 단계는 수량과 매출 합계가 비현실적인 값에 끌려가지 않게 하기 위해 필요합니다.</p>
 <div class="code-scroll"><pre><code class="language-python">cleaned = cleaned.loc[~qty_outlier].copy()
 cleaned = cleaned.loc[cleaned[&quot;amount&quot;] &gt; 0].copy()
 
@@ -817,7 +845,9 @@ for col in [&quot;order_id&quot;, &quot;hour&quot;, &quot;unit_price&quot;, &quo
 cleaned[&quot;expected_amount&quot;] = cleaned[&quot;unit_price&quot;] * cleaned[&quot;qty&quot;]
 cleaned[&quot;date_month&quot;] = cleaned[&quot;date&quot;].dt.to_period(&quot;M&quot;).astype(&quot;string&quot;)
 </code></pre></div>
+<p><code>expected_amount</code>는 단가와 수량을 곱해 다시 계산한 금액입니다. 영수증 금액을 한 번 더 검산하는 것과 같습니다. <code>date_month</code>는 월별로 묶기 위해 만든 값입니다.</p>
 <h2>따라하기 5: 정제 후 검산</h2>
+<p>정제했다고 바로 끝내지 않습니다. 정말 깨끗해졌는지 다시 확인해야 합니다. 청소한 뒤 바닥을 한 번 더 보는 것처럼, 분석 전에 검산을 합니다.</p>
 <div class="code-scroll"><pre><code class="language-python">print(&quot;정제 후 행수:&quot;, len(cleaned))
 print(&quot;중복 order_id:&quot;, cleaned.duplicated(&quot;order_id&quot;).sum())
 print(&quot;전체 결측값:&quot;, cleaned.isna().sum().sum())
@@ -825,7 +855,7 @@ print(&quot;단가 x 수량과 금액 불일치:&quot;, (cleaned[&quot;expected_
 print(&quot;최대 수량:&quot;, cleaned[&quot;qty&quot;].max())
 print(&quot;최소 금액:&quot;, cleaned[&quot;amount&quot;].min())
 </code></pre></div>
-<p>기대 결과:</p>
+<p>기대 결과입니다.</p>
 <ul>
 <li>정제 후 행수: 10,421행</li>
 <li>중복 <code>order_id</code>: 0</li>
@@ -834,7 +864,9 @@ print(&quot;최소 금액:&quot;, cleaned[&quot;amount&quot;].min())
 <li>최대 수량: 3</li>
 <li>최소 금액: 3,000</li>
 </ul>
+<p>이 값들이 나온다면 중복, 결측, 이상치, 음수 금액, 금액 불일치가 정리된 상태입니다. 이제 이 표로 집계하면 이전보다 훨씬 믿을 수 있습니다.</p>
 <h2>따라하기 6: 청소 전후 비교</h2>
+<p>정제 전후를 비교하면 정제가 왜 필요한지 숫자로 보입니다. “많이 좋아졌다”가 아니라 행수, 판매수량 합계, 최대 수량, 최소 금액이 어떻게 바뀌었는지 확인해 봅니다.</p>
 <div class="code-scroll"><pre><code class="language-python">raw_qty = pd.to_numeric(df[&quot;qty&quot;], errors=&quot;coerce&quot;)
 raw_amount = pd.to_numeric(df[&quot;amount&quot;], errors=&quot;coerce&quot;)
 
@@ -873,15 +905,17 @@ comparison = pd.DataFrame({
 
 comparison
 </code></pre></div>
-<p>비교할 핵심:</p>
+<p>비교할 값입니다.</p>
 <ul>
-<li>행수는 10,439행에서 10,421행으로 줄었다.</li>
-<li>판매수량 합계는 19,259개에서 17,238개로 줄었다.</li>
-<li>최대 수량은 999에서 3으로 바뀌었다.</li>
-<li>최소 금액은 -5,500원에서 3,000원으로 바뀌었다.</li>
+<li>행수는 10,439행에서 10,421행으로 줄었습니다.</li>
+<li>판매수량 합계는 19,259개에서 17,238개로 줄었습니다.</li>
+<li>최대 수량은 999에서 3으로 바뀌었습니다.</li>
+<li>최소 금액은 -5,500원에서 3,000원으로 바뀌었습니다.</li>
 </ul>
+<p>특히 판매수량 합계가 크게 달라진 이유를 보세요. 수량 999가 들어 있으면 실제보다 판매가 훨씬 많아 보입니다. 이상치 하나가 전체 통계를 얼마나 흔드는지 확인할 수 있습니다.</p>
 <h2>따라하기 7: cp949 파일을 encoding 옵션으로 읽기</h2>
-<p>먼저 기본값으로 읽어 본다.</p>
+<p>인코딩은 글자를 저장하는 약속입니다. 같은 한글이라도 어떤 약속으로 저장했는지에 따라 Python이 읽지 못할 수 있습니다. 이번에는 일부러 cp949 방식의 한글 파일을 읽어 보며 오류와 해결 방법을 확인합니다.</p>
+<p>먼저 기본값으로 읽어 봅니다. 이 단계는 일부 파일이 왜 바로 열리지 않는지 직접 보기 위해 필요합니다.</p>
 <div class="code-scroll"><pre><code class="language-python">cp949_path = root / &quot;02_datasets/real_korean/delivery_food/food_delivery_prediction_raw_data2_ORIGINAL_cp949.csv&quot;
 
 try:
@@ -889,75 +923,79 @@ try:
 except UnicodeDecodeError as e:
     print(type(e).__name__)
 </code></pre></div>
-<p>기대 결과:</p>
+<p>기대 결과입니다.</p>
 <div class="code-scroll"><pre><code class="language-text">UnicodeDecodeError
 </code></pre></div>
-<p>이제 인코딩을 지정해 다시 읽는다.</p>
+<p><code>UnicodeDecodeError</code>는 글자를 해석하는 방식이 맞지 않아서 생기는 오류입니다. 데이터가 망가졌다는 뜻이 아니라, 읽을 때 맞는 인코딩을 알려 달라는 신호로 보면 됩니다.</p>
+<p>이제 인코딩을 지정해 다시 읽습니다. cp949로 저장된 파일은 <code>encoding="cp949"</code>를 알려 주면 정상적으로 열립니다.</p>
 <div class="code-scroll"><pre><code class="language-python">delivery = pd.read_csv(cp949_path, encoding=&quot;cp949&quot;)
 
 print(delivery.shape)
 print(delivery.head())
 print(delivery.columns)
 </code></pre></div>
-<p>기대 결과:</p>
+<p>기대 결과입니다.</p>
 <ul>
 <li>데이터 크기: 1,947행 x 15열</li>
 <li>첫 열: <code>일자</code></li>
-<li>한글 컬럼이 정상적으로 보인다.</li>
+<li>한글 컬럼이 정상적으로 보입니다.</li>
 </ul>
-<p>날짜를 datetime으로 바꾼다.</p>
+<p>날짜를 datetime으로 바꿉니다. 날짜가 문자열로 남아 있으면 기간 검색이나 월별 집계가 불편합니다.</p>
 <div class="code-scroll"><pre><code class="language-python">delivery[&quot;일자_dt&quot;] = pd.to_datetime(delivery[&quot;일자&quot;], errors=&quot;coerce&quot;)
 
 print(delivery[&quot;일자_dt&quot;].isna().sum())
 print(delivery[&quot;일자_dt&quot;].min())
 print(delivery[&quot;일자_dt&quot;].max())
 </code></pre></div>
-<p>기대 결과:</p>
+<p>기대 결과입니다.</p>
 <ul>
 <li>날짜 변환 실패: 0건</li>
 <li>기간: 2013-12-01 ~ 2019-03-31</li>
 </ul>
+<p>이제 <code>일자_dt</code>를 기준으로 기간을 자르거나 월별로 묶을 수 있습니다. 날짜를 날짜 타입으로 바꿔 두면 사전에서 단어를 찾듯이 원하는 기간을 정확히 찾을 수 있습니다.</p>
 <h2>직접 해보기: 청소 전후 행수와 통계 비교</h2>
-<p>아래 세 가지를 스스로 완성한다.</p>
+<p>아래 세 가지를 스스로 완성해 보세요. 코드를 따라 치는 것에서 끝내지 않고, 어떤 문제가 있었고 정제 후 무엇이 달라졌는지 자기 말로 설명하는 연습입니다.</p>
 <ol>
-<li><code>cafe_sales_dirty.csv</code>에서 문제를 찾는 요약표를 만든다.</li>
-<li>정제 전후 비교표를 만든다.</li>
-<li>아래 문장을 자기 말로 완성한다.</li>
+<li>카페 매출 dirty 데이터에서 문제를 찾는 요약표를 만듭니다.</li>
+<li>정제 전후 비교표를 만듭니다.</li>
+<li>아래 문장을 자기 말로 완성합니다.</li>
 </ol>
 <div class="code-scroll"><pre><code class="language-text">정제 전에는 행수가 ______행이고, 정제 후에는 ______행이다.
 주요 제거 사유는 ______, ______, ______이다.
 판매수량 합계가 크게 달라진 이유는 ______ 때문이다.
 정제 후에는 중복 order_id가 ______개이고, 단가 x 수량과 금액 불일치가 ______건이다.
 </code></pre></div>
+<p>빈칸에는 오늘 확인한 숫자와 이유를 넣어 보세요. 숫자는 분석 결과이고, 이유는 여러분의 해석입니다. 둘이 함께 있어야 데이터 분석 문장이 됩니다.</p>
 <h2>제출 기준</h2>
+<p>아래 항목을 모두 확인해 보세요. 단순히 코드가 실행된 것이 아니라, 각 결과가 무슨 뜻인지 말할 수 있어야 합니다.</p>
 <ul>
-<li>결측값 개수를 <code>isna().sum()</code>으로 확인했다.</li>
-<li><code>payment</code>와 <code>member</code> 결측 처리 기준을 설명했다.</li>
-<li><code>unit_price</code>, <code>qty</code>, <code>amount</code>, <code>date</code> 타입 변환을 수행했다.</li>
-<li><code>order_id</code> 중복 15행을 제거했다.</li>
-<li>IQR 기준으로 <code>qty=999</code> 2행을 찾아 제거했다.</li>
-<li>음수 금액 1행을 제거했다.</li>
-<li>cp949 원본 파일을 <code>encoding="cp949"</code>로 정상 로드했다.</li>
-<li>청소 전후 통계 변화에 대한 해석 문장을 작성했다.</li>
+<li>결측값 개수를 <code>isna().sum()</code>으로 확인했습니다.</li>
+<li><code>payment</code>와 <code>member</code> 결측 처리 기준을 설명했습니다.</li>
+<li><code>unit_price</code>, <code>qty</code>, <code>amount</code>, <code>date</code> 타입 변환을 수행했습니다.</li>
+<li><code>order_id</code> 중복 15행을 제거했습니다.</li>
+<li>IQR 기준으로 <code>qty=999</code> 2행을 찾아 제거했습니다.</li>
+<li>음수 금액 1행을 제거했습니다.</li>
+<li>cp949 원본 파일을 <code>encoding="cp949"</code>로 정상 로드했습니다.</li>
+<li>청소 전후 통계 변화에 대한 해석 문장을 작성했습니다.</li>
 </ul>
 </section>
 <section class="tab-panel markdown-body" data-panel="script" aria-label="강사대본">
 <h1>S12 강사대본: 데이터 정제</h1>
 <h2>수업 전 확인</h2>
 <ul>
-<li><code>02_datasets/cafe_sales/cafe_sales_dirty.csv</code>가 열리는지 확인한다.</li>
-<li><code>02_datasets/real_korean/delivery_food/food_delivery_prediction_raw_data2_ORIGINAL_cp949.csv</code>가 존재하는지 확인한다.</li>
-<li><code>python3 06_answers/S12_code.py</code>를 실행해 <code>검증 통과</code>가 출력되는지 확인한다.</li>
+<li>수업 홈의 데이터 받기 페이지에서 내려받는 카페 매출 정제 실습 파일이 열리는지 확인한다. 초보자는 엑셀 파일(.xlsx)을 받아도 되고, pandas 실습에서는 엑셀로도 열리는 표 파일인 CSV를 사용한다고 안내한다.</li>
+<li>수업 홈의 데이터 받기 페이지에서 내려받는 배달 음식 인코딩 실습 파일이 제공되어 있는지 확인한다.</li>
+<li>S12 정답 검증 스크립트를 실행해 <code>검증 통과</code>가 출력되는지 확인한다.</li>
 <li>pandas 버전은 출력되면 통과로 보고, 2.x여도 무방하다.</li>
 <li>수강생이 S11에서 <code>read_csv</code>, <code>head</code>, <code>info</code>, 불리언 필터를 한 번 사용해 보았다는 전제로 진행한다.</li>
 </ul>
 <h2>오늘의 수업 메시지</h2>
-<p>오늘은 분석보다 앞에 오는 일을 한다. 데이터 정제는 표를 예쁘게 꾸미는 일이 아니다. 계산이 가능한 상태로 만드는 일이다.</p>
-<p>엑셀에서도 빈칸을 채우고, 중복 제거를 하고, 숫자로 보이는 문자를 숫자로 바꾼 경험이 있을 것이다. pandas도 같은 일을 한다. 다만 마우스로 한 번씩 누르는 대신, 어떤 기준으로 처리했는지를 코드로 남긴다. 그래서 나중에 같은 파일이 다시 와도 같은 기준으로 반복할 수 있다.</p>
+<p>오늘은 분석보다 앞에 오는 일을 합니다. 데이터 정제는 표를 예쁘게 꾸미는 일이 아닙니다. 계산이 가능한 상태로 만드는 일입니다.</p>
+<p>엑셀에서도 빈칸을 채우고, 중복 제거를 하고, 숫자로 보이는 문자를 진짜 숫자로 바꾼 경험이 있으실 겁니다. pandas도 같은 일을 합니다. 다만 마우스로 한 칸씩 누르는 대신, 어떤 기준으로 처리했는지를 코드로 남깁니다. 그래서 나중에 같은 형식의 파일이 다시 와도 같은 기준으로 반복할 수 있습니다.</p>
 <h2>0-5분. 도입</h2>
-<p>말할 것:</p>
-<p>지난 시간에는 pandas로 CSV를 열고, 표의 앞부분을 보고, 조건으로 행을 골랐다. 오늘은 그 표가 믿을 만한지 먼저 점검한다.</p>
-<p>분석을 빨리 시작하고 싶은 마음이 들 수 있다. 하지만 결측, 중복, 문자 숫자, 날짜 형식, 이상치가 섞여 있으면 평균과 합계가 틀어진다. 오늘 목표는 멋진 차트를 만드는 것이 아니라, 차트를 만들어도 되는 표로 바꾸는 것이다.</p>
+<p>강사 멘트 예시:</p>
+<p>지난 시간에는 pandas로 표 파일을 열고, 표의 앞부분을 보고, 조건으로 행을 골라 봤습니다. 오늘은 그 표가 믿을 만한지 먼저 점검해 봅니다.</p>
+<p>분석을 빨리 시작하고 싶은 마음이 들 수 있습니다. 그런데 결측, 즉 비어 있는 값이 있고, 중복이 있고, 숫자처럼 보이는 문자가 섞여 있고, 날짜 형식이 제각각이고, 이상하게 큰 값이 들어 있으면 평균과 합계가 틀어집니다. 오늘 목표는 멋진 차트를 만드는 것이 아닙니다. 차트를 만들어도 되는 표로 바꾸는 것입니다.</p>
 <p>질문:</p>
 <p>"엑셀에서 피벗테이블을 만들었는데 같은 지점이 두 줄로 나뉜 경험이 있나요?"</p>
 <p>받을 답:</p>
@@ -966,13 +1004,13 @@ print(delivery[&quot;일자_dt&quot;].max())
 <li>이름이 조금 다르게 적힌 경우</li>
 <li>복사해 온 데이터의 형식이 다른 경우</li>
 </ul>
-<p>정리:</p>
-<p>오늘 그 문제를 pandas의 <code>.str</code> 기능으로 해결한다.</p>
-<h2>5-15분. dirty 데이터의 8종 문제 소개</h2>
-<p>파일:</p>
-<p><code>02_datasets/cafe_sales/cafe_sales_dirty.csv</code></p>
-<p>말할 것:</p>
-<p>이 데이터는 의도적으로 문제가 들어간 카페 주문 데이터다. 실제 업무 데이터에서도 비슷한 일이 자주 생긴다. 이번 파일에는 다음 문제가 있다.</p>
+<p>이어 말하기:</p>
+<p>오늘은 그 문제를 pandas의 <code>.str</code> 기능으로 해결해 봅니다. <code>.str</code>은 글자가 들어 있는 열에 엑셀의 공백 정리나 찾기/바꾸기 같은 일을 한 번에 적용하는 도구라고 보시면 됩니다.</p>
+<h2>5-15분. 문제 많은 카페 매출 데이터의 8종 문제 소개</h2>
+<p>사용할 데이터:</p>
+<p>수업 홈의 데이터 받기 페이지에서 내려받은 카페 매출 정제 실습 파일</p>
+<p>강사 멘트 예시:</p>
+<p>이 데이터는 의도적으로 문제가 들어간 카페 주문 데이터입니다. 실제 업무 데이터에서도 비슷한 일이 자주 생깁니다. 이번 파일에는 이런 문제가 섞여 있습니다.</p>
 <ol>
 <li><code>payment</code> 결측</li>
 <li><code>member</code> 결측</li>
@@ -990,17 +1028,17 @@ df.head()
 df.isna().sum()
 df.duplicated(&quot;order_id&quot;).sum()
 </code></pre></div>
-<p>말할 것:</p>
-<p>정제의 첫 단계는 고치는 것이 아니라 보는 것이다. 바로 고치면 무엇을 고쳤는지 설명할 수 없다. 먼저 몇 행인지, 어떤 열인지, 어디에 결측과 중복이 있는지 숫자로 남긴다.</p>
+<p>강사 멘트 예시:</p>
+<p>정제의 첫 단계는 고치는 것이 아니라 보는 것입니다. 바로 고치면 무엇을 고쳤는지 설명할 수 없습니다. 먼저 몇 행인지, 어떤 열이 있는지, 어디에 결측과 중복이 있는지 숫자로 남겨야 합니다. 몸무게를 관리할 때도 먼저 재고 나서 판단하듯이, 데이터도 먼저 상태를 재고 시작합니다.</p>
 <h2>15-25분. 문제 진단 시연</h2>
 <p>시연 포인트:</p>
 <div class="code-scroll"><pre><code class="language-python">df[&quot;store&quot;].value_counts(dropna=False)
 df[&quot;category&quot;].value_counts(dropna=False)
 df[&quot;item&quot;].value_counts(dropna=False).head(20)
 </code></pre></div>
-<p>말할 것:</p>
-<p>여기서 <code>강남점</code>과 <code>강남 점</code>은 사람이 보면 같은 값이다. 하지만 컴퓨터는 다르게 본다. 피벗테이블을 만들면 지점이 두 줄로 나뉜다.</p>
-<p><code>커피</code> 앞에 공백이 붙은 값도 있다. 눈으로는 잘 안 보인다. 이런 값은 <code>.str.strip()</code>으로 정리한다.</p>
+<p>강사 멘트 예시:</p>
+<p>여기서 뭐가 보이시나요? <code>강남점</code>과 <code>강남 점</code>은 사람이 보면 같은 값입니다. 그런데 컴퓨터는 사전에서 글자를 찾듯이 한 글자씩 비교합니다. 중간에 공백이 있으면 다른 값으로 봅니다. 그래서 피벗테이블을 만들면 지점이 두 줄로 나뉩니다.</p>
+<p><code>커피</code> 앞에 공백이 붙은 값도 있습니다. 눈으로는 잘 안 보입니다. 이런 값은 <code>.str.strip()</code>으로 정리합니다. <code>strip</code>은 글자의 앞뒤에 붙은 빈칸을 떼어 내는 기능입니다.</p>
 <p>시연 포인트:</p>
 <div class="code-scroll"><pre><code class="language-python">unit_price_num = pd.to_numeric(
     df[&quot;unit_price&quot;].astype(&quot;string&quot;)
@@ -1009,11 +1047,11 @@ df[&quot;item&quot;].value_counts(dropna=False).head(20)
     errors=&quot;coerce&quot;,
 )
 </code></pre></div>
-<p>말할 것:</p>
-<p><code>4,500원</code>은 숫자처럼 보이지만 문자다. 엑셀에서 <code>VALUE</code>와 <code>SUBSTITUTE</code>를 같이 쓰는 것과 같은 일이다. pandas에서는 한 열 전체에 한 번에 적용한다.</p>
+<p>강사 멘트 예시:</p>
+<p><code>4,500원</code>은 숫자처럼 보이지만 문자입니다. 숫자 계산을 하려면 쉼표와 <code>원</code>이라는 글자를 먼저 빼고, 그다음 숫자로 바꿔야 합니다. 엑셀에서 <code>VALUE</code>와 <code>SUBSTITUTE</code>를 같이 쓰는 것과 같은 생각입니다. pandas에서는 이 작업을 한 열 전체에 한 번에 적용합니다.</p>
 <h2>25-40분. 문자열, 타입, 결측 정리 시연</h2>
-<p>말할 것:</p>
-<p>원본은 그대로 둔다. 정제 실습에서는 항상 복사본을 만든다. 원본과 정제본을 비교해야 하기 때문이다.</p>
+<p>강사 멘트 예시:</p>
+<p>원본은 그대로 둡니다. 정제 실습에서는 항상 복사본을 만듭니다. 원본과 정제본을 비교해야 하기 때문입니다. 잘못 고쳤을 때 돌아갈 기준도 필요합니다.</p>
 <p>시연 코드:</p>
 <div class="code-scroll"><pre><code class="language-python">cleaned = df.copy()
 
@@ -1028,22 +1066,23 @@ cleaned[&quot;item&quot;] = cleaned[&quot;item&quot;].astype(&quot;string&quot;)
 cleaned[&quot;payment&quot;] = cleaned[&quot;payment&quot;].astype(&quot;string&quot;).str.strip().fillna(&quot;미확인&quot;)
 cleaned[&quot;member&quot;] = cleaned[&quot;member&quot;].astype(&quot;boolean&quot;).fillna(False)
 </code></pre></div>
-<p>말할 것:</p>
-<p>결측을 처리할 때는 기준이 필요하다. <code>payment</code>는 결제수단을 모르는 주문이다. 주문 자체는 살아 있으므로 <code>미확인</code>으로 채운다. <code>member</code>는 이번 수업에서는 기록이 없으면 비회원으로 처리한다. 실제 업무에서는 담당자와 기준을 확인해야 한다.</p>
+<p>강사 멘트 예시:</p>
+<p>결측을 처리할 때는 기준이 필요합니다. <code>payment</code>는 결제수단을 모르는 주문입니다. 주문 자체는 살아 있으므로 <code>미확인</code>으로 채웁니다. 결제수단을 모른다고 해서 매출까지 버릴 필요는 없습니다.</p>
+<p><code>member</code>는 이번 수업에서는 기록이 없으면 비회원으로 처리합니다. 다만 실제 업무에서는 담당자에게 기준을 확인해야 합니다. 빈칸이 진짜 비회원이라는 뜻인지, 아직 확인하지 못했다는 뜻인지, 시스템에서 빠진 값인지가 다를 수 있기 때문입니다.</p>
 <p>시연 코드:</p>
 <div class="code-scroll"><pre><code class="language-python">cleaned[&quot;date&quot;] = pd.to_datetime(cleaned[&quot;date&quot;], format=&quot;mixed&quot;, errors=&quot;coerce&quot;)
 cleaned[&quot;unit_price&quot;] = pd.to_numeric(...)
 </code></pre></div>
-<p>말할 것:</p>
-<p>날짜는 문자열로 두면 월별 집계와 기간 필터가 불편하다. datetime으로 바꾸면 <code>dt.month</code>, <code>dt.to_period("M")</code> 같은 기능을 쓸 수 있다.</p>
-<h2>40-50분. 중복, dropna, IQR 이상치</h2>
+<p>강사 멘트 예시:</p>
+<p>날짜는 문자열로 두면 월별 집계와 기간 필터가 불편합니다. 날짜처럼 보이는 글자일 뿐이라서, 컴퓨터가 월이나 요일을 바로 꺼내기 어렵습니다. datetime으로 바꾸면 <code>dt.month</code>, <code>dt.to_period("M")</code> 같은 기능을 쓸 수 있습니다.</p>
+<h2>40-50분. 중복, dropna, IQR 이상치 처리</h2>
 <p>시연 코드:</p>
 <div class="code-scroll"><pre><code class="language-python">cleaned = cleaned.drop_duplicates(subset=[&quot;order_id&quot;], keep=&quot;first&quot;).copy()
 cleaned = cleaned.dropna(subset=[&quot;date&quot;, &quot;store&quot;, &quot;category&quot;, &quot;item&quot;, &quot;unit_price&quot;, &quot;qty&quot;, &quot;amount&quot;]).copy()
 </code></pre></div>
-<p>말할 것:</p>
-<p>중복 제거의 기준은 모든 열이 아니라 <code>order_id</code>다. 주문번호가 같은 행은 같은 주문이 두 번 들어온 것으로 본다.</p>
-<p>이번 데이터에서는 필수값 결측으로 삭제되는 행은 0행이다. 그래도 <code>dropna(subset=...)</code>를 넣는 이유는 분석에 반드시 필요한 열이 비어 있으면 제외한다는 기준을 코드로 남기기 위해서다.</p>
+<p>강사 멘트 예시:</p>
+<p>중복 제거의 기준은 모든 열이 아니라 <code>order_id</code>입니다. 주문번호가 같은 행은 같은 주문이 두 번 들어온 것으로 봅니다. 엑셀에서 중복 제거를 할 때 어떤 열을 기준으로 볼지 고르는 것과 같습니다.</p>
+<p>이번 데이터에서는 필수값 결측으로 삭제되는 행은 0행입니다. 그래도 <code>dropna(subset=...)</code>를 넣는 이유가 있습니다. 날짜, 지점, 품목, 단가, 수량, 금액처럼 분석에 반드시 필요한 열이 비어 있으면 제외한다는 기준을 코드로 남기기 위해서입니다.</p>
 <p>시연 코드:</p>
 <div class="code-scroll"><pre><code class="language-python">q1 = cleaned[&quot;qty&quot;].quantile(0.25)
 q3 = cleaned[&quot;qty&quot;].quantile(0.75)
@@ -1051,8 +1090,8 @@ iqr = q3 - q1
 lower = q1 - 1.5 * iqr
 upper = q3 + 1.5 * iqr
 </code></pre></div>
-<p>말할 것:</p>
-<p>IQR은 가운데 50퍼센트 범위다. 이번 수량 데이터에서는 Q1이 1, Q3가 2다. 정상범위가 -0.5부터 3.5까지이므로 <code>qty=999</code>는 업무적으로도 통계적으로도 확인 대상이다.</p>
+<p>강사 멘트 예시:</p>
+<p>IQR은 가운데 50퍼센트 범위입니다. 값을 작은 순서대로 세웠을 때 가운데 부분이 어느 정도 폭을 가지는지 보는 방법입니다. 이번 수량 데이터에서는 Q1이 1, Q3가 2입니다. 정상범위가 -0.5부터 3.5까지이므로 <code>qty=999</code>는 업무적으로도 통계적으로도 확인 대상입니다.</p>
 <p>시연 포인트:</p>
 <ul>
 <li><code>qty=999</code> 2행을 보여준다.</li>
@@ -1102,14 +1141,15 @@ upper = q3 + 1.5 * iqr
 </tr>
 </tbody>
 </table></div>
-<p>말할 것:</p>
-<p>총매출은 크게 달라지지 않았는데, 판매수량 합계는 확 줄었다. <code>qty=999</code> 두 행 때문이다. 이상치는 평균만이 아니라 합계까지 흔든다.</p>
-<p>정제 후 행수가 줄었다는 사실만 보면 데이터가 손실된 것처럼 보일 수 있다. 하지만 이번에는 중복과 거래로 보기 어려운 행을 제외해 분석 기준을 더 명확하게 만든 것이다.</p>
+<p>강사 멘트 예시:</p>
+<p>총매출은 크게 달라지지 않았는데, 판매수량 합계는 확 줄었습니다. <code>qty=999</code> 두 행 때문입니다. 이상치는 평균만 흔드는 것이 아니라 합계까지 흔듭니다. 작은 표에서는 한두 줄처럼 보여도, 계산 결과에서는 아주 크게 보일 수 있습니다.</p>
+<p>정제 후 행수가 줄었다는 사실만 보면 데이터가 손실된 것처럼 보일 수 있습니다. 하지만 이번에는 중복과 거래로 보기 어려운 행을 제외해 분석 기준을 더 명확하게 만든 것입니다. 삭제했다는 말보다, 어떤 기준으로 분석 대상에서 제외했는지를 설명하는 것이 중요합니다.</p>
 <h2>58-65분. cp949 인코딩과 날짜 파싱</h2>
-<p>파일:</p>
-<p><code>02_datasets/real_korean/delivery_food/food_delivery_prediction_raw_data2_ORIGINAL_cp949.csv</code></p>
-<p>말할 것:</p>
-<p>CSV는 결국 텍스트 파일이다. 한글을 어떤 방식으로 저장했느냐에 따라 읽는 방법도 달라진다. 요즘 데이터는 대부분 UTF-8이지만, 오래된 공공데이터나 윈도우에서 만든 파일은 cp949인 경우가 종종 있다.</p>
+<p>사용할 데이터:</p>
+<p>수업 홈의 데이터 받기 페이지에서 내려받은 배달 음식 인코딩 실습 파일</p>
+<p>강사 멘트 예시:</p>
+<p>CSV는 결국 텍스트 파일입니다. 글자를 어떤 방식으로 저장했느냐에 따라 읽는 방법도 달라집니다. 이 약속을 인코딩이라고 부릅니다. 요즘 데이터는 대부분 UTF-8이지만, 오래된 공공데이터나 윈도우에서 만든 파일은 cp949인 경우가 종종 있습니다.</p>
+<p>파일을 열었는데 한글이 깨지거나 아예 읽히지 않으면, 데이터 내용이 틀린 것이 아니라 글자를 읽는 약속이 맞지 않는 것일 수 있습니다. 그럴 때 <code>encoding</code> 옵션을 지정해 다시 읽어 봅니다.</p>
 <p>시연 코드:</p>
 <div class="code-scroll"><pre><code class="language-python">try:
     pd.read_csv(cp949_path)
@@ -1128,7 +1168,7 @@ delivery[&quot;일자_dt&quot;] = pd.to_datetime(delivery[&quot;일자&quot;], e
 </ul>
 <h2>65-70분. 직접 해보기 안내</h2>
 <p>미션:</p>
-<p><code>cafe_sales_dirty.csv</code>를 정제하고, 청소 전후 행수와 통계를 비교한 뒤 해석 문장을 작성한다.</p>
+<p>수업 홈의 데이터 받기 페이지에서 내려받은 카페 매출 정제 실습 파일을 정제하고, 청소 전후 행수와 통계를 비교한 뒤 해석 문장을 작성한다.</p>
 <p>수강생에게 요구할 답:</p>
 <ul>
 <li>청소 전 행수는 10,439행, 청소 후 행수는 10,421행이다.</li>
@@ -1140,23 +1180,24 @@ delivery[&quot;일자_dt&quot;] = pd.to_datetime(delivery[&quot;일자&quot;], e
 <p>수강생이 <code>정제 전 10,439행에서 중복 15행, 수량 이상치 2행, 음수 금액 1행을 제외해 10,421행이 되었고, 판매수량 합계 변화는 qty=999 두 행의 영향</code>이라고 설명하면 완료로 본다.</p>
 <h2>예상 질문과 답변</h2>
 <h3>Q1. 결측값은 그냥 전부 삭제하면 안 되나요?</h3>
-<p>안 된다. 결측이 있는 행을 모두 삭제하면 멀쩡한 주문까지 버릴 수 있다. 이번 데이터에서 <code>payment</code>만 비어 있는 주문은 매출과 수량 분석에는 사용할 수 있다. 그래서 <code>미확인</code>으로 채운다.</p>
+<p>안 됩니다. 결측이 있는 행을 모두 삭제하면 멀쩡한 주문까지 버릴 수 있습니다. 이번 데이터에서 <code>payment</code>만 비어 있는 주문은 매출과 수량 분석에는 사용할 수 있습니다. 그래서 <code>미확인</code>으로 채웁니다. 빈칸이 있다고 무조건 버리는 것이 아니라, 그 빈칸이 분석에 어떤 영향을 주는지 보고 결정해야 합니다.</p>
 <h3>Q2. <code>member</code> 결측을 <code>False</code>로 채워도 되나요?</h3>
-<p>이번 실습에서는 기준을 단순화하기 위해 그렇게 처리한다. 실제 업무에서는 빈칸이 비회원인지, 미확인인지, 시스템 누락인지 확인해야 한다. 중요한 것은 결측 처리 기준을 코드와 보고서에 남기는 것이다.</p>
+<p>이번 실습에서는 기준을 단순화하기 위해 그렇게 처리합니다. 실제 업무에서는 빈칸이 비회원인지, 미확인인지, 시스템 누락인지 확인해야 합니다. 중요한 것은 결측 처리 기준을 코드와 보고서에 남기는 것입니다. 나중에 누가 다시 보더라도 "왜 이렇게 처리했는지" 알 수 있어야 합니다.</p>
 <h3>Q3. 왜 <code>drop_duplicates()</code>에 <code>subset=["order_id"]</code>를 넣나요?</h3>
-<p>거래 1건을 식별하는 키가 <code>order_id</code>이기 때문이다. 모든 열이 완전히 같은 행만 제거하면 같은 주문번호가 두 번 들어온 문제를 놓칠 수 있다.</p>
+<p>거래 1건을 식별하는 키가 <code>order_id</code>이기 때문입니다. 키는 사전에서 단어를 찾을 때 쓰는 표제어처럼, 한 건을 구분하는 기준입니다. 모든 열이 완전히 같은 행만 제거하면 같은 주문번호가 두 번 들어온 문제를 놓칠 수 있습니다.</p>
 <h3>Q4. IQR로 잡힌 이상치는 무조건 삭제하나요?</h3>
-<p>무조건 삭제하지 않는다. 먼저 원자료나 업무 맥락을 확인해야 한다. 이번 데이터의 <code>qty=999</code>는 카페 주문 수량으로 보기 어렵고, 생성된 dirty 함정임이 확인되어 제거한다.</p>
+<p>무조건 삭제하지 않습니다. 먼저 원자료나 업무 맥락을 확인해야 합니다. 이상치는 나쁜 값이라는 뜻이 아니라 확인해야 할 값이라는 뜻에 가깝습니다. 이번 데이터의 <code>qty=999</code>는 카페 주문 수량으로 보기 어렵고, 생성된 dirty 함정임이 확인되어 제거합니다.</p>
 <h3>Q5. <code>amount</code> 음수는 할인이나 환불일 수도 있지 않나요?</h3>
-<p>그럴 수 있다. 실제 업무에서는 환불 거래라면 별도 유형으로 분리해야 한다. 이번 카페 주문 데이터의 <code>amount</code>는 주문 금액이므로 음수는 오류로 보고 제거한다.</p>
+<p>그럴 수 있습니다. 실제 업무에서는 환불 거래라면 별도 유형으로 분리해야 합니다. 이번 카페 주문 데이터의 <code>amount</code>는 주문 금액이므로 음수는 오류로 보고 제거합니다. 데이터 정제에서는 값 하나를 지울 때도 "업무적으로 어떤 의미인지"를 같이 봐야 합니다.</p>
 <h3>Q6. cp949 파일은 앞으로도 항상 <code>encoding="cp949"</code>로 읽으면 되나요?</h3>
-<p>아니다. UTF-8 파일을 cp949로 읽으면 오히려 오류가 난다. 파일마다 인코딩이 다를 수 있다. 이번 과정의 대부분 파일은 UTF-8이고, S12 실습용 원본 1개만 cp949로 보존되어 있다.</p>
+<p>아닙니다. UTF-8 파일을 cp949로 읽으면 오히려 오류가 납니다. 파일마다 인코딩이 다를 수 있습니다. 이번 과정의 대부분 파일은 UTF-8이고, S12 실습용 원본 1개만 cp949로 보존되어 있습니다. 파일이 안 열릴 때 선택지를 하나 더 아는 것이 목적입니다.</p>
 <h3>Q7. <code>format="mixed"</code>는 꼭 필요한가요?</h3>
-<p>이번 <code>cafe_sales_dirty.csv</code>에는 날짜 형식이 세 가지로 섞여 있다. pandas 2.x나 3.x에서는 <code>format="mixed"</code>를 쓰면 섞인 형식을 한 번에 파싱할 수 있다. 형식이 하나로 통일된 파일이면 명시적인 날짜 형식을 지정하는 편이 더 안전하다.</p>
+<p>이번 카페 매출 정제 실습 파일에는 날짜 형식이 세 가지로 섞여 있습니다. pandas 2.x나 3.x에서는 <code>format="mixed"</code>를 쓰면 섞인 형식을 한 번에 파싱할 수 있습니다. 형식이 하나로 통일된 파일이면 명시적인 날짜 형식을 지정하는 편이 더 안전합니다.</p>
 </section>
 <section class="tab-panel markdown-body" data-panel="answer" aria-label="모범답안">
 <h1>S12 모범답안</h1>
-<h2>미션 모범답안</h2>
+<h2>미션 답안은 이렇게 씁니다</h2>
+<p>모범답안은 “데이터를 청소했습니다”에서 끝나면 부족합니다. 몇 행이 줄었는지, 왜 줄었는지, 그 결과 계산이 얼마나 믿을 만해졌는지를 숫자로 말해야 합니다. 키를 재듯이, 청소 전과 청소 후를 같은 기준으로 재야 변화가 보입니다.</p>
 <p>작성 문장 예시:</p>
 <div class="code-scroll"><pre><code class="language-text">정제 전에는 10,439행이고, 정제 후에는 10,421행이다.
 주요 제거 사유는 중복 order_id 15행, qty=999 수량 이상치 2행, amount 음수 1행이다.
@@ -1173,11 +1214,13 @@ delivery[&quot;일자_dt&quot;] = pd.to_datetime(delivery[&quot;일자&quot;], e
 <li>정제 전후 행수와 통계 변화를 숫자로 설명했다.</li>
 <li>cp949 원본 파일을 <code>encoding="cp949"</code>로 읽고 날짜를 datetime으로 변환했다.</li>
 </ul>
-<h2>실제 확인한 데이터</h2>
+<p>여기서 중요한 점은 “삭제를 많이 했다”가 아니라 “분석에 쓸 수 있는 표로 만들었다”는 점입니다. <code>payment</code>처럼 결제수단을 모르는 값은 주문 자체를 버릴 이유가 없으니 <code>미확인</code>으로 채웁니다. 반대로 <code>qty=999</code>처럼 카페 주문 수량으로 보기 어려운 값은 합계를 크게 흔들기 때문에 따로 확인하고 제거합니다.</p>
+<h2>실제로 확인한 데이터와 실행 환경</h2>
+<p>수업 홈의 데이터 받기 페이지에서 내려받은 카페 매출 CSV를 확인했습니다. CSV는 엑셀로도 열리는 표 파일입니다. 초보자는 같은 데이터의 엑셀 파일(.xlsx)을 내려받아 먼저 눈으로 열어 봐도 됩니다. 다만 아래 검증 코드는 CSV를 기준으로 실행했습니다.</p>
 <p>검증 파일:</p>
 <ul>
-<li><code>02_datasets/cafe_sales/cafe_sales_dirty.csv</code></li>
-<li><code>02_datasets/real_korean/delivery_food/food_delivery_prediction_raw_data2_ORIGINAL_cp949.csv</code></li>
+<li>수업 홈의 데이터 받기 페이지에서 내려받은 카페 매출 dirty 데이터</li>
+<li>수업 홈의 데이터 받기 페이지에서 내려받은 cp949 배달 음식 원본 데이터</li>
 </ul>
 <p>실제 실행 환경:</p>
 <ul>
@@ -1211,7 +1254,9 @@ delivery[&quot;일자_dt&quot;] = pd.to_datetime(delivery[&quot;일자&quot;], e
 </tr>
 </tbody>
 </table></div>
-<h2>dirty 데이터 문제 요약</h2>
+<p>행과 열은 표의 크기를 말합니다. 10,439행 x 12열이면 주문 기록이 10,439줄 있고, 각 주문에 대해 날짜, 지점, 메뉴, 금액 같은 정보가 12가지 들어 있다는 뜻입니다. 고유 <code>order_id</code>가 10,424개인데 전체 행수는 10,439행이므로, 같은 주문번호가 반복된 행이 있다는 것도 바로 의심할 수 있습니다.</p>
+<h2>dirty 데이터에서 보이는 문제</h2>
+<p>dirty 데이터는 더럽다는 뜻이 아니라, 분석 전에 손봐야 할 문제가 섞여 있는 데이터라고 보면 됩니다. 엑셀에서 빈칸, 이상한 숫자, 같은 주문번호, 띄어쓰기 다른 메뉴명을 찾는 작업과 같습니다.</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -1290,7 +1335,9 @@ delivery[&quot;일자_dt&quot;] = pd.to_datetime(delivery[&quot;일자&quot;], e
 </tr>
 </tbody>
 </table></div>
-<h2>정제 기준</h2>
+<p>여기서 뭐가 보이시나요? 빈칸만 문제가 아닙니다. <code>강남점</code>과 <code>강남 점</code>처럼 사람 눈에는 같은 지점이지만 컴퓨터에는 다른 글자인 값도 있습니다. <code>unit_price</code>에 쉼표나 <code>원</code>이 섞이면 사람에게는 가격처럼 보여도 pandas에는 문자로 읽힐 수 있습니다. 그래서 계산하기 전에 숫자 타입으로 바꿔야 합니다.</p>
+<h2>정제 기준은 이렇게 잡습니다</h2>
+<p>정제 기준은 “내 마음대로 고치기”가 아닙니다. 왜 채우는지, 왜 지우는지 기준을 정하고 그 기준대로 처리해야 합니다. 사전에서 단어를 통일하듯이, 같은 뜻의 값은 같은 표기로 맞춰 줍니다.</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -1345,7 +1392,10 @@ delivery[&quot;일자_dt&quot;] = pd.to_datetime(delivery[&quot;일자&quot;], e
 </tr>
 </tbody>
 </table></div>
-<h2>청소 전후 비교</h2>
+<p><code>payment</code>는 결제수단을 모른다는 뜻이므로 <code>미확인</code>으로 남겨도 주문 금액 분석에는 쓸 수 있습니다. <code>member</code>는 수업용 기준으로 비회원인 <code>False</code>로 채웠습니다. 실제 회사 데이터라면 이 기준은 담당자와 확인해야 합니다.</p>
+<p>IQR은 값이 보통 어느 범위 안에 모여 있는지 보는 방법입니다. 이번 수량 데이터에서는 정상범위가 -0.5~3.5로 계산됩니다. 카페 주문 수량이 999개인 행은 이 범위를 아주 크게 벗어나므로 이상치로 보는 것이 자연스럽습니다.</p>
+<h2>청소 전후 비교로 결과를 확인합니다</h2>
+<p>정제를 마친 뒤에는 꼭 전후 비교를 해야 합니다. 청소를 했는데 행수가 얼마나 줄었는지, 총매출이 이상하게 바뀌지는 않았는지, 최대 수량과 최소 금액이 정상 범위로 돌아왔는지 확인해야 합니다.</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -1397,6 +1447,7 @@ delivery[&quot;일자_dt&quot;] = pd.to_datetime(delivery[&quot;일자&quot;], e
 </tr>
 </tbody>
 </table></div>
+<p>행수는 10,439행에서 10,421행으로 줄었습니다. 줄어든 18행은 중복 <code>order_id</code> 15행, <code>qty=999</code> 이상치 2행, 음수 금액 1행입니다. 총매출은 90,600,500원에서 90,476,000원으로 크게 흔들리지 않았지만, 판매수량 합계는 19,259개에서 17,238개로 줄었습니다. 이 차이는 <code>qty=999</code> 두 행이 원래 수량 합계를 크게 부풀렸기 때문입니다.</p>
 <p>해석:</p>
 <div class="code-scroll"><pre><code class="language-text">정제 후 행수는 18행 줄었다. 중복 order_id 15행, qty=999 이상치 2행, amount 음수 1행을 제거했기 때문이다. 총매출은 크게 달라지지 않았지만 판매수량 합계는 2,021개 줄었다. 이는 qty=999 두 행이 수량 합계를 크게 부풀렸기 때문이다. 정제 후에는 중복 주문번호, 전체 결측값, 단가 x 수량과 금액 불일치가 모두 0이므로 카테고리별 매출 집계에 사용할 수 있다.
 </code></pre></div>
@@ -1431,13 +1482,16 @@ delivery[&quot;일자_dt&quot;] = pd.to_datetime(delivery[&quot;일자&quot;], e
 </tr>
 </tbody>
 </table></div>
+<p>이 표는 이제 카테고리별 매출을 비교하는 데 쓸 수 있습니다. 중복 주문번호가 남아 있거나, 금액이 음수로 들어 있거나, 단가와 수량의 곱이 금액과 맞지 않으면 이런 집계표를 믿기 어렵습니다. 정제 후에는 그런 문제를 0건으로 맞췄기 때문에 카테고리별 매출 비교로 넘어갈 수 있습니다.</p>
 <h2>cp949 인코딩 실습 결과</h2>
+<p>인코딩은 글자를 저장하는 약속입니다. 같은 한글 파일이라도 UTF-8 약속으로 저장된 파일이 있고, cp949 약속으로 저장된 파일이 있습니다. 약속이 맞지 않으면 한글이 깨지거나 아예 파일이 열리지 않습니다.</p>
 <p>기본값으로 읽기:</p>
 <div class="code-scroll"><pre><code class="language-python">pd.read_csv(&quot;02_datasets/real_korean/delivery_food/food_delivery_prediction_raw_data2_ORIGINAL_cp949.csv&quot;)
 </code></pre></div>
 <p>결과:</p>
 <div class="code-scroll"><pre><code class="language-text">UnicodeDecodeError
 </code></pre></div>
+<p><code>UnicodeDecodeError</code>는 파일 안의 글자를 현재 읽는 방식으로 해석할 수 없다는 뜻입니다. 이럴 때는 데이터가 저장된 인코딩을 지정해서 다시 읽어야 합니다.</p>
 <p>인코딩 지정:</p>
 <div class="code-scroll"><pre><code class="language-python">delivery = pd.read_csv(
     &quot;02_datasets/real_korean/delivery_food/food_delivery_prediction_raw_data2_ORIGINAL_cp949.csv&quot;,
@@ -1450,14 +1504,14 @@ delivery[&quot;일자_dt&quot;] = pd.to_datetime(delivery[&quot;일자&quot;], e
 <li><code>일자</code>를 datetime으로 변환한 뒤 실패 0건</li>
 <li>날짜 범위: 2013-12-01 ~ 2019-03-31</li>
 </ul>
+<p><code>일자</code>를 datetime으로 바꾸는 이유도 중요합니다. 날짜가 글자로 남아 있으면 월별 집계나 기간 필터를 하기가 불편합니다. datetime은 pandas가 날짜로 알아보는 타입이라서 월, 연도, 기간 계산을 할 수 있습니다.</p>
 <h2>실행한 검증 코드</h2>
-<p>전체 검증 코드는 아래 파일에 저장되어 있다.</p>
-<p><code>06_answers/S12_code.py</code></p>
+<p>아래 코드는 수업용 검증 스크립트로 실행한 내용입니다. 학생 입장에서는 코드 전체를 한 번에 외우기보다, 결측 확인, 타입 변환, 중복 제거, 이상치 제거, 검산 순서로 읽어 보세요.</p>
 <p>실행 명령:</p>
 <div class="code-scroll"><pre><code class="language-bash">cd /mnt/d/ai-data-analysis-course
 python3 06_answers/S12_code.py
 </code></pre></div>
-<p>핵심 실습 코드는 다음과 같다.</p>
+<p>수업에서 실제로 돌린 주요 실습 코드는 아래입니다.</p>
 <div class="code-scroll"><pre><code class="language-python">from pathlib import Path
 import pandas as pd
 
@@ -1571,6 +1625,7 @@ print(delivery[&quot;일자_dt&quot;].isna().sum())
 print(delivery[&quot;일자_dt&quot;].min(), delivery[&quot;일자_dt&quot;].max())
 </code></pre></div>
 <h2>실제 실행 출력 요약</h2>
+<p>아래 출력은 정제가 제대로 되었는지 확인하는 검산표처럼 보면 됩니다. 중복 주문번호, 전체 결측값, 단가 x 수량과 금액 불일치가 모두 0이면 카테고리별 집계에 사용할 준비가 된 상태입니다.</p>
 <div class="code-scroll"><pre><code class="language-text">pandas version: 3.0.3
 cafe_sales_dirty 원본: 10,439행 x 12열
 중복 order_id 제거: 15행

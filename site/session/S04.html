@@ -379,22 +379,25 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 <li>선수 차시: S03</li>
 <li>난이도: 2</li>
 <li>시간: 50분</li>
-<li>사용 데이터: <code>/mnt/d/ai-data-analysis-course/02_datasets/shop_orders/shop_orders_clean.xlsx</code></li>
+<li>사용 데이터: 수업 홈의 데이터 받기 페이지에서 내려받은 주문 매출 엑셀 파일</li>
 <li>사용 시트: <code>orders</code>, <code>customers</code>, <code>products</code></li>
 </ul>
-<p>이번 차시가 다루는 건 엑셀로 실무 데이터를 만질 때 거의 매번 부딪히는 문제다. 주문 목록에 들어 있는 정보는 주문번호, 고객번호, 상품번호, 수량, 할인율뿐이다. 고객이 어느 지역 사람인지, 등급이 무엇인지, 상품 단가가 얼마인지는 여기 없다. 실무 데이터는 이렇게 여러 표에 흩어져 있기 마련이라, 분석을 시작하려면 표부터 이어 붙여야 한다.</p>
-<p>작업의 뼈대는 이렇다. <code>orders</code>를 중심 표로 삼아 <code>products</code>에서 단가를, <code>customers</code>에서 지역과 등급을 끌어온 다음 매출을 계산한다. 이어서 <code>SUMIF</code>, <code>COUNTIF</code>로 지역별 매출과 등급별 객단가를 구한다.</p>
+<p>엑셀로 실무 데이터를 다루다 보면 “한 표만 보고는 답을 낼 수 없는 상황”을 자주 만납니다. 주문 목록을 열어 보면 주문번호, 고객번호, 상품번호, 수량, 할인율은 보입니다. 그런데 고객이 어느 지역 사람인지, 고객 등급이 무엇인지, 상품 단가가 얼마인지는 보이지 않습니다.</p>
+<p>이건 데이터가 잘못된 것이 아닙니다. 실무 데이터는 원래 이렇게 여러 표에 나뉘어 저장되는 경우가 많습니다. 주문 표에는 주문에 대한 사실만 모아 두고, 고객 표에는 고객 정보만 모아 두고, 상품 표에는 상품 정보만 모아 두는 식입니다. 같은 내용을 여러 곳에 반복해서 적지 않기 위해서입니다.</p>
+<p>그래서 분석을 시작하기 전에 먼저 해야 할 일이 있습니다. 흩어져 있는 표에서 필요한 값을 찾아와 한 표에서 계산할 수 있게 만드는 일입니다. 키 재듯이 수량과 단가를 맞춰 보고, 사전에서 단어 뜻을 찾듯이 고객번호와 상품번호로 필요한 정보를 찾아오는 과정이라고 보면 됩니다.</p>
+<p>이 차시에서는 <code>orders</code>를 중심 표로 봅니다. <code>orders</code>는 주문이 한 줄씩 쌓인 표입니다. 여기에 <code>products</code>에서 단가를 가져오고, <code>customers</code>에서 지역과 등급을 가져옵니다. 그다음 단가, 수량, 할인율을 이용해 주문별 매출을 계산합니다. 마지막으로 <code>SUMIF</code>, <code>COUNTIF</code>를 사용해 지역별 매출과 등급별 객단가를 구해 봅니다.</p>
 <h2>학습 목표</h2>
-<p>수강생은 이 차시가 끝나면 다음을 할 수 있어야 한다.</p>
+<p>수강생은 이 차시가 끝나면 아래 작업을 할 수 있어야 합니다.</p>
 <ol>
-<li>주문 표의 상품번호와 고객번호를 기준으로 다른 표의 값을 가져올 수 있다.</li>
-<li><code>VLOOKUP</code>과 <code>XLOOKUP</code>의 차이를 설명할 수 있다.</li>
-<li>단가, 수량, 할인율을 이용해 주문별 매출을 계산할 수 있다.</li>
-<li><code>SUMIF</code>, <code>COUNTIF</code>로 조건에 맞는 합계와 건수를 계산할 수 있다.</li>
-<li>엑셀 함수 방식이 행이 많아질수록 관리하기 어려워지는 이유를 말할 수 있다.</li>
+<li>주문 표의 상품번호와 고객번호를 기준으로 다른 표의 값을 가져올 수 있습니다.</li>
+<li><code>VLOOKUP</code>과 <code>XLOOKUP</code>의 차이를 설명할 수 있습니다.</li>
+<li>단가, 수량, 할인율을 이용해 주문별 매출을 계산할 수 있습니다.</li>
+<li><code>SUMIF</code>, <code>COUNTIF</code>로 조건에 맞는 합계와 건수를 계산할 수 있습니다.</li>
+<li>엑셀 함수 방식이 행이 많아질수록 관리하기 어려워지는 이유를 말할 수 있습니다.</li>
 </ol>
+<p>여기서 중요한 흐름은 “찾아오기 → 계산하기 → 조건별로 모아 보기”입니다. 데이터를 분석한다는 말이 어렵게 들릴 수 있지만, 실제로는 필요한 재료를 한곳에 모은 다음 원하는 기준으로 합계나 평균을 보는 일에서 출발합니다.</p>
 <h2>데이터 구조</h2>
-<p>실제 파일 확인 결과는 다음과 같다.</p>
+<p>수업 홈의 데이터 받기 페이지에서 내려받은 주문 매출 엑셀 파일을 열면 세 개의 시트가 있습니다. 각 시트는 서로 다른 역할을 합니다.</p>
 <ul>
 <li><code>orders</code>: 20,000행, 6열</li>
 <li>컬럼: <code>order_id</code>, <code>customer_id</code>, <code>product_id</code>, <code>order_date</code>, <code>qty</code>, <code>discount_rate</code></li>
@@ -403,58 +406,74 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 <li><code>products</code>: 200행, 5열</li>
 <li>컬럼: <code>product_id</code>, <code>product_name</code>, <code>category</code>, <code>price</code>, <code>cost</code></li>
 </ul>
-<p><code>orders</code>에는 매출 컬럼이 없다. 매출은 다음 공식으로 직접 계산한다.</p>
+<p><code>orders</code>에는 주문이 20,000행 들어 있습니다. 한 행은 주문 한 건이라고 보면 됩니다. 그런데 이 표에는 매출 컬럼이 없습니다. 주문 수량과 할인율은 있지만, 단가가 없기 때문입니다.</p>
+<p>단가는 <code>products</code> 시트에 있습니다. 그래서 상품번호를 기준으로 <code>products</code>에서 단가를 찾아와야 합니다. 마찬가지로 지역과 등급은 <code>customers</code> 시트에 있으므로, 고객번호를 기준으로 찾아와야 합니다.</p>
+<p><code>orders</code>에는 매출 컬럼이 없습니다. 매출은 아래 공식으로 직접 계산합니다.</p>
 <div class="code-scroll"><pre><code class="language-text">매출 = 단가 × 수량 × (1 - 할인율)
 </code></pre></div>
+<p>이 공식은 “할인까지 반영한 실제 주문 금액”을 구하는 식입니다. 예를 들어 단가에 수량을 곱하면 할인 전 금액이 됩니다. 여기에 <code>(1 - 할인율)</code>을 곱하면 할인 후 금액이 됩니다. 할인율이 10%라면 실제로 받는 비율은 90%이므로 <code>1 - 0.1</code>을 곱하는 방식입니다.</p>
 <h2>개념 설명</h2>
-<h3>1. 주문 표는 영수증, 고객 표와 상품 표는 사전</h3>
-<p><code>orders</code> 시트는 거래가 한 줄씩 쌓인 영수증 목록에 가깝다. 그런데 영수증에 적힌 건 고객번호와 상품번호뿐이다. 고객번호 <code>C000787</code>이 어느 지역 고객인지, 상품번호 <code>P00159</code>의 단가가 얼마인지 알려면 다른 표를 들여다봐야 한다.</p>
-<p>여기서 <code>customers</code>와 <code>products</code>가 사전 노릇을 한다. 고객번호로 사전을 찾으면 지역과 등급이, 상품번호로 찾으면 상품명과 단가가 나온다. <code>VLOOKUP</code>과 <code>XLOOKUP</code>이 바로 이 사전 찾기를 대신해 주는 함수다.</p>
-<h3>2. VLOOKUP은 왼쪽 첫 열에서 찾아 오른쪽 값을 가져온다</h3>
-<p><code>VLOOKUP</code>은 다음 구조로 읽는다.</p>
+<h3>1. 주문 표는 영수증, 고객 표와 상품 표는 사전입니다</h3>
+<p><code>orders</code> 시트는 영수증 목록에 가깝습니다. 주문이 발생할 때마다 한 줄씩 기록됩니다. 여기에는 고객번호와 상품번호가 있습니다. 그런데 고객번호 <code>C000787</code>만 보고는 그 고객이 어느 지역에 사는지 알 수 없습니다. 상품번호 <code>P00159</code>만 보고는 그 상품의 단가가 얼마인지 알 수 없습니다.</p>
+<p>이럴 때 <code>customers</code>와 <code>products</code>가 사전 역할을 합니다. 사전에서 단어를 찾으면 뜻이 나오듯이, 고객번호를 <code>customers</code>에서 찾으면 지역과 등급이 나옵니다. 상품번호를 <code>products</code>에서 찾으면 상품명, 카테고리, 단가가 나옵니다.</p>
+<p><code>VLOOKUP</code>과 <code>XLOOKUP</code>은 이 사전 찾기를 엑셀이 대신하게 해 주는 함수입니다. 사람이 눈으로 고객번호를 하나씩 찾아 복사해 오면 시간이 오래 걸리고 실수도 납니다. 함수로 찾게 하면 같은 규칙을 20,000행에 반복해서 적용할 수 있습니다.</p>
+<p>여기서 기준이 되는 값이 중요합니다. 고객 정보는 고객번호로 찾고, 상품 정보는 상품번호로 찾습니다. 이렇게 두 표를 연결할 때 기준이 되는 값을 보통 “키”라고 부릅니다. 문을 열 때 열쇠가 필요하듯이, 다른 표에서 정보를 찾아오려면 두 표가 함께 가지고 있는 키가 필요합니다.</p>
+<h3>2. VLOOKUP은 왼쪽 첫 열에서 찾아 오른쪽 값을 가져옵니다</h3>
+<p><code>VLOOKUP</code>은 엑셀에서 오래전부터 많이 쓰인 찾기 함수입니다. 이름이 낯설어도 구조는 어렵지 않습니다. “이 값을 표의 첫 번째 열에서 찾고, 같은 줄의 몇 번째 열 값을 가져와 주세요”라는 뜻입니다.</p>
+<p><code>VLOOKUP</code>은 아래 구조로 읽습니다.</p>
 <div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(찾을값, 찾을표범위, 가져올열번호, 정확히찾기)
 </code></pre></div>
-<p>예를 들어 상품번호를 기준으로 단가를 가져오려면 다음처럼 쓴다.</p>
+<p>예를 들어 상품번호를 기준으로 단가를 가져오려면 아래처럼 씁니다.</p>
 <div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(C2,products!$A:$E,4,FALSE)
 </code></pre></div>
-<p>뜻은 다음과 같다.</p>
+<p>이 공식은 <code>orders</code>의 현재 행에 있는 상품번호를 보고, <code>products</code> 시트에서 같은 상품번호를 찾은 뒤, 그 줄의 네 번째 열 값을 가져오라는 뜻입니다.</p>
+<p>각 부분을 천천히 보면 이렇습니다.</p>
 <ul>
-<li><code>C2</code>: 현재 주문의 상품번호</li>
-<li><code>products!$A:$E</code>: 상품 사전 범위</li>
-<li><code>4</code>: 상품 사전에서 네 번째 열인 <code>price</code></li>
-<li><code>FALSE</code>: 비슷한 값이 아니라 정확히 같은 상품번호만 찾기</li>
+<li><code>C2</code>: 현재 주문의 상품번호입니다.</li>
+<li><code>products!$A:$E</code>: 상품번호와 상품 정보가 들어 있는 상품 표 범위입니다.</li>
+<li><code>4</code>: 상품 표에서 네 번째 열인 <code>price</code>를 가져오라는 뜻입니다.</li>
+<li><code>FALSE</code>: 비슷한 값이 아니라 정확히 같은 상품번호만 찾으라는 뜻입니다.</li>
 </ul>
-<p>입문 단계에서는 마지막 인수 <code>FALSE</code>를 빠뜨리지 않는 게 중요하다. 상품번호나 고객번호처럼 정확히 맞아떨어져야 하는 키에 근사값 검색을 쓰면 엉뚱한 값이 딸려 올 수 있다.</p>
-<h3>3. XLOOKUP은 찾을 열과 가져올 열을 따로 지정한다</h3>
-<p><code>XLOOKUP</code>은 최신 엑셀에서 쓸 수 있는 함수로, 구조가 한결 직관적이다.</p>
+<p>입문 단계에서는 마지막 인수 <code>FALSE</code>를 꼭 넣는 습관을 들이는 것이 좋습니다. 상품번호나 고객번호는 “대충 비슷한 값”을 찾으면 안 됩니다. 주민등록번호나 회원번호처럼 정확히 같은 값이어야 합니다. <code>FALSE</code>를 빠뜨리면 엉뚱한 상품의 단가가 들어와도 겉으로는 조용히 계산이 진행될 수 있습니다.</p>
+<p><code>VLOOKUP</code>을 쓸 때 조심할 점도 있습니다. 찾는 값은 반드시 지정한 표 범위의 왼쪽 첫 열에 있어야 합니다. 그리고 가져올 열을 숫자로 세야 합니다. 열이 많아지면 네 번째 열인지 다섯 번째 열인지 헷갈리기 쉽습니다. 이 헷갈림이 실무에서 자주 생기는 오류입니다.</p>
+<h3>3. XLOOKUP은 찾을 열과 가져올 열을 따로 지정합니다</h3>
+<p><code>XLOOKUP</code>은 최신 엑셀에서 사용할 수 있는 찾기 함수입니다. <code>VLOOKUP</code>보다 읽는 방식이 더 직관적입니다. 몇 번째 열인지 숫자로 세는 대신, “어느 열에서 찾고, 어느 열에서 가져올지”를 직접 지정합니다.</p>
+<p><code>XLOOKUP</code>은 아래 구조로 읽습니다.</p>
 <div class="code-scroll"><pre><code class="language-excel">=XLOOKUP(찾을값, 찾을열, 가져올열, 못찾을때값)
 </code></pre></div>
-<p>단가를 가져오는 공식은 다음과 같다.</p>
+<p>단가를 가져오는 공식은 아래와 같습니다.</p>
 <div class="code-scroll"><pre><code class="language-excel">=XLOOKUP(C2,products!$A:$A,products!$D:$D,&quot;확인필요&quot;)
 </code></pre></div>
-<p><code>VLOOKUP</code>은 표 범위에서 몇 번째 열을 가져올지 숫자로 세야 한다. <code>XLOOKUP</code>은 찾을 열과 가져올 열을 곧바로 지정하니, 열이 추가되거나 순서가 바뀌어도 공식이 덜 흔들린다.</p>
-<h3>4. SUMIF와 COUNTIF는 조건을 걸어 계산한다</h3>
-<p>분석 질문은 대개 “전체 매출은 얼마인가”에서 끝나지 않는다. 실무에서는 “지역별 매출은 얼마인가”, “등급별 객단가는 얼마인가”처럼 조건이 따라붙는다.</p>
-<p><code>SUMIF</code>는 조건에 맞는 행의 값을 합산한다.</p>
+<p>이 공식은 <code>C2</code>에 있는 상품번호를 <code>products</code> 시트의 A열에서 찾고, 같은 위치에 있는 D열의 값을 가져오라는 뜻입니다. 만약 찾지 못하면 빈칸이나 오류만 보여 주는 대신 <code>"확인필요"</code>라고 표시합니다. 이렇게 해 두면 나중에 문제가 있는 행을 찾기 쉽습니다.</p>
+<p><code>VLOOKUP</code>은 표 범위 안에서 가져올 열 번호를 숫자로 세야 합니다. 반면 <code>XLOOKUP</code>은 찾을 열과 가져올 열을 바로 지정합니다. 그래서 중간에 열이 추가되거나 순서가 바뀌어도 공식이 덜 흔들립니다.</p>
+<p>두 함수 모두 “다른 표에서 값을 찾아온다”는 목적은 같습니다. 다만 초보자에게는 <code>VLOOKUP</code>이 기존 문서에서 자주 보이기 때문에 읽을 줄 알아야 하고, 새로 작업할 때는 <code>XLOOKUP</code>이 더 편한 경우가 많습니다.</p>
+<h3>4. SUMIF와 COUNTIF는 조건을 걸어 계산합니다</h3>
+<p>값을 찾아오고 매출까지 계산했다면, 이제 질문을 바꿔 볼 수 있습니다. 전체 매출 하나만 보는 것으로는 충분하지 않습니다. 실무에서는 “서울특별시 매출은 얼마인가요?”, “VIP 고객 주문은 몇 건인가요?”, “등급별 객단가는 어떻게 다른가요?”처럼 조건이 붙은 질문이 자주 나옵니다.</p>
+<p><code>SUMIF</code>는 조건에 맞는 행의 값을 합산합니다. 말로 풀면 “이 조건에 해당하는 것만 골라서 더해 주세요”입니다.</p>
 <div class="code-scroll"><pre><code class="language-excel">=SUMIF(조건범위, 조건, 합계범위)
 </code></pre></div>
-<p><code>COUNTIF</code>는 조건에 맞는 행의 개수를 센다.</p>
+<p>예를 들어 지역이 서울특별시인 행만 골라 매출을 더하면 서울특별시 매출이 됩니다. 조건범위는 지역이 들어 있는 열이고, 조건은 특정 지역 이름이며, 합계범위는 매출이 들어 있는 열입니다.</p>
+<p><code>COUNTIF</code>는 조건에 맞는 행의 개수를 셉니다. 말로 풀면 “이 조건에 해당하는 주문이 몇 건인지 세어 주세요”입니다.</p>
 <div class="code-scroll"><pre><code class="language-excel">=COUNTIF(조건범위, 조건)
 </code></pre></div>
-<p>등급별 객단가는 다음처럼 계산한다.</p>
+<p>지역별 주문 건수를 구할 때는 지역 열을 조건범위로 두고, 각 지역 이름을 조건으로 넣습니다. 그러면 해당 지역의 주문이 몇 줄인지 셀 수 있습니다.</p>
+<p>등급별 객단가는 아래처럼 계산합니다.</p>
 <div class="code-scroll"><pre><code class="language-text">등급별 객단가 = 등급별 매출 합계 ÷ 등급별 주문 건수
 </code></pre></div>
+<p>객단가는 주문 한 건당 평균 매출입니다. 총매출만 보면 고객 수나 주문 수가 많은 그룹이 크게 보일 수 있습니다. 객단가를 보면 주문 한 건의 크기를 비교할 수 있습니다. 예를 들어 VIP 등급의 총매출이 높다면 주문이 많아서인지, 주문 한 건의 금액이 커서인지 나누어 생각할 수 있습니다.</p>
 <h2>엑셀 비교와 한계</h2>
-<p>엑셀 함수는 눈앞의 표를 빠르게 잇고 요약하는 데 대단히 강하다. 2만 행 남짓한 주문 데이터라면 수강생이 공식이 흘러가는 과정을 직접 눈으로 좇을 수 있어 학습 효과도 좋다.</p>
-<p>하지만 실무 데이터가 커지고 표가 늘어나면 다음 문제가 생긴다.</p>
+<p>엑셀 함수는 눈앞의 표를 빠르게 이어 붙이고 요약하는 데 매우 강합니다. 20,000행 정도의 주문 데이터라면 공식이 어떻게 내려가고, 값이 어떻게 채워지는지 직접 눈으로 확인할 수 있습니다. 초보자에게는 이 과정이 중요합니다. 데이터가 계산되는 흐름을 손으로 따라가며 이해할 수 있기 때문입니다.</p>
+<p>예를 들어 <code>orders</code>에 단가가 없다는 사실을 확인하고, <code>products</code>에서 단가를 찾아온 뒤, 매출을 직접 계산해 보면 “분석 결과는 원래 있는 것이 아니라 필요한 정보를 모아 만들어 내는 것”이라는 감각이 생깁니다.</p>
+<p>하지만 행이 많아지고 연결해야 할 표가 늘어나면 엑셀 함수 방식은 관리가 어려워집니다.</p>
 <ul>
-<li>열 번호를 잘못 세면 <code>VLOOKUP</code> 결과가 조용히 틀릴 수 있다.</li>
-<li>공식이 여러 열에 복사되면 어느 열이 원본이고 어느 열이 계산 결과인지 헷갈릴 수 있다.</li>
-<li>파일이 무거워지고 다시 계산하는 시간이 길어진다.</li>
-<li>같은 계산을 다음 달에도 반복하려면 사람이 다시 클릭하고 복사해야 한다.</li>
-<li>연결해야 할 표가 세 개, 네 개로 늘어나면 공식 관리가 어려워진다.</li>
+<li>열 번호를 잘못 세면 <code>VLOOKUP</code> 결과가 조용히 틀릴 수 있습니다.</li>
+<li>공식이 여러 열에 복사되면 어느 열이 원본이고 어느 열이 계산 결과인지 헷갈릴 수 있습니다.</li>
+<li>파일이 무거워지고 다시 계산하는 시간이 길어집니다.</li>
+<li>같은 계산을 다음 달에도 반복하려면 사람이 다시 클릭하고 복사해야 합니다.</li>
+<li>연결해야 할 표가 세 개, 네 개로 늘어나면 공식 관리가 어려워집니다.</li>
 </ul>
-<p>이 차시에서는 엑셀 실무 함수로 분석의 기본 골격을 익힌다. 뒤이어 파이썬과 BI 도구를 배우고 나면, 같은 문제를 더 재현하기 쉽고 관리하기 편한 방식으로 풀 수 있다.</p>
+<p>여기서 엑셀이 나쁘다는 뜻은 아닙니다. 엑셀은 데이터를 눈으로 확인하고, 빠르게 계산해 보고, 작은 규모의 분석을 진행하는 데 아주 좋은 도구입니다. 다만 같은 작업을 매달 반복하거나, 데이터가 더 커지거나, 여러 사람이 함께 관리해야 하는 순간에는 다른 방식이 필요해집니다.</p>
+<p>그래서 이 수업에서는 먼저 엑셀 실무 함수로 분석의 기본 골격을 익힙니다. 표를 잇고, 필요한 값을 찾아오고, 조건별로 합계와 건수를 구하는 흐름을 몸에 익히는 것이 목적입니다. 뒤에서 파이썬과 BI 도구를 배우면 같은 문제를 더 재현하기 쉽고 관리하기 편한 방식으로 풀어 볼 수 있습니다.</p>
 <h2>50분 수업 흐름</h2>
 <div class="table-scroll"><table>
 <thead>
@@ -507,17 +526,19 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 </tr>
 </tbody>
 </table></div>
-<h2>수업의 핵심 메시지</h2>
-<p>데이터분석은 필요한 정보를 한 표에 모으는 일에서 출발한다. 엑셀에서는 <code>VLOOKUP</code>이나 <code>XLOOKUP</code>으로 표를 잇고, <code>SUMIF</code>, <code>COUNTIF</code>로 조건이 붙은 질문에 답한다. 다만 함수가 늘수록 관리 비용도 불어난다. 이 한계를 몸으로 느끼는 순간이 다음 단계인 자동화 도구로 넘어가는 출발점이다.</p>
+<h2>수업에서 가져갈 생각</h2>
+<p>데이터분석은 필요한 정보를 한 표에 모으는 일에서 시작합니다. 주문 표만 보고 답이 나오지 않는다면, 고객 표와 상품 표에서 필요한 값을 찾아와야 합니다. 이때 고객번호와 상품번호가 표와 표를 이어 주는 기준이 됩니다.</p>
+<p>엑셀에서는 <code>VLOOKUP</code>이나 <code>XLOOKUP</code>으로 다른 표의 값을 찾아올 수 있습니다. 찾아온 단가, 수량, 할인율을 이용하면 주문별 매출을 계산할 수 있습니다. 그다음 <code>SUMIF</code>, <code>COUNTIF</code>를 쓰면 지역별 매출, 주문 건수, 등급별 객단가처럼 조건이 붙은 질문에도 답할 수 있습니다.</p>
+<p>함수가 늘어나면 분석도 강해지지만 관리할 것도 함께 늘어납니다. 열 번호를 잘못 세거나, 공식을 잘못 복사하거나, 다음 달에 같은 작업을 반복해야 할 때 문제가 생길 수 있습니다. 이 불편함을 직접 느껴 보는 것이 중요합니다. 그래야 나중에 파이썬이나 BI 도구를 배울 때 “왜 자동화와 재현 가능한 분석이 필요한지” 자연스럽게 이해할 수 있습니다.</p>
 </section>
 <section class="tab-panel markdown-body" data-panel="handout" aria-label="핸드아웃">
 <h1>S04 핸드아웃: VLOOKUP/XLOOKUP과 조건부 집계</h1>
 <h2>실습 목표</h2>
-<p>이번 실습에서는 주문 데이터에 상품 단가와 고객의 지역, 등급을 붙이고 주문별 매출을 계산한다. 끝으로 지역별 매출을 구한 뒤, 직접 해보기 미션에서 등급별 객단가까지 계산한다.</p>
+<p>주문 데이터에는 고객번호와 상품번호는 있지만, 고객의 지역, 등급, 상품 단가는 아직 붙어 있지 않습니다. 이 실습에서는 주문 표에 상품 정보와 고객 정보를 찾아 붙이고, 주문별 매출을 계산해 봅니다. 마지막에는 지역별 매출을 구한 뒤, 직접 해보기 미션에서 등급별 객단가까지 계산합니다.</p>
+<p>엑셀에서는 이런 작업을 “표끼리 연결한다”고 볼 수 있습니다. 주문 표가 영수증이라면, 고객 표와 상품 표는 사전입니다. 번호를 보고 사전에서 뜻을 찾듯이, 고객번호와 상품번호를 기준으로 필요한 정보를 가져오는 연습을 해 봅니다.</p>
 <h2>사용할 파일</h2>
-<div class="code-scroll"><pre><code class="language-text">/mnt/d/ai-data-analysis-course/02_datasets/shop_orders/shop_orders_clean.xlsx
-</code></pre></div>
-<p>파일을 열면 세 개의 시트가 있다.</p>
+<p>수업 홈의 데이터 받기 페이지에서 쇼핑몰 주문 파일을 내려받아 여세요. 엑셀 파일을 받아도 되고, 엑셀로도 열리는 표 파일인 CSV로 받아도 됩니다. 이 실습에서는 여러 시트가 함께 들어 있는 엑셀 파일을 기준으로 설명합니다.</p>
+<p>파일을 열면 세 개의 시트가 있습니다.</p>
 <ul>
 <li><code>orders</code>: 주문 목록, 20,000행</li>
 <li><code>customers</code>: 고객 정보, 3,000행</li>
@@ -525,13 +546,14 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 </ul>
 <h2>따라하기</h2>
 <h3>1단계. 세 시트의 역할 확인하기</h3>
+<p>이 단계에서는 어떤 표에서 무엇을 가져와야 하는지 먼저 확인합니다. 재료가 어디에 있는지 알아야 공식을 쓸 때 길을 잃지 않습니다.</p>
 <ol>
-<li><code>shop_orders_clean.xlsx</code>를 연다.</li>
-<li>아래 시트를 차례로 클릭한다.
+<li>데이터 받기 페이지에서 내려받은 쇼핑몰 주문 파일을 엽니다.</li>
+<li>아래 시트를 차례로 클릭해 보세요.
    - <code>orders</code>
    - <code>customers</code>
    - <code>products</code></li>
-<li>각 시트에서 다음 컬럼을 확인한다.</li>
+<li>각 시트에서 다음 컬럼을 확인합니다.</li>
 </ol>
 <div class="table-scroll"><table>
 <thead>
@@ -574,9 +596,10 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 </tr>
 </tbody>
 </table></div>
-<p><code>orders</code>에는 매출이 없다. 매출을 구하려면 <code>products</code>에서 단가부터 가져와야 한다.</p>
+<p><code>orders</code>에는 매출이 없습니다. 주문 수량과 할인율은 있지만, 상품 단가가 없기 때문입니다. 매출을 구하려면 먼저 <code>products</code>에서 단가를 가져와야 합니다.</p>
 <h3>2단계. orders 시트에 새 열 만들기</h3>
-<p><code>orders</code> 시트에서 F열 오른쪽에 다음 제목을 추가한다.</p>
+<p>이 단계에서는 가져온 값과 계산 결과를 담을 자리를 만듭니다. 빈 칸을 먼저 만들어 두면, 어떤 정보를 붙이고 있는지 눈으로 따라가기 쉽습니다.</p>
+<p><code>orders</code> 시트에서 F열 오른쪽에 다음 제목을 추가합니다.</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -611,42 +634,47 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 </tr>
 </tbody>
 </table></div>
+<p>G열부터 I열까지는 상품 표에서 가져올 정보입니다. J열과 K열은 고객 표에서 가져올 정보입니다. L열은 단가, 수량, 할인율을 이용해 직접 계산할 매출입니다.</p>
 <h3>3단계. VLOOKUP으로 상품 정보 가져오기</h3>
-<p><code>orders</code> 시트의 G2 셀에 입력한다.</p>
+<p>이 단계에서는 상품번호를 기준으로 상품명, 카테고리, 단가를 가져옵니다. 사전에서 단어를 찾듯이, <code>product_id</code>를 보고 <code>products</code> 시트에서 필요한 값을 찾는 작업입니다.</p>
+<p><code>orders</code> 시트의 G2 셀에 입력합니다.</p>
 <div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(C2,products!$A:$E,2,FALSE)
 </code></pre></div>
-<p>H2 셀에 입력한다.</p>
+<p>H2 셀에 입력합니다.</p>
 <div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(C2,products!$A:$E,3,FALSE)
 </code></pre></div>
-<p>I2 셀에 입력한다.</p>
+<p>I2 셀에 입력합니다.</p>
 <div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(C2,products!$A:$E,4,FALSE)
 </code></pre></div>
-<p>각 공식의 뜻은 다음과 같다.</p>
+<p>각 공식의 부분은 이렇게 읽습니다.</p>
 <ul>
-<li><code>C2</code>: 현재 주문의 상품번호</li>
-<li><code>products!$A:$E</code>: 상품번호를 찾을 상품 표</li>
-<li><code>2</code>, <code>3</code>, <code>4</code>: 상품명, 카테고리, 단가가 있는 열 번호</li>
-<li><code>FALSE</code>: 정확히 일치하는 상품번호만 찾기</li>
+<li><code>C2</code>: 현재 주문의 상품번호입니다.</li>
+<li><code>products!$A:$E</code>: 상품번호를 찾을 상품 표입니다.</li>
+<li><code>2</code>, <code>3</code>, <code>4</code>: 상품명, 카테고리, 단가가 있는 열 번호입니다.</li>
+<li><code>FALSE</code>: 비슷한 상품번호가 아니라 정확히 같은 상품번호만 찾겠다는 뜻입니다.</li>
 </ul>
-<p>G2부터 I2까지 선택한 뒤 20,001행까지 채운다.</p>
+<p>여기서 <code>FALSE</code>는 꼭 확인해 주세요. 상품번호는 대충 비슷한 값을 찾으면 안 됩니다. 주민등록번호나 학번처럼 정확히 맞는 번호를 찾아야 합니다.</p>
+<p>G2부터 I2까지 선택한 뒤 20,001행까지 채웁니다. 첫 주문에만 공식을 쓰는 것이 아니라, 20,000건의 주문 전체에 같은 방식으로 상품 정보를 붙이는 과정입니다.</p>
 <h3>4단계. VLOOKUP으로 고객 정보 가져오기</h3>
-<p>J2 셀에 입력한다.</p>
+<p>이 단계에서는 고객번호를 기준으로 지역과 등급을 가져옵니다. 상품번호로 상품 사전을 찾았던 것처럼, 이번에는 고객번호로 고객 사전을 찾는다고 보면 됩니다.</p>
+<p>J2 셀에 입력합니다.</p>
 <div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(B2,customers!$A:$G,5,FALSE)
 </code></pre></div>
-<p>K2 셀에 입력한다.</p>
+<p>K2 셀에 입력합니다.</p>
 <div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(B2,customers!$A:$G,7,FALSE)
 </code></pre></div>
-<p>뜻은 다음과 같다.</p>
+<p>각 부분은 이렇게 읽습니다.</p>
 <ul>
-<li><code>B2</code>: 현재 주문의 고객번호</li>
-<li><code>customers!$A:$G</code>: 고객번호를 찾을 고객 표</li>
-<li><code>5</code>: <code>region</code> 열</li>
-<li><code>7</code>: <code>grade</code> 열</li>
-<li><code>FALSE</code>: 정확히 일치하는 고객번호만 찾기</li>
+<li><code>B2</code>: 현재 주문의 고객번호입니다.</li>
+<li><code>customers!$A:$G</code>: 고객번호를 찾을 고객 표입니다.</li>
+<li><code>5</code>: <code>region</code> 열입니다.</li>
+<li><code>7</code>: <code>grade</code> 열입니다.</li>
+<li><code>FALSE</code>: 정확히 일치하는 고객번호만 찾겠다는 뜻입니다.</li>
 </ul>
-<p>J2부터 K2까지 선택한 뒤 20,001행까지 채운다.</p>
+<p>J2부터 K2까지 선택한 뒤 20,001행까지 채웁니다. 이렇게 하면 주문 한 줄마다 고객의 지역과 등급이 붙습니다. 이제 주문 표만 보아도 “어느 지역의 어떤 등급 고객이 무엇을 샀는지”를 볼 수 있습니다.</p>
 <h3>5단계. XLOOKUP 방식도 비교하기</h3>
-<p>엑셀에 <code>XLOOKUP</code>이 있다면 같은 작업을 아래처럼 쓸 수도 있다. 앞서 VLOOKUP으로 값을 이미 채웠다면 다시 입력할 필요는 없고, 두 함수의 구조를 견줘 보는 셈 치고 읽으면 된다.</p>
+<p>이 단계에서는 같은 찾기 작업을 <code>XLOOKUP</code>으로도 읽어 봅니다. 이미 <code>VLOOKUP</code>으로 값을 채웠다면 다시 입력하지 않아도 됩니다. 두 함수가 어떻게 다른지 구조를 비교하는 것이 목적입니다.</p>
+<p>엑셀에 <code>XLOOKUP</code>이 있다면 같은 작업을 아래처럼 쓸 수도 있습니다. 앞서 VLOOKUP으로 값을 이미 채웠다면 다시 입력할 필요는 없고, 두 함수의 구조를 견줘 보는 셈 치고 읽으면 됩니다.</p>
 <p>단가를 가져오는 공식:</p>
 <div class="code-scroll"><pre><code class="language-excel">=XLOOKUP(C2,products!$A:$A,products!$D:$D,&quot;확인필요&quot;)
 </code></pre></div>
@@ -656,26 +684,30 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 <p>등급을 가져오는 공식:</p>
 <div class="code-scroll"><pre><code class="language-excel">=XLOOKUP(B2,customers!$A:$A,customers!$G:$G,&quot;확인필요&quot;)
 </code></pre></div>
-<p><code>VLOOKUP</code>은 가져올 열을 숫자로 세고, <code>XLOOKUP</code>은 찾을 열과 가져올 열을 직접 지정한다.</p>
+<p><code>VLOOKUP</code>은 가져올 열을 숫자로 셉니다. 그래서 상품 표에서 단가가 몇 번째 열인지 직접 세어야 합니다. <code>XLOOKUP</code>은 찾을 열과 가져올 열을 직접 지정합니다. 사전의 왼쪽 페이지에서 단어를 찾고, 오른쪽 페이지의 뜻을 바로 가져오는 느낌에 가깝습니다.</p>
 <h3>6단계. 주문별 매출 계산하기</h3>
-<p>L2 셀에 입력한다.</p>
+<p>이 단계에서는 주문 한 건마다 실제 매출을 계산합니다. 단가만으로는 매출이 아닙니다. 몇 개를 샀는지, 할인이 있었는지까지 반영해야 합니다.</p>
+<p>L2 셀에 입력합니다.</p>
 <div class="code-scroll"><pre><code class="language-excel">=I2*E2*(1-F2)
 </code></pre></div>
-<p>뜻은 다음과 같다.</p>
+<p>뜻은 이렇게 읽습니다.</p>
 <div class="code-scroll"><pre><code class="language-text">매출 = 단가 × 수량 × (1 - 할인율)
 </code></pre></div>
-<p>L2 셀을 20,001행까지 채운다.</p>
+<p>예를 들어 할인율이 0.1이라면 10% 할인이라는 뜻입니다. 그래서 <code>1 - 할인율</code>을 곱하면 할인 후 실제로 받은 금액이 됩니다. 물건의 정가를 먼저 보고, 할인된 비율만큼 깎아서 최종 금액을 계산하는 방식입니다.</p>
+<p>L2 셀을 20,001행까지 채웁니다. 주문이 20,000건이므로, 모든 주문에 같은 매출 계산식을 적용해야 합니다.</p>
 <p>확인할 값:</p>
 <ul>
 <li>L2: <code>22900</code></li>
 <li>L3: <code>35910</code></li>
 <li>L4: <code>105800</code></li>
 </ul>
+<p>위 값이 맞으면 단가, 수량, 할인율이 제대로 연결되어 계산된 것입니다.</p>
 <h3>7단계. 지역별 매출 집계표 만들기</h3>
+<p>이 단계에서는 주문별로 계산한 매출을 지역 기준으로 모아 봅니다. 한 줄 한 줄의 주문을 보는 것이 아니라, 지역별로 주문이 몇 건이고 매출이 얼마인지 요약하는 작업입니다.</p>
 <ol>
-<li>새 시트를 만든다.</li>
-<li>시트 이름을 <code>region_summary</code>로 바꾼다.</li>
-<li>A1:D1에 제목을 입력한다.</li>
+<li>새 시트를 만듭니다.</li>
+<li>시트 이름을 <code>region_summary</code>로 바꿉니다.</li>
+<li>A1:D1에 제목을 입력합니다.</li>
 </ol>
 <div class="table-scroll"><table>
 <thead>
@@ -704,20 +736,24 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 </tbody>
 </table></div>
 <ol start="4">
-<li><code>orders</code> 시트의 J2:J20001을 복사해 <code>region_summary</code>의 A2에 붙여넣는다.</li>
-<li>A열을 선택하고 데이터 탭에서 중복 제거를 실행한다.</li>
-<li>A열을 오름차순으로 정렬한다.</li>
+<li><code>orders</code> 시트의 J2:J20001을 복사해 <code>region_summary</code>의 A2에 붙여넣습니다.</li>
+<li>A열을 선택하고 데이터 탭에서 중복 제거를 실행합니다.</li>
+<li>A열을 오름차순으로 정렬합니다.</li>
 </ol>
-<p>B2 셀에 입력한다.</p>
+<p>4번부터 6번까지는 지역 목록을 하나씩만 남기는 과정입니다. 주문은 20,000건이지만, 지역 이름은 여러 번 반복됩니다. 집계표에서는 같은 지역이 한 번만 나오면 됩니다.</p>
+<p>B2 셀에 입력합니다.</p>
 <div class="code-scroll"><pre><code class="language-excel">=COUNTIF(orders!$J$2:$J$20001,A2)
 </code></pre></div>
-<p>C2 셀에 입력한다.</p>
+<p><code>COUNTIF</code>는 조건에 맞는 행의 개수를 셉니다. 여기서는 A2에 적힌 지역과 같은 주문이 몇 건인지 세는 공식입니다.</p>
+<p>C2 셀에 입력합니다.</p>
 <div class="code-scroll"><pre><code class="language-excel">=SUMIF(orders!$J$2:$J$20001,A2,orders!$L$2:$L$20001)
 </code></pre></div>
-<p>D2 셀에 입력한다.</p>
+<p><code>SUMIF</code>는 조건에 맞는 행의 값을 더합니다. 여기서는 A2에 적힌 지역의 주문만 골라서 L열의 매출을 합칩니다.</p>
+<p>D2 셀에 입력합니다.</p>
 <div class="code-scroll"><pre><code class="language-excel">=C2/B2
 </code></pre></div>
-<p>B2:D2를 마지막 지역 행까지 채운다.</p>
+<p>객단가는 주문 한 건당 평균 매출입니다. 키를 잴 때 전체 키의 합을 사람 수로 나누듯이, 매출 합계를 주문 건수로 나누면 주문 한 건의 평균 금액이 나옵니다.</p>
+<p>B2:D2를 마지막 지역 행까지 채웁니다.</p>
 <p>검산 기준:</p>
 <ul>
 <li><code>order_count</code> 합계: <code>20000</code></li>
@@ -725,13 +761,15 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 <li>서울특별시 매출: <code>570482124</code></li>
 <li>경기도 매출: <code>530726511</code></li>
 </ul>
+<p>검산 값이 맞으면 지역별 집계가 정상적으로 된 것입니다. 특히 <code>order_count</code> 합계가 <strong>20000</strong>이어야 합니다. 주문이 빠지거나 중복으로 들어가면 이 숫자가 달라집니다.</p>
 <h2>직접 해보기</h2>
 <h3>미션. 등급별 객단가 구하기</h3>
-<p>고객 등급별로 주문 건수, 매출 합계, 객단가를 구한다.</p>
+<p>이번에는 고객 등급별로 주문 건수, 매출 합계, 객단가를 구해 보세요. 앞에서 지역별로 했던 작업을 등급 기준으로 바꾸는 연습입니다.</p>
+<p>고객 등급별로 주문 건수, 매출 합계, 객단가를 구합니다.</p>
 <ol>
-<li>새 시트를 만든다.</li>
-<li>시트 이름을 <code>grade_summary</code>로 바꾼다.</li>
-<li>A1:D1에 제목을 입력한다.</li>
+<li>새 시트를 만듭니다.</li>
+<li>시트 이름을 <code>grade_summary</code>로 바꿉니다.</li>
+<li>A1:D1에 제목을 입력합니다.</li>
 </ol>
 <div class="table-scroll"><table>
 <thead>
@@ -760,7 +798,7 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 </tbody>
 </table></div>
 <ol start="4">
-<li>A2:A5에 등급을 입력한다.</li>
+<li>A2:A5에 등급을 입력합니다.</li>
 </ol>
 <div class="code-scroll"><pre><code class="language-text">VIP
 골드
@@ -768,18 +806,20 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 브론즈
 </code></pre></div>
 <ol start="5">
-<li>B2:D2에 알맞은 <code>COUNTIF</code>, <code>SUMIF</code>, 나눗셈 공식을 작성한다.</li>
-<li>B2:D2를 5행까지 채운다.</li>
-<li>어떤 등급의 객단가가 가장 높은지 한 문장으로 적는다.</li>
+<li>B2:D2에 알맞은 <code>COUNTIF</code>, <code>SUMIF</code>, 나눗셈 공식을 작성합니다.</li>
+<li>B2:D2를 5행까지 채웁니다.</li>
+<li>어떤 등급의 객단가가 가장 높은지 한 문장으로 적습니다.</li>
 </ol>
+<p>1번과 2번은 등급별 결과만 따로 보기 위한 공간을 만드는 과정입니다. 3번과 4번은 집계표의 뼈대를 만드는 과정입니다. 5번에서는 주문 표의 등급과 매출을 이용해 계산하고, 6번에서는 같은 공식을 다른 등급에도 적용합니다. 7번에서는 계산 결과를 숫자로만 두지 말고, 사람이 읽을 수 있는 문장으로 해석해 봅니다.</p>
 <p>힌트:</p>
 <ul>
-<li>등급은 <code>orders</code> 시트의 K열에 있다.</li>
-<li>매출은 <code>orders</code> 시트의 L열에 있다.</li>
-<li>객단가는 매출 합계를 주문 건수로 나눈 값이다.</li>
+<li>등급은 <code>orders</code> 시트의 K열에 있습니다.</li>
+<li>매출은 <code>orders</code> 시트의 L열에 있습니다.</li>
+<li>객단가는 매출 합계를 주문 건수로 나눈 값입니다.</li>
 </ul>
+<p>지역별 집계에서 지역 이름을 조건으로 썼다면, 여기서는 등급 이름을 조건으로 쓰면 됩니다. 조건이 바뀌어도 <code>COUNTIF</code>, <code>SUMIF</code>, 나눗셈의 생각 방식은 같습니다.</p>
 <h2>제출 전 확인</h2>
-<p>아래 값과 맞으면 실습이 정상적으로 완료된 것이다.</p>
+<p>아래 값과 맞으면 실습이 정상적으로 완료된 것입니다.</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -814,13 +854,13 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 </tr>
 </tbody>
 </table></div>
-<p>가장 높은 객단가는 VIP 등급이다.</p>
+<p>가장 높은 객단가는 VIP 등급입니다. 이 문장은 단순한 감상이 아니라, 등급별 매출 합계를 등급별 주문 건수로 나눈 결과를 비교해서 나온 해석입니다.</p>
 </section>
 <section class="tab-panel markdown-body" data-panel="script" aria-label="강사대본">
 <h1>S04 강사대본: 실무 함수</h1>
-<h2>수업 전 준비</h2>
+<h2>수업 전 강사 준비</h2>
 <ul>
-<li>파일 확인: <code>/mnt/d/ai-data-analysis-course/02_datasets/shop_orders/shop_orders_clean.xlsx</code></li>
+<li>자료 확인: 수업 홈의 데이터 받기 페이지에서 내려받은 쇼핑몰 주문 엑셀 파일</li>
 <li>시트 확인: <code>orders</code>, <code>customers</code>, <code>products</code></li>
 <li>실제 데이터 행수:</li>
 <li><code>orders</code>: 20,000행</li>
@@ -831,10 +871,14 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 <li>전체 매출: 1,938,489,803</li>
 <li>VIP 객단가: 104,719.97</li>
 </ul>
+<p>수업 전에 강사는 데이터 받기 페이지에서 쇼핑몰 주문 엑셀 파일을 직접 내려받아 열어 봅니다. 학생에게도 같은 파일을 내려받으면 된다고 안내하세요. 이 수업에서는 파일 위치를 설명하는 데 시간을 쓰기보다, 파일 안에 들어 있는 세 시트가 어떤 역할을 하는지 이해시키는 데 시간을 쓰는 편이 좋습니다.</p>
 <h2>도입: 0-5분</h2>
-<p>오늘 다루는 건 엑셀 실무에서 가장 손이 자주 가는 함수 묶음이다. 주문 데이터를 열어 보면 주문번호, 고객번호, 상품번호, 수량, 할인율은 있는데 지역도 단가도 없다. 지역별 매출을 내려면 지역과 매출이 둘 다 있어야 하니, 지금 표 하나만으로는 답이 안 나온다.</p>
-<p>실무에서는 흔한 장면이다. 거래 기록 따로, 고객 정보 따로, 상품 정보 따로 놓여 있다. 분석하려면 이 표들부터 연결해야 한다. 오늘 목표는 <code>orders</code>를 가운데 두고 <code>customers</code>와 <code>products</code>에서 필요한 값을 끌어오는 것이다.</p>
-<h2>데이터 구조 설명: 5-12분</h2>
+<p>말할 내용:</p>
+<p>엑셀 실무에서 손이 정말 자주 가는 함수들이 있습니다. 값을 찾아오는 함수와, 조건에 맞는 값만 세거나 더하는 함수입니다.</p>
+<p>주문 데이터를 열어 보면 주문번호, 고객번호, 상품번호, 수량, 할인율은 있습니다. 그런데 지역이 보이지 않고, 상품 단가도 보이지 않습니다. 여기서 질문을 하나 던져 볼까요? 지역별 매출을 구하려면 무엇이 필요할까요? 지역도 필요하고 매출도 필요합니다. 그런데 지금 <code>orders</code> 표 하나만 봐서는 둘 다 바로 구하기 어렵습니다.</p>
+<p>실무에서는 이런 일이 아주 흔합니다. 거래 기록은 거래 기록대로 있고, 고객 정보는 고객 정보대로 있고, 상품 정보는 또 따로 있습니다. 분석을 하려면 먼저 흩어진 표들을 이어야 합니다. 오늘은 <code>orders</code>를 가운데에 놓고, <code>customers</code>와 <code>products</code>에서 필요한 값을 찾아와 한 표에 붙여 봅니다.</p>
+<p>이 과정은 사전에서 단어를 찾는 것과 비슷합니다. 상품번호만 보고는 가격을 알 수 없으니, 상품번호를 들고 상품 사전을 찾아보는 겁니다. 고객번호만 보고는 지역을 알 수 없으니, 고객번호를 들고 고객 사전을 찾아보는 겁니다. 엑셀에서는 이 일을 <code>VLOOKUP</code>이나 <code>XLOOKUP</code> 같은 함수가 도와줍니다.</p>
+<h2>데이터 구조 이해: 5-12분</h2>
 <p>시연 포인트:</p>
 <ol>
 <li><code>orders</code> 시트를 연다.</li>
@@ -843,9 +887,12 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 <li><code>products</code> 시트에서 <code>product_id</code>, <code>price</code>를 짚는다.</li>
 </ol>
 <p>말할 내용:</p>
-<p><code>orders</code>는 주문이 한 줄씩 쌓인 거래 기록이다. 그런데 주문표만 봐서는 <code>P00159</code>가 얼마짜리인지 알 도리가 없다. 상품번호를 들고 <code>products</code>라는 사전을 뒤져야 한다. 고객도 똑같다. <code>C000787</code>이 어느 지역, 어떤 등급 고객인지는 <code>customers</code>에서 찾아야 나온다.</p>
-<p>여기서 기억할 단어가 키다. 표와 표를 이을 때 기준이 되는 값을 키라고 부른다. 오늘은 <code>product_id</code>와 <code>customer_id</code>가 그 키다.</p>
-<h2>VLOOKUP 시연: 12-25분</h2>
+<p>먼저 <code>orders</code> 시트를 보겠습니다. 이 시트는 주문이 한 줄씩 쌓인 거래 기록입니다. 한 줄이 주문 한 건이라고 보면 됩니다. 여기에는 <code>customer_id</code>, <code>product_id</code>, <code>qty</code>, <code>discount_rate</code>가 있습니다.</p>
+<p><code>customer_id</code>는 고객을 찾는 번호입니다. <code>product_id</code>는 상품을 찾는 번호입니다. <code>qty</code>는 주문 수량이고, <code>discount_rate</code>는 할인율입니다. 주문 기록 자체는 여기까지 알려 줍니다.</p>
+<p>그런데 <code>P00159</code>라는 상품번호가 보인다고 해서, 이 상품이 얼마짜리인지 바로 알 수는 없습니다. 상품번호를 들고 <code>products</code> 시트를 찾아가야 합니다. 사전에서 단어를 찾듯이, <code>product_id</code>를 기준으로 상품명, 카테고리, 단가를 찾아오는 겁니다.</p>
+<p>고객도 똑같습니다. <code>C000787</code>이라는 고객번호만 보고는 어느 지역 고객인지, 어떤 등급 고객인지 알 수 없습니다. 그래서 <code>customers</code> 시트에서 같은 고객번호를 찾아 <code>region</code>과 <code>grade</code>를 가져옵니다.</p>
+<p>여기서 꼭 기억할 단어가 있습니다. 표와 표를 이어 줄 때 기준이 되는 값을 키라고 부릅니다. 문을 열 때 열쇠가 필요하듯이, 다른 표에서 값을 찾아오려면 기준이 되는 열쇠가 필요합니다. 오늘은 <code>product_id</code>와 <code>customer_id</code>가 그 키입니다.</p>
+<h2>VLOOKUP으로 값 가져오기: 12-25분</h2>
 <p>시연 포인트:</p>
 <ol>
 <li><code>orders</code> 시트 G:L 열에 새 제목을 만든다.</li>
@@ -865,9 +912,13 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 <div class="code-scroll"><pre><code class="language-excel">=VLOOKUP(B2,customers!$A:$G,7,FALSE)
 </code></pre></div>
 <p>말할 내용:</p>
-<p><code>VLOOKUP</code>은 세로로 늘어선 표에서 값을 찾는 함수다. 인수는 순서대로 찾을 값, 찾을 표, 가져올 열 번호, 그리고 정확히 찾을지 여부다. 고객번호와 상품번호는 정확히 일치해야 하니 맨 끝에는 <code>FALSE</code>를 넣는다.</p>
-<p>수강생이 가장 헷갈려 하는 건 세 번째 인수다. <code>products!$A:$E</code> 범위에서는 A열이 1번, B열이 2번, C열이 3번, D열이 4번이다. 그러니 단가인 <code>price</code>를 가져오려면 4를 쓴다.</p>
-<h2>XLOOKUP 비교: 25-30분</h2>
+<p>이제 <code>VLOOKUP</code>을 써 보겠습니다. <code>VLOOKUP</code>은 세로로 늘어선 표에서 값을 찾아오는 함수입니다. 쉽게 말하면, 왼쪽에서 번호를 찾고 오른쪽에 있는 정보를 가져오는 함수입니다.</p>
+<p>공식은 네 부분으로 읽으면 됩니다. 찾을 값, 찾을 표, 가져올 열 번호, 정확히 찾을지 여부입니다. 상품번호와 고객번호는 비슷한 값을 찾으면 안 됩니다. 반드시 정확히 같은 번호를 찾아야 합니다. 그래서 맨 끝에는 <code>FALSE</code>를 넣습니다.</p>
+<p>첫 번째 공식은 <code>C2</code>에 있는 상품번호를 <code>products</code> 시트에서 찾고, 그 표의 두 번째 열 값을 가져오라는 뜻입니다. 같은 방식으로 세 번째 열, 네 번째 열도 가져옵니다. 이렇게 하면 상품명, 카테고리, 단가를 주문표에 붙일 수 있습니다.</p>
+<p>학생들이 가장 많이 헷갈리는 부분은 세 번째 인수입니다. <code>products!$A:$E</code> 범위에서는 A열이 1번입니다. B열은 2번, C열은 3번, D열은 4번입니다. 단가인 <code>price</code>가 D열에 있으니 단가를 가져오려면 4를 써야 합니다.</p>
+<p>고객 정보도 같은 방식입니다. <code>B2</code>에 있는 고객번호를 <code>customers</code> 시트에서 찾습니다. 지역은 다섯 번째 열에 있고, 등급은 일곱 번째 열에 있습니다. 그래서 지역을 가져올 때는 5, 등급을 가져올 때는 7을 씁니다.</p>
+<p>공식을 입력한 뒤에는 바로 아래로 채우기 전에 한두 줄을 눈으로 확인해 보세요. 함수는 겉으로는 계산이 된 것처럼 보여도, 열 번호를 잘못 세면 조용히 틀린 값을 가져올 수 있습니다. 그래서 처음 몇 줄을 확인하는 습관이 중요합니다.</p>
+<h2>XLOOKUP과 비교하기: 25-30분</h2>
 <p>시연 포인트:</p>
 <ol>
 <li>VLOOKUP으로 이미 계산한 값을 지우지 않는다.</li>
@@ -877,8 +928,10 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 <div class="code-scroll"><pre><code class="language-excel">=XLOOKUP(C2,products!$A:$A,products!$D:$D,&quot;확인필요&quot;)
 </code></pre></div>
 <p>말할 내용:</p>
-<p><code>XLOOKUP</code>은 찾을 열과 가져올 열을 따로 지정하니 열 번호를 셀 일이 없다. 최신 엑셀이라면 이쪽이 읽기 쉽고 덜 헷갈린다. 다만 회사마다 엑셀 버전이 제각각이라, 오늘은 VLOOKUP을 기본으로 익히고 XLOOKUP은 한 수 나은 대안으로만 알아 둔다.</p>
-<h2>매출 계산: 30-36분</h2>
+<p>같은 일을 <code>XLOOKUP</code>으로도 할 수 있습니다. <code>XLOOKUP</code>은 최신 엑셀에서 쓸 수 있는 찾기 함수입니다. <code>VLOOKUP</code>보다 읽기가 더 편한 편입니다.</p>
+<p>차이를 보겠습니다. <code>VLOOKUP</code>은 가져올 열을 숫자로 세야 합니다. 그래서 네 번째 열인지, 다섯 번째 열인지 사람이 직접 세어야 합니다. 반면 <code>XLOOKUP</code>은 찾을 열과 가져올 열을 따로 지정합니다. 여기서는 상품번호를 <code>products</code>의 A열에서 찾고, 단가는 D열에서 가져오라고 바로 말합니다.</p>
+<p>이 방식은 열 번호를 셀 필요가 없어서 실수를 줄이는 데 도움이 됩니다. 다만 회사마다 엑셀 버전이 다를 수 있습니다. 어떤 회사 파일은 아직 <code>XLOOKUP</code>을 지원하지 않을 수도 있습니다. 그래서 오늘은 <code>VLOOKUP</code>을 기본으로 익히고, <code>XLOOKUP</code>은 더 읽기 쉬운 대안으로 알아 둔다고 생각하면 됩니다.</p>
+<h2>주문별 매출 계산하기: 30-36분</h2>
 <p>시연 포인트:</p>
 <ol>
 <li>L2 셀에 매출 공식을 입력한다.</li>
@@ -889,15 +942,17 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 <div class="code-scroll"><pre><code class="language-excel">=I2*E2*(1-F2)
 </code></pre></div>
 <p>말할 내용:</p>
-<p>매출은 단가에 수량을 곱한 뒤 할인율을 반영한 값이다. 할인율이 5%면 고객은 정가의 95%를 낸다. 그래서 <code>1 - 할인율</code>을 곱한다.</p>
+<p>이제 매출을 계산해 보겠습니다. 매출은 단가에 수량을 곱한 뒤, 할인율을 반영한 값입니다. 단가가 있고 수량이 있으면 정가 기준 금액을 구할 수 있습니다. 여기에 할인을 빼야 실제 매출이 됩니다.</p>
+<p>할인율이 5%라면 고객은 정가의 95%를 냅니다. 그래서 <code>1 - 할인율</code>을 곱합니다. 키를 재듯이 하나씩 보면 됩니다. 단가가 얼마인지 보고, 몇 개 샀는지 보고, 할인이 얼마나 들어갔는지 본 다음, 세 값을 한 줄 공식으로 묶는 겁니다.</p>
 <p>확인할 값:</p>
 <ul>
 <li>L2: 22,900</li>
 <li>L3: 35,910</li>
 <li>L4: 105,800</li>
 </ul>
-<p>이 값이 어긋나면 십중팔구 단가를 가져온 열이 틀렸거나 수량 컬럼을 잘못 참조한 경우다. 이 데이터의 수량 컬럼은 <code>qty</code>이고 E열에 있다.</p>
-<h2>지역별 SUMIF/COUNTIF: 36-43분</h2>
+<p>이 값이 맞지 않으면 먼저 단가를 가져온 열을 확인하세요. 단가가 들어 있어야 할 I열에 다른 값이 들어가 있으면 매출이 달라집니다. 다음으로 수량 컬럼을 확인합니다. 이 데이터의 수량 컬럼은 <code>qty</code>이고 E열에 있습니다. 할인율은 F열입니다.</p>
+<p>처음 세 줄이 기준값과 맞으면, 그때 L열 전체를 채우면 됩니다. 계산이 많이 들어가는 작업일수록 처음 몇 줄 검산이 시간을 아껴 줍니다.</p>
+<h2>지역별 SUMIF/COUNTIF 집계하기: 36-43분</h2>
 <p>시연 포인트:</p>
 <ol>
 <li><code>region_summary</code> 시트를 만든다.</li>
@@ -913,7 +968,11 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 <div class="code-scroll"><pre><code class="language-excel">=C2/B2
 </code></pre></div>
 <p>말할 내용:</p>
-<p><code>SUMIF</code>는 조건에 맞는 값만 골라 더한다. 여기서는 J열 지역이 A2와 같은 행만 추려 L열 매출을 합친다. <code>COUNTIF</code>는 그 같은 조건의 주문 건수를 센다. 매출을 주문 건수로 나누면 객단가다.</p>
+<p>이제 지역별로 주문 건수와 매출을 구해 보겠습니다. 전체 매출 하나만 보는 것보다, 지역별로 나누어 보면 어느 지역에서 매출이 많이 나오는지 볼 수 있습니다.</p>
+<p>먼저 <code>region_summary</code> 시트를 만듭니다. 그리고 지역 목록을 만듭니다. 같은 지역이 여러 번 나오기 때문에 중복 제거를 해서 지역 이름이 한 번씩만 나오게 합니다. 이 목록이 집계표의 기준이 됩니다.</p>
+<p><code>COUNTIF</code>는 조건에 맞는 행의 개수를 세는 함수입니다. 여기서는 <code>orders</code> 시트의 J열, 즉 지역 열을 봅니다. J열의 지역이 A2에 적힌 지역과 같은 주문이 몇 건인지 세는 겁니다.</p>
+<p><code>SUMIF</code>는 조건에 맞는 값만 골라 더하는 함수입니다. 여기서도 조건은 지역입니다. J열의 지역이 A2와 같은 행만 골라서, L열에 있는 매출을 더합니다.</p>
+<p>객단가는 매출 합계를 주문 건수로 나눈 값입니다. 이 실습에서 객단가는 고객 한 명당 평균 구매액이 아니라, 주문 한 건당 평균 매출입니다. 주문 건수를 기준으로 나눈다는 점을 학생들이 헷갈리지 않게 짚어 주세요.</p>
 <p>검산 기준:</p>
 <ul>
 <li>주문 건수 합계: 20,000</li>
@@ -921,11 +980,14 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 <li>서울특별시 매출: 570,482,124</li>
 <li>경기도 매출: 530,726,511</li>
 </ul>
+<p>집계표를 만들고 나면 전체 주문 건수 합계가 20,000인지 확인합니다. 그리고 매출 합계가 1,938,489,803인지 확인합니다. 지역별 계산을 했더라도 전체를 다시 더했을 때 원래 전체와 맞아야 합니다. 이 검산은 저울의 영점을 맞추는 것처럼 중요합니다.</p>
 <h2>직접 해보기: 43-48분</h2>
 <p>미션:</p>
 <p>등급별 주문 건수, 매출 합계, 객단가를 구한다.</p>
 <p>힌트로만 말할 내용:</p>
-<p>지역별 집계에서는 조건 범위가 지역 열인 J열이었다. 이번엔 조건 범위만 등급 열인 K열로 바뀌고, 합계 범위는 여전히 매출 열인 L열이다.</p>
+<p>이제 같은 방법을 등급에 적용해 보세요. 지역별 집계에서는 조건 범위가 지역 열인 J열이었습니다. 등급별 집계에서는 조건 범위만 등급 열인 K열로 바뀝니다. 합계 범위는 그대로 매출 열인 L열입니다.</p>
+<p>새 시트를 만들고 <code>grade_summary</code>라는 이름을 붙입니다. 등급은 VIP, 골드, 실버, 브론즈입니다. 각 등급마다 주문 건수를 세고, 매출을 더하고, 매출 합계를 주문 건수로 나누면 객단가가 나옵니다.</p>
+<p>여기서는 공식을 바로 알려 주기보다, 지역별 집계에서 했던 구조를 떠올리게 해 주세요. 조건 범위가 무엇인지, 조건이 무엇인지, 합계 범위가 무엇인지 학생이 직접 말해 보게 하면 좋습니다.</p>
 <p>정답 기준:</p>
 <div class="table-scroll"><table>
 <thead>
@@ -963,33 +1025,36 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 </tr>
 </tbody>
 </table></div>
-<h2>정리: 48-50분</h2>
+<p>정답을 확인할 때는 숫자 하나만 보지 말고 흐름을 같이 봅니다. VIP는 주문 건수는 가장 많지 않지만 객단가가 가장 높습니다. 객단가가 높다는 말은 주문 한 건당 평균 매출이 높다는 뜻입니다.</p>
+<h2>마무리: 48-50분</h2>
 <p>말할 내용:</p>
-<p>오늘 한 일이 곧 데이터분석의 기본 흐름이다. 필요한 값을 여러 표에서 끌어와 한 표로 모으고, 매출이라는 계산 컬럼을 새로 만들고, 끝으로 조건별 합계와 건수를 구해 질문에 답했다.</p>
-<p>엑셀은 이 과정을 눈으로 좇으며 따라가기에 좋다. 그러나 함수가 불어나고 파일이 무거워지면 실수가 끼어들 자리도 그만큼 늘어난다. 그래서 다음부터는 같은 작업을 더 되풀이하기 쉽게 만드는 도구를 배운다.</p>
+<p>오늘 한 일은 데이터분석의 아주 기본적인 흐름입니다. 먼저 흩어진 정보를 한 표로 모았습니다. 상품번호로 단가를 찾아왔고, 고객번호로 지역과 등급을 찾아왔습니다. 그다음 매출이라는 새 계산 컬럼을 만들었습니다. 마지막으로 지역별, 등급별로 조건을 걸어 합계와 건수를 구했습니다.</p>
+<p>엑셀은 이 과정을 눈으로 따라가며 배우기에 좋습니다. 셀 하나에 공식이 있고, 그 공식이 아래로 채워지고, 결과가 표에 바로 보입니다. 그래서 처음 데이터분석을 배울 때는 아주 좋은 도구입니다.</p>
+<p>다만 함수가 많아지고 파일이 커지면 관리가 어려워집니다. 열 번호를 하나 잘못 세도 결과가 틀릴 수 있고, 같은 작업을 다음 달에 또 하려면 사람이 다시 반복해야 합니다. 그래서 이후 수업에서는 같은 분석을 더 되풀이하기 쉽고, 실수를 줄이기 쉬운 도구로도 해 보게 됩니다.</p>
 <h2>예상 질문과 답변</h2>
 <p>Q. 왜 <code>FALSE</code>를 꼭 넣어야 하나요?</p>
-<p>A. 고객번호와 상품번호는 정확히 같은 값을 찾아야 한다. <code>FALSE</code>를 빼면 엑셀이 비슷한 값을 찾는 방식으로 움직일 수 있고, 그러면 엉뚱한 값이 딸려 올 위험이 있다.</p>
+<p>A. 고객번호와 상품번호는 정확히 같은 값을 찾아야 합니다. <code>FALSE</code>를 빼면 엑셀이 비슷한 값을 찾는 방식으로 움직일 수 있습니다. 번호는 비슷하다고 맞는 것이 아닙니다. 사전에서 정확한 단어를 찾아야 뜻이 맞듯이, 상품번호와 고객번호도 정확히 일치해야 합니다.</p>
 <p>Q. VLOOKUP과 XLOOKUP 중 무엇을 쓰면 되나요?</p>
-<p>A. 회사 엑셀이 XLOOKUP을 지원하면 XLOOKUP이 읽기 편하다. 다만 VLOOKUP은 오래된 파일이나 조직에서도 여전히 흔하게 쓰이니, 읽고 고칠 줄은 알아야 한다.</p>
+<p>A. 회사 엑셀이 <code>XLOOKUP</code>을 지원한다면 <code>XLOOKUP</code>이 읽기 편합니다. 찾을 열과 가져올 열을 따로 지정하니 열 번호를 셀 필요가 적습니다. 다만 오래된 엑셀 파일이나 조직에서는 <code>VLOOKUP</code>이 여전히 많이 쓰입니다. 그래서 <code>VLOOKUP</code>은 읽고 고칠 줄 알아야 하고, 가능하면 <code>XLOOKUP</code>도 함께 알아 두면 좋습니다.</p>
 <p>Q. 숫자가 정답과 조금 다릅니다.</p>
-<p>A. 먼저 L열 매출 공식이 <code>=I2*E2*(1-F2)</code>인지 본다. 다음으로 I열 단가가 <code>products</code>의 네 번째 열인 <code>price</code>를 제대로 가져오는지 확인한다. 지역이나 등급별 집계라면 조건 범위와 합계 범위가 서로 다른 열을 가리키고 있어야 한다.</p>
+<p>A. 먼저 L열 매출 공식이 <code>=I2*E2*(1-F2)</code>인지 확인해 보세요. 다음으로 I열 단가가 <code>products</code>의 네 번째 열인 <code>price</code>를 제대로 가져오는지 봅니다. 지역이나 등급별 집계라면 조건 범위와 합계 범위도 확인해야 합니다. 조건 범위는 지역이나 등급이 있는 열이고, 합계 범위는 매출이 있는 열이어야 합니다.</p>
 <p>Q. 지역 목록은 꼭 중복 제거로 만들어야 하나요?</p>
-<p>A. 꼭 그렇진 않다. 다만 입문 단계에서는 눈으로 확인하기 쉬워 중복 제거를 쓴다. 최신 엑셀이라면 <code>=SORT(UNIQUE(orders!J2:J20001))</code>로도 만들 수 있다.</p>
+<p>A. 꼭 그렇지는 않습니다. 입문 단계에서는 눈으로 확인하기 쉬워서 중복 제거를 씁니다. 지역 이름을 한 번씩만 남겨 놓고, 그 목록을 기준으로 집계하면 구조가 잘 보입니다. 최신 엑셀이라면 <code>=SORT(UNIQUE(orders!J2:J20001))</code>로도 만들 수 있습니다.</p>
 <p>Q. 객단가는 고객 1명당 평균 구매액인가요?</p>
-<p>A. 이 실습에서 말하는 객단가는 주문 1건당 평균 매출이다. 고객 1명당 평균 구매액을 보려면 고객별로 먼저 묶는 계산이 따로 필요하다.</p>
+<p>A. 이 실습에서 말하는 객단가는 주문 1건당 평균 매출입니다. 주문 건수를 기준으로 나눈 값입니다. 고객 1명당 평균 구매액을 보려면 고객별로 먼저 묶는 계산이 따로 필요합니다. 기준이 주문인지 고객인지에 따라 숫자의 의미가 달라집니다.</p>
 <h2>완료 판단 체크포인트</h2>
-<p>수강생이 <code>orders</code>에 단가, 지역, 등급, 매출을 붙였고, <code>region_summary</code>의 주문 건수 합계가 20,000, 매출 합계가 1,938,489,803으로 나오며, <code>grade_summary</code>에서 VIP 객단가가 104,719.97원으로 잡히면 완료로 본다.</p>
+<p>수강생이 <code>orders</code>에 단가, 지역, 등급, 매출을 붙였는지 확인합니다. <code>region_summary</code>의 주문 건수 합계가 20,000이고, 매출 합계가 1,938,489,803이면 지역별 집계가 맞게 된 것입니다. <code>grade_summary</code>에서 VIP 객단가가 104,719.97원으로 나오면 등급별 집계까지 정상적으로 완료된 것으로 봅니다.</p>
 </section>
 <section class="tab-panel markdown-body" data-panel="answer" aria-label="모범답안">
 <h1>S04 모범답안: 등급별 객단가</h1>
-<h2>미션</h2>
-<p>고객 등급별로 주문 건수, 매출 합계, 객단가를 구한다.</p>
-<p>객단가는 이 실습에서 주문 1건당 평균 매출을 뜻한다.</p>
+<h2>미션 확인</h2>
+<p>고객 등급별로 주문 건수, 매출 합계, 객단가를 구합니다.</p>
+<p>객단가는 이 실습에서 주문 1건당 평균 매출을 뜻합니다. 손님 한 명이 아니라, 주문 한 건이 평균적으로 얼마의 매출을 만들었는지 보는 값입니다. 키를 잴 때 여러 사람의 키를 더한 뒤 사람 수로 나누듯이, 매출도 전체 매출을 주문 건수로 나누어 평균을 냅니다.</p>
 <div class="code-scroll"><pre><code class="language-text">객단가 = 매출 합계 ÷ 주문 건수
 </code></pre></div>
-<h2>전제</h2>
-<p><code>orders</code> 시트에 따라하기 결과가 이미 만들어져 있어야 한다.</p>
+<h2>풀이 전 확인</h2>
+<p>수업 홈의 데이터 받기 페이지에서 내려받은 쇼핑몰 주문 파일을 열고, <code>orders</code> 시트에 따라하기 결과가 이미 만들어져 있어야 합니다.</p>
+<p><code>orders</code> 시트에는 앞 실습에서 상품 단가, 고객 지역, 고객 등급, 주문별 매출을 붙여 두었습니다.</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -1016,11 +1081,13 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 </tr>
 </tbody>
 </table></div>
-<p>주문별 매출 공식은 다음과 같다.</p>
+<p>주문별 매출은 단가에 수량을 곱하고, 할인율만큼 빼서 계산합니다. 할인율이 10%라면 실제로는 90%만 매출로 잡히는 식입니다.</p>
+<p>주문별 매출 공식은 다음과 같습니다.</p>
 <div class="code-scroll"><pre><code class="language-excel">=I2*E2*(1-F2)
 </code></pre></div>
-<h2>엑셀 풀이</h2>
-<p>새 시트 <code>grade_summary</code>를 만들고 A1:D1에 다음 제목을 입력한다.</p>
+<h2>엑셀로 푸는 방법</h2>
+<p>새 시트 <code>grade_summary</code>를 만듭니다. 이 시트는 등급별 결과만 따로 모아 보는 요약표입니다.</p>
+<p>A1:D1에 다음 제목을 입력해 보세요.</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -1047,22 +1114,22 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 </tr>
 </tbody>
 </table></div>
-<p>A2:A5에는 등급을 입력한다.</p>
+<p>A2:A5에는 등급을 직접 입력합니다. 등급 이름을 먼저 적어 두고, 엑셀 함수가 각 등급에 맞는 주문만 찾아 계산하게 만드는 방식입니다.</p>
 <div class="code-scroll"><pre><code class="language-text">VIP
 골드
 실버
 브론즈
 </code></pre></div>
-<p>B2 셀:</p>
+<p>B2 셀에는 VIP 주문이 몇 건인지 세는 공식을 입력합니다. <code>COUNTIF</code>는 조건에 맞는 행의 개수를 세는 함수입니다. 여기서는 <code>orders</code> 시트의 K열에서 A2에 적힌 등급, 즉 VIP와 같은 값을 찾습니다.</p>
 <div class="code-scroll"><pre><code class="language-excel">=COUNTIF(orders!$K$2:$K$20001,A2)
 </code></pre></div>
-<p>C2 셀:</p>
+<p>C2 셀에는 VIP의 매출 합계를 구하는 공식을 입력합니다. <code>SUMIF</code>는 조건에 맞는 행의 값을 더하는 함수입니다. K열에서 VIP인 주문만 찾고, 그 주문들의 L열 매출을 더합니다.</p>
 <div class="code-scroll"><pre><code class="language-excel">=SUMIF(orders!$K$2:$K$20001,A2,orders!$L$2:$L$20001)
 </code></pre></div>
-<p>D2 셀:</p>
+<p>D2 셀에는 객단가를 계산합니다. 이미 C2에 매출 합계가 있고 B2에 주문 건수가 있으니, 매출 합계를 주문 건수로 나누면 됩니다.</p>
 <div class="code-scroll"><pre><code class="language-excel">=C2/B2
 </code></pre></div>
-<p>B2:D2를 5행까지 채운다.</p>
+<p>B2:D2를 5행까지 채워 보세요. 그러면 골드, 실버, 브론즈도 같은 방식으로 계산됩니다. 공식 안의 <code>A2</code>가 아래로 내려가면서 <code>A3</code>, <code>A4</code>, <code>A5</code>로 바뀌기 때문에 각 등급에 맞는 결과가 나옵니다.</p>
 <h2>정답</h2>
 <div class="table-scroll"><table>
 <thead>
@@ -1100,8 +1167,10 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 </tr>
 </tbody>
 </table></div>
-<p>해석: 네 등급 중 주문 1건당 평균 매출이 가장 높은 등급은 VIP다. VIP의 객단가는 104,719.97원이고, 브론즈의 객단가 88,787.10원보다 높다.</p>
-<h2>검산값</h2>
+<p>여기서 뭐가 보이시나요? 네 등급 중 주문 1건당 평균 매출이 가장 높은 등급은 VIP입니다. VIP의 객단가는 104,719.97원이고, 브론즈의 객단가 88,787.10원보다 높습니다.</p>
+<p>주문 건수만 보면 실버가 6,373건으로 가장 많습니다. 하지만 객단가는 VIP가 가장 높습니다. 그래서 “많이 주문한 등급”과 “주문 1건당 매출이 큰 등급”은 다를 수 있습니다.</p>
+<h2>검산값 확인</h2>
+<p>계산이 맞는지 확인할 때는 전체 합계와 맞춰 봅니다. 저울의 눈금을 확인하듯이, 등급별로 나눈 값들을 다시 더했을 때 전체 값과 같아야 합니다.</p>
 <div class="table-scroll"><table>
 <thead>
 <tr>
@@ -1124,9 +1193,9 @@ footer.site-footer a:hover{ color: var(--ink-subtle); }
 </tr>
 </tbody>
 </table></div>
-<p>등급별 주문 건수 합계와 매출 합계가 위 검산값과 일치해야 한다.</p>
+<p>등급별 주문 건수 합계와 매출 합계가 위 검산값과 일치해야 합니다. 주문 건수는 3,757 + 5,433 + 6,373 + 4,437을 더했을 때 20,000이 되어야 하고, 매출 합계도 네 등급의 <code>total_sales</code>를 더했을 때 1,938,489,803이 되어야 합니다.</p>
 <h2>강사용 검증 코드</h2>
-<p>아래 코드는 엑셀 풀이와 같은 계산을 pandas로 재현해 검산한 코드다. 이 차시는 엑셀 함수 차시이므로 수강생 실습용 코드는 엑셀 공식이며, 별도 <code>S04_code.py</code> 산출물은 만들지 않는다.</p>
+<p>아래 코드는 엑셀 풀이와 같은 계산을 pandas로 재현해 검산한 코드입니다. pandas는 표 데이터를 다루는 파이썬 도구입니다. 이 차시는 엑셀 함수 차시이므로 수강생은 위의 엑셀 공식으로 실습하면 됩니다. 별도 <code>S04_code.py</code> 산출물은 만들지 않습니다.</p>
 <div class="code-scroll"><pre><code class="language-python">import pandas as pd
 from pathlib import Path
 
@@ -1163,7 +1232,7 @@ print(answer.to_string(index=False, float_format=lambda x: f&quot;{x:.2f}&quot;)
 print(&quot;orders&quot;, len(merged))
 print(&quot;total_sales&quot;, f&quot;{merged['sales'].sum():.2f}&quot;)
 </code></pre></div>
-<p>실행 확인 결과:</p>
+<p>실행 확인 결과는 아래와 같습니다. 엑셀에서 계산한 표와 같은 값이 나와야 합니다.</p>
 <div class="code-scroll"><pre><code class="language-text">grade  order_count  total_sales  avg_order_value
   VIP         3757 393432930.00        104719.97
    골드         5433 547524985.00        100777.65

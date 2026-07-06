@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>수업 데이터 내려받기 · 데이터 리터러시 with AI</title>
+<meta name="description" content="수업에서 쓰는 예제 데이터를 엑셀·CSV로 내려받습니다. CSV가 무엇인지도 쉽게 설명합니다." />
+<style>
+  :root{
+    --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a;
+    --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+    --primary:#5e6ad2; --primary-hover:#828fff; --hairline:#23252a; --hairline-strong:#34343a; --success:#27a644;
+    --font-display:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;
+    --font-text:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+    --font-mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --radius:12px; --container:960px;
+  }
+  *,*::before,*::after{box-sizing:border-box;}
+  html{background:var(--canvas);scroll-behavior:smooth;}
+  body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font-text);
+    font-size:16px;line-height:1.6;letter-spacing:-0.1px;-webkit-font-smoothing:antialiased;}
+  a{color:inherit;text-decoration:none;}
+  .container{max-width:var(--container);margin:0 auto;padding:0 24px;}
+  .top-nav{position:sticky;top:0;z-index:20;border-bottom:1px solid var(--hairline);
+    background:rgba(1,1,2,0.82);backdrop-filter:blur(10px);}
+  .top-nav .container{display:flex;align-items:center;justify-content:space-between;height:60px;}
+  .brand{display:flex;align-items:center;gap:9px;font-weight:600;font-size:15px;}
+  .brand-mark{width:20px;height:20px;border-radius:6px;background:var(--primary);position:relative;}
+  .brand-mark::after{content:"";position:absolute;inset:6px;border-radius:2px;background:rgba(255,255,255,0.85);}
+  .back-link{font-size:14px;color:var(--ink-subtle);}
+  .back-link:hover{color:var(--ink);}
+  header.hero{padding:72px 0 40px;
+    background:radial-gradient(ellipse 50% 40% at 80% 10%,rgba(94,106,210,0.16),transparent 60%);}
+  .eyebrow{font-family:var(--font-mono);font-size:13px;letter-spacing:1px;text-transform:uppercase;
+    color:var(--primary-hover);margin-bottom:16px;}
+  h1{font-family:var(--font-display);font-size:clamp(30px,5vw,46px);font-weight:640;
+    line-height:1.08;letter-spacing:-1.4px;margin:0 0 16px;}
+  .lead{color:var(--ink-muted);font-size:18px;max-width:60ch;}
+  section{padding:28px 0;}
+  h2{font-family:var(--font-display);font-size:clamp(22px,3vw,28px);font-weight:620;
+    letter-spacing:-0.6px;margin:0 0 8px;}
+  .explainer{border:1px solid var(--hairline);background:var(--surface-1);border-radius:var(--radius);
+    padding:22px 26px;margin-bottom:12px;}
+  .explainer h2{margin-bottom:12px;}
+  .explainer p{color:var(--ink-muted);margin:0 0 10px;}
+  .explainer p:last-child{margin-bottom:0;}
+  .explainer b{color:var(--ink);}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:20px;}
+  @media (max-width:720px){.grid{grid-template-columns:1fr;}}
+  .card{border:1px solid var(--hairline);background:var(--surface-1);border-radius:var(--radius);
+    padding:22px 24px;display:flex;flex-direction:column;}
+  .card .tag{font-family:var(--font-mono);font-size:12px;color:var(--ink-subtle);
+    text-transform:uppercase;letter-spacing:0.6px;margin-bottom:10px;}
+  .card h3{font-size:19px;font-weight:620;margin:0 0 8px;letter-spacing:-0.4px;}
+  .card .desc{color:var(--ink-muted);font-size:14.5px;line-height:1.6;flex:1;margin-bottom:8px;}
+  .card .uses{color:var(--ink-tertiary);font-size:13px;font-family:var(--font-mono);margin-bottom:16px;}
+  .btns{display:flex;flex-wrap:wrap;gap:10px;}
+  .btn{display:inline-flex;align-items:center;gap:7px;border-radius:8px;font-size:14px;font-weight:560;
+    padding:9px 15px;transition:border-color .15s,background-color .15s,color .15s;border:1px solid var(--hairline-strong);}
+  .btn.primary{background:var(--primary);border-color:var(--primary);color:#fff;}
+  .btn.primary:hover{background:var(--primary-hover);border-color:var(--primary-hover);}
+  .btn.ghost{background:var(--surface-2);color:var(--ink-muted);}
+  .btn.ghost:hover{border-color:var(--primary);color:var(--ink);}
+  .btn .ico{font-family:var(--font-mono);font-size:12px;opacity:0.85;}
+  .note-box{border-left:3px solid var(--primary);background:var(--surface-1);border-radius:0 10px 10px 0;
+    padding:16px 20px;color:var(--ink-muted);font-size:14.5px;margin-top:16px;}
+  .note-box b{color:var(--ink);}
+  .src-list{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+  .src-list a{border:1px solid var(--hairline-strong);border-radius:8px;padding:8px 14px;
+    font-size:14px;color:var(--ink-muted);background:var(--surface-1);}
+  .src-list a:hover{border-color:var(--primary);color:var(--ink);}
+  footer{border-top:1px solid var(--hairline);margin-top:32px;padding:28px 0 48px;
+    color:var(--ink-tertiary);font-size:13px;}
+</style>
+</head>
+<body>
+<nav class="top-nav">
+  <div class="container">
+    <div class="brand"><span class="brand-mark"></span>데이터 리터러시 with AI</div>
+    <a class="back-link" href="./index.html">&larr; 수업 홈으로</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="container">
+    <div class="eyebrow">수업 데이터 내려받기</div>
+    <h1>실습 파일을 여기서 받으세요</h1>
+    <p class="lead">수업에서 쓰는 예제 데이터를 정리해 두었습니다. 엑셀로 바로 열리는 파일을 받아 그대로 따라 하시면 됩니다.</p>
+  </div>
+</header>
+
+<section class="container">
+  <div class="explainer">
+    <h2>CSV가 무엇인가요?</h2>
+    <p><b>CSV는 엑셀로도 열리는 표 파일</b>입니다. 이름이 낯설 뿐, 열어 보면 평소 보던 엑셀 표와 똑같습니다. 값들이 쉼표로 나뉘어 저장된다고 해서 붙은 이름입니다.</p>
+    <p>수업에서는 같은 데이터를 두 가지 형식으로 드립니다. <b>엑셀 파일(.xlsx)</b>은 더블클릭하면 엑셀에서 바로 열립니다. <b>CSV 파일(.csv)</b>은 파이썬 파트에서 코드로 불러올 때 씁니다. 처음에는 엑셀 파일만 받아도 충분합니다.</p>
+    <p>내려받은 파일은 한 폴더에 모아 두세요. 수업 자료가 이 파일들을 찾아 씁니다.</p>
+  </div>
+</section>
+
+<section class="container">
+  <h2>예제 데이터 (바로 내려받기)</h2>
+  <p class="lead" style="font-size:15px;">아래 데이터는 수업용으로 직접 만든 가상 데이터라 마음껏 받아 연습하셔도 됩니다.</p>
+  <div class="grid" id="datasets"></div>
+</section>
+
+<section class="container">
+  <h2>수업에 나오는 실제 공공데이터</h2>
+  <div class="explainer">
+    <p>수업 뒷부분에서는 한국의 진짜 공공데이터도 다룹니다. 이 자료들은 <b>각 기관이 배포 조건을 두고 있어 이 페이지에서 직접 나눠 드리지 않습니다.</b> 대신 원본을 받을 수 있는 곳을 안내합니다. 강사가 수업 중에 정리본을 따로 배포합니다.</p>
+    <div class="src-list">
+      <a href="https://data.seoul.go.kr" target="_blank" rel="noopener">서울 열린데이터광장 &nearr;</a>
+      <a href="https://www.data.go.kr" target="_blank" rel="noopener">공공데이터포털 &nearr;</a>
+      <a href="https://kosis.kr" target="_blank" rel="noopener">국가통계포털 KOSIS &nearr;</a>
+      <a href="https://rtdown.molit.go.kr" target="_blank" rel="noopener">국토부 실거래가 &nearr;</a>
+    </div>
+  </div>
+  <div class="note-box">전체 파일을 한 번에 받고 싶다면 <b><a href="https://github.com/kimsh-1/data-literacy-with-ai" target="_blank" rel="noopener" style="color:var(--primary-hover);">수업 자료 저장소</a></b>에서 초록색 <b>Code</b> 버튼을 누르고 <b>Download ZIP</b>을 고르면 예제 파일이 한꺼번에 받아집니다.</div>
+</section>
+
+<footer>
+  <div class="container">데이터 리터러시 with AI · 예제 데이터는 수업용 가상 데이터입니다.</div>
+</footer>
+
+<script>
+  var REPO = "https://github.com/kimsh-1/data-literacy-with-ai/raw/main/02_datasets/";
+  var DATA = [
+    {tag:"카페 매출", name:"카페 주문 데이터", dir:"cafe_sales",
+     desc:"카페 두 지점의 반년치 주문 기록입니다. 지점별·메뉴별·시간대별 매출을 보는 대부분의 실습에서 씁니다. 일부러 오류를 섞은 정제 연습용 파일도 함께 있습니다.",
+     uses:"S01~S09 대부분",
+     files:[["엑셀 파일 받기","cafe_sales_clean.xlsx","primary"],["CSV 받기","cafe_sales_clean.csv","ghost"],["오류 섞인 연습용","cafe_sales_dirty.xlsx","ghost"]]},
+    {tag:"직원·부서", name:"직원 인사 데이터", dir:"hr_employees",
+     desc:"부서별 직원 정보입니다. 평균과 분포를 읽고, 전체 경향과 그룹별 경향이 뒤집히는 심슨의 역설을 확인하는 통계 실습에 씁니다.",
+     uses:"S05~S06 통계",
+     files:[["엑셀 파일 받기","hr_employees_clean.xlsx","primary"],["CSV 받기","hr_employees_clean.csv","ghost"]]},
+    {tag:"쇼핑몰 3표", name:"쇼핑몰 주문 데이터", dir:"shop_orders",
+     desc:"주문·고객·상품 세 장의 표로 나뉜 데이터입니다. 여러 표를 열쇠로 이어 붙이는 VLOOKUP과 데이터 모델링 실습에 씁니다.",
+     uses:"S04 함수 · BI 모델링",
+     files:[["엑셀 파일 받기","shop_orders_clean.xlsx","primary"],["주문표 CSV","orders.csv","ghost"],["고객표 CSV","customers.csv","ghost"],["상품표 CSV","products.csv","ghost"]]},
+    {tag:"설문 응답", name:"설문 응답 데이터", dir:"survey_responses",
+     desc:"만족도 설문 응답 기록입니다. 숫자로 답한 값과 보기로 답한 값의 차이(척도)를 이해하는 실습에 씁니다.",
+     uses:"S02 데이터의 모양",
+     files:[["엑셀 파일 받기","survey_responses_clean.xlsx","primary"],["CSV 받기","survey_responses_clean.csv","ghost"]]}
+  ];
+  var el = document.getElementById("datasets");
+  el.innerHTML = DATA.map(function(d){
+    var btns = d.files.map(function(f){
+      return '<a class="btn '+f[2]+'" href="'+REPO+d.dir+'/'+f[1]+'" download><span class="ico">&darr;</span>'+f[0]+'</a>';
+    }).join("");
+    return '<div class="card"><div class="tag">'+d.tag+'</div><h3>'+d.name+'</h3>'+
+      '<div class="desc">'+d.desc+'</div><div class="uses">'+d.uses+'</div>'+
+      '<div class="btns">'+btns+'</div></div>';
+  }).join("");
+</script>
+</body>
+</html>

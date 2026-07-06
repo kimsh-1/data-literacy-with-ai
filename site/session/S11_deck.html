@@ -100,6 +100,22 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 .img-box .lbl{position:absolute;top:-1.9em;left:-2px;white-space:nowrap;
   background:var(--primary);color:#fff;font-size:0.8rem;font-weight:600;
   padding:2px 8px;border-radius:6px;}
+/* --- 공냥 설명 블록(초보자용 설명) --- */
+.explain{margin-top:1.4rem;max-width:66ch;color:var(--ink-muted);
+  font-size:clamp(1.02rem,1.45vw,1.32rem);line-height:1.68;letter-spacing:-0.1px;}
+.explain p{margin:0 0 0.7rem;}
+.explain p:last-child{margin-bottom:0;}
+.explain b{color:var(--ink);font-weight:640;}
+.explain .term{color:var(--primary-hover);font-weight:560;
+  border-bottom:1px dashed var(--hairline-strong);cursor:help;}
+/* 설명이 붙는 시각 슬라이드는 시각 높이를 제한해 설명 공간 확보 */
+.slide.has-explain .viz svg{max-height:38vh;}
+.slide.has-explain .img-wrap{max-width:64ch;}
+.slide.has-explain .img-wrap img{max-height:40vh;object-fit:contain;}
+.slide-note .slide-inner{max-width:70ch;}
+.slide-note .explain{font-size:clamp(1.08rem,1.6vw,1.44rem);margin-top:1.6rem;}
+.cont-tag{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:1px;
+  color:var(--ink-tertiary);text-transform:uppercase;margin-left:0.6rem;}
 /* chrome */
 .progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
 .hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
@@ -129,7 +145,7 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <div class="progress"></div>
 <div class="brand">데이터 리터러시 with AI</div>
 <div class="hud">
-  <span class="counter"><span class="cur">1</span> / 14</span>
+  <span class="counter"><span class="cur">1</span> / 18</span>
   <a class="back" href="./S11.html">자료로 돌아가기</a>
 </div>
 <div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
@@ -142,41 +158,47 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <li>CSV의 행 수와 열 구조를 확인한다</li>
 <li>불리언 마스크로 행을 필터링한다</li>
 <li>금액 기준으로 결과를 정렬한다</li></ul></div></section>
-<section id="s3" class="slide slide-image"><div class="slide-inner"><h2>파이썬에서 표를 다룬다</h2>
+<section id="s3" class="slide slide-image has-explain"><div class="slide-inner"><h2>파이썬에서 표를 다룬다</h2>
 <div class="img-wrap"><img src="../images/deck/python.png" alt="파이썬으로 CSV 표 데이터를 다루는 파트 이미지"/></div>
-<div class="viz-cap">오늘은 문법을 표 분석으로 연결한다.</div></div></section>
-<section id="s4" class="slide slide-transform"><div class="slide-inner"><h2>표 전체와 열 하나를 구분한다</h2>
+<div class="viz-cap">오늘은 문법을 표 분석으로 연결한다.</div><div class="explain"><p>파이썬을 표 분석에 쓰는 순간입니다. 지난 시간에는 변수나 조건문처럼 작은 부품을 배웠다면, 여기서는 그 부품으로 실제 카페 매출 표를 열어 봅니다.</p><p>CSV는 엑셀로도 열리는 표 파일입니다. pandas는 그 표를 파이썬 안으로 가져와서 행과 열을 확인하고, 원하는 조건의 주문만 남기게 해 주는 도구라고 보면 됩니다.</p><p>오늘 화면에서 봐야 할 흐름은 표를 읽고, 표 모양을 확인하고, 엑셀 필터처럼 조건에 맞는 행만 남기는 흐름입니다.</p></div></div></section>
+<section id="s4" class="slide slide-transform has-explain"><div class="slide-inner"><h2>표 전체와 열 하나를 구분한다</h2>
 <div class="xform"><div class="xform-card"><div class="xf-label">DataFrame</div><div class="xf-row"><span class="k">형태</span><span class="v">표 전체</span></div><div class="xf-row changed"><span class="k">크기</span><span class="v">10,424행 x 12열</span></div><div class="xf-row"><span class="k">엑셀 감각</span><span class="v">시트</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">Series</div><div class="xf-row"><span class="k">형태</span><span class="v">열 하나</span></div><div class="xf-row changed"><span class="k">길이</span><span class="v">10,424</span></div><div class="xf-row"><span class="k">대상</span><span class="v">amount</span></div></div></div>
-<div class="result-line"><span class="lead">결과</span>DataFrame에서 한 열을 꺼내면 <b>Series</b>가 된다.</div></div></section>
-<section id="s5" class="slide slide-table"><div class="slide-inner"><h2>CSV를 읽은 뒤 먼저 점검한다</h2>
-<table class="deck-table"><thead><tr><th>도구</th><th>보는 것</th><th>의미</th></tr></thead><tbody><tr><td>shape</td><td>행·열 개수</td><td>10,424 x 12</td></tr><tr><td>columns</td><td>열 이름</td><td>머리글 확인</td></tr><tr><td>head</td><td>앞쪽 행</td><td>파일 열림 확인</td></tr><tr><td>info</td><td>타입·빈칸</td><td>구조 점검</td></tr><tr><td>describe</td><td>숫자 요약</td><td>범위 확인</td></tr></tbody></table>
-<p class="note">CSV를 읽은 뒤 바로 분석하지 않는다.</p></div></section>
-<section id="s6" class="slide slide-chart"><div class="slide-inner"><h2>주문 금액 범위를 먼저 확인한다</h2>
+<div class="result-line"><span class="lead">결과</span>DataFrame에서 한 열을 꺼내면 <b>Series</b>가 된다.</div><div class="explain"><p>왼쪽의 DataFrame은 표 전체입니다. 엑셀로 치면 시트 한 장 전체를 보는 느낌이고, 이 수업의 카페 매출 표는 10,424행 x 12열로 되어 있습니다.</p><p>오른쪽의 Series는 그 표에서 열 하나만 꺼낸 것입니다. 여기서는 amount, 즉 주문 금액 열 하나를 꺼냈기 때문에 길이가 10,424입니다. 행마다 주문 금액이 하나씩 들어 있으니 전체 행수와 길이가 같습니다.</p><p>표 전체와 열 하나를 구분하는 감각이 중요합니다. 냉장고 전체를 보는 것과 그 안의 음료 칸만 꺼내 보는 것이 다르듯이, DataFrame은 전체 표이고 Series는 그 안의 한 열입니다.</p></div></div></section>
+<section id="s5" class="slide slide-table has-explain"><div class="slide-inner"><h2>표 파일은 먼저 점검한다</h2>
+<table class="deck-table"><thead><tr><th>도구</th><th>보는 것</th><th>의미</th></tr></thead><tbody><tr><td>shape</td><td>행·열 개수</td><td>10,424 x 12</td></tr><tr><td>columns</td><td>열 이름</td><td>머리글 확인</td></tr><tr><td>head</td><td>앞쪽 행</td><td>파일 열림 확인</td></tr></tbody></table>
+<p class="note">표 파일을 연 뒤 바로 분석하지 않는다.</p><div class="explain"><p>표 파일을 열었다고 바로 분석을 시작하면 위험합니다. 엑셀 파일을 받았을 때도 먼저 시트가 제대로 열렸는지, 열 제목이 맞는지, 빈칸이 이상하게 섞였는지 훑어보죠. pandas에서도 같은 일을 먼저 합니다.</p><p>shape는 표의 크기를 봅니다. 여기서는 10,424 x 12니까 주문 기록이 10,424행 있고, 열이 12개 있다는 뜻입니다. columns는 머리글을 확인하는 도구라서 어떤 열 이름들이 있는지 봅니다.</p><p>head는 앞쪽 몇 행을 눈으로 보는 기능입니다. info는 열마다 숫자인지 글자인지, 빈칸이 있는지 보는 점검표이고, describe는 숫자 열의 평균, 최소, 최대 같은 범위를 빠르게 보는 도구입니다.</p><p>이 표는 분석 결과표라기보다 출발 전 안전 점검표입니다. 차를 몰기 전에 계기판을 보듯이, 표를 분석하기 전에 이 다섯 가지로 표 상태를 확인해 보세요.</p></div></div></section>
+<section id="s6" class="slide slide-table"><div class="slide-inner"><h2>표 파일은 먼저 점검한다 (이어서)</h2>
+<table class="deck-table"><thead><tr><th>도구</th><th>보는 것</th><th>의미</th></tr></thead><tbody><tr><td>info</td><td>타입·빈칸</td><td>구조 점검</td></tr><tr><td>describe</td><td>숫자 요약</td><td>범위 확인</td></tr></tbody></table></div></section>
+<section id="s7" class="slide slide-chart has-explain"><div class="slide-inner"><h2>주문 금액 범위를 먼저 확인한다</h2>
 <div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="122" y="344" width="150" height="54" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="197" y="332" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3,000원</text><text x="197" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">최소</text><rect x="435" y="241" width="150" height="157" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="229" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">8681.17원</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">평균</text><rect x="748" y="46" width="150" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="823" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">19,500원</text><text x="823" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">최대</text><line x1="133" y1="88" x2="823" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="823" cy="40" r="4" fill="#828fff"/><rect x="48" y="46" width="170" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="133" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">최대 19,500원</text></svg></div>
-<div class="result-line"><span class="lead">결과</span>주문 금액은 <b>3,000원~19,500원</b> 범위다.</div></div></section>
-<section id="s7" class="slide slide-chart"><div class="slide-inner"><h2>강남점 행 수가 더 많다</h2>
+<div class="result-line"><span class="lead">결과</span>주문 금액은 <b>3,000원~19,500원</b> 범위다.</div><div class="explain"><p>이 막대그래프는 주문 한 건의 금액이 어느 정도 범위에 있는지 보여줍니다. 왼쪽은 가장 작은 주문 금액 3,000원, 가운데는 평균 주문 금액 8,681.17원, 오른쪽은 가장 큰 주문 금액 19,500원입니다.</p><p>볼 때는 오른쪽 끝의 최대값과 왼쪽 끝의 최소값을 먼저 보세요. 저울에 올려서 가장 가벼운 값과 가장 무거운 값을 재는 것처럼, 데이터의 양끝을 확인하는 일입니다.</p></div></div></section>
+<section id="s8" class="slide slide-note"><div class="slide-inner"><h2>주문 금액 범위를 먼저 확인한다<span class="cont-tag">이어서</span></h2><div class="explain"><p>그래서 이 표의 주문 금액은 3,000원보다 작거나 19,500원보다 큰 값이 없다고 이해하면 됩니다. 만약 1,000,000원 같은 값이 끼어 있었다면 입력 오류인지 확인해야겠지만, 여기서는 카페 주문 금액으로 자연스러운 범위입니다.</p></div></div></section>
+<section id="s9" class="slide slide-chart has-explain"><div class="slide-inner"><h2>강남점 행 수가 더 많다</h2>
 <div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="200" y="46" width="150" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="275" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">6,196행</text><text x="275" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">강남점</text><rect x="670" y="158" width="150" height="240" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="745" y="146" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">4,228행</text><text x="745" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">홍대점</text><line x1="887" y1="88" x2="275" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="275" cy="40" r="4" fill="#828fff"/><rect x="802" y="46" width="170" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="887" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">강남점 6,196행</text></svg></div>
-<div class="result-line"><span class="lead">결과</span>강남점이 <b>6,196행</b>으로 가장 많다.</div></div></section>
-<section id="s8" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<div class="result-line"><span class="lead">결과</span>강남점이 <b>6,196행</b>으로 가장 많다.</div><div class="explain"><p>이 막대그래프는 지점별로 주문 기록이 몇 행 있는지 세어 본 그림입니다. 강남점은 6,196행, 홍대점은 4,228행입니다.</p><p>막대의 높이는 매출액이 아니라 행 수입니다. 행 수는 주문 기록의 개수라고 보면 됩니다. 강남점 막대가 더 높다는 말은 강남점 주문 기록이 홍대점보다 더 많이 들어 있다는 뜻입니다.</p><p>여기서 바로 강남점 매출이 더 크다고 단정하지는 않습니다. 지금 확인한 것은 금액 합계가 아니라 주문 기록 개수입니다. 금액을 보려면 amount를 더해서 따로 계산해야 합니다.</p></div></div></section>
+<section id="s10" class="slide slide-concept has-explain"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
 <h2>필터는 먼저 조건을 만든다</h2>
-<p class="body">store가 강남점인지 행마다 판단해 결과를 True와 False로 만든다.</p>
+<p class="body">지점 열이 강남점인지 행마다 판단해 결과를 True와 False로 만든다.</p>
 <ul class="bullets"><li>True인 행만 loc로 남긴다</li>
-<li>여러 조건은 괄호와 &amp;로 연결한다</li></ul></div></section>
-<section id="s9" class="slide slide-transform"><div class="slide-inner"><h2>마스크로 행을 줄인다</h2>
+<li>여러 조건은 괄호와 &amp;로 연결한다</li></ul><div class="explain"><p>pandas에서 필터는 바로 행을 지우는 일이 아닙니다. 먼저 각 행에게 질문을 던집니다. 이 주문은 강남점 주문인가요? 맞으면 True, 아니면 False가 됩니다.</p><p>이렇게 True와 False로 길게 만들어진 열을 불리언 마스크라고 부릅니다. 불리언은 참과 거짓이라는 뜻이고, 마스크는 조건에 맞는 행만 통과시키는 체라고 생각하면 됩니다.</p><p>loc는 그 마스크를 보고 True인 행만 남깁니다. 엑셀 필터에서 강남점만 체크하면 강남점 행만 보이는 것과 같은 원리입니다.</p><p>조건이 여러 개일 때는 각 조건을 괄호로 감싸고 &amp;로 이어 주세요. 강남점이면서 커피이고 금액이 10,000원 이상인 주문처럼, 여러 체를 차례로 통과시키는 느낌입니다.</p></div></div></section>
+<section id="s11" class="slide slide-transform has-explain"><div class="slide-inner"><h2>조건에 맞는 행만 남긴다</h2>
 <div class="xform"><div class="xform-card"><div class="xf-label">조건 적용 전</div><div class="xf-row changed"><span class="k">행수</span><span class="v">10,424</span></div><div class="xf-row"><span class="k">지점</span><span class="v">강남점·홍대점</span></div><div class="xf-row"><span class="k">상태</span><span class="v">전체 DataFrame</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">강남점 필터 후</div><div class="xf-row changed"><span class="k">행수</span><span class="v">6,196</span></div><div class="xf-row"><span class="k">지점</span><span class="v">강남점</span></div><div class="xf-row"><span class="k">상태</span><span class="v">True 행만 남김</span></div></div></div>
-<div class="result-line"><span class="lead">결과</span>불리언 마스크를 적용하면 <b>강남점 6,196행</b>만 남는다.</div></div></section>
-<section id="s10" class="slide slide-chart"><div class="slide-inner"><h2>조건이 늘면 행이 줄어든다</h2>
+<div class="result-line"><span class="lead">결과</span>불리언 마스크를 적용하면 <b>강남점 6,196행</b>만 남는다.</div><div class="explain"><p>왼쪽은 필터를 걸기 전 전체 표입니다. 행이 10,424개 있고, 지점에는 강남점과 홍대점이 함께 들어 있습니다.</p><p>오른쪽은 강남점인지 묻는 조건을 적용한 뒤입니다. True로 표시된 강남점 행만 남아서 6,196행이 되었습니다.</p><p>홍대점 데이터가 원본에서 사라진 것은 아닙니다. 원본 표는 그대로 두고, 강남점 조건에 맞는 행만 따로 꺼내 본 결과라고 이해하면 됩니다.</p><p>엑셀에서 필터를 걸면 화면에 보이는 행이 줄어드는 것과 같습니다. pandas에서는 그 일을 불리언 마스크와 loc가 나누어 맡습니다.</p></div></div></section>
+<section id="s12" class="slide slide-chart has-explain"><div class="slide-inner"><h2>조건이 늘면 행이 줄어든다</h2>
 <div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="122" y="46" width="150" height="352" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="197" y="34" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">10,424행</text><text x="197" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">전체</text><rect x="435" y="189" width="150" height="209" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="177" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">6,196행</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">강남점</text><rect x="748" y="352" width="150" height="46" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="823" y="340" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">1,362행</text><text x="823" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">미션</text><line x1="103" y1="88" x2="823" y2="346" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="823" cy="346" r="4" fill="#828fff"/><rect x="48" y="46" width="110" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="103" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">1,362행</text></svg></div>
-<div class="result-line"><span class="lead">결과</span>세 조건을 모두 적용하면 <b>1,362행</b>만 남는다.</div></div></section>
-<section id="s11" class="slide slide-transform"><div class="slide-inner"><h2>미션 결과가 숫자로 요약된다</h2>
+<div class="result-line"><span class="lead">결과</span>세 조건을 모두 적용하면 <b>1,362행</b>만 남는다.</div><div class="explain"><p>이 그래프는 조건을 하나씩 더 붙일수록 남는 행이 어떻게 줄어드는지 보여줍니다. 전체 표는 10,424행이고, 강남점만 남기면 6,196행이 됩니다.</p><p>미션 조건은 여기서 한 번 더 좁힌 결과입니다. 강남점이면서, 카테고리가 커피이고, 주문 금액이 10,000원 이상인 행만 남기면 1,362행이 됩니다.</p></div></div></section>
+<section id="s13" class="slide slide-note"><div class="slide-inner"><h2>조건이 늘면 행이 줄어든다<span class="cont-tag">이어서</span></h2><div class="explain"><p>막대가 줄어드는 것은 데이터가 잘못된 것이 아니라 조건이 더 까다로워졌다는 뜻입니다. 체에 구멍을 더 촘촘하게 만든다고 생각해 보세요. 통과하는 주문만 남기 때문에 행 수가 줄어드는 것이 자연스럽습니다.</p></div></div></section>
+<section id="s14" class="slide slide-transform has-explain"><div class="slide-inner"><h2>미션 결과가 숫자로 요약된다</h2>
 <div class="xform"><div class="xform-card"><div class="xf-label">필터 전</div><div class="xf-row changed"><span class="k">행수</span><span class="v">10,424</span></div><div class="xf-row"><span class="k">총금액</span><span class="v">전체</span></div><div class="xf-row"><span class="k">평균금액</span><span class="v">전체</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">미션 후</div><div class="xf-row changed"><span class="k">행수</span><span class="v">1,362</span></div><div class="xf-row changed"><span class="k">총금액</span><span class="v">16,664,500원</span></div><div class="xf-row changed"><span class="k">평균금액</span><span class="v">12,235.32원</span></div></div></div>
-<div class="result-line"><span class="lead">결과</span>미션은 <b>1,362행</b>, 총금액 <b>16,664,500원</b>이다.</div></div></section>
-<section id="s12" class="slide slide-table"><div class="slide-inner"><h2>정렬하면 큰 금액이 위로 온다</h2>
-<table class="deck-table"><thead><tr><th>순서</th><th>order_id</th><th>amount</th></tr></thead><tbody><tr><td>1</td><td>10029</td><td>16,500</td></tr><tr><td>2</td><td>10064</td><td>16,500</td></tr><tr><td>3</td><td>10085</td><td>16,500</td></tr><tr><td>4</td><td>10108</td><td>16,500</td></tr><tr><td>5</td><td>10114</td><td>16,500</td></tr></tbody></table>
-<p class="note">같은 금액은 날짜와 주문번호로 정렬한다.</p></div></section>
-<section id="s13" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="result-line"><span class="lead">결과</span>미션은 <b>1,362행</b>, 총금액 <b>16,664,500원</b>이다.</div><div class="explain"><p>왼쪽은 아직 조건을 적용하기 전이라 전체 10,424행을 보고 있는 상태입니다. 이때의 총금액과 평균금액은 전체 표를 대상으로 한 값입니다.</p><p>오른쪽은 미션 조건을 적용한 뒤입니다. 강남점, 커피, 10,000원 이상이라는 조건을 모두 통과한 주문이 1,362행 남았습니다.</p><p>총금액 16,664,500원은 그 1,362행의 주문 금액을 모두 더한 값입니다. 평균금액 12,235.32원은 그 주문들을 한 건씩 저울에 올려 평균을 낸 값이라고 보면 됩니다.</p><p>필터를 한 뒤에는 행수만 보지 말고 총금액과 평균금액도 같이 확인해 보세요. 조건이 제대로 걸렸는지 숫자로 다시 확인하는 습관이 생깁니다.</p></div></div></section>
+<section id="s15" class="slide slide-table has-explain"><div class="slide-inner"><h2>정렬하면 큰 금액이 위로 온다</h2>
+<table class="deck-table"><thead><tr><th>순서</th><th>order_id</th><th>amount</th></tr></thead><tbody><tr><td>1</td><td>10029</td><td>16,500</td></tr><tr><td>2</td><td>10064</td><td>16,500</td></tr><tr><td>3</td><td>10085</td><td>16,500</td></tr></tbody></table>
+<p class="note">같은 금액은 날짜와 주문번호로 정렬한다.</p><div class="explain"><p>이 표는 미션 결과를 주문 금액이 큰 순서로 정렬한 뒤 위쪽 5개를 보여줍니다. amount는 주문 금액이고, order_id는 주문을 구분하는 번호입니다.</p><p>위에 있는 5개 행의 금액이 모두 16,500입니다. 지금 보이는 결과에서는 16,500원이 가장 큰 주문 금액이라서 맨 위에 모여 있습니다.</p><p>같은 금액이 여러 개 있으면 순서가 흔들릴 수 있습니다. 그래서 날짜와 주문번호를 보조 기준으로 함께 써서, 같은 16,500원 안에서도 일정한 순서로 보이게 합니다.</p><p>정렬은 원본 표를 망가뜨리는 작업이 아닙니다. 엑셀에서 금액 열을 큰 값부터 보기 좋게 정렬하듯이, 분석 결과를 읽기 쉬운 순서로 바꿔 보는 과정입니다.</p></div></div></section>
+<section id="s16" class="slide slide-table"><div class="slide-inner"><h2>정렬하면 큰 금액이 위로 온다 (이어서)</h2>
+<table class="deck-table"><thead><tr><th>순서</th><th>order_id</th><th>amount</th></tr></thead><tbody><tr><td>4</td><td>10108</td><td>16,500</td></tr><tr><td>5</td><td>10114</td><td>16,500</td></tr></tbody></table></div></section>
+<section id="s17" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
 <div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 조건 행 추출</div><div class="m-desc">강남점·커피·10,000원 이상 주문만 남긴다.</div></div><div class="mission-card"><div class="m-label">미션 2. 금액순 정렬</div><div class="m-desc">amount가 큰 순서로 결과를 정렬한다.</div></div><div class="mission-card"><div class="m-label">미션 3. 결과 요약</div><div class="m-desc">행수, 총금액, 평균금액을 출력한다.</div></div></div></div></section>
-<section id="s14" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<section id="s18" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
 <ul class="bullets"><li>DataFrame은 표 전체, Series는 열 하나다.</li>
 <li>CSV는 shape, info, describe로 먼저 점검한다.</li>
 <li>pandas에서는 엑셀 필터를 <b>불리언 마스크</b>로 다룬다.</li>

@@ -100,6 +100,22 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 .img-box .lbl{position:absolute;top:-1.9em;left:-2px;white-space:nowrap;
   background:var(--primary);color:#fff;font-size:0.8rem;font-weight:600;
   padding:2px 8px;border-radius:6px;}
+/* --- 공냥 설명 블록(초보자용 설명) --- */
+.explain{margin-top:1.4rem;max-width:66ch;color:var(--ink-muted);
+  font-size:clamp(1.02rem,1.45vw,1.32rem);line-height:1.68;letter-spacing:-0.1px;}
+.explain p{margin:0 0 0.7rem;}
+.explain p:last-child{margin-bottom:0;}
+.explain b{color:var(--ink);font-weight:640;}
+.explain .term{color:var(--primary-hover);font-weight:560;
+  border-bottom:1px dashed var(--hairline-strong);cursor:help;}
+/* 설명이 붙는 시각 슬라이드는 시각 높이를 제한해 설명 공간 확보 */
+.slide.has-explain .viz svg{max-height:38vh;}
+.slide.has-explain .img-wrap{max-width:64ch;}
+.slide.has-explain .img-wrap img{max-height:40vh;object-fit:contain;}
+.slide-note .slide-inner{max-width:70ch;}
+.slide-note .explain{font-size:clamp(1.08rem,1.6vw,1.44rem);margin-top:1.6rem;}
+.cont-tag{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:1px;
+  color:var(--ink-tertiary);text-transform:uppercase;margin-left:0.6rem;}
 /* chrome */
 .progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
 .hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
@@ -129,7 +145,7 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <div class="progress"></div>
 <div class="brand">데이터 리터러시 with AI</div>
 <div class="hud">
-  <span class="counter"><span class="cur">1</span> / 14</span>
+  <span class="counter"><span class="cur">1</span> / 16</span>
   <a class="back" href="./S20.html">자료로 돌아가기</a>
 </div>
 <div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
@@ -142,54 +158,56 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <li>결론을 뒷받침하는 시각화 1개를 고른다</li>
 <li>1페이지 보고서와 3분 발표로 정리한다</li>
 <li>동료 피드백을 반영해 제목과 액션을 고친다</li></ul></div></section>
-<section id="s3" class="slide slide-image"><div class="slide-inner"><h2>보고는 다음 행동을 묻는다</h2>
+<section id="s3" class="slide slide-image has-explain"><div class="slide-inner"><h2>보고는 다음 행동을 묻는다</h2>
 <div class="img-wrap"><img src="../images/deck/hero.png" alt="S20 인사이트 보고 파트 인포그래픽"/></div>
-<div class="viz-cap">차트의 끝은 다음 행동이다.</div></div></section>
-<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<div class="viz-cap">차트의 끝은 다음 행동이다.</div><div class="explain"><p>이 그림은 차트를 만든 뒤에 일이 끝나는 것이 아니라, 차트를 보고 어떤 행동을 정해야 하는지를 보여줍니다. 분석 수업에서는 그래프를 예쁘게 만드는 데 마음이 쏠리기 쉽지만, 보고를 받는 사람은 보통 한 가지를 묻습니다. 그래서 무엇을 하면 되나요?</p><p>그림을 볼 때는 차트 자체보다 차트 뒤에 붙는 판단을 보시면 됩니다. 예를 들어 점포수가 많은 구를 확인했다면, 거기서 멈추지 않고 어느 구를 먼저 비교할지, 어떤 업종을 더 볼지, 회의 자료에는 무엇만 남길지를 정해야 합니다.</p><p>보고서는 데이터 언어를 일의 언어로 바꾸는 과정입니다. 숫자는 저울에 올려 무게를 재는 도구이고, 보고서는 그 무게를 보고 물건을 옮길지 말지 결정하게 해 주는 안내문이라고 보면 됩니다.</p></div></div></section>
+<section id="s4" class="slide slide-concept has-explain"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
 <h2>세 항목으로 나누어 읽는다</h2>
 <p class="body">보고서는 분석 과정을 모두 옮기는 문서가 아니다. 발견, 시사점, 액션으로 판단을 압축한다.</p>
 <ul class="bullets"><li>발견은 데이터가 보여 주는 사실이다</li>
 <li>시사점은 그 사실의 의미다</li>
-<li>액션은 누가 무엇을 할지 제시한다</li></ul></div></section>
-<section id="s5" class="slide slide-transform"><div class="slide-inner"><h2>원자료를 보고서 재료로 압축한다</h2>
+<li>액션은 누가 무엇을 할지 제시한다</li></ul><div class="explain"><p>보고서를 읽을 때는 내용을 세 칸으로 나누면 훨씬 덜 헷갈립니다. 발견은 데이터에서 실제로 확인한 사실이고, 시사점은 그 사실이 업무상 무슨 뜻인지 풀어 쓴 말이며, 액션은 보고서를 읽은 사람이 다음에 할 행동입니다.</p><p>예를 들어 &#x27;강남구 12,095개&#x27;는 발견입니다. 이 숫자 자체는 좋다, 나쁘다를 말하지 않습니다. 여기에서 &#x27;상권 후보를 볼 때는 전체 점포수뿐 아니라 구와 업종 조합도 함께 봐야 한다&#x27;라고 의미를 붙이면 시사점이 됩니다.</p><p>액션은 더 구체적이어야 합니다. &#x27;추가 분석이 필요하다&#x27;에서 멈추면 방향만 말한 것입니다. &#x27;상권 조사 담당자는 강남구, 마포구, 송파구의 한식과 커피점/카페 점포수를 먼저 비교한다&#x27;처럼 누가 무엇을 할지 적어 보세요.</p></div></div></section>
+<section id="s5" class="slide slide-transform has-explain"><div class="slide-inner"><h2>원자료를 보고서 재료로 압축한다</h2>
 <div class="xform"><div class="xform-card"><div class="xf-label">원자료</div><div class="xf-row changed"><span class="k">범위</span><span class="v">119,158행</span></div><div class="xf-row"><span class="k">단위</span><span class="v">개별 점포</span></div><div class="xf-row"><span class="k">상태</span><span class="v">원자료 전체</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">보고서 재료</div><div class="xf-row changed"><span class="k">범위</span><span class="v">상위 3개 구</span></div><div class="xf-row"><span class="k">단위</span><span class="v">구별 점포수</span></div><div class="xf-row"><span class="k">상태</span><span class="v">판단 근거</span></div></div></div>
-<div class="result-line"><span class="lead">결과</span>원자료 전체가 구별 우선순위 3개로 압축된다.</div></div></section>
-<section id="s6" class="slide slide-chart"><div class="slide-inner"><h2>강남구는 구별 점포수가 가장 많다</h2>
+<div class="result-line"><span class="lead">결과</span>원자료 전체가 구별 우선순위 3개로 압축된다.</div><div class="explain"><p>왼쪽의 원자료는 119,158행짜리 긴 표입니다. 여기서 한 행은 개별 점포 하나에 가깝다고 보면 됩니다. 이 표를 그대로 보고서에 붙이면 읽는 사람은 어디를 봐야 할지 알기 어렵습니다.</p><p>오른쪽은 같은 자료를 구별 점포수로 묶어 세고, 그중 상위 3개 구만 남긴 모습입니다. 집계는 같은 항목끼리 모아서 세는 일입니다. 키를 잴 때 사람 전체를 설명하지 않고 숫자 하나로 줄이듯, 보고서 재료도 판단에 필요한 크기로 줄여야 합니다.</p><p>여기서 중요한 변화는 &#x27;원자료 전체&#x27;가 &#x27;판단 근거&#x27;로 바뀐다는 점입니다. 보고서에는 모든 줄을 보여주는 것이 아니라, 강남구 12,095개, 마포구 7,396개, 송파구 7,106개처럼 비교에 바로 쓰이는 숫자를 남깁니다.</p></div></div></section>
+<section id="s6" class="slide slide-chart has-explain"><div class="slide-inner"><h2>강남구는 구별 점포수가 가장 많다</h2>
 <div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="122" y="46" width="150" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="197" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">12,095개</text><text x="197" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">강남구</text><rect x="435" y="183" width="150" height="215" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="171" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">7,396개</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">마포구</text><rect x="748" y="191" width="150" height="207" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="823" y="179" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">7,106개</text><text x="823" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">송파구</text><line x1="917" y1="88" x2="197" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="197" cy="40" r="4" fill="#828fff"/><rect x="862" y="46" width="110" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="917" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">최다 점포수</text></svg></div>
-<div class="result-line"><span class="lead">결과</span>상위 3개 구 중 강남구의 점포수가 가장 많다.</div></div></section>
-<section id="s7" class="slide slide-chart"><div class="slide-inner"><h2>구·업종 조합에서는 한식이 많다</h2>
+<div class="result-line"><span class="lead">결과</span>상위 3개 구 중 강남구의 점포수가 가장 많다.</div><div class="explain"><p>이 막대그래프는 상위 3개 구의 점포수를 비교하는 그림입니다. 막대 하나가 한 구를 뜻하고, 막대가 길수록 그 구에 점포가 많다는 뜻입니다. 단위는 개입니다.</p><p>먼저 가장 긴 막대를 보시면 됩니다. 강남구가 12,095개로 가장 길고, 그다음이 마포구 7,396개, 송파구 7,106개입니다. 그래프 위의 &#x27;최다 점포수&#x27; 표시는 강남구가 이 비교 안에서 가장 많다는 점을 짚어 줍니다.</p></div></div></section>
+<section id="s7" class="slide slide-note"><div class="slide-inner"><h2>강남구는 구별 점포수가 가장 많다<span class="cont-tag">이어서</span></h2><div class="explain"><p>이 숫자가 말해 주는 것은 강남구가 1차로 살펴볼 큰 후보라는 점입니다. 다만 점포수가 많다는 말이 곧 성공 가능성이 높다는 뜻은 아닙니다. 점포수는 상권 규모와 경쟁 강도를 함께 보여주는 출발점이므로, 다음에는 업종별로도 나누어 봐야 합니다.</p></div></div></section>
+<section id="s8" class="slide slide-chart has-explain"><div class="slide-inner"><h2>구·업종 조합에서는 한식이 많다</h2>
 <div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="87" y="46" width="141" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="158" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3,917개</text><text x="158" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">강남구 한식</text><rect x="322" y="143" width="141" height="255" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="392" y="131" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2,835개</text><text x="392" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">마포구 한식</text><rect x="557" y="162" width="141" height="236" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="628" y="150" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2,626개</text><text x="628" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">송파구 한식</text><rect x="792" y="196" width="141" height="202" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="862" y="184" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2,253개</text><text x="862" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">강남구 커피점/카페</text><line x1="894" y1="88" x2="158" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="158" cy="40" r="4" fill="#828fff"/><rect x="817" y="46" width="155" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="894" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">강남구 2개 조합</text></svg></div>
-<div class="result-line"><span class="lead">결과</span>상위 조합은 한식 중심이고, 강남구 카페도 포함된다.</div></div></section>
-<section id="s8" class="slide slide-table"><div class="slide-inner"><h2>숫자를 세 문장으로 바꾼다</h2>
+<div class="result-line"><span class="lead">결과</span>상위 조합은 한식 중심이고, 강남구 카페도 포함된다.</div><div class="explain"><p>이 막대그래프는 구와 업종을 한 묶음으로 보았을 때 어디에 점포가 많이 모여 있는지 보여줍니다. &#x27;강남구 한식&#x27;은 강남구 안의 한식 점포수를 뜻하고, &#x27;강남구 커피점/카페&#x27;는 강남구 안의 커피점과 카페 점포수를 뜻합니다.</p><p>막대 길이를 비교해 보면 강남구 한식이 3,917개로 가장 많습니다. 그다음은 마포구 한식 2,835개, 송파구 한식 2,626개이고, 강남구 커피점/카페도 2,253개로 상위 조합에 들어갑니다.</p></div></div></section>
+<section id="s9" class="slide slide-note"><div class="slide-inner"><h2>구·업종 조합에서는 한식이 많다<span class="cont-tag">이어서</span></h2><div class="explain"><p>여기서 볼 점은 한식 조합이 많이 보인다는 것과, 강남구가 한식과 커피점/카페 두 조합에서 모두 눈에 띈다는 점입니다. 그래서 상권 후보를 고를 때는 구 전체 점포수만 보지 말고, 어떤 업종이 그 구에서 많이 모여 있는지도 함께 비교해야 합니다.</p></div></div></section>
+<section id="s10" class="slide slide-table has-explain"><div class="slide-inner"><h2>숫자를 세 문장으로 바꾼다</h2>
 <table class="deck-table"><thead><tr><th>구분</th><th>문장</th><th>역할</th></tr></thead><tbody><tr><td>발견</td><td>강남구 12,095개</td><td>데이터 사실</td></tr><tr><td>시사점</td><td>구·업종 함께 비교</td><td>의미</td></tr><tr><td>액션</td><td>상위 3구 먼저 비교</td><td>다음 행동</td></tr></tbody></table>
-<p class="note">발견에서 액션으로 곧장 넘어가지 않는다.</p></div></section>
-<section id="s9" class="slide slide-table"><div class="slide-inner"><h2>1페이지에는 판단만 남긴다</h2>
+<p class="note">발견에서 액션으로 곧장 넘어가지 않는다.</p><div class="explain"><p>이 표는 보고서 문장을 만드는 연습표입니다. 같은 숫자라도 어디에 놓느냐에 따라 역할이 달라집니다. 숫자를 발견, 시사점, 액션으로 나누면 읽는 사람이 생각의 흐름을 따라가기 쉬워집니다.</p><p>첫 줄의 &#x27;강남구 12,095개&#x27;는 데이터에서 확인한 사실입니다. 아직 판단을 붙이지 않았기 때문에 발견입니다. 둘째 줄의 &#x27;구·업종 함께 비교&#x27;는 그 숫자를 보고 얻은 의미입니다. 구만 볼 것이 아니라 업종까지 함께 봐야 한다는 말이죠.</p><p>마지막 줄의 &#x27;상위 3구 먼저 비교&#x27;는 다음 행동입니다. 발견에서 바로 행동으로 뛰어가면 근거가 약해 보일 수 있습니다. 가운데에 시사점을 놓아 주면, 왜 그 행동을 해야 하는지 사전에서 뜻을 찾아 주듯 연결됩니다.</p></div></div></section>
+<section id="s11" class="slide slide-table has-explain"><div class="slide-inner"><h2>1페이지에는 판단만 남긴다</h2>
 <table class="deck-table"><thead><tr><th>영역</th><th>담을 내용</th></tr></thead><tbody><tr><td>제목</td><td>결론 한 문장</td></tr><tr><td>핵심 발견</td><td>숫자 2-3개</td></tr><tr><td>핵심 시각화</td><td>차트 1개</td></tr><tr><td>시사점·액션</td><td>의미와 다음 행동</td></tr><tr><td>주의</td><td>데이터 한계</td></tr></tbody></table>
-<p class="note">작업 기록은 부록으로 분리한다.</p></div></section>
-<section id="s10" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<p class="note">작업 기록은 부록으로 분리한다.</p><div class="explain"><p>이 표는 1페이지 보고서에 무엇을 남길지 정하는 틀입니다. 한 페이지는 분석 과정 전체를 담는 공간이 아니라, 읽는 사람이 판단하는 데 필요한 것만 남기는 공간입니다.</p><p>제목에는 주제가 아니라 결론을 씁니다. 핵심 발견에는 실제 숫자 2-3개를 넣고, 핵심 시각화에는 결론을 가장 잘 보여주는 차트 1개만 고릅니다. 시사점·액션에는 그 숫자가 왜 중요하고 다음에 무엇을 할지 적습니다.</p><p>주의에는 데이터 한계를 씁니다. 예를 들어 이 상권 예시는 2021년 서울 음식점·카페 점포수만 본 것이므로, 실제 출점 판단에는 임대료, 유동인구, 매출, 배달 수요, 폐업률, 접근성 같은 정보가 더 필요합니다. 작업하면서 만든 긴 표와 여러 차트는 부록으로 보내면 됩니다.</p></div></div></section>
+<section id="s12" class="slide slide-concept has-explain"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
 <h2>차트는 하나만 고른다</h2>
 <p class="body">시각화는 결론을 가장 짧게 검증하는 기준으로 고른다.</p>
 <ul class="bullets"><li>그룹별 크기 비교에는 막대그래프를 쓴다</li>
 <li>두 숫자의 관계에는 산점도를 쓴다</li>
 <li>시간 흐름에는 선그래프를 쓴다</li>
-<li>많은 차트보다 핵심 차트 1개가 낫다</li></ul></div></section>
-<section id="s11" class="slide slide-concept"><div class="slide-inner"><div class="kicker">발표 구조</div>
+<li>많은 차트보다 핵심 차트 1개가 낫다</li></ul><div class="explain"><p>차트는 많이 넣을수록 좋은 것이 아니라, 내 결론을 가장 짧게 확인해 주는 것을 고르는 도구입니다. 보고서에서 차트는 장식이 아니라 증거입니다.</p><p>그룹별 크기를 비교할 때는 막대그래프가 잘 맞습니다. 강남구, 마포구, 송파구처럼 구별 점포수를 비교하는 경우가 여기에 해당합니다. 두 숫자가 함께 움직이는지 볼 때는 산점도, 시간에 따라 오르내리는 흐름을 볼 때는 선그래프를 씁니다.</p><p>상권 예시에서는 구와 업종 조합별 점포수 비교가 중요하므로 막대그래프 1개가 가장 읽기 쉽습니다. 차트가 여러 개 있으면 성실해 보일 수는 있지만, 초보 독자는 어느 그림을 먼저 봐야 하는지 놓치기 쉽습니다.</p></div></div></section>
+<section id="s13" class="slide slide-concept has-explain"><div class="slide-inner"><div class="kicker">발표 구조</div>
 <h2>3분 발표는 결론을 먼저 말한다</h2>
 <p class="body">짧은 발표에서는 분석 과정을 처음부터 설명하지 않는다. 결론, 근거 둘, 액션 하나 순서로 말한다.</p>
 <ul class="bullets"><li>1분: 결론</li>
 <li>1분: 근거 숫자 2개 이상</li>
-<li>1분: 액션과 한계</li></ul></div></section>
-<section id="s12" class="slide slide-concept"><div class="slide-inner"><div class="kicker">피드백 기준</div>
+<li>1분: 액션과 한계</li></ul><div class="explain"><p>3분 발표에서는 분석 과정을 처음부터 끝까지 설명할 시간이 없습니다. 듣는 사람에게 먼저 결론을 말하고, 그 결론을 받쳐 주는 숫자 두 개 이상을 보여준 뒤, 마지막에 다음 행동을 말하면 됩니다.</p><p>첫 1분에는 &#x27;서울 음식점·카페 상권은 강남구에 가장 집중되어 있으며, 구별 우선순위는 한식과 커피점/카페 조합부터 확인해야 한다&#x27;처럼 결론을 말합니다. 다음 1분에는 119,158행을 집계했고, 강남구 12,095개, 마포구 7,396개, 송파구 7,106개 순이라는 근거를 말합니다.</p><p>마지막 1분에는 액션과 한계를 붙입니다. 예를 들어 상권 조사 담당자는 강남구, 마포구, 송파구를 먼저 비교하고, 한식과 커피점/카페의 경쟁 강도를 확인해 보세요. 그리고 이 분석은 점포수 기준이므로 임대료나 유동인구 같은 정보는 추가로 봐야 한다고 말하면 발표가 단단해집니다.</p></div></div></section>
+<section id="s14" class="slide slide-concept has-explain"><div class="slide-inner"><div class="kicker">피드백 기준</div>
 <h2>동료 피드백은 구조를 확인한다</h2>
 <p class="body">좋은 피드백은 취향이 아니라 결론, 근거, 액션이 연결되는지 확인하는 질문이다.</p>
 <ul class="bullets"><li>제목만 읽어도 결론이 보여야 한다</li>
 <li>발견 문장에는 실제 숫자가 있어야 한다</li>
 <li>시사점은 발견과 연결되어야 한다</li>
 <li>액션은 구체적 행동이어야 한다</li>
-<li>차트는 결론을 직접 보여 주어야 한다</li></ul></div></section>
-<section id="s13" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<li>차트는 결론을 직접 보여 주어야 한다</li></ul><div class="explain"><p>동료 피드백은 마음에 드는지 아닌지를 말하는 시간이 아닙니다. 보고서의 결론, 근거, 액션이 서로 이어지는지 확인하는 시간입니다. 취향 평가보다 구조 점검에 가깝습니다.</p><p>제목만 읽어도 결론이 보이는지 먼저 봅니다. 그다음 발견 문장에 실제 숫자가 들어 있는지 확인합니다. &#x27;많다&#x27;라고만 쓰면 부족하고, 강남구 12,095개처럼 숫자를 넣어야 합니다.</p><p>시사점은 발견과 연결되어야 하고, 액션은 실제 행동으로 보여야 합니다. 차트도 결론을 직접 보여주어야 합니다. 동료가 다른 뜻으로 이해했다면, 그 사람을 설득하려 하기보다 제목과 액션 문장을 더 좁혀 보세요.</p></div></div></section>
+<section id="s15" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
 <div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 1페이지 보고서</div><div class="m-desc">S19 결과물을 발견, 시사점, 액션으로 정리한다.</div></div><div class="mission-card"><div class="m-label">미션 2. 3분 발표 원고</div><div class="m-desc">결론, 근거, 액션 순서로 발표문을 쓴다.</div></div><div class="mission-card"><div class="m-label">미션 3. 피드백 반영</div><div class="m-desc">동료 피드백 2개를 받고 최소 1개를 고친다.</div></div></div></div></section>
-<section id="s14" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<section id="s16" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
 <ul class="bullets"><li>보고서는 분석 결과를 의사결정 언어로 번역한다.</li>
 <li>발견은 실제 숫자, 시사점은 의미, 액션은 다음 행동이다.</li>
 <li>차트는 결론을 가장 직접적으로 보여 주는 1개를 고른다.</li></ul>

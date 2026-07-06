@@ -117,6 +117,22 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 .img-box .lbl{position:absolute;top:-1.9em;left:-2px;white-space:nowrap;
   background:var(--primary);color:#fff;font-size:0.8rem;font-weight:600;
   padding:2px 8px;border-radius:6px;}
+/* --- 공냥 설명 블록(초보자용 설명) --- */
+.explain{margin-top:1.4rem;max-width:66ch;color:var(--ink-muted);
+  font-size:clamp(1.02rem,1.45vw,1.32rem);line-height:1.68;letter-spacing:-0.1px;}
+.explain p{margin:0 0 0.7rem;}
+.explain p:last-child{margin-bottom:0;}
+.explain b{color:var(--ink);font-weight:640;}
+.explain .term{color:var(--primary-hover);font-weight:560;
+  border-bottom:1px dashed var(--hairline-strong);cursor:help;}
+/* 설명이 붙는 시각 슬라이드는 시각 높이를 제한해 설명 공간 확보 */
+.slide.has-explain .viz svg{max-height:38vh;}
+.slide.has-explain .img-wrap{max-width:64ch;}
+.slide.has-explain .img-wrap img{max-height:40vh;object-fit:contain;}
+.slide-note .slide-inner{max-width:70ch;}
+.slide-note .explain{font-size:clamp(1.08rem,1.6vw,1.44rem);margin-top:1.6rem;}
+.cont-tag{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:1px;
+  color:var(--ink-tertiary);text-transform:uppercase;margin-left:0.6rem;}
 /* chrome */
 .progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
 .hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
@@ -497,10 +513,67 @@ def slide_image(sd):
     return "\n".join(p)
 
 
+def render_explain(sd):
+    """공냥 설명 블록. explain은 문자열 또는 문단 리스트."""
+    ex = sd.get("explain")
+    if not ex:
+        return ""
+    paras = ex if isinstance(ex, list) else [ex]
+    body = "".join(f"<p>{render_inline(p)}</p>" for p in paras if str(p).strip())
+    return f'<div class="explain">{body}</div>'
+
+
+def slide_inner(sd):
+    """슬라이드 내부 HTML(렌더러 출력 + 설명 블록)."""
+    t = sd.get("type", "concept")
+    inner = RENDERERS.get(t, slide_concept)(sd)
+    if t != "note" and sd.get("explain"):
+        inner += render_explain(sd)
+    return inner
+
+
+def slide_classes(sd):
+    t = sd.get("type", "concept")
+    cls = f"slide slide-{t}"
+    if t == "closing":
+        cls += " closing"
+    if sd.get("explain") and t not in ("note", "title"):
+        cls += " has-explain"
+    return cls
+
+
+def slide_section(sd, i):
+    return f'<section id="s{i}" class="{slide_classes(sd)}"><div class="slide-inner">{slide_inner(sd)}</div></section>'
+
+
+def standalone_slide(sd):
+    """단일 슬라이드를 자연 높이로 렌더(높이 측정용). 1280px 폭, 상단정렬, 실제 슬라이드와 동일 여백.
+    - base href: 상대경로 이미지(../images/deck/*.png)가 임시폴더에서도 로드되게 함(높이 정확 측정).
+    - vh→px 고정: 실제 배포 덱은 720px 슬라이드라 40vh=288px·38vh=274px. 측정창 높이(4000px)에
+      vh가 휘둘리지 않도록 실제 값으로 고정해야 이미지·차트 높이가 PDF와 일치한다."""
+    base = OUT_DIR.as_uri() + "/"
+    fit_css = (".slide{min-height:0!important;height:auto!important;justify-content:flex-start!important;"
+               "padding:43px 102px!important;}.slide::after{display:none;}"
+               "body{width:1280px;}"
+               ".slide.has-explain .viz svg{max-height:274px!important;}"
+               ".slide.has-explain .img-wrap img{max-height:288px!important;}")
+    return f"""<!doctype html><html lang="ko"><head><meta charset="utf-8">
+<base href="{base}">
+<style>{CSS}
+{fit_css}</style></head><body>{slide_section(sd, 0)}</body></html>"""
+
+
+def slide_note(sd):
+    """설명 전용/연속 슬라이드 — 시각 없이 제목 + 공냥 설명."""
+    tag = '<span class="cont-tag">이어서</span>' if sd.get("cont") else ""
+    h = f'<h2>{render_inline(sd.get("heading",""))}{tag}</h2>' if sd.get("heading") else ""
+    return h + render_explain(sd)
+
+
 RENDERERS = {
     "title": slide_title, "objectives": slide_objectives, "concept": slide_concept,
     "table": slide_table, "quote": slide_quote, "mission": slide_mission, "closing": slide_closing,
-    "chart": slide_chart, "transform": slide_transform, "image": slide_image,
+    "chart": slide_chart, "transform": slide_transform, "image": slide_image, "note": slide_note,
 }
 
 
@@ -509,9 +582,7 @@ def build(spec):
     slides_html = []
     for i, sd in enumerate(spec["slides"], 1):
         t = sd.get("type", "concept")
-        inner = RENDERERS.get(t, slide_concept)(sd)
-        extra = " closing" if t == "closing" else ""
-        slides_html.append(f'<section id="s{i}" class="slide slide-{t}{extra}"><div class="slide-inner">{inner}</div></section>')
+        slides_html.append(slide_section(sd, i))
     body = "\n".join(slides_html)
     title = f'{sid} · {spec["title"]}'
     return f"""<!doctype html>

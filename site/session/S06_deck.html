@@ -100,6 +100,22 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 .img-box .lbl{position:absolute;top:-1.9em;left:-2px;white-space:nowrap;
   background:var(--primary);color:#fff;font-size:0.8rem;font-weight:600;
   padding:2px 8px;border-radius:6px;}
+/* --- 공냥 설명 블록(초보자용 설명) --- */
+.explain{margin-top:1.4rem;max-width:66ch;color:var(--ink-muted);
+  font-size:clamp(1.02rem,1.45vw,1.32rem);line-height:1.68;letter-spacing:-0.1px;}
+.explain p{margin:0 0 0.7rem;}
+.explain p:last-child{margin-bottom:0;}
+.explain b{color:var(--ink);font-weight:640;}
+.explain .term{color:var(--primary-hover);font-weight:560;
+  border-bottom:1px dashed var(--hairline-strong);cursor:help;}
+/* 설명이 붙는 시각 슬라이드는 시각 높이를 제한해 설명 공간 확보 */
+.slide.has-explain .viz svg{max-height:38vh;}
+.slide.has-explain .img-wrap{max-width:64ch;}
+.slide.has-explain .img-wrap img{max-height:40vh;object-fit:contain;}
+.slide-note .slide-inner{max-width:70ch;}
+.slide-note .explain{font-size:clamp(1.08rem,1.6vw,1.44rem);margin-top:1.6rem;}
+.cont-tag{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:1px;
+  color:var(--ink-tertiary);text-transform:uppercase;margin-left:0.6rem;}
 /* chrome */
 .progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
 .hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
@@ -129,7 +145,7 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <div class="progress"></div>
 <div class="brand">데이터 리터러시 with AI</div>
 <div class="hud">
-  <span class="counter"><span class="cur">1</span> / 14</span>
+  <span class="counter"><span class="cur">1</span> / 19</span>
   <a class="back" href="./S06.html">자료로 돌아가기</a>
 </div>
 <div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
@@ -142,48 +158,54 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <li>상관과 인과를 구분해 설명한다</li>
 <li>전체 평균과 그룹 평균을 비교한다</li>
 <li>그럴듯한 주장을 데이터로 반박한다</li></ul></div></section>
-<section id="s3" class="slide slide-image"><div class="slide-inner"><h2>두 열을 함께 살핀다</h2>
+<section id="s3" class="slide slide-image has-explain"><div class="slide-inner"><h2>두 열을 함께 살핀다</h2>
 <div class="img-wrap"><img src="../images/deck/stats.png" alt="통계 파트 인포그래픽"/></div>
-<div class="viz-cap">두 변수 관계와 그룹 분해가 핵심이다.</div></div></section>
-<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<div class="viz-cap">두 변수 관계와 그룹 분해가 핵심이다.</div><div class="explain"><p>오늘은 표에서 열 하나만 보는 것이 아니라, 두 열을 나란히 놓고 봅니다. 예를 들어 아파트 전용면적과 거래금액, 기온과 매출, 성별과 연봉처럼 두 값이 함께 움직이는지 살펴보는 방식입니다.</p><p>그림은 통계에서 자주 하는 두 가지 일을 떠올리게 합니다. 하나는 두 숫자 열의 관계를 보는 일이고, 다른 하나는 전체를 부서나 성별 같은 그룹으로 나누어 다시 보는 일입니다. 키와 몸무게를 같이 재듯이, 데이터도 한 가지 숫자만 보면 놓치는 관계가 생깁니다.</p><p>여기서 조심할 점이 있습니다. 두 값이 같이 움직인다고 해서 바로 한쪽이 다른 쪽의 원인이라고 말할 수는 없습니다. 같이 움직였는지 보는 것과, 왜 그렇게 되었는지 따지는 것은 서로 다른 질문입니다.</p></div></div></section>
+<section id="s4" class="slide slide-concept has-explain"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
 <h2>r은 함께 움직이는 정도를 요약한다</h2>
 <p class="body">상관계수 r은 -1부터 1 사이에서 두 숫자 열이 함께 움직이는 정도를 나타낸다.</p>
 <ul class="bullets"><li>1에 가까우면 함께 커진다</li>
 <li>0에 가까우면 함께 움직임이 약하다</li>
-<li>-1에 가까우면 반대로 움직인다</li></ul></div></section>
-<section id="s5" class="slide slide-transform"><div class="slide-inner"><h2>거래금액을 숫자로 바꾼다</h2>
+<li>-1에 가까우면 반대로 움직인다</li></ul><div class="explain"><p>상관계수 r은 두 숫자 열이 얼마나 같이 움직이는지 한 숫자로 줄여서 보여주는 값입니다. 값은 -1부터 1 사이에 있습니다. 체온계가 온도를 숫자 하나로 보여주듯이, r은 두 열의 관계를 숫자 하나로 요약해 줍니다.</p><p>r이 1에 가까우면 한쪽이 커질 때 다른 쪽도 커지는 경향이 강합니다. 아파트 전용면적이 커질수록 거래금액도 대체로 높아지는 경우가 여기에 가깝습니다. r이 -1에 가까우면 한쪽이 커질 때 다른 쪽은 작아지는 경향입니다. r이 0에 가까우면 두 값이 같이 움직인다고 보기 어렵습니다.</p><p>다만 r은 관계의 방향과 강도를 알려 주는 숫자이지, 원인을 알려 주는 숫자는 아닙니다. 사전에서 단어 뜻을 찾듯이 r을 읽되, 그 숫자 하나만 보고 결론을 끝내지는 않아야 합니다.</p></div></div></section>
+<section id="s5" class="slide slide-transform has-explain"><div class="slide-inner"><h2>거래금액을 숫자로 바꾼다</h2>
 <div class="xform"><div class="xform-card"><div class="xf-label">변환 전</div><div class="xf-row changed"><span class="k">거래금액(만원)</span><span class="v">쉼표 포함 문자</span></div><div class="xf-row"><span class="k">행수</span><span class="v">3,754행</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">변환 후</div><div class="xf-row changed"><span class="k">거래금액_만원</span><span class="v">숫자</span></div><div class="xf-row"><span class="k">행수</span><span class="v">3,754행</span></div></div></div>
-<div class="result-line"><span class="lead">결과</span>숫자형이어야 r=0.806을 계산할 수 있다.</div></div></section>
-<section id="s6" class="slide slide-chart"><div class="slide-inner"><h2>면적과 금액은 함께 움직인다</h2>
+<div class="result-line"><span class="lead">결과</span>숫자형이어야 r=0.806을 계산할 수 있다.</div><div class="explain"><p>이 표는 같은 아파트 거래 자료를 계산하기 전과 후로 비교한 그림입니다. 왼쪽은 거래금액이 쉼표가 들어간 문자처럼 읽힌 상태이고, 오른쪽은 거래금액을 계산 가능한 숫자로 바꾼 상태입니다. 행수는 3,754행으로 그대로이고, 바뀐 것은 금액 열의 성격입니다.</p><p>엑셀에서는 134,500처럼 쉼표가 들어간 값이 때로는 숫자가 아니라 글자로 취급될 수 있습니다. 글자로 읽힌 금액은 더하거나 평균을 내거나 상관계수를 계산할 때 문제가 됩니다. 계산하려면 금액을 저울에 올릴 수 있는 숫자처럼 만들어야 합니다.</p><p>그래서 수업 자료 페이지에서 내려받은 아파트 실거래 표에서 거래금액 열을 새 숫자 열로 바꿉니다. 이렇게 해야 전용면적과 거래금액의 상관계수 r=0.806을 계산할 수 있습니다. 모양은 금액처럼 보여도, 엑셀이 숫자로 이해하는지가 중요합니다.</p></div></div></section>
+<section id="s6" class="slide slide-chart has-explain"><div class="slide-inner"><h2>면적과 금액은 함께 움직인다</h2>
 <div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="435" y="114" width="150" height="284" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="510" y="102" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">0.806</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">면적-거래금액</text><line x1="894" y1="88" x2="510" y2="108" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="510" cy="108" r="4" fill="#828fff"/><rect x="817" y="46" width="155" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="894" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">r = 0.806</text></svg></div>
-<div class="result-line"><span class="lead">결과</span>강남구 3,754건에서 <b>강한 양의 상관</b>이 확인된다.</div></div></section>
-<section id="s7" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<div class="result-line"><span class="lead">결과</span>강남구 3,754건에서 <b>강한 양의 상관</b>이 확인된다.</div><div class="explain"><p>이 막대는 전용면적과 거래금액의 상관계수를 보여줍니다. 상관계수 r이 0.806으로 나왔습니다. r은 -1부터 1 사이의 값이므로, 0.806은 1에 꽤 가까운 편입니다.</p><p>어디를 보면 될까요? 막대의 값과 표시된 r = 0.806을 보면 됩니다. 양수이기 때문에 전용면적이 커질수록 거래금액도 대체로 높아지는 방향입니다. 값이 0에 가까운 것이 아니라 0.806이므로, 관계가 약하다고 보기는 어렵습니다.</p></div></div></section>
+<section id="s7" class="slide slide-note"><div class="slide-inner"><h2>면적과 금액은 함께 움직인다<span class="cont-tag">이어서</span></h2><div class="explain"><p>그래서 강남구 아파트 실거래 3,754건에서는 면적과 거래금액이 함께 움직인다고 말할 수 있습니다. 다만 이 말은 &#x27;면적이 가격의 전부를 결정한다&#x27;는 뜻이 아닙니다. 같은 면적이어도 단지, 위치, 층, 연식, 거래 시점이 다르면 가격은 달라질 수 있습니다.</p></div></div></section>
+<section id="s8" class="slide slide-concept has-explain"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
 <h2>상관은 원인이 아니다</h2>
 <p class="body">상관은 함께 움직였다는 뜻이고, 인과는 A가 B를 일으켰다는 뜻이다.</p>
 <ul class="bullets"><li>제3의 요인이 있을 수 있다</li>
 <li>방향이 반대일 수 있다</li>
-<li>우연히 함께 움직일 수 있다</li></ul></div></section>
-<section id="s8" class="slide slide-chart"><div class="slide-inner"><h2>직관과 데이터가 어긋난다</h2>
+<li>우연히 함께 움직일 수 있다</li></ul><div class="explain"><p>상관은 두 값이 같이 움직였다는 뜻입니다. 인과는 A가 B를 일으켰다는 뜻입니다. 두 말은 비슷하게 들리지만 데이터 분석에서는 반드시 나누어 생각해야 합니다.</p><p>예를 들어 더운 날 아이스크림 판매도 늘고 물놀이 사고도 늘었다고 해 봅니다. 그렇다고 아이스크림이 사고를 일으켰다고 말할 수는 없습니다. 더운 날씨나 휴가철처럼 둘 모두에 영향을 주는 다른 요인이 있을 수 있습니다. 이런 것을 제3의 요인이라고 부릅니다.</p><p>또 방향을 잘못 볼 수도 있습니다. A가 B를 만든 것인지, B가 A를 만든 것인지 모를 때가 있습니다. 기간을 짧게 잘라 보면 우연히 같이 움직인 것처럼 보일 수도 있습니다. 그래서 상관을 발견하면 바로 결론을 내리지 말고, 다른 설명이 가능한지 한 번 더 물어봐야 합니다.</p></div></div></section>
+<section id="s9" class="slide slide-chart has-explain"><div class="slide-inner"><h2>직관과 데이터가 어긋난다</h2>
 <div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="435" y="393" width="150" height="5" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="510" y="381" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">0.015</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">기온-통화건수</text><line x1="894" y1="88" x2="510" y2="387" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="510" cy="387" r="4" fill="#828fff"/><rect x="817" y="46" width="155" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="894" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">r = 0.015</text></svg></div>
-<div class="result-line"><span class="lead">결과</span>기온-통화건수는 <b>거의 0</b>으로, 주장을 지지하지 않는다.</div></div></section>
-<section id="s9" class="slide slide-chart"><div class="slide-inner"><h2>전체 평균은 남성이 높다</h2>
+<div class="result-line"><span class="lead">결과</span>기온-통화건수는 <b>거의 0</b>으로, 주장을 지지하지 않는다.</div><div class="explain"><p>이 막대는 기온과 배달 통화건수가 같이 움직이는지 본 참고 사례입니다. 겉으로는 기온이 배달과 관련 있을 것처럼 느껴질 수 있습니다. 그런데 상관계수는 r = 0.015입니다.</p><p>여기서는 0.015라는 숫자를 보면 됩니다. r은 0에 가까울수록 두 값이 함께 움직이는 경향이 약하다는 뜻입니다. 0.015는 거의 0에 붙어 있으므로, 이 데이터에서는 기온과 통화건수가 뚜렷하게 같이 움직인다고 보기 어렵습니다.</p></div></div></section>
+<section id="s10" class="slide slide-note"><div class="slide-inner"><h2>직관과 데이터가 어긋난다<span class="cont-tag">이어서</span></h2><div class="explain"><p>그래서 &#x27;기온이 오르면 배달 통화가 늘어난다&#x27;처럼 그럴듯하게 들리는 말도 바로 믿으면 안 됩니다. 먼저 같은 기준으로 데이터를 맞추고, 산점도와 상관계수로 확인해야 합니다. 직감은 출발점일 수 있지만 결론은 데이터로 확인해야 합니다.</p></div></div></section>
+<section id="s11" class="slide slide-chart has-explain"><div class="slide-inner"><h2>전체 평균은 남성이 높다</h2>
 <div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="200" y="46" width="150" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="275" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">67,296,571원</text><text x="275" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">남성</text><rect x="670" y="64" width="150" height="334" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="745" y="52" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">63,910,600원</text><text x="745" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">여성</text><line x1="864" y1="88" x2="275" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="275" cy="40" r="4" fill="#828fff"/><rect x="757" y="46" width="215" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="864" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">차이 3,385,971원</text></svg></div>
-<div class="result-line"><span class="lead">결과</span>전체만 보면 남성이 <b>3,385,971원</b> 높다.</div></div></section>
-<section id="s10" class="slide slide-chart"><div class="slide-inner"><h2>부서별로 결론이 뒤집힌다</h2>
+<div class="result-line"><span class="lead">결과</span>전체만 보면 남성이 <b>3,385,971원</b> 높다.</div><div class="explain"><p>이 막대그래프는 직원 전체를 성별로만 나누어 평균 연봉을 비교한 그림입니다. 남성 평균은 67,296,571원이고 여성 평균은 63,910,600원입니다.</p><p>어디를 보면 될까요? 두 막대의 높이를 비교하면 됩니다. 남성 막대가 여성 막대보다 높고, 표시된 차이는 3,385,971원입니다. 전체 직원만 한꺼번에 보면 남성 평균 연봉이 더 높다는 결론이 나옵니다.</p></div></div></section>
+<section id="s12" class="slide slide-note"><div class="slide-inner"><h2>전체 평균은 남성이 높다<span class="cont-tag">이어서</span></h2><div class="explain"><p>하지만 여기서 멈추면 위험합니다. 전체 평균은 여러 부서의 사람이 한 바구니에 섞인 값입니다. 사과와 배를 한 봉지에 넣고 무게를 잰 것처럼, 어떤 부서 사람이 더 많이 들어 있는지에 따라 평균이 달라질 수 있습니다.</p></div></div></section>
+<section id="s13" class="slide slide-chart has-explain"><div class="slide-inner"><h2>부서별로 결론이 뒤집힌다</h2>
 <div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="78" y="167" width="113" height="231" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="134" y="155" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3,433,286원</text><text x="134" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">개발본부</text><rect x="266" y="223" width="113" height="175" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="322" y="211" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2,597,500원</text><text x="322" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">고객운영팀</text><rect x="454" y="46" width="113" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="510" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">5,229,365원</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">데이터전략팀</text><rect x="642" y="94" width="113" height="304" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="698" y="82" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">4,510,909원</text><text x="698" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">영업본부</text><rect x="830" y="292" width="113" height="106" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="886" y="280" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">1,570,769원</text><text x="886" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">인사총무팀</text><line x1="924" y1="88" x2="510" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="510" cy="40" r="4" fill="#828fff"/><rect x="877" y="46" width="95" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="924" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">여성-남성</text></svg></div>
-<div class="result-line"><span class="lead">결과</span>부서로 나누면 5개 모두 <b>여성 평균이 높다</b>.</div></div></section>
-<section id="s11" class="slide slide-table"><div class="slide-inner"><h2>부서별 평균을 함께 확인한다</h2>
-<table class="deck-table"><thead><tr><th>부서</th><th>남성</th><th>여성</th></tr></thead><tbody><tr><td>개발본부</td><td>73,541,000원</td><td>76,974,286원</td></tr><tr><td>고객운영팀</td><td>51,497,500원</td><td>54,095,000원</td></tr><tr><td>데이터전략팀</td><td>67,437,778원</td><td>72,667,143원</td></tr><tr><td>영업본부</td><td>61,020,000원</td><td>65,530,909원</td></tr><tr><td>인사총무팀</td><td>58,280,000원</td><td>59,850,769원</td></tr></tbody></table>
-<p class="note">전체 평균과 부서별 평균의 결론이 반대다.</p></div></section>
-<section id="s12" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
+<div class="result-line"><span class="lead">결과</span>부서로 나누면 5개 모두 <b>여성 평균이 높다</b>.</div><div class="explain"><p>이 막대그래프는 전체 평균이 아니라 부서별로 나누어 여성 평균과 남성 평균의 차이를 본 그림입니다. 값은 여성 평균에서 남성 평균을 뺀 금액입니다. 그래서 값이 양수이면 그 부서에서는 여성 평균이 더 높다는 뜻입니다.</p><p>막대 5개를 하나씩 보면 개발본부 3,433,286원, 고객운영팀 2,597,500원, 데이터전략팀 5,229,365원, 영업본부 4,510,909원, 인사총무팀 1,570,769원입니다. 모두 0보다 큽니다. 특히 데이터전략팀은 5,229,365원으로 차이가 가장 큽니다.</p></div></div></section>
+<section id="s14" class="slide slide-note"><div class="slide-inner"><h2>부서별로 결론이 뒤집힌다<span class="cont-tag">이어서</span></h2><div class="explain"><p>여기서 결론이 뒤집힙니다. 전체 평균만 보면 남성이 높았는데, 부서 안에서 비교하면 5개 부서 모두 여성 평균이 높습니다. 이런 현상을 심슨의 역설이라고 부릅니다. 전체로 볼 때와 중요한 그룹으로 나누어 볼 때 결론이 반대로 보이는 현상입니다.</p><p>왜 이런 일이 생길까요? 성별 자체보다 부서 구성이 전체 평균에 크게 영향을 주었기 때문입니다. 연봉 수준이 높은 부서에 남성이 더 많이 모여 있고, 낮은 부서에 여성이 더 많이 모여 있으면 전체 평균은 남성이 높아 보일 수 있습니다. 같은 부서 안에서 비교해야 더 공정한 비교에 가까워집니다.</p></div></div></section>
+<section id="s15" class="slide slide-table has-explain"><div class="slide-inner"><h2>부서별 평균을 함께 확인한다</h2>
+<table class="deck-table"><thead><tr><th>부서</th><th>남성</th><th>여성</th></tr></thead><tbody><tr><td>개발본부</td><td>73,541,000원</td><td>76,974,286원</td></tr><tr><td>고객운영팀</td><td>51,497,500원</td><td>54,095,000원</td></tr><tr><td>데이터전략팀</td><td>67,437,778원</td><td>72,667,143원</td></tr></tbody></table>
+<p class="note">전체 평균과 부서별 평균의 결론이 반대다.</p><div class="explain"><p>이 표는 막대그래프에서 본 내용을 숫자로 다시 확인하는 표입니다. 행은 부서이고, 열은 남성 평균 연봉과 여성 평균 연봉입니다. 그래프가 큰 흐름을 보여준다면, 표는 정확한 금액을 사전에서 찾듯 확인하게 해 줍니다.</p><p>각 행을 왼쪽부터 오른쪽으로 읽어 보세요. 개발본부는 남성 73,541,000원, 여성 76,974,286원입니다. 고객운영팀은 남성 51,497,500원, 여성 54,095,000원입니다. 데이터전략팀, 영업본부, 인사총무팀도 모두 여성 평균이 남성 평균보다 높습니다.</p><p>이 표에서 중요한 것은 전체 평균과 부서별 평균이 서로 다른 말을 한다는 점입니다. 전체 평균은 남성이 높다고 말했지만, 부서별 표는 모든 부서에서 여성이 높다고 말합니다. 그래서 평균을 볼 때는 &#x27;무엇끼리 섞어서 평균을 냈는지&#x27;를 꼭 확인해야 합니다.</p></div></div></section>
+<section id="s16" class="slide slide-table"><div class="slide-inner"><h2>부서별 평균을 함께 확인한다 (이어서)</h2>
+<table class="deck-table"><thead><tr><th>부서</th><th>남성</th><th>여성</th></tr></thead><tbody><tr><td>영업본부</td><td>61,020,000원</td><td>65,530,909원</td></tr><tr><td>인사총무팀</td><td>58,280,000원</td><td>59,850,769원</td></tr></tbody></table></div></section>
+<section id="s17" class="slide slide-concept has-explain"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
 <h2>왜 뒤집히는가</h2>
 <p class="body">성별 자체보다 부서 구성이 전체 평균에 큰 영향을 준다.</p>
 <ul class="bullets"><li>전체 평균만 보면 구조를 놓친다</li>
 <li>비교 기준에 맞게 그룹을 나눈다</li>
-<li>심슨의 역설은 분해로 확인한다</li></ul></div></section>
-<section id="s13" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<li>심슨의 역설은 분해로 확인한다</li></ul><div class="explain"><p>결론이 뒤집힌 이유는 전체 평균 안에 부서 구성이 숨어 있기 때문입니다. 평균은 한 줄로 보기에는 편하지만, 그 안에 어떤 사람들이 얼마나 섞였는지는 가려 버립니다.</p><p>심슨의 역설은 전체로 보면 A가 높아 보이는데, 중요한 그룹으로 나누어 보면 모든 그룹에서 B가 높게 나오는 현상입니다. 방금 본 연봉 예시에서는 전체 평균만 보면 남성이 높지만, 부서별로 나누면 5개 부서 모두 여성 평균이 높았습니다.</p><p>그래서 분석할 때는 전체 평균을 버리라는 뜻이 아닙니다. 전체 평균을 본 뒤에, 비교에 영향을 줄 만한 기준으로 한 번 더 나누어 보라는 뜻입니다. 부서, 직급, 연차, 지역, 기간처럼 결과에 영향을 줄 수 있는 기준을 확인해 보세요.</p></div></div></section>
+<section id="s18" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
 <div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 주장 반박문 작성</div><div class="m-desc">기온과 매출을 날짜 기준으로 맞춘 뒤 상관과 다른 요인을 점검한다.</div></div></div></div></section>
-<section id="s14" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<section id="s19" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
 <ul class="bullets"><li>r=0.806은 강한 상관이지 인과를 단정할 근거는 아니다.</li>
 <li>전체 평균은 남성이 높지만 부서별 평균은 모두 여성이 높다.</li>
 <li>그럴듯한 주장은 산점도, r, 그룹 분해로 검토한다.</li></ul>
