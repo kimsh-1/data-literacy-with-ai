@@ -12,3 +12,5 @@
 - Phase 8 완료: Linear 소개 사이트(site/index.html) designer 에이전트 제작, Playwright 3해상도 검증. SVG→실PNG 교체.
 - Phase 9 완료: GitHub 공개 repo https://github.com/kimsh-1/data-literacy-with-ai (176파일, 실데이터 제외). Vercel 배포 라이브 https://site-opal-iota-97.vercel.app (HTML/이미지 200 확인).
 - Phase 7 진행중: 30초 인트로 영상(hyperframes) 렌더 중 → 완성 시 사이트 슬롯 배선·재배포.
+- Phase 7 완료: 30초 인트로 영상(intro.mp4, 1920x1080, 30.04s, h264+aac, Linear 모션그래픽). 프레임 실측검증. 사이트 <video> 배선 → Vercel 재배포 → GitHub 커밋/푸시.
+- 전체 완료: GitHub https://github.com/kimsh-1/data-literacy-with-ai · Vercel https://site-opal-iota-97.vercel.app (영상 서빙 200 확인).
