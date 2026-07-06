@@ -36,13 +36,13 @@ a{color:inherit;text-decoration:none;}
 .kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
   text-transform:uppercase;margin-bottom:0.9rem;}
 .body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
-ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
-ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
-  color:var(--ink);line-height:1.5;}
-ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.8rem;max-width:62ch;}
+ul.bullets>li{position:relative;padding-left:1.6rem;font-size:clamp(1rem,1.35vw,1.24rem);
+  color:var(--ink);line-height:1.42;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.58em;width:7px;height:7px;border-radius:2px;
   background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
 ul.bullets>li b{color:var(--ink);font-weight:640;}
-.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid{display:flex;flex-direction:column;gap:1rem;counter-reset:obj;max-width:58ch;}
 .obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
   font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
 .obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
@@ -53,9 +53,11 @@ ul.bullets>li b{color:var(--ink);font-weight:640;}
   padding:1.3rem 1.5rem;}
 .mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
 .mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
-table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.18rem);}
 table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
-  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+  padding:0.72rem 1.1rem;text-align:left;vertical-align:top;line-height:1.4;}
+table.deck-table.compact{font-size:clamp(0.8rem,1.05vw,0.98rem);}
+table.deck-table.compact th,table.deck-table.compact td{padding:0.42rem 0.8rem;line-height:1.32;}
 table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
   font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
 table.deck-table td{color:var(--ink-muted);}
@@ -69,6 +71,35 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 .closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
   color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
 .closing .next b{color:var(--primary-hover);}
+/* --- visual slides --- */
+.viz{margin-top:1rem;width:100%;max-width:78ch;}
+.viz svg{width:100%;height:auto;display:block;overflow:visible;}
+.viz-cap{margin-top:1rem;color:var(--ink-tertiary);font-size:0.92rem;font-family:var(--font-mono);}
+.result-line{margin-top:1.4rem;padding:0.9rem 1.2rem;border-left:3px solid var(--primary);
+  background:var(--surface-1);border-radius:0 10px 10px 0;color:var(--ink);
+  font-size:clamp(1rem,1.4vw,1.3rem);line-height:1.5;max-width:62ch;}
+.result-line b{color:var(--primary-hover);}
+.result-line .lead{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:1px;
+  text-transform:uppercase;color:var(--ink-subtle);display:block;margin-bottom:0.3rem;}
+.xform{display:flex;align-items:stretch;gap:0;max-width:80ch;margin-top:0.6rem;}
+.xform-card{flex:1;border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;padding:1.2rem 1.3rem;}
+.xform-card .xf-label{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.6px;
+  color:var(--ink-subtle);text-transform:uppercase;margin-bottom:0.9rem;}
+.xform-arrow{display:flex;align-items:center;padding:0 1.1rem;color:var(--primary-hover);font-size:2rem;flex:none;}
+.xf-row{display:flex;justify-content:space-between;gap:1rem;padding:0.55rem 0.6rem;
+  font-size:clamp(0.92rem,1.25vw,1.12rem);border-radius:8px;}
+.xf-row .k{color:var(--ink-subtle);font-family:var(--font-mono);font-size:0.9em;}
+.xf-row .v{color:var(--ink);text-align:right;}
+.xf-row.changed{background:rgba(94,106,210,0.14);outline:1.5px solid var(--primary);}
+.xf-row.changed .v{color:var(--primary-hover);font-weight:640;}
+.img-wrap{position:relative;width:100%;max-width:80ch;margin-top:0.6rem;
+  border:1px solid var(--hairline);border-radius:16px;overflow:hidden;background:var(--surface-1);}
+.img-wrap img{width:100%;display:block;}
+.img-box{position:absolute;border:2px solid var(--primary-hover);border-radius:6px;
+  box-shadow:0 0 0 3px rgba(94,106,210,0.18);}
+.img-box .lbl{position:absolute;top:-1.9em;left:-2px;white-space:nowrap;
+  background:var(--primary);color:#fff;font-size:0.8rem;font-weight:600;
+  padding:2px 8px;border-radius:6px;}
 /* chrome */
 .progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
 .hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
@@ -98,57 +129,56 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <div class="progress"></div>
 <div class="brand">데이터 리터러시 with AI</div>
 <div class="hud">
-  <span class="counter"><span class="cur">1</span> / 11</span>
+  <span class="counter"><span class="cur">1</span> / 13</span>
   <a class="back" href="./S17.html">자료로 돌아가기</a>
 </div>
 <div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
 <main class="deck">
 <section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S17 · PART 05 · BI · 난이도 4</div>
 <h1>시각화·상호작용·DAX 기초</h1>
-<p class="subtitle">S16에서 만든 관계형 모델을 슬라이서, 상호작용, DAX 측정값으로 움직이는 대시보드로 바꾸는 시간이다.</p></div></section>
-<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
-<ul class="obj-grid"><li>슬라이서, 드릴다운, 시각화 간 상호작용의 역할을 설명한다.</li>
-<li>Power BI 모델에서 DAX 측정값을 만들고 카드, 차트, 표에 재사용한다.</li>
-<li>SUMX, DIVIDE, CALCULATE의 입문 수준 용도를 이해한다.</li>
-<li>날짜테이블을 사용해 전월매출과 전월대비 성장률을 계산한다.</li>
-<li>고객 등급 슬라이서와 월별 KPI를 포함한 시계열 대시보드를 만들고 해석한다.</li></ul></div></section>
-<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
-<h2>슬라이서는 대시보드 전체를 바꾸는 필터다</h2>
-<p class="body">Power BI의 슬라이서는 같은 모델에 연결된 여러 시각화를 동시에 바꾼다. 고객 등급에서 VIP를 선택하면 총매출 카드, 월별 선그래프, 카테고리 막대그래프가 모두 VIP 고객 기준으로 다시 계산된다.</p>
-<ul class="bullets"><li>엑셀 피벗테이블 슬라이서와 비슷하지만 한 시각화에만 머물지 않는다.</li>
-<li>숫자가 단순히 가려지는 것이 아니라 측정값이 필터 조건 아래에서 다시 계산된다.</li></ul></div></section>
-<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
-<h2>드릴다운은 큰 묶음에서 작은 항목으로 내려가는 기능이다</h2>
-<p class="body">막대그래프 축에 products[category]와 products[product_name]을 순서대로 올리면 처음에는 카테고리별 매출이 보이고, 디지털 막대를 누르면 디지털 카테고리 안의 상품별 매출로 내려간다.</p>
-<ul class="bullets"><li>전체에서 어디가 큰지 본 뒤 그 안에서 무엇이 큰지 이어서 볼 때 유용하다.</li>
-<li>카테고리별 매출 막대그래프는 products[category]에서 products[product_name]으로 드릴다운되어야 한다.</li></ul></div></section>
-<section id="s5" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
-<h2>DAX 측정값은 모델 안에 저장하는 계산식이다</h2>
-<p class="body">엑셀은 셀에 수식을 적지만 Power BI는 모델 안에 측정값을 만들어 둔다. 주문 테이블에는 매출 컬럼이 없으므로 상품 단가, 주문 수량, 할인율을 조합해 총매출 측정값을 만든다.</p>
-<ul class="bullets"><li>총매출은 products[price] × orders[qty] × (1 - orders[discount_rate])로 계산한다.</li>
-<li>SUMX는 주문 행을 한 줄씩 보며 매출을 계산한 뒤 모두 더한다.</li>
-<li>RELATED(products[price])는 연결된 상품 테이블에서 단가를 가져온다.</li></ul></div></section>
-<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
-<h2>비율과 시간 계산은 필터 맥락을 바꿔 읽는다</h2>
-<p class="body">매출비중은 현재 카테고리 매출을 전체 카테고리 매출로 나누어 만든다. 전월대비 성장률은 날짜테이블을 기준으로 현재 보고 있는 달의 전월을 찾아 계산한다.</p>
-<ul class="bullets"><li>DIVIDE는 분모가 0이거나 비어 있을 때 오류를 줄여 준다.</li>
-<li>CALCULATE는 계산 맥락을 바꾸어 분모를 전체 카테고리 기준으로 다시 계산한다.</li>
-<li>전월대비 카드는 월 슬라이서처럼 현재 월을 정하는 맥락이 있어야 제대로 읽힌다.</li></ul></div></section>
-<section id="s7" class="slide slide-table"><div class="slide-inner"><h2>데이터와 핵심 검증값</h2>
-<table class="deck-table"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>orders</td><td>20,000행</td></tr><tr><td>customers</td><td>3,000행</td></tr><tr><td>products</td><td>200행</td></tr><tr><td>주문 기간</td><td>2024-01-01 ~ 2024-12-31</td></tr><tr><td>날짜테이블 행수</td><td>366</td></tr><tr><td>전체 주문건수</td><td>20,000</td></tr><tr><td>전체 판매수량</td><td>29,535</td></tr><tr><td>전체 매출</td><td>1,938,489,803</td></tr><tr><td>평균주문금액</td><td>96,924.49</td></tr></tbody></table>
-<p class="note">고객 조인 누락과 상품 조인 누락은 모두 0건이다.</p></div></section>
-<section id="s8" class="slide slide-table"><div class="slide-inner"><h2>카테고리별 매출비중 검증값</h2>
-<table class="deck-table"><thead><tr><th>카테고리</th><th>매출</th><th>매출비중</th></tr></thead><tbody><tr><td>디지털</td><td>673,862,749</td><td>34.76%</td></tr><tr><td>패션</td><td>281,835,909</td><td>14.54%</td></tr><tr><td>스포츠</td><td>217,531,145</td><td>11.22%</td></tr><tr><td>뷰티</td><td>179,845,362</td><td>9.28%</td></tr><tr><td>생활용품</td><td>178,042,374</td><td>9.18%</td></tr></tbody></table>
-<p class="note">표나 막대그래프에서 products[category]와 나란히 놓을 때 매출비중의 의미가 살아난다.</p></div></section>
-<section id="s9" class="slide slide-quote"><div class="slide-inner"><blockquote class="quote">오늘 만든 대시보드는 그냥 예쁜 그림이 아니다. 관계형 모델 위에 측정값을 올리고, 그 측정값이 필터 맥락에 따라 스스로 다시 계산되도록 짜 놓은 결과물이다.</blockquote>
-<div class="attribution">S17 강사 멘트</div></div></section>
-<section id="s10" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
-<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 시계열 KPI 대시보드 완성</div><div class="m-desc">총매출, 주문건수, 평균주문금액, 전월대비 성장률 카드와 월별 총매출 선그래프를 한 페이지에 배치한다.</div></div><div class="mission-card"><div class="m-label">미션 2. 슬라이서와 드릴다운 동작 확인</div><div class="m-desc">고객 등급 슬라이서와 월 슬라이서를 만들고, 카테고리별 매출 막대그래프가 상품명으로 드릴다운되도록 구성한다.</div></div><div class="mission-card"><div class="m-label">미션 3. 검증값과 해석 문장 확인</div><div class="m-desc">월 슬라이서에서 2024-12를 선택하면 전월대비 성장률 1.14%가 보여야 하며, 해석 문장 2개를 적는다.</div></div></div></div></section>
-<section id="s11" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
-<ul class="bullets"><li>슬라이서는 대시보드 전체를 바꾸는 필터이며, 상호작용 설정에 따라 차트끼리 서로 영향을 준다.</li>
-<li>DAX 측정값은 시각화에서 반복해서 쓰는 계산식이며, 같은 측정값이 필터 맥락에 따라 다시 계산된다.</li>
-<li>전월대비 계산에는 날짜테이블과 주문일 관계가 필요하며, 카드로 읽을 때는 현재 월 맥락이 필요하다.</li></ul>
-<div class="next"><b>다음 차시</b>는 S18 배포와 공유이며, Looker Studio를 표준 경로로 보고서를 공유 링크 형태로 다듬는다.</div></div></section>
+<p class="subtitle">관계형 모델을 클릭할 때 다시 계산되는 대시보드로 바꾼다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>학습 후 할 수 있는 것</h2>
+<ul class="obj-grid"><li>슬라이서·드릴다운·상호작용을 설명한다</li>
+<li>DAX 측정값을 카드·차트·표에 재사용한다</li>
+<li>날짜 테이블로 전월대비 성장률을 계산한다</li>
+<li>월별 KPI 대시보드를 해석한다</li></ul></div></section>
+<section id="s3" class="slide slide-image"><div class="slide-inner"><h2>모델이 대시보드가 된다</h2>
+<div class="img-wrap"><img src="../images/deck/bi.png" alt="BI 대시보드 흐름 인포그래픽"/></div>
+<div class="viz-cap">모델 위의 측정값은 필터마다 다시 계산된다.</div></div></section>
+<section id="s4" class="slide slide-table"><div class="slide-inner"><h2>기준 데이터부터 고정한다</h2>
+<table class="deck-table"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>orders</td><td>20,000행</td></tr><tr><td>customers</td><td>3,000행</td></tr><tr><td>products</td><td>200행</td></tr><tr><td>날짜 테이블</td><td>366행</td></tr><tr><td>조인 누락</td><td>0건</td></tr></tbody></table>
+<p class="note">주문 기간은 2024-01-01부터 2024-12-31까지다.</p></div></section>
+<section id="s5" class="slide slide-transform"><div class="slide-inner"><h2>총매출은 매출 컬럼 없이 만든다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">원천 테이블</div><div class="xf-row"><span class="k">orders 행수</span><span class="v">20,000</span></div><div class="xf-row changed"><span class="k">매출 컬럼</span><span class="v">없음</span></div><div class="xf-row"><span class="k">price 위치</span><span class="v">products</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">DAX 측정값</div><div class="xf-row changed"><span class="k">총매출</span><span class="v">1,938,489,803</span></div><div class="xf-row"><span class="k">주문건수</span><span class="v">20,000</span></div><div class="xf-row"><span class="k">평균주문금액</span><span class="v">96,924.49</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>SUMX로 행별 매출을 계산해 <b>총매출</b> 측정값으로 재사용한다.</div></div></section>
+<section id="s6" class="slide slide-chart"><div class="slide-inner"><h2>월별 매출은 12월이 가장 높다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="56" y1="398" x2="976" y2="398" stroke="#2b2d33" stroke-width="1.5"/><polyline points="56,193 140,198 223,186 307,160 391,141 474,183 558,135 641,145 725,163 809,150 892,50 976,46" fill="none" stroke="#828fff" stroke-width="3"/><circle cx="56" cy="193" r="6" fill="#828fff"/><text x="56" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">1월</text><circle cx="140" cy="198" r="6" fill="#828fff"/><text x="140" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2월</text><circle cx="223" cy="186" r="6" fill="#828fff"/><text x="223" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3월</text><circle cx="307" cy="160" r="6" fill="#828fff"/><text x="307" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">4월</text><circle cx="391" cy="141" r="6" fill="#828fff"/><text x="391" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">5월</text><circle cx="474" cy="183" r="6" fill="#828fff"/><text x="474" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">6월</text><circle cx="558" cy="135" r="6" fill="#828fff"/><text x="558" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">7월</text><circle cx="641" cy="145" r="6" fill="#828fff"/><text x="641" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">8월</text><circle cx="725" cy="163" r="6" fill="#828fff"/><text x="725" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">9월</text><circle cx="809" cy="150" r="6" fill="#828fff"/><text x="809" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">10월</text><circle cx="892" cy="50" r="6" fill="#828fff"/><text x="892" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">11월</text><circle cx="976" cy="46" r="6" fill="#828fff"/><text x="976" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">12월</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>12월 매출이 <b>225,576,457원</b>으로 가장 높다.</div></div></section>
+<section id="s7" class="slide slide-chart"><div class="slide-inner"><h2>성장률이 급등한 달은 11월이다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="56" y1="398" x2="976" y2="398" stroke="#2b2d33" stroke-width="1.5"/><polyline points="56,310 148,262 240,219 332,250 424,398 516,158 608,320 700,341 792,263 884,46 976,290" fill="none" stroke="#828fff" stroke-width="3"/><circle cx="56" cy="310" r="6" fill="#828fff"/><text x="56" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2월</text><circle cx="148" cy="262" r="6" fill="#828fff"/><text x="148" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3월</text><circle cx="240" cy="219" r="6" fill="#828fff"/><text x="240" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">4월</text><circle cx="332" cy="250" r="6" fill="#828fff"/><text x="332" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">5월</text><circle cx="424" cy="398" r="6" fill="#828fff"/><text x="424" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">6월</text><circle cx="516" cy="158" r="6" fill="#828fff"/><text x="516" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">7월</text><circle cx="608" cy="320" r="6" fill="#828fff"/><text x="608" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">8월</text><circle cx="700" cy="341" r="6" fill="#828fff"/><text x="700" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">9월</text><circle cx="792" cy="263" r="6" fill="#828fff"/><text x="792" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">10월</text><circle cx="884" cy="46" r="6" fill="#828fff"/><text x="884" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">11월</text><circle cx="976" cy="290" r="6" fill="#828fff"/><text x="976" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">12월</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>11월은 10월보다 <b>40.43%</b> 증가했다.</div></div></section>
+<section id="s8" class="slide slide-chart"><div class="slide-inner"><h2>디지털이 매출 비중 1위다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="78" y="46" width="113" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="134" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">673,862,749원</text><text x="134" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">디지털</text><rect x="266" y="251" width="113" height="147" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="322" y="239" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">281,835,909원</text><text x="322" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">패션</text><rect x="454" y="284" width="113" height="114" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="272" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">217,531,145원</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">스포츠</text><rect x="642" y="304" width="113" height="94" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="698" y="292" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">179,845,362원</text><text x="698" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">뷰티</text><rect x="830" y="305" width="113" height="93" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="886" y="293" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">178,042,374원</text><text x="886" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">생활용품</text><line x1="917" y1="88" x2="134" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="134" cy="40" r="4" fill="#828fff"/><rect x="862" y="46" width="110" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="917" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">34.76%</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>디지털 매출은 <b>673,862,749원</b>, 전체의 34.76%다.</div></div></section>
+<section id="s9" class="slide slide-chart"><div class="slide-inner"><h2>등급 슬라이서가 매출 집계를 바꾼다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="87" y="46" width="141" height="352" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="158" y="34" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">603,583,519원</text><text x="158" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">실버</text><rect x="322" y="79" width="141" height="319" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="392" y="67" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">547,524,985원</text><text x="392" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">골드</text><rect x="557" y="168" width="141" height="230" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="628" y="156" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">393,948,369원</text><text x="628" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">브론즈</text><rect x="792" y="169" width="141" height="229" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="862" y="157" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">393,432,930원</text><text x="862" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">VIP</text><line x1="103" y1="88" x2="862" y2="163" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="862" cy="163" r="4" fill="#828fff"/><rect x="48" y="46" width="110" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="103" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">VIP 선택</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>VIP 선택 시 총매출은 <b>393,432,930원</b>이다.</div></div></section>
+<section id="s10" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>측정값은 맥락에서 계산된다</h2>
+<p class="body">측정값은 저장된 숫자가 아니다. 선택한 고객 등급, 카테고리, 월 조건에 따라 다시 계산된다.</p>
+<ul class="bullets"><li>VIP 선택은 VIP 주문만 남긴다</li>
+<li>디지털 클릭은 디지털 매출만 보여준다</li>
+<li>월 선택은 전월대비 기준을 정한다</li></ul></div></section>
+<section id="s11" class="slide slide-table"><div class="slide-inner"><h2>차트 클릭의 세 가지 효과</h2>
+<table class="deck-table"><thead><tr><th>방식</th><th>효과</th><th>해석</th></tr></thead><tbody><tr><td>필터</td><td>선택 항목만 남긴다</td><td>기준을 좁힌다</td></tr><tr><td>강조</td><td>선택 비중을 강조한다</td><td>구성비를 읽는다</td></tr><tr><td>없음</td><td>다른 차트 영향 없음</td><td>연동을 끊는다</td></tr></tbody></table>
+<p class="note">이번 실습에서는 카테고리 막대가 선 그래프와 KPI 카드를 필터링한다.</p></div></section>
+<section id="s12" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. KPI 카드</div><div class="m-desc">총매출·주문건수·평균주문금액·성장률을 배치한다.</div></div><div class="mission-card"><div class="m-label">미션 2. 월별 흐름</div><div class="m-desc">월별 총매출 선 그래프와 월 슬라이서를 만든다.</div></div><div class="mission-card"><div class="m-label">미션 3. 상호작용</div><div class="m-desc">등급 슬라이서와 카테고리 드릴다운을 연동한다.</div></div><div class="mission-card"><div class="m-label">미션 4. 검증</div><div class="m-desc">2024-12 성장률 1.14%와 VIP 매출을 확인한다.</div></div></div></div></section>
+<section id="s13" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>총매출은 모델 관계를 바탕으로 DAX 측정값으로 만든다.</li>
+<li>슬라이서와 차트 클릭은 같은 측정값의 필터 맥락을 바꾼다.</li>
+<li>날짜 테이블과 월 맥락이 있어야 전월대비를 읽을 수 있다.</li></ul>
+<div class="next"><b>다음 차시</b>: 배포와 공유, Looker Studio 중심</div></div></section>
 </main>
 <script>
 const deck=document.querySelector('.deck');

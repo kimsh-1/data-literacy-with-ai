@@ -36,13 +36,13 @@ a{color:inherit;text-decoration:none;}
 .kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
   text-transform:uppercase;margin-bottom:0.9rem;}
 .body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
-ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
-ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
-  color:var(--ink);line-height:1.5;}
-ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.8rem;max-width:62ch;}
+ul.bullets>li{position:relative;padding-left:1.6rem;font-size:clamp(1rem,1.35vw,1.24rem);
+  color:var(--ink);line-height:1.42;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.58em;width:7px;height:7px;border-radius:2px;
   background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
 ul.bullets>li b{color:var(--ink);font-weight:640;}
-.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid{display:flex;flex-direction:column;gap:1rem;counter-reset:obj;max-width:58ch;}
 .obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
   font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
 .obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
@@ -53,9 +53,11 @@ ul.bullets>li b{color:var(--ink);font-weight:640;}
   padding:1.3rem 1.5rem;}
 .mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
 .mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
-table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.18rem);}
 table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
-  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+  padding:0.72rem 1.1rem;text-align:left;vertical-align:top;line-height:1.4;}
+table.deck-table.compact{font-size:clamp(0.8rem,1.05vw,0.98rem);}
+table.deck-table.compact th,table.deck-table.compact td{padding:0.42rem 0.8rem;line-height:1.32;}
 table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
   font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
 table.deck-table td{color:var(--ink-muted);}
@@ -69,6 +71,35 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 .closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
   color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
 .closing .next b{color:var(--primary-hover);}
+/* --- visual slides --- */
+.viz{margin-top:1rem;width:100%;max-width:78ch;}
+.viz svg{width:100%;height:auto;display:block;overflow:visible;}
+.viz-cap{margin-top:1rem;color:var(--ink-tertiary);font-size:0.92rem;font-family:var(--font-mono);}
+.result-line{margin-top:1.4rem;padding:0.9rem 1.2rem;border-left:3px solid var(--primary);
+  background:var(--surface-1);border-radius:0 10px 10px 0;color:var(--ink);
+  font-size:clamp(1rem,1.4vw,1.3rem);line-height:1.5;max-width:62ch;}
+.result-line b{color:var(--primary-hover);}
+.result-line .lead{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:1px;
+  text-transform:uppercase;color:var(--ink-subtle);display:block;margin-bottom:0.3rem;}
+.xform{display:flex;align-items:stretch;gap:0;max-width:80ch;margin-top:0.6rem;}
+.xform-card{flex:1;border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;padding:1.2rem 1.3rem;}
+.xform-card .xf-label{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.6px;
+  color:var(--ink-subtle);text-transform:uppercase;margin-bottom:0.9rem;}
+.xform-arrow{display:flex;align-items:center;padding:0 1.1rem;color:var(--primary-hover);font-size:2rem;flex:none;}
+.xf-row{display:flex;justify-content:space-between;gap:1rem;padding:0.55rem 0.6rem;
+  font-size:clamp(0.92rem,1.25vw,1.12rem);border-radius:8px;}
+.xf-row .k{color:var(--ink-subtle);font-family:var(--font-mono);font-size:0.9em;}
+.xf-row .v{color:var(--ink);text-align:right;}
+.xf-row.changed{background:rgba(94,106,210,0.14);outline:1.5px solid var(--primary);}
+.xf-row.changed .v{color:var(--primary-hover);font-weight:640;}
+.img-wrap{position:relative;width:100%;max-width:80ch;margin-top:0.6rem;
+  border:1px solid var(--hairline);border-radius:16px;overflow:hidden;background:var(--surface-1);}
+.img-wrap img{width:100%;display:block;}
+.img-box{position:absolute;border:2px solid var(--primary-hover);border-radius:6px;
+  box-shadow:0 0 0 3px rgba(94,106,210,0.18);}
+.img-box .lbl{position:absolute;top:-1.9em;left:-2px;white-space:nowrap;
+  background:var(--primary);color:#fff;font-size:0.8rem;font-weight:600;
+  padding:2px 8px;border-radius:6px;}
 /* chrome */
 .progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
 .hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
@@ -98,62 +129,59 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <div class="progress"></div>
 <div class="brand">데이터 리터러시 with AI</div>
 <div class="hud">
-  <span class="counter"><span class="cur">1</span> / 11</span>
+  <span class="counter"><span class="cur">1</span> / 13</span>
   <a class="back" href="./S07.html">자료로 돌아가기</a>
 </div>
 <div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
 <main class="deck">
 <section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S07 · PART 03 · AI · 난이도 2</div>
 <h1>엑셀을 AI에 올려 자연어로 분석</h1>
-<p class="subtitle">엑셀 파일을 AI에 업로드한 뒤 자연어로 요약, 월별 집계, 이상치 확인을 요청하고 답의 기준을 검토한다.</p></div></section>
-<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
-<ul class="obj-grid"><li>엑셀 파일을 AI 분석 도구에 업로드하고 분석 대상 시트를 명확히 지정한다.</li>
-<li>자연어로 데이터 요약, 월별 집계, 추세, 이상치 확인을 요청한다.</li>
-<li>AI가 만든 표와 차트를 받을 때 집계 기준과 제외 기준을 함께 확인한다.</li>
-<li>두 AI 답안을 비교해 더 믿을 만한 답을 고르고 그 이유를 설명한다.</li></ul></div></section>
-<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
-<h2>AI 업로드는 파일 전달이고 프롬프트는 업무 지시서다</h2>
-<p class="body">엑셀에서는 피벗테이블 필드를 손으로 배치하지만, AI 분석에서는 같은 일을 말로 지시한다. 지시가 모호하면 AI의 작업 기준도 함께 모호해진다.</p>
-<ul class="bullets"><li>월별 매출을 요청할 때 중복 주문번호, 음수 매출, 날짜 오류 처리 기준을 함께 말한다.</li>
-<li>좋은 프롬프트는 결과를 검토할 수 있게 만드는 업무 지시서다.</li></ul></div></section>
-<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
-<h2>첫 질문은 결론이 아니라 구조 확인이다</h2>
-<p class="body">AI에게 바로 결론을 요구하면 그럴듯한 문장부터 받을 수 있다. 첫 질문은 파일의 구조와 품질을 확인하는 일이어야 한다.</p>
-<ul class="bullets"><li>전체 데이터는 10,439행 × 12열이다.</li>
-<li>sales 시트를 분석 대상으로 지정한다.</li>
-<li>payment 결측은 313개이고 member 결측은 209개다.</li>
-<li>중복 order_id 추가 행은 15개다.</li></ul></div></section>
-<section id="s5" class="slide slide-table"><div class="slide-inner"><h2>월별 분석 전에 확인할 데이터 품질</h2>
-<table class="deck-table"><thead><tr><th>항목</th><th>확인값</th></tr></thead><tbody><tr><td>완전 중복 행</td><td>13</td></tr><tr><td>중복 order_id 추가 행</td><td>15</td></tr><tr><td>payment 결측</td><td>313</td></tr><tr><td>member 결측</td><td>209</td></tr><tr><td>store 값 강남 점</td><td>310</td></tr><tr><td>앞 공백이 있는 category</td><td>313</td></tr><tr><td>unit_price에 원이 붙은 값</td><td>157</td></tr><tr><td>단가×수량과 주문금액이 맞지 않는 행</td><td>3</td></tr></tbody></table>
-<p class="note">date는 2025-01-01, 2025/01/01, 01-01-2025처럼 형식이 뒤섞여 있다.</p></div></section>
-<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
-<h2>월별 집계 기준은 사용자가 명시한다</h2>
-<p class="body">AI는 피벗테이블을 대신 만들 수 있지만, 어떤 행을 포함하고 제외할지는 사용자가 기준으로 줘야 한다.</p>
-<ul class="bullets"><li>date는 섞여 있는 세 가지 날짜 형식을 모두 날짜로 해석한다.</li>
-<li>order_id는 주문 고유번호로 보고 중복 order_id는 한 건만 남긴다.</li>
-<li>unit_price의 쉼표와 원 문자는 제거해 숫자로 바꾼다.</li>
-<li>amount가 0 이하인 행, qty가 20보다 큰 행, 단가×수량과 amount가 맞지 않는 행은 이상치로 따로 표시하고 집계에서 제외한다.</li>
-<li>payment와 member 결측은 매출 집계에서 제외하지 않는다.</li></ul></div></section>
-<section id="s7" class="slide slide-table"><div class="slide-inner"><h2>기준 적용 후 월별 매출 추세</h2>
-<table class="deck-table"><thead><tr><th>월</th><th>주문건수</th><th>판매수량</th><th>매출액</th><th>전월대비 증감률</th></tr></thead><tbody><tr><td>2025-01</td><td>1,685</td><td>2,784</td><td>14,421,000</td><td></td></tr><tr><td>2025-02</td><td>1,523</td><td>2,534</td><td>13,151,500</td><td>-8.8%</td></tr><tr><td>2025-03</td><td>1,716</td><td>2,842</td><td>14,735,500</td><td>12.0%</td></tr><tr><td>2025-04</td><td>1,760</td><td>2,938</td><td>15,257,500</td><td>3.5%</td></tr><tr><td>2025-05</td><td>1,800</td><td>2,996</td><td>16,094,000</td><td>5.5%</td></tr><tr><td>2025-06</td><td>1,937</td><td>3,144</td><td>16,816,500</td><td>4.5%</td></tr></tbody></table>
-<p class="note">이 기준을 적용하면 분석용 데이터는 10,421행이다.</p></div></section>
-<section id="s8" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
-<h2>이상치는 큰 값만 뜻하지 않는다</h2>
-<p class="body">이번 데이터의 이상치는 매출이 큰 달이 아니라 행 단위에서 기준을 흔드는 값이다. 수량, 금액, 검산 불일치를 따로 확인해야 한다.</p>
-<ul class="bullets"><li>order_id 11496은 qty가 999이고 단가×수량과 amount가 맞지 않는다.</li>
-<li>order_id 13013은 amount가 -5,500원이다.</li>
-<li>order_id 16235는 qty가 999이고 단가×수량과 amount가 맞지 않는다.</li>
-<li>일별 매출 합계는 IQR 기준으로 통계적 이상치가 없었다.</li></ul></div></section>
-<section id="s9" class="slide slide-quote"><div class="slide-inner"><blockquote class="quote">좋은 AI 답은 문장이 매끄러운 답이 아니라 검산이 되는 답이다.</blockquote>
-<div class="attribution">S07 강사 멘트</div></div></section>
-<section id="s10" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
-<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 두 AI 답 비교</div><div class="m-desc">같은 파일과 같은 질문을 두 AI에게 넣고 답 A와 답 B를 비교한다. 도구가 하나뿐이면 짧은 프롬프트와 긴 프롬프트를 각각 실행해 비교한다.</div></div><div class="mission-card"><div class="m-label">미션 2. 더 믿을 답 고르기</div><div class="m-desc">행 수, 날짜 처리, 중복 처리, 이상치 목록, 월별 매출 표 중 최소 세 가지 근거로 더 신뢰할 답을 고른다.</div></div><div class="mission-card"><div class="m-label">미션 3. 결론 3문장 작성</div><div class="m-desc">월별 매출은 2월에 하락한 뒤 3월부터 6월까지 증가하며, 6월 매출이 가장 크다는 흐름을 자기 말로 정리한다.</div></div></div></div></section>
-<section id="s11" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
-<ul class="bullets"><li>AI에 파일을 올리는 것만으로 분석이 끝나지 않는다.</li>
-<li>분석은 행 수와 컬럼을 확인하고, 집계 기준을 말한 뒤, 마지막에 결론을 받는 순서로 진행한다.</li>
-<li>AI가 만든 표와 차트는 결론이 아니라 검토해야 할 중간 산출물이다.</li>
-<li>두 AI 답이 다르면 더 그럴듯한 문장이 아니라 더 검증 가능한 답을 고른다.</li></ul>
-<div class="next"><b>다음 차시</b>: S08 좋은 분석 프롬프트 설계에서 맥락, 질문, 출력형식을 갖춘 분석 요청서를 작성한다.</div></div></section>
+<p class="subtitle">파일을 올린 뒤 기준을 묻고 숫자를 검증한다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 학습 후 할 수 있는 것</h2>
+<ul class="obj-grid"><li>sales 시트의 행·열과 품질을 확인한다</li>
+<li>월별 매출 표와 선 그래프를 요청한다</li>
+<li>중복·이상치 제외 기준을 검토한다</li>
+<li>두 AI 답안 중 신뢰할 답을 고른다</li></ul></div></section>
+<section id="s3" class="slide slide-image"><div class="slide-inner"><h2>AI 분석은 지시서에서 시작</h2>
+<div class="img-wrap"><img src="../images/deck/ai.png" alt="AI 분석을 상징하는 인포그래픽"/></div>
+<div class="viz-cap">파일보다 먼저 분석 기준을 정한다.</div></div></section>
+<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>파일 업로드는 업무 지시다</h2>
+<p class="body">엑셀의 필드 배치는 AI에게 말로 지시한다. 모호한 질문은 모호한 기준을 만든다.</p>
+<ul class="bullets"><li>분석 전에 시트와 컬럼을 확인한다</li>
+<li>기간 단위는 월별로 명시한다</li>
+<li>제외 기준을 먼저 명시한다</li></ul></div></section>
+<section id="s5" class="slide slide-chart"><div class="slide-inner"><h2>품질 이슈를 먼저 본다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="78" y="46" width="113" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="134" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">313행</text><text x="134" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">payment 결측</text><rect x="266" y="163" width="113" height="235" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="322" y="151" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">209행</text><text x="322" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">member 결측</text><rect x="454" y="49" width="113" height="349" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="37" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">310행</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">강남 점</text><rect x="642" y="46" width="113" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="698" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">313행</text><text x="698" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">category 앞공백</text><rect x="830" y="221" width="113" height="177" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="886" y="209" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">157행</text><text x="886" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">unit_price 원</text><line x1="910" y1="88" x2="134" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="134" cy="40" r="4" fill="#828fff"/><rect x="847" y="46" width="125" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="910" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">최대 313행</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>결측은 남기고 표기 문제는 변환 기준으로 다룬다.</div></div></section>
+<section id="s6" class="slide slide-chart"><div class="slide-inner"><h2>날짜 형식은 세 가지다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="122" y="46" width="150" height="352" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="197" y="34" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">10,129행</text><text x="197" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">YYYY-MM-DD</text><rect x="435" y="391" width="150" height="7" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="510" y="379" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">206행</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">YYYY/MM/DD</text><rect x="748" y="394" width="150" height="4" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="823" y="382" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">104행</text><text x="823" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">MM-DD-YYYY</text><line x1="924" y1="88" x2="510" y2="385" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="510" cy="385" r="4" fill="#828fff"/><rect x="877" y="46" width="95" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="924" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">혼합 형식</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>두 보조 형식도 모두 월로 변환해야 한다.</div></div></section>
+<section id="s7" class="slide slide-transform"><div class="slide-inner"><h2>정제하면 행 수가 바뀐다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">원본</div><div class="xf-row"><span class="k">전체 행수</span><span class="v">10,439</span></div><div class="xf-row changed"><span class="k">중복 order_id</span><span class="v">15행</span></div><div class="xf-row changed"><span class="k">행 단위 이상치</span><span class="v">3행</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">분석용</div><div class="xf-row changed"><span class="k">분석 행수</span><span class="v">10,421</span></div><div class="xf-row"><span class="k">중복 처리</span><span class="v">첫 행만 남김</span></div><div class="xf-row changed"><span class="k">이상치 처리</span><span class="v">집계 제외</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>중복 15행과 이상치 3행을 제외해 10,421행으로 분석한다.</div></div></section>
+<section id="s8" class="slide slide-chart"><div class="slide-inner"><h2>월별 매출은 2월에만 꺾인다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="56" y1="398" x2="976" y2="398" stroke="#2b2d33" stroke-width="1.5"/><polyline points="56,96 240,123 424,90 608,79 792,61 976,46" fill="none" stroke="#828fff" stroke-width="3"/><circle cx="56" cy="96" r="6" fill="#828fff"/><text x="56" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2025-01</text><circle cx="240" cy="123" r="6" fill="#828fff"/><text x="240" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2025-02</text><circle cx="424" cy="90" r="6" fill="#828fff"/><text x="424" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2025-03</text><circle cx="608" cy="79" r="6" fill="#828fff"/><text x="608" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2025-04</text><circle cx="792" cy="61" r="6" fill="#828fff"/><text x="792" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2025-05</text><circle cx="976" cy="46" r="6" fill="#828fff"/><text x="976" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2025-06</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>2월 하락 뒤 6월 <b>16,816,500원</b>까지 증가한다.</div></div></section>
+<section id="s9" class="slide slide-chart"><div class="slide-inner"><h2>전월 대비 반등은 3월이 크다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="78" y="680" width="113" height="-282" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="134" y="668" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">-1,269,500원</text><text x="134" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2월</text><rect x="266" y="46" width="113" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="322" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">1,584,000원</text><text x="322" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3월</text><rect x="454" y="282" width="113" height="116" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="270" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">522,000원</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">4월</text><rect x="642" y="212" width="113" height="186" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="698" y="200" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">836,500원</text><text x="698" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">5월</text><rect x="830" y="237" width="113" height="161" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="886" y="225" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">722,500원</text><text x="886" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">6월</text><line x1="924" y1="88" x2="322" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="322" cy="40" r="4" fill="#828fff"/><rect x="877" y="46" width="95" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="924" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">최대 반등</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>3월 <b>1,584,000원</b> 반등이 가장 크다.</div></div></section>
+<section id="s10" class="slide slide-table"><div class="slide-inner"><h2>이상치는 행 단위로 잡는다</h2>
+<table class="deck-table"><thead><tr><th>order_id</th><th>문제</th><th>처리</th></tr></thead><tbody><tr><td>11496</td><td>qty 999·금액 불일치</td><td>매출 제외</td></tr><tr><td>13013</td><td>amount -5,500원</td><td>매출 제외</td></tr><tr><td>16235</td><td>qty 999·금액 불일치</td><td>매출 제외</td></tr></tbody></table>
+<p class="note">일별 매출 IQR 이상치는 0건이다.</p></div></section>
+<section id="s11" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<h2>표와 차트는 검산 대상이다</h2>
+<p class="body">AI 답의 유창함보다 행 수, 제외 기준, 월별 숫자가 서로 맞는지를 확인한다.</p>
+<ul class="bullets"><li>행 수와 열 수를 먼저 확인한다</li>
+<li>제외한 행과 남긴 결측을 분리한다</li>
+<li>표·차트·결론의 숫자를 맞춘다</li></ul></div></section>
+<section id="s12" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 답 A 만들기</div><div class="m-desc">짧은 프롬프트로 월별 추세와 이상치를 요청한다.</div></div><div class="mission-card"><div class="m-label">미션 2. 답 B 만들기</div><div class="m-desc">전처리 기준을 포함한 긴 프롬프트로 다시 요청한다.</div></div><div class="mission-card"><div class="m-label">미션 3. 신뢰할 답 고르기</div><div class="m-desc">행 수, 날짜, 중복, 이상치, 최고 월을 근거로 판단한다.</div></div></div></div></section>
+<section id="s13" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>AI 분석은 업로드가 아니라 기준 제시에서 시작한다.</li>
+<li>월별 매출은 2월 하락 뒤 6월까지 증가한다.</li>
+<li>신뢰할 답은 전처리 기준과 숫자가 맞는 답이다.</li></ul>
+<div class="next"><b>다음 차시</b>: 후속 실습에서 검증 습관을 이어간다.</div></div></section>
 </main>
 <script>
 const deck=document.querySelector('.deck');

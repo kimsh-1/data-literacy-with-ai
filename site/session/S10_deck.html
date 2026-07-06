@@ -36,13 +36,13 @@ a{color:inherit;text-decoration:none;}
 .kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
   text-transform:uppercase;margin-bottom:0.9rem;}
 .body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
-ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
-ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
-  color:var(--ink);line-height:1.5;}
-ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.8rem;max-width:62ch;}
+ul.bullets>li{position:relative;padding-left:1.6rem;font-size:clamp(1rem,1.35vw,1.24rem);
+  color:var(--ink);line-height:1.42;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.58em;width:7px;height:7px;border-radius:2px;
   background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
 ul.bullets>li b{color:var(--ink);font-weight:640;}
-.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid{display:flex;flex-direction:column;gap:1rem;counter-reset:obj;max-width:58ch;}
 .obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
   font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
 .obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
@@ -53,9 +53,11 @@ ul.bullets>li b{color:var(--ink);font-weight:640;}
   padding:1.3rem 1.5rem;}
 .mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
 .mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
-table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.18rem);}
 table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
-  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+  padding:0.72rem 1.1rem;text-align:left;vertical-align:top;line-height:1.4;}
+table.deck-table.compact{font-size:clamp(0.8rem,1.05vw,0.98rem);}
+table.deck-table.compact th,table.deck-table.compact td{padding:0.42rem 0.8rem;line-height:1.32;}
 table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
   font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
 table.deck-table td{color:var(--ink-muted);}
@@ -69,6 +71,35 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 .closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
   color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
 .closing .next b{color:var(--primary-hover);}
+/* --- visual slides --- */
+.viz{margin-top:1rem;width:100%;max-width:78ch;}
+.viz svg{width:100%;height:auto;display:block;overflow:visible;}
+.viz-cap{margin-top:1rem;color:var(--ink-tertiary);font-size:0.92rem;font-family:var(--font-mono);}
+.result-line{margin-top:1.4rem;padding:0.9rem 1.2rem;border-left:3px solid var(--primary);
+  background:var(--surface-1);border-radius:0 10px 10px 0;color:var(--ink);
+  font-size:clamp(1rem,1.4vw,1.3rem);line-height:1.5;max-width:62ch;}
+.result-line b{color:var(--primary-hover);}
+.result-line .lead{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:1px;
+  text-transform:uppercase;color:var(--ink-subtle);display:block;margin-bottom:0.3rem;}
+.xform{display:flex;align-items:stretch;gap:0;max-width:80ch;margin-top:0.6rem;}
+.xform-card{flex:1;border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;padding:1.2rem 1.3rem;}
+.xform-card .xf-label{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.6px;
+  color:var(--ink-subtle);text-transform:uppercase;margin-bottom:0.9rem;}
+.xform-arrow{display:flex;align-items:center;padding:0 1.1rem;color:var(--primary-hover);font-size:2rem;flex:none;}
+.xf-row{display:flex;justify-content:space-between;gap:1rem;padding:0.55rem 0.6rem;
+  font-size:clamp(0.92rem,1.25vw,1.12rem);border-radius:8px;}
+.xf-row .k{color:var(--ink-subtle);font-family:var(--font-mono);font-size:0.9em;}
+.xf-row .v{color:var(--ink);text-align:right;}
+.xf-row.changed{background:rgba(94,106,210,0.14);outline:1.5px solid var(--primary);}
+.xf-row.changed .v{color:var(--primary-hover);font-weight:640;}
+.img-wrap{position:relative;width:100%;max-width:80ch;margin-top:0.6rem;
+  border:1px solid var(--hairline);border-radius:16px;overflow:hidden;background:var(--surface-1);}
+.img-wrap img{width:100%;display:block;}
+.img-box{position:absolute;border:2px solid var(--primary-hover);border-radius:6px;
+  box-shadow:0 0 0 3px rgba(94,106,210,0.18);}
+.img-box .lbl{position:absolute;top:-1.9em;left:-2px;white-space:nowrap;
+  background:var(--primary);color:#fff;font-size:0.8rem;font-weight:600;
+  padding:2px 8px;border-radius:6px;}
 /* chrome */
 .progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
 .hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
@@ -98,67 +129,62 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <div class="progress"></div>
 <div class="brand">데이터 리터러시 with AI</div>
 <div class="hud">
-  <span class="counter"><span class="cur">1</span> / 11</span>
+  <span class="counter"><span class="cur">1</span> / 14</span>
   <a class="back" href="./S10.html">자료로 돌아가기</a>
 </div>
 <div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
 <main class="deck">
 <section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S10 · PART 04 · 파이썬 · 난이도 3</div>
 <h1>Colab과 파이썬 기초</h1>
-<p class="subtitle">엑셀에서 파이썬으로 넘어가는 첫 수업으로, 다음 차시부터 쓸 pandas 문법이 낯설지 않도록 기본 언어 감각을 익힌다.</p></div></section>
-<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
-<ul class="obj-grid"><li>Colab 노트북을 만들고 코드 셀을 실행할 수 있다.</li>
-<li>변수, 자료형, 리스트, 딕셔너리의 역할을 엑셀 표와 비교해 설명할 수 있다.</li>
-<li>if 조건문으로 원하는 경우만 골라낼 수 있다.</li>
-<li>for 반복문으로 여러 값을 하나씩 처리하고 합계와 평균을 계산할 수 있다.</li>
-<li>함수는 자주 쓰는 절차에 이름을 붙이는 것이라고 이해할 수 있다.</li></ul></div></section>
-<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
-<h2>Colab은 브라우저에서 쓰는 파이썬 작업장이다</h2>
-<p class="body">Colab은 구글 계정으로 사용하는 온라인 노트북이다. 엑셀 파일이 셀 격자로 되어 있다면, Colab 노트북은 코드 셀과 텍스트 셀로 되어 있다.</p>
-<ul class="bullets"><li>코드 셀을 실행하면 결과가 셀 아래에 표시된다.</li>
-<li>위 셀에서 만든 변수는 아래 셀에서 다시 쓸 수 있다.</li>
-<li>위 셀을 실행하지 않았거나 런타임을 재시작했다면 아래 셀에서 그 변수를 찾지 못한다.</li></ul></div></section>
-<section id="s4" class="slide slide-table"><div class="slide-inner"><h2>엑셀과 Colab의 감각 비교</h2>
-<table class="deck-table"><thead><tr><th>엑셀에서의 감각</th><th>Colab에서의 감각</th></tr></thead><tbody><tr><td>셀에 수식 입력</td><td>코드 셀에 파이썬 코드 입력</td></tr><tr><td>Enter로 셀 이동</td><td>Shift + Enter로 코드 실행 후 다음 셀 이동</td></tr><tr><td>워크시트 저장</td><td>구글 드라이브에 노트북 저장</td></tr><tr><td>수식 결과가 셀에 표시</td><td>코드 실행 결과가 셀 아래에 표시</td></tr><tr><td>잘못된 수식은 오류 표시</td><td>잘못된 코드는 빨간 오류 메시지 표시</td></tr></tbody></table></div></section>
-<section id="s5" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
-<h2>변수와 자료형은 값의 이름과 종류를 구분한다</h2>
-<p class="body">변수는 값에 붙이는 이름이다. 엑셀에서 B2 같은 셀 주소가 값을 가리키듯, 파이썬에서는 today_sales처럼 사람이 읽을 수 있는 이름을 붙인다.</p>
-<ul class="bullets"><li>등호 =는 오른쪽 값을 왼쪽 이름에 담는다는 뜻이다.</li>
-<li>같은지 비교할 때는 ==를 쓴다.</li>
-<li>자료형은 값의 종류이며 str, int, float, bool을 구분한다.</li>
-<li>계산이 안 될 때는 숫자인 줄 알았는데 글자였는지부터 확인한다.</li></ul></div></section>
-<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
-<h2>리스트는 한 열, 딕셔너리는 한 행처럼 생각한다</h2>
-<p class="body">리스트는 여러 값을 순서대로 담는 상자이고, 딕셔너리는 값마다 이름표가 붙어 있는 구조다. 리스트 안에 딕셔너리를 여러 개 넣으면 작은 표처럼 다룰 수 있다.</p>
-<ul class="bullets"><li>sales_list는 월요일부터 금요일까지 매출 5개를 담은 리스트다.</li>
-<li>len()은 리스트 안의 값이 몇 개인지 세는 함수다.</li>
-<li>one_day는 요일과 매출을 담은 한 행처럼 볼 수 있다.</li>
-<li>이 구조가 다음 차시의 pandas DataFrame으로 이어진다.</li></ul></div></section>
-<section id="s7" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
-<h2>조건문과 반복문은 필터와 아래로 채우기의 출발점이다</h2>
-<p class="body">조건문은 원하는 경우만 실행하게 하는 문법이고, 반복문은 같은 작업을 여러 값에 적용하는 방법이다. 엑셀 필터와 아래로 채우기에 빗대어 이해할 수 있다.</p>
-<ul class="bullets"><li>if 뒤에는 조건을 쓰고 조건 끝에는 콜론을 붙인다.</li>
-<li>if나 for 아래에서 실행할 코드는 한 단계 안쪽으로 들여쓴다.</li>
-<li>for amount in sales_list는 리스트에서 값을 하나씩 꺼내 이번 값을 amount라고 부른다는 뜻이다.</li>
-<li>pandas 필터는 if 조건문을 표 전체 열에 한 번에 적용하는 방식이다.</li></ul></div></section>
-<section id="s8" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 5</div>
-<h2>함수는 자주 쓰는 절차에 이름을 붙이는 것이다</h2>
-<p class="body">이번 차시에서 함수는 깊게 다루지 않는다. 다만 다음 차시부터 read_csv(), head(), mean() 같은 함수를 계속 만나므로, 정해진 일을 해주는 도구라는 감각을 잡는다.</p>
-<ul class="bullets"><li>평균은 합계를 개수로 나눈 값이다.</li>
-<li>엑셀 AVERAGE 함수가 하던 일을 파이썬 코드로 손으로 써 본다.</li>
-<li>average(numbers)는 평균 계산 절차에 이름을 붙인 예다.</li></ul></div></section>
-<section id="s9" class="slide slide-table"><div class="slide-inner"><h2>오류가 났을 때 먼저 볼 것</h2>
-<table class="deck-table"><thead><tr><th>오류</th><th>흔한 원인</th><th>확인할 것</th></tr></thead><tbody><tr><td>NameError</td><td>변수를 만들기 전에 사용함</td><td>위 셀을 실행했는가</td></tr><tr><td>SyntaxError</td><td>문법이 틀림</td><td>콜론, 따옴표, 괄호가 빠졌는가</td></tr><tr><td>IndentationError</td><td>들여쓰기가 틀림</td><td>if, for 아래 줄이 들여쓰기 되었는가</td></tr><tr><td>TypeError</td><td>자료형이 맞지 않음</td><td>숫자와 글자를 섞어 계산하지 않았는가</td></tr></tbody></table>
-<p class="note">오류가 나면 빨간 메시지의 맨 아래 줄부터 읽는다.</p></div></section>
-<section id="s10" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
-<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 평일 행만 고르기</div><div class="m-desc">daily_sales에서 평일인 월, 화, 수, 목, 금 행만 골라 weekday_rows 리스트에 담는다.</div></div><div class="mission-card"><div class="m-label">미션 2. 평일 매출 계산하기</div><div class="m-desc">평일 행수 5, 평일 매출 합계 678000, 평일 매출 평균 135600.0을 출력한다.</div></div><div class="mission-card"><div class="m-label">미션 3. pandas 필터와 연결하기</div><div class="m-desc">오늘의 if 조건문이 다음 차시 pandas 필터의 바탕이라는 점을 설명한다.</div></div></div></div></section>
-<section id="s11" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
-<ul class="bullets"><li>Colab은 코드 셀을 위에서 아래로 실행하는 브라우저 기반 파이썬 작업장이다.</li>
-<li>변수는 값을 다시 쓰기 위해 붙이는 이름이고, 자료형은 값의 종류다.</li>
-<li>리스트는 여러 값을 순서대로 담고, 딕셔너리는 이름표가 붙은 값을 담는다.</li>
-<li>반복문은 값을 하나씩 처리하고, 조건문은 원하는 경우만 남긴다.</li>
-<li>함수는 자주 쓰는 절차에 이름을 붙여 다시 쓰는 방법이다.</li></ul>
-<div class="next"><b>다음 차시 S11</b>에서는 pandas 입문으로, CSV를 불러오고 조건을 표 전체에 적용하는 방법을 다룬다.</div></div></section>
+<p class="subtitle">브라우저에서 코드를 실행하고 작은 표를 필터링한다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>학습 목표</h2>
+<ul class="obj-grid"><li>Colab 노트북을 만들고 코드 셀을 실행한다.</li>
+<li>변수, 자료형, 리스트, 딕셔너리를 구분한다.</li>
+<li>for 반복문으로 합계와 평균을 계산한다.</li>
+<li>if 조건문으로 평일 행만 고른다.</li></ul></div></section>
+<section id="s3" class="slide slide-image"><div class="slide-inner"><h2>엑셀에서 파이썬으로 이동</h2>
+<div class="img-wrap"><img src="../images/deck/python.png" alt="파이썬 학습 파트 인포그래픽"/></div>
+<div class="viz-cap">엑셀 감각을 파이썬 문법으로 옮기는 차시다.</div></div></section>
+<section id="s4" class="slide slide-table"><div class="slide-inner"><h2>엑셀 감각을 문법으로 바꾼다</h2>
+<table class="deck-table"><thead><tr><th>엑셀</th><th>파이썬</th><th>뜻</th></tr></thead><tbody><tr><td>셀 주소</td><td>변수</td><td>값 이름</td></tr><tr><td>한 열</td><td>리스트</td><td>여러 값</td></tr><tr><td>한 행</td><td>딕셔너리</td><td>이름 붙은 값</td></tr><tr><td>필터</td><td>if</td><td>조건 선택</td></tr><tr><td>아래로 채우기</td><td>for</td><td>반복 적용</td></tr></tbody></table></div></section>
+<section id="s5" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>Colab은 코드 셀로 작업한다</h2>
+<p class="body">코드 셀을 실행하면 결과가 바로 아래에 나타난다. 위에서 만든 변수는 아래 셀에서 다시 쓴다.</p>
+<ul class="bullets"><li>Shift + Enter로 실행한다.</li>
+<li>런타임이 꺼지면 변수는 사라진다.</li>
+<li>필요한 셀은 위에서 아래로 실행한다.</li></ul></div></section>
+<section id="s6" class="slide slide-transform"><div class="slide-inner"><h2>변수는 값에 이름을 붙인다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">엑셀 감각</div><div class="xf-row"><span class="k">주소</span><span class="v">B2</span></div><div class="xf-row changed"><span class="k">값</span><span class="v">170000</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">파이썬 감각</div><div class="xf-row changed"><span class="k">이름</span><span class="v">today_sales</span></div><div class="xf-row"><span class="k">값</span><span class="v">170000</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>셀 주소 대신 today_sales라는 이름으로 값을 다시 쓴다.</div></div></section>
+<section id="s7" class="slide slide-table"><div class="slide-inner"><h2>자료형은 계산 가능성을 정한다</h2>
+<table class="deck-table"><thead><tr><th>값</th><th>자료형</th><th>뜻</th></tr></thead><tbody><tr><td>강남점</td><td>str</td><td>글자</td></tr><tr><td>170000</td><td>int</td><td>정수</td></tr><tr><td>0.1</td><td>float</td><td>소수</td></tr><tr><td>False</td><td>bool</td><td>참거짓</td></tr></tbody></table>
+<p class="note">계산이 안 되면 값이 숫자인지 먼저 확인한다.</p></div></section>
+<section id="s8" class="slide slide-chart"><div class="slide-inner"><h2>평일 매출 5개를 비교한다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="78" y="150" width="113" height="248" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="134" y="138" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">120,000원</text><text x="134" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">월</text><rect x="266" y="195" width="113" height="203" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="322" y="183" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">98,000원</text><text x="322" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">화</text><rect x="454" y="118" width="113" height="280" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="106" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">135,000원</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">수</text><rect x="642" y="46" width="113" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="698" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">170,000원</text><text x="698" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">목</text><rect x="830" y="77" width="113" height="321" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="886" y="65" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">155,000원</text><text x="886" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">금</text><line x1="96" y1="88" x2="698" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="698" cy="40" r="4" fill="#828fff"/><rect x="48" y="46" width="95" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="96" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">평일 최대</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>목요일 <b>170,000원</b>이 평일 매출 중 가장 크다.</div></div></section>
+<section id="s9" class="slide slide-transform"><div class="slide-inner"><h2>반복문은 합계를 만든다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">입력</div><div class="xf-row changed"><span class="k">매출 개수</span><span class="v">5</span></div><div class="xf-row changed"><span class="k">초기 합계</span><span class="v">0</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">출력</div><div class="xf-row changed"><span class="k">매출 합계</span><span class="v">678000</span></div><div class="xf-row changed"><span class="k">매출 평균</span><span class="v">135600.0</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>5개 값을 누적해 합계 <b>678,000원</b>을 만든다.</div></div></section>
+<section id="s10" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<h2>함수는 절차의 이름이다</h2>
+<p class="body">average는 반복문으로 더하고 개수로 나누는 절차에 이름을 붙인 예다.</p>
+<ul class="bullets"><li>같은 계산을 다시 사용할 수 있다.</li>
+<li>출력은 135600.0이다.</li>
+<li>pandas의 mean과 연결된다.</li></ul></div></section>
+<section id="s11" class="slide slide-chart"><div class="slide-inner"><h2>작은 표에는 주말도 포함된다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="67" y="197" width="81" height="201" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="107" y="185" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">120,000원</text><text x="107" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">월</text><rect x="201" y="234" width="81" height="164" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="241" y="222" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">98,000원</text><text x="241" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">화</text><rect x="335" y="172" width="81" height="226" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="376" y="160" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">135,000원</text><text x="376" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">수</text><rect x="470" y="113" width="81" height="285" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="101" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">170,000원</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">목</text><rect x="604" y="138" width="81" height="260" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="644" y="126" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">155,000원</text><text x="644" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">금</text><rect x="738" y="46" width="81" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="779" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">210,000원</text><text x="779" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">토</text><rect x="873" y="80" width="81" height="318" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="913" y="68" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">190,000원</text><text x="913" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">일</text><line x1="96" y1="88" x2="779" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="779" cy="40" r="4" fill="#828fff"/><rect x="48" y="46" width="95" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="96" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">제외 대상</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>토·일을 제외해야 평일 계산만 남는다.</div></div></section>
+<section id="s12" class="slide slide-transform"><div class="slide-inner"><h2>조건문은 행을 걸러낸다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">조건 전</div><div class="xf-row changed"><span class="k">행수</span><span class="v">7</span></div><div class="xf-row"><span class="k">요일</span><span class="v">월~일</span></div><div class="xf-row"><span class="k">조건</span><span class="v">없음</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">조건 후</div><div class="xf-row changed"><span class="k">행수</span><span class="v">5</span></div><div class="xf-row changed"><span class="k">요일</span><span class="v">월~금</span></div><div class="xf-row changed"><span class="k">조건</span><span class="v">in weekday_names</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>조건문을 적용하면 평일 <b>5행</b>만 남는다.</div></div></section>
+<section id="s13" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 평일 행 고르기</div><div class="m-desc">월~금만 weekday_rows에 담는다.</div></div><div class="mission-card"><div class="m-label">미션 2. 합계와 평균 계산</div><div class="m-desc">행수 5, 합계 678000, 평균 135600.0을 출력한다.</div></div></div></div></section>
+<section id="s14" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>Colab에서는 코드 셀을 위에서 아래로 실행한다.</li>
+<li>리스트는 열, 딕셔너리는 행처럼 생각한다.</li>
+<li>for는 누적 계산, if는 필터의 출발점이다.</li>
+<li>함수는 자주 쓰는 절차에 붙인 이름이다.</li></ul>
+<div class="next"><b>다음 차시</b> — pandas로 10,424행 CSV를 다룬다.</div></div></section>
 </main>
 <script>
 const deck=document.querySelector('.deck');

@@ -36,13 +36,13 @@ a{color:inherit;text-decoration:none;}
 .kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
   text-transform:uppercase;margin-bottom:0.9rem;}
 .body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
-ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
-ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
-  color:var(--ink);line-height:1.5;}
-ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.8rem;max-width:62ch;}
+ul.bullets>li{position:relative;padding-left:1.6rem;font-size:clamp(1rem,1.35vw,1.24rem);
+  color:var(--ink);line-height:1.42;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.58em;width:7px;height:7px;border-radius:2px;
   background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
 ul.bullets>li b{color:var(--ink);font-weight:640;}
-.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid{display:flex;flex-direction:column;gap:1rem;counter-reset:obj;max-width:58ch;}
 .obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
   font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
 .obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
@@ -53,9 +53,11 @@ ul.bullets>li b{color:var(--ink);font-weight:640;}
   padding:1.3rem 1.5rem;}
 .mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
 .mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
-table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.18rem);}
 table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
-  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+  padding:0.72rem 1.1rem;text-align:left;vertical-align:top;line-height:1.4;}
+table.deck-table.compact{font-size:clamp(0.8rem,1.05vw,0.98rem);}
+table.deck-table.compact th,table.deck-table.compact td{padding:0.42rem 0.8rem;line-height:1.32;}
 table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
   font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
 table.deck-table td{color:var(--ink-muted);}
@@ -69,6 +71,35 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 .closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
   color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
 .closing .next b{color:var(--primary-hover);}
+/* --- visual slides --- */
+.viz{margin-top:1rem;width:100%;max-width:78ch;}
+.viz svg{width:100%;height:auto;display:block;overflow:visible;}
+.viz-cap{margin-top:1rem;color:var(--ink-tertiary);font-size:0.92rem;font-family:var(--font-mono);}
+.result-line{margin-top:1.4rem;padding:0.9rem 1.2rem;border-left:3px solid var(--primary);
+  background:var(--surface-1);border-radius:0 10px 10px 0;color:var(--ink);
+  font-size:clamp(1rem,1.4vw,1.3rem);line-height:1.5;max-width:62ch;}
+.result-line b{color:var(--primary-hover);}
+.result-line .lead{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:1px;
+  text-transform:uppercase;color:var(--ink-subtle);display:block;margin-bottom:0.3rem;}
+.xform{display:flex;align-items:stretch;gap:0;max-width:80ch;margin-top:0.6rem;}
+.xform-card{flex:1;border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;padding:1.2rem 1.3rem;}
+.xform-card .xf-label{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.6px;
+  color:var(--ink-subtle);text-transform:uppercase;margin-bottom:0.9rem;}
+.xform-arrow{display:flex;align-items:center;padding:0 1.1rem;color:var(--primary-hover);font-size:2rem;flex:none;}
+.xf-row{display:flex;justify-content:space-between;gap:1rem;padding:0.55rem 0.6rem;
+  font-size:clamp(0.92rem,1.25vw,1.12rem);border-radius:8px;}
+.xf-row .k{color:var(--ink-subtle);font-family:var(--font-mono);font-size:0.9em;}
+.xf-row .v{color:var(--ink);text-align:right;}
+.xf-row.changed{background:rgba(94,106,210,0.14);outline:1.5px solid var(--primary);}
+.xf-row.changed .v{color:var(--primary-hover);font-weight:640;}
+.img-wrap{position:relative;width:100%;max-width:80ch;margin-top:0.6rem;
+  border:1px solid var(--hairline);border-radius:16px;overflow:hidden;background:var(--surface-1);}
+.img-wrap img{width:100%;display:block;}
+.img-box{position:absolute;border:2px solid var(--primary-hover);border-radius:6px;
+  box-shadow:0 0 0 3px rgba(94,106,210,0.18);}
+.img-box .lbl{position:absolute;top:-1.9em;left:-2px;white-space:nowrap;
+  background:var(--primary);color:#fff;font-size:0.8rem;font-weight:600;
+  padding:2px 8px;border-radius:6px;}
 /* chrome */
 .progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
 .hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
@@ -98,62 +129,53 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <div class="progress"></div>
 <div class="brand">데이터 리터러시 with AI</div>
 <div class="hud">
-  <span class="counter"><span class="cur">1</span> / 10</span>
+  <span class="counter"><span class="cur">1</span> / 12</span>
   <a class="back" href="./S15.html">자료로 돌아가기</a>
 </div>
 <div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
 <main class="deck">
 <section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S15 · PART 05 · BI · 난이도 3</div>
 <h1>Power BI 설치, 로드, 첫 차트</h1>
-<p class="subtitle">Power BI Desktop을 실행하고 정제된 카페 매출 CSV를 불러와 총매출 카드, 카테고리별 막대그래프, 일자별 꺾은선그래프를 한 페이지에 만든다.</p></div></section>
-<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
-<ul class="obj-grid"><li>Power BI Desktop이 Windows용 보고서 제작 도구라는 점을 알고 설치 또는 실행한다.</li>
-<li>CSV 파일과 엑셀 파일을 Power BI에 불러오는 경로를 설명한다.</li>
-<li>필드 목록, 시각화 패널, 캔버스의 역할을 엑셀 피벗테이블과 비교해 이해한다.</li>
-<li>category, date, amount 필드를 사용해 막대그래프와 꺾은선그래프를 만든다.</li>
-<li>amount의 합계를 KPI 카드로 표시하고 표시 단위를 조정해 총매출을 확인한다.</li></ul></div></section>
-<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
-<h2>Power BI Desktop은 보고서 제작 도구이다</h2>
-<p class="body">Power BI Desktop은 Windows PC에 설치해 보고서 파일을 만드는 프로그램이다. 이번 차시는 로컬 파일을 열고 보고서 한 페이지를 만드는 데 집중한다.</p>
-<ul class="bullets"><li><b>Power BI Desktop</b>은 Windows에서 보고서를 만드는 프로그램이다.</li>
-<li><b>.pbix 파일</b>은 Power BI Desktop에서 저장하는 보고서 파일이다.</li>
-<li><b>Power BI Service</b>는 웹에 게시하고 공유하는 서비스이며 S18에서 공유 개념을 다룬다.</li>
-<li>Mac 수강생은 화면 구조와 개념을 따라오고 S18에서 Looker Studio 경로로 직접 실습한다.</li></ul></div></section>
-<section id="s4" class="slide slide-table"><div class="slide-inner"><h2>실습 데이터 기준</h2>
-<table class="deck-table"><thead><tr><th>항목</th><th>확인값</th></tr></thead><tbody><tr><td>데이터 원본</td><td>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.csv</td></tr><tr><td>보조 데이터 파일</td><td>/mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.xlsx</td></tr><tr><td>행 수</td><td>10,424</td></tr><tr><td>열 수</td><td>12</td></tr><tr><td>기간</td><td>2025-01-01부터 2025-06-30까지</td></tr><tr><td>총매출 amount 합계</td><td>90,492,500</td></tr><tr><td>주문수</td><td>10,424</td></tr><tr><td>결측값 총합</td><td>0</td></tr></tbody></table>
-<p class="note">실습 기준은 cafe_sales_clean.csv이며, 엑셀 파일은 같은 데이터를 담은 보조 파일이다.</p></div></section>
-<section id="s5" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
-<h2>로드는 표를 Power BI 안으로 가져오는 일이다</h2>
-<p class="body">엑셀은 파일을 열면 셀이 바로 보이지만, Power BI는 데이터를 먼저 가져와야 한다. 이 과정을 로드라고 부른다.</p>
-<ul class="bullets"><li>CSV는 홈, 데이터 가져오기, 텍스트/CSV 순서로 불러온다.</li>
-<li>엑셀 파일은 새 Power BI 파일에서 Excel 통합 문서, cafe_sales_clean.xlsx, sales 시트 순서로 불러온다.</li>
-<li>한 Power BI 파일에 CSV와 엑셀을 동시에 불러오지 않는다.</li>
-<li>오늘 파일은 정제 실습이 아니므로 date가 날짜로, amount가 숫자로 인식되는지만 확인한다.</li></ul></div></section>
-<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
-<h2>시각화는 필드를 놓는 방식으로 만든다</h2>
-<p class="body">화면 가운데 흰 영역은 캔버스이고, 오른쪽에는 시각화 패널과 데이터 패널이 있다. 차트는 비교 기준, 볼 숫자, 적절한 모양을 정해 만든다.</p>
-<ul class="bullets"><li><b>category</b>는 카테고리별 매출 막대그래프의 X축에 놓는다.</li>
-<li><b>date</b>는 일자별 매출 꺾은선그래프의 X축에 놓는다.</li>
-<li><b>amount</b>는 그래프의 Y축 또는 값 영역에 놓고 합계로 집계한다.</li>
-<li>막대그래프는 항목 비교에, 꺾은선그래프는 시간 흐름에, 카드는 핵심 숫자 하나에 쓴다.</li></ul></div></section>
-<section id="s7" class="slide slide-table"><div class="slide-inner"><h2>첫 페이지에 들어갈 세 시각화</h2>
-<table class="deck-table"><thead><tr><th>시각화</th><th>필드 배치</th><th>목적</th></tr></thead><tbody><tr><td>총매출 KPI 카드</td><td>amount 합계</td><td>핵심 숫자 확인</td></tr><tr><td>카테고리별 매출 막대그래프</td><td>X축 category, Y축 amount 합계</td><td>상품군별 매출 비교</td></tr><tr><td>일자별 매출 꺾은선그래프</td><td>X축 date, Y축 amount 합계</td><td>기간 흐름 확인</td></tr></tbody></table>
-<p class="note">카테고리별 매출 합계는 커피 45,606,000, 음료 25,550,000, 디저트 19,336,500이다.</p></div></section>
-<section id="s8" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
-<h2>KPI 카드는 큰 셀 하나이다</h2>
-<p class="body">Power BI의 카드는 핵심 숫자 하나를 크게 보여주는 시각화다. 엑셀에서 SUM 결과를 큰 글씨로 적어 두는 것과 같은 역할이다.</p>
-<ul class="bullets"><li>이번 미션의 정답 카드 값은 <b>90,492,500</b>이다.</li>
-<li>값 필드는 amount이고 집계 방식은 합계여야 한다.</li>
-<li>카드가 90.49M 또는 90M처럼 보이면 계산이 틀린 것이 아니라 표시 단위가 자동 축약된 것이다.</li>
-<li>정확히 검산하려면 표시 단위를 없음으로, 소수 자릿수를 0으로 바꾼다.</li></ul></div></section>
-<section id="s9" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
-<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 총매출 KPI 카드 만들기</div><div class="m-desc">카드 또는 카드(새)를 선택하고 amount를 값 영역에 넣은 뒤 합계로 집계해 총매출 90,492,500을 표시한다.</div></div><div class="mission-card"><div class="m-label">미션 2. 표시 단위 검산하기</div><div class="m-desc">카드 서식에서 표시 단위를 없음으로 바꾸고 소수 자릿수를 0으로 맞춰 축약 표시가 아닌 실제 숫자를 확인한다.</div></div><div class="mission-card"><div class="m-label">미션 3. 첫 페이지 완성하기</div><div class="m-desc">같은 페이지에 총매출 카드, 카테고리별 매출 막대그래프, 일자별 매출 꺾은선그래프를 함께 배치하고 S15_cafe_sales_first_dashboard.pbix로 저장한다.</div></div></div></div></section>
-<section id="s10" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
-<ul class="bullets"><li>Power BI Desktop은 Windows에서 보고서 파일을 만드는 도구이며, 오늘은 공유나 게시가 아니라 로컬 보고서 작성에 집중한다.</li>
-<li>CSV와 엑셀은 데이터 가져오기 메뉴에서 불러오며, 오늘 실습 결과는 cafe_sales_clean.csv를 기준으로 맞춘다.</li>
-<li>필드를 X축, Y축, 값 영역에 놓으면 막대그래프, 꺾은선그래프, 카드가 만들어진다.</li>
-<li>총매출 카드의 기준은 amount 합계 90,492,500이며, 표시 단위와 집계 방식을 반드시 확인한다.</li></ul>
-<div class="next"><b>다음 차시</b>는 S16 데이터 모델링으로, Power BI에서 여러 표를 한 모델로 연결하고 관계, 스타 스키마, 날짜 차원을 다룬다.</div></div></section>
+<p class="subtitle">정제된 카페 매출을 불러와 첫 보고서 화면을 만든다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>이번 차시에서 할 수 있는 것</h2>
+<ul class="obj-grid"><li>Power BI Desktop의 역할을 설명한다</li>
+<li>CSV와 엑셀 로드 경로를 구분한다</li>
+<li>category, date, amount로 첫 차트를 만든다</li>
+<li>총매출 카드 값을 검산한다</li></ul></div></section>
+<section id="s3" class="slide slide-image"><div class="slide-inner"><h2>표를 보고서 화면으로 바꾼다</h2>
+<div class="img-wrap"><img src="../images/deck/bi.png" alt="BI 대시보드 인포그래픽"/></div>
+<div class="viz-cap">Power BI는 반복해 확인하는 보고서 화면이다.</div></div></section>
+<section id="s4" class="slide slide-table"><div class="slide-inner"><h2>엑셀의 감각을 BI로 옮긴다</h2>
+<table class="deck-table"><thead><tr><th>엑셀</th><th>Power BI</th><th>의미</th></tr></thead><tbody><tr><td>파일 열기</td><td>데이터 가져오기</td><td>로드</td></tr><tr><td>필드 목록</td><td>데이터 패널</td><td>열 선택</td></tr><tr><td>행/열/값</td><td>X축/Y축</td><td>배치</td></tr><tr><td>피벗 차트</td><td>시각화 개체</td><td>표현</td></tr></tbody></table>
+<p class="note">원리는 같고 이름만 바뀐다.</p></div></section>
+<section id="s5" class="slide slide-table"><div class="slide-inner"><h2>로드할 표를 먼저 검산한다</h2>
+<table class="deck-table"><thead><tr><th>항목</th><th>값</th><th>뜻</th></tr></thead><tbody><tr><td>행 수</td><td>10,424</td><td>주문 건수</td></tr><tr><td>열 수</td><td>12</td><td>필드 수</td></tr><tr><td>기간</td><td>2025-01-01~06-30</td><td>6개월</td></tr><tr><td>결측값</td><td>0</td><td>정제 완료</td></tr><tr><td>총매출</td><td>90,492,500원</td><td>카드 정답</td></tr></tbody></table></div></section>
+<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>오늘 쓰는 핵심 필드는 셋이다</h2>
+<p class="body">첫 보고서는 핵심 필드만 제대로 배치해도 완성된다.</p>
+<ul class="bullets"><li>amount: 합계로 총매출을 만든다</li>
+<li>category: 상품군을 비교하는 축이다</li>
+<li>date: 시간 흐름의 축이다</li>
+<li>store: 필터나 범례 후보이다</li></ul></div></section>
+<section id="s7" class="slide slide-chart"><div class="slide-inner"><h2>총매출 카드는 합계값이다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="435" y="46" width="150" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="510" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">90,492,500원</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">총매출</text><line x1="917" y1="88" x2="510" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="510" cy="40" r="4" fill="#828fff"/><rect x="862" y="46" width="110" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="917" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">정답 카드값</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>카드 값은 <b>90,492,500원</b>과 일치해야 한다.</div></div></section>
+<section id="s8" class="slide slide-chart"><div class="slide-inner"><h2>상품군 매출은 커피가 가장 높다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="122" y="46" width="150" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="197" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">45,606,000원</text><text x="197" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">커피</text><rect x="435" y="201" width="150" height="197" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="189" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">25,550,000원</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">음료</text><rect x="748" y="249" width="150" height="149" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="823" y="237" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">19,336,500원</text><text x="823" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">디저트</text><line x1="947" y1="88" x2="197" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="197" cy="40" r="4" fill="#828fff"/><rect x="922" y="46" width="50" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="947" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">최고</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>커피, 음료, 디저트 순으로 매출이 낮아진다.</div></div></section>
+<section id="s9" class="slide slide-chart"><div class="slide-inner"><h2>월별 매출은 6월이 가장 높다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="56" y1="398" x2="976" y2="398" stroke="#2b2d33" stroke-width="1.5"/><polyline points="56,96 240,123 424,90 608,79 792,61 976,46" fill="none" stroke="#828fff" stroke-width="3"/><circle cx="56" cy="96" r="6" fill="#828fff"/><text x="56" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2025-01</text><circle cx="240" cy="123" r="6" fill="#828fff"/><text x="240" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2025-02</text><circle cx="424" cy="90" r="6" fill="#828fff"/><text x="424" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2025-03</text><circle cx="608" cy="79" r="6" fill="#828fff"/><text x="608" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2025-04</text><circle cx="792" cy="61" r="6" fill="#828fff"/><text x="792" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2025-05</text><circle cx="976" cy="46" r="6" fill="#828fff"/><text x="976" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2025-06</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>2월 이후 매출이 계속 올라 6월이 가장 높다.</div></div></section>
+<section id="s10" class="slide slide-table"><div class="slide-inner"><h2>카드 오류는 값 배치 문제다</h2>
+<table class="deck-table"><thead><tr><th>보이는 값</th><th>원인</th><th>수정</th></tr></thead><tbody><tr><td>10,424</td><td>order_id 개수</td><td>amount 합계</td></tr><tr><td>약 8,681</td><td>amount 평균</td><td>합계로 변경</td></tr><tr><td>90.49M</td><td>표시 단위 자동</td><td>없음으로 변경</td></tr><tr><td>연도 한 점</td><td>날짜 계층</td><td>date 자체 선택</td></tr></tbody></table>
+<p class="note">숫자가 맞아도 표시 방식 때문에 달라 보일 수 있다.</p></div></section>
+<section id="s11" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. KPI 카드</div><div class="m-desc">amount 합계를 90,492,500원으로 맞춘다.</div></div><div class="mission-card"><div class="m-label">미션 2. 첫 페이지</div><div class="m-desc">카드, 막대그래프, 꺾은선그래프를 한 페이지에 배치한다.</div></div></div></div></section>
+<section id="s12" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>Power BI는 로드한 표를 보고서 화면으로 바꾼다.</li>
+<li>amount 합계가 카드와 차트의 기준이다.</li>
+<li>총매출 <b>90,492,500원</b>이 검산 기준이다.</li></ul>
+<div class="next"><b>다음 차시</b>: 여러 표를 관계로 연결하는 모델링으로 넘어간다.</div></div></section>
 </main>
 <script>
 const deck=document.querySelector('.deck');

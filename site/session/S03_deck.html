@@ -36,13 +36,13 @@ a{color:inherit;text-decoration:none;}
 .kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
   text-transform:uppercase;margin-bottom:0.9rem;}
 .body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
-ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
-ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
-  color:var(--ink);line-height:1.5;}
-ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.8rem;max-width:62ch;}
+ul.bullets>li{position:relative;padding-left:1.6rem;font-size:clamp(1rem,1.35vw,1.24rem);
+  color:var(--ink);line-height:1.42;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.58em;width:7px;height:7px;border-radius:2px;
   background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
 ul.bullets>li b{color:var(--ink);font-weight:640;}
-.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid{display:flex;flex-direction:column;gap:1rem;counter-reset:obj;max-width:58ch;}
 .obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
   font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
 .obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
@@ -53,9 +53,11 @@ ul.bullets>li b{color:var(--ink);font-weight:640;}
   padding:1.3rem 1.5rem;}
 .mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
 .mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
-table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.18rem);}
 table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
-  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+  padding:0.72rem 1.1rem;text-align:left;vertical-align:top;line-height:1.4;}
+table.deck-table.compact{font-size:clamp(0.8rem,1.05vw,0.98rem);}
+table.deck-table.compact th,table.deck-table.compact td{padding:0.42rem 0.8rem;line-height:1.32;}
 table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
   font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
 table.deck-table td{color:var(--ink-muted);}
@@ -69,6 +71,35 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 .closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
   color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
 .closing .next b{color:var(--primary-hover);}
+/* --- visual slides --- */
+.viz{margin-top:1rem;width:100%;max-width:78ch;}
+.viz svg{width:100%;height:auto;display:block;overflow:visible;}
+.viz-cap{margin-top:1rem;color:var(--ink-tertiary);font-size:0.92rem;font-family:var(--font-mono);}
+.result-line{margin-top:1.4rem;padding:0.9rem 1.2rem;border-left:3px solid var(--primary);
+  background:var(--surface-1);border-radius:0 10px 10px 0;color:var(--ink);
+  font-size:clamp(1rem,1.4vw,1.3rem);line-height:1.5;max-width:62ch;}
+.result-line b{color:var(--primary-hover);}
+.result-line .lead{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:1px;
+  text-transform:uppercase;color:var(--ink-subtle);display:block;margin-bottom:0.3rem;}
+.xform{display:flex;align-items:stretch;gap:0;max-width:80ch;margin-top:0.6rem;}
+.xform-card{flex:1;border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;padding:1.2rem 1.3rem;}
+.xform-card .xf-label{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.6px;
+  color:var(--ink-subtle);text-transform:uppercase;margin-bottom:0.9rem;}
+.xform-arrow{display:flex;align-items:center;padding:0 1.1rem;color:var(--primary-hover);font-size:2rem;flex:none;}
+.xf-row{display:flex;justify-content:space-between;gap:1rem;padding:0.55rem 0.6rem;
+  font-size:clamp(0.92rem,1.25vw,1.12rem);border-radius:8px;}
+.xf-row .k{color:var(--ink-subtle);font-family:var(--font-mono);font-size:0.9em;}
+.xf-row .v{color:var(--ink);text-align:right;}
+.xf-row.changed{background:rgba(94,106,210,0.14);outline:1.5px solid var(--primary);}
+.xf-row.changed .v{color:var(--primary-hover);font-weight:640;}
+.img-wrap{position:relative;width:100%;max-width:80ch;margin-top:0.6rem;
+  border:1px solid var(--hairline);border-radius:16px;overflow:hidden;background:var(--surface-1);}
+.img-wrap img{width:100%;display:block;}
+.img-box{position:absolute;border:2px solid var(--primary-hover);border-radius:6px;
+  box-shadow:0 0 0 3px rgba(94,106,210,0.18);}
+.img-box .lbl{position:absolute;top:-1.9em;left:-2px;white-space:nowrap;
+  background:var(--primary);color:#fff;font-size:0.8rem;font-weight:600;
+  padding:2px 8px;border-radius:6px;}
 /* chrome */
 .progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
 .hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
@@ -98,63 +129,62 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <div class="progress"></div>
 <div class="brand">데이터 리터러시 with AI</div>
 <div class="hud">
-  <span class="counter"><span class="cur">1</span> / 11</span>
+  <span class="counter"><span class="cur">1</span> / 14</span>
   <a class="back" href="./S03.html">자료로 돌아가기</a>
 </div>
 <div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
 <main class="deck">
 <section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S03 · PART 01 · 엑셀 · 난이도 2</div>
 <h1>피벗테이블로 질문에 답하기</h1>
-<p class="subtitle">원본 주문 목록을 지점별, 카테고리별, 요일별, 시간대별 요약표로 접어 질문에 답한다.</p></div></section>
-<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
-<ul class="obj-grid"><li>피벗테이블의 행, 열, 값 영역이 각각 어떤 역할을 하는지 설명한다.</li>
-<li>매출 합계, 판매수량 합계, 주문건수처럼 질문에 맞는 집계함수를 고른다.</li>
-<li>지점×카테고리, 요일×시간대 교차표를 보고 어느 구간이 큰지 해석한다.</li>
-<li>가장 잘 팔리는 시간대라는 질문을 피벗테이블로 답한다.</li></ul></div></section>
-<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
-<h2>수업 데이터는 주문 한 건 단위로 쌓인 표다</h2>
-<p class="body">사용 파일은 /mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.xlsx이고, 시트 이름은 sales다.</p>
-<ul class="bullets"><li>확인된 데이터 규모는 10,424행 × 12열이다.</li>
-<li>주요 컬럼은 store, category, weekday, hour, amount, qty, order_id다.</li>
-<li>이번 차시에서는 계산식을 새로 만들지 않고 amount, qty, order_id를 피벗테이블로 요약한다.</li></ul></div></section>
-<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
-<h2>피벗테이블은 긴 영수증 묶음을 요약표로 접는다</h2>
-<p class="body">원본에는 주문 한 건 한 건이 있지만, 점장이 알고 싶은 것은 보통 지점별 매출, 카테고리별 매출, 시간대별 흐름 같은 요약 질문이다.</p>
-<ul class="bullets"><li>피벗테이블은 원본을 바꾸지 않고 같은 데이터를 다른 방식으로 요약한다.</li>
-<li>행과 열은 나누는 기준이고, 값은 계산할 숫자다.</li>
-<li>필터는 특정 지점이나 특정 카테고리처럼 일부만 보는 조건이다.</li></ul></div></section>
-<section id="s5" class="slide slide-table"><div class="slide-inner"><h2>피벗테이블 네 영역은 역할이 다르다</h2>
-<table class="deck-table"><thead><tr><th>영역</th><th>넣는 것</th><th>예시</th></tr></thead><tbody><tr><td>행</td><td>세로로 나눌 기준</td><td>store, weekday, hour</td></tr><tr><td>열</td><td>가로로 나눌 기준</td><td>category, hour</td></tr><tr><td>값</td><td>계산할 숫자</td><td>amount 합계, qty 합계</td></tr><tr><td>필터</td><td>일부만 볼 조건</td><td>특정 지점, 특정 카테고리</td></tr></tbody></table>
-<p class="note">중요한 질문은 무엇별로 나눌 것인지와 무엇을 계산할 것인지다.</p></div></section>
-<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
-<h2>질문은 필드 배치로 번역한다</h2>
-<p class="body">지점별 카테고리별 매출이라는 질문은 행에 store, 열에 category, 값에 amount 합계를 두는 구조로 바뀐다.</p>
-<ul class="bullets"><li>행에는 강남점과 홍대점이 생긴다.</li>
-<li>열에는 디저트, 음료, 커피가 자리를 잡는다.</li>
-<li>각 칸은 그 지점과 카테고리가 만나는 주문금액의 합계다.</li></ul></div></section>
-<section id="s7" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
-<h2>집계함수는 질문의 뜻을 정한다</h2>
-<p class="body">많이 팔렸다는 말은 기준에 따라 다른 답이 된다.</p>
-<ul class="bullets"><li>매출이 큰지는 amount의 합계로 판단한다.</li>
-<li>수량이 많은지는 qty의 합계로 판단한다.</li>
-<li>주문이 자주 들어왔는지는 order_id의 개수로 판단한다.</li>
-<li>결과를 말할 때는 합계, 개수, 평균 중 어떤 기준인지 함께 말한다.</li></ul></div></section>
-<section id="s8" class="slide slide-table"><div class="slide-inner"><h2>지점×카테고리 매출 피벗은 커피 비중을 보여 준다</h2>
-<table class="deck-table"><thead><tr><th>지점</th><th>디저트</th><th>음료</th><th>커피</th><th>총합계</th></tr></thead><tbody><tr><td>강남점</td><td>11,604,000</td><td>15,281,500</td><td>26,539,500</td><td>53,425,000</td></tr><tr><td>홍대점</td><td>7,732,500</td><td>10,268,500</td><td>19,066,500</td><td>37,067,500</td></tr><tr><td>총합계</td><td>19,336,500</td><td>25,550,000</td><td>45,606,000</td><td>90,492,500</td></tr></tbody></table>
-<p class="note">금액 단위는 원이다.</p></div></section>
-<section id="s9" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 5</div>
-<h2>교차표는 한 칸씩 외우지 않고 패턴을 본다</h2>
-<p class="body">요일×시간대 피벗은 숫자가 많으므로 큰 숫자가 몰리는 시간대를 먼저 찾고, 특정 요일에서 유난히 큰 칸이 있는지 확인한다.</p>
-<ul class="bullets"><li>매출액 합계 기준으로 13시가 전체 1위다.</li>
-<li>요일과 시간대를 함께 보면 Sun 13시가 2,260,500원으로 가장 큰 조합이다.</li>
-<li>Sun은 일요일을 뜻한다.</li></ul></div></section>
-<section id="s10" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
-<div class="mission-grid"><div class="mission-card"><div class="m-label">미션. 가장 잘 팔리는 시간대 찾기</div><div class="m-desc">hour를 행에 넣고 amount 합계, qty 합계, order_id 개수를 값에 넣은 새 피벗테이블을 만든다.</div></div><div class="mission-card"><div class="m-label">정렬과 답변</div><div class="m-desc">amount 합계를 기준으로 내림차순 정렬하고, 매출액 합계 기준 1위 시간대와 매출, 판매수량, 주문건수를 한 문장으로 작성한다.</div></div><div class="mission-card"><div class="m-label">추가 확인</div><div class="m-desc">판매수량 기준 1위, 주문건수 기준 1위, 요일×시간대의 가장 큰 조합이 무엇인지 확인한다.</div></div></div></div></section>
-<section id="s11" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
-<ul class="bullets"><li>피벗테이블은 원본을 바꾸지 않고 주문 한 건 단위 데이터를 요약표로 만든다.</li>
-<li>행과 열은 분류 기준이고 값은 계산 대상이다.</li>
-<li>이 데이터에서는 매출액 합계 기준 13시가 1위이며, 매출은 11,626,000원, 판매수량은 2,220개, 주문건수는 1,348건이다.</li></ul>
-<div class="next"><b>다음 차시</b>: S04에서는 VLOOKUP/XLOOKUP으로 여러 표를 이어 붙이고 조건부 집계로 지역별 매출과 등급별 객단가를 구한다.</div></div></section>
+<p class="subtitle">긴 주문 목록을 지점·카테고리·시간대별 요약표로 만든다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>학습 후 할 수 있는 것</h2>
+<ul class="obj-grid"><li>행·열·값 영역의 역할을 구분한다</li>
+<li>질문에 맞는 집계함수를 고른다</li>
+<li>교차표에서 주요 패턴을 읽는다</li>
+<li>13시가 1위인 근거를 설명한다</li></ul></div></section>
+<section id="s3" class="slide slide-image"><div class="slide-inner"><h2>엑셀 피벗테이블로 전환</h2>
+<div class="img-wrap"><img src="../images/deck/excel.png" alt="엑셀 피벗테이블 수업 인포그래픽"/></div>
+<div class="viz-cap">주문 건별 표를 요약표로 만들어 질문에 답한다.</div></div></section>
+<section id="s4" class="slide slide-transform"><div class="slide-inner"><h2>원본이 요약표가 된다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">원본 주문표</div><div class="xf-row"><span class="k">단위</span><span class="v">주문 1건</span></div><div class="xf-row changed"><span class="k">행수</span><span class="v">10,424행</span></div><div class="xf-row"><span class="k">열수</span><span class="v">12열</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">피벗 요약표</div><div class="xf-row"><span class="k">행</span><span class="v">store / hour</span></div><div class="xf-row changed"><span class="k">값</span><span class="v">amount 합계</span></div><div class="xf-row changed"><span class="k">답</span><span class="v">13시 1위</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>10,424행 주문표가 질문별 요약표로 바뀐다.</div></div></section>
+<section id="s5" class="slide slide-table"><div class="slide-inner"><h2>피벗 네 영역</h2>
+<table class="deck-table"><thead><tr><th>영역</th><th>넣는 것</th><th>예시</th></tr></thead><tbody><tr><td>행</td><td>세로 기준</td><td>store, weekday</td></tr><tr><td>열</td><td>가로 기준</td><td>category, hour</td></tr><tr><td>값</td><td>계산 대상</td><td>amount 합계</td></tr><tr><td>필터</td><td>일부 조건</td><td>특정 지점</td></tr></tbody></table></div></section>
+<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>질문을 배치로 바꾼다</h2>
+<p class="body">피벗테이블은 긴 주문 목록을 요약표로 바꾼다. 행·열은 분류 기준, 값은 계산 대상이다.</p>
+<ul class="bullets"><li>지점별: 행 store</li>
+<li>카테고리 비교: 열 category</li>
+<li>시간대별: 행 hour</li>
+<li>매출 기준: 값 amount 합계</li></ul></div></section>
+<section id="s7" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<h2>기준이 답을 정한다</h2>
+<p class="body">&#x27;잘 팔린다&#x27;는 말은 값 영역에 매출, 수량, 주문건수 중 무엇을 넣었는지에 따라 달라진다.</p>
+<ul class="bullets"><li>매출: amount 합계</li>
+<li>수량: qty 합계</li>
+<li>주문건수: order_id 개수</li></ul></div></section>
+<section id="s8" class="slide slide-chart"><div class="slide-inner"><h2>강남점 매출이 더 크다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="200" y="46" width="150" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="275" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">53,425,000원</text><text x="275" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">강남점</text><rect x="670" y="154" width="150" height="244" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="745" y="142" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">37,067,500원</text><text x="745" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">홍대점</text><line x1="917" y1="88" x2="275" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="275" cy="40" r="4" fill="#828fff"/><rect x="862" y="46" width="110" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="917" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">강남점 1위</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>강남점은 <b>53,425,000원</b>, 홍대점은 <b>37,067,500원</b>이다.</div></div></section>
+<section id="s9" class="slide slide-chart"><div class="slide-inner"><h2>커피가 전체 매출 1위다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="122" y="249" width="150" height="149" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="197" y="237" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">19,336,500원</text><text x="197" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">디저트</text><rect x="435" y="201" width="150" height="197" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="189" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">25,550,000원</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">음료</text><rect x="748" y="46" width="150" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="823" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">45,606,000원</text><text x="823" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">커피</text><line x1="140" y1="88" x2="823" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="823" cy="40" r="4" fill="#828fff"/><rect x="48" y="46" width="185" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="140" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">45,606,000원</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>전체 매출은 커피가 <b>45,606,000원</b>으로 가장 크다.</div></div></section>
+<section id="s10" class="slide slide-chart"><div class="slide-inner"><h2>13시가 매출 1위다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="78" y="46" width="113" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="134" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">11,626,000원</text><text x="134" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">13시</text><rect x="266" y="89" width="113" height="309" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="322" y="77" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">10,205,000원</text><text x="322" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">12시</text><rect x="454" y="114" width="113" height="284" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="102" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">9,381,500원</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">14시</text><rect x="642" y="182" width="113" height="216" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="698" y="170" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">7,119,500원</text><text x="698" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">15시</text><rect x="830" y="183" width="113" height="215" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="886" y="171" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">7,085,500원</text><text x="886" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">16시</text><line x1="924" y1="88" x2="134" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="134" cy="40" r="4" fill="#828fff"/><rect x="877" y="46" width="95" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="924" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">매출 1위</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>13시 매출은 <b>11,626,000원</b>으로 1위다.</div></div></section>
+<section id="s11" class="slide slide-table"><div class="slide-inner"><h2>13시의 세 기준</h2>
+<table class="deck-table"><thead><tr><th>기준</th><th>값</th><th>순위</th></tr></thead><tbody><tr><td>매출</td><td>11,626,000원</td><td>1위</td></tr><tr><td>판매수량</td><td>2,220개</td><td>1위</td></tr><tr><td>주문건수</td><td>1,348건</td><td>1위</td></tr></tbody></table>
+<p class="note">이 데이터에서는 세 기준 모두 13시가 1위다.</p></div></section>
+<section id="s12" class="slide slide-table"><div class="slide-inner"><h2>교차표의 최고 조합</h2>
+<table class="deck-table"><thead><tr><th>기준</th><th>값</th></tr></thead><tbody><tr><td>요일</td><td>Sun(일요일)</td></tr><tr><td>시간대</td><td>13시</td></tr><tr><td>매출액</td><td>2,260,500원</td></tr></tbody></table>
+<p class="note">요일×시간대에서는 일요일 13시가 가장 크다.</p></div></section>
+<section id="s13" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 시간대 1위 찾기</div><div class="m-desc">hour를 행에, amount·qty·order_id를 값에 배치하고 amount 합계 기준으로 정렬한다.</div></div></div></div></section>
+<section id="s14" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>피벗은 질문을 행·열·값 배치로 바꾼다.</li>
+<li>값 영역의 집계함수가 답의 기준이다.</li>
+<li>이 데이터에서는 13시가 세 기준 모두 1위다.</li></ul>
+<div class="next"><b>다음 차시</b>: 여러 표를 연결하고 계산 컬럼으로 질문을 넓힌다.</div></div></section>
 </main>
 <script>
 const deck=document.querySelector('.deck');

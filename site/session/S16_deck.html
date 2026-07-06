@@ -36,13 +36,13 @@ a{color:inherit;text-decoration:none;}
 .kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
   text-transform:uppercase;margin-bottom:0.9rem;}
 .body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
-ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
-ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
-  color:var(--ink);line-height:1.5;}
-ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.8rem;max-width:62ch;}
+ul.bullets>li{position:relative;padding-left:1.6rem;font-size:clamp(1rem,1.35vw,1.24rem);
+  color:var(--ink);line-height:1.42;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.58em;width:7px;height:7px;border-radius:2px;
   background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
 ul.bullets>li b{color:var(--ink);font-weight:640;}
-.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid{display:flex;flex-direction:column;gap:1rem;counter-reset:obj;max-width:58ch;}
 .obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
   font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
 .obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
@@ -53,9 +53,11 @@ ul.bullets>li b{color:var(--ink);font-weight:640;}
   padding:1.3rem 1.5rem;}
 .mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
 .mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
-table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.18rem);}
 table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
-  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+  padding:0.72rem 1.1rem;text-align:left;vertical-align:top;line-height:1.4;}
+table.deck-table.compact{font-size:clamp(0.8rem,1.05vw,0.98rem);}
+table.deck-table.compact th,table.deck-table.compact td{padding:0.42rem 0.8rem;line-height:1.32;}
 table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
   font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
 table.deck-table td{color:var(--ink-muted);}
@@ -69,6 +71,35 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 .closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
   color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
 .closing .next b{color:var(--primary-hover);}
+/* --- visual slides --- */
+.viz{margin-top:1rem;width:100%;max-width:78ch;}
+.viz svg{width:100%;height:auto;display:block;overflow:visible;}
+.viz-cap{margin-top:1rem;color:var(--ink-tertiary);font-size:0.92rem;font-family:var(--font-mono);}
+.result-line{margin-top:1.4rem;padding:0.9rem 1.2rem;border-left:3px solid var(--primary);
+  background:var(--surface-1);border-radius:0 10px 10px 0;color:var(--ink);
+  font-size:clamp(1rem,1.4vw,1.3rem);line-height:1.5;max-width:62ch;}
+.result-line b{color:var(--primary-hover);}
+.result-line .lead{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:1px;
+  text-transform:uppercase;color:var(--ink-subtle);display:block;margin-bottom:0.3rem;}
+.xform{display:flex;align-items:stretch;gap:0;max-width:80ch;margin-top:0.6rem;}
+.xform-card{flex:1;border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;padding:1.2rem 1.3rem;}
+.xform-card .xf-label{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.6px;
+  color:var(--ink-subtle);text-transform:uppercase;margin-bottom:0.9rem;}
+.xform-arrow{display:flex;align-items:center;padding:0 1.1rem;color:var(--primary-hover);font-size:2rem;flex:none;}
+.xf-row{display:flex;justify-content:space-between;gap:1rem;padding:0.55rem 0.6rem;
+  font-size:clamp(0.92rem,1.25vw,1.12rem);border-radius:8px;}
+.xf-row .k{color:var(--ink-subtle);font-family:var(--font-mono);font-size:0.9em;}
+.xf-row .v{color:var(--ink);text-align:right;}
+.xf-row.changed{background:rgba(94,106,210,0.14);outline:1.5px solid var(--primary);}
+.xf-row.changed .v{color:var(--primary-hover);font-weight:640;}
+.img-wrap{position:relative;width:100%;max-width:80ch;margin-top:0.6rem;
+  border:1px solid var(--hairline);border-radius:16px;overflow:hidden;background:var(--surface-1);}
+.img-wrap img{width:100%;display:block;}
+.img-box{position:absolute;border:2px solid var(--primary-hover);border-radius:6px;
+  box-shadow:0 0 0 3px rgba(94,106,210,0.18);}
+.img-box .lbl{position:absolute;top:-1.9em;left:-2px;white-space:nowrap;
+  background:var(--primary);color:#fff;font-size:0.8rem;font-weight:600;
+  padding:2px 8px;border-radius:6px;}
 /* chrome */
 .progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
 .hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
@@ -98,63 +129,60 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <div class="progress"></div>
 <div class="brand">데이터 리터러시 with AI</div>
 <div class="hud">
-  <span class="counter"><span class="cur">1</span> / 11</span>
+  <span class="counter"><span class="cur">1</span> / 15</span>
   <a class="back" href="./S16.html">자료로 돌아가기</a>
 </div>
 <div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
 <main class="deck">
 <section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S16 · PART 05 · BI · 난이도 4</div>
-<h1>데이터 모델링: 관계, 스타 스키마, 날짜 차원</h1>
-<p class="subtitle">Power BI에서 orders, customers, products를 한 표로 합치지 않고 각 표의 역할을 유지한 채 관계로 연결하고, S17 시간 계산에 쓸 날짜 차원을 만든다.</p></div></section>
-<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
-<ul class="obj-grid"><li>Power BI에서 1:다 관계를 만들고 관계 방향을 확인한다.</li>
-<li>팩트 테이블과 차원 테이블을 구분한다.</li>
-<li>orders, customers, products, 날짜테이블로 스타 스키마를 구성한다.</li>
-<li>주문일 범위를 기준으로 날짜 차원 테이블을 만들고 날짜 테이블로 지정한다.</li>
-<li>customers[region] 필드로 주문 매출을 지역별로 분해한다.</li></ul></div></section>
-<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
-<h2>관계는 VLOOKUP을 모델로 만든 것이다</h2>
-<p class="body">엑셀 VLOOKUP은 필요한 값을 주문표 옆에 복사하지만, Power BI 관계는 고객번호나 상품번호가 같다는 규칙을 모델에 저장한다.</p>
-<ul class="bullets"><li>orders에 region을 직접 붙이지 않아도 customers[region]을 축으로 지역별 매출을 계산한다.</li>
-<li>표를 하나로 합치지 않고 각 표의 역할을 살린 채 연결한다.</li></ul></div></section>
-<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
-<h2>1:다 관계는 사전 한 줄과 거래 여러 줄의 관계다</h2>
-<p class="body">customers에는 고객 한 명이 한 줄만 있고 products에는 상품 하나가 한 줄만 있지만, orders에는 같은 고객과 상품이 여러 번 반복될 수 있다.</p>
-<ul class="bullets"><li>차원 테이블은 1쪽이고 팩트 테이블은 다쪽이다.</li>
-<li>관계 방향은 고객, 상품, 날짜가 주문을 필터링하도록 차원에서 팩트로 둔다.</li>
-<li>양방향 필터는 입문 단계의 기본값으로 쓰지 않는다.</li></ul></div></section>
-<section id="s5" class="slide slide-table"><div class="slide-inner"><h2>실습 데이터는 세 표로 나뉜다</h2>
-<table class="deck-table"><thead><tr><th>표</th><th>행 수</th><th>열 수</th><th>역할</th></tr></thead><tbody><tr><td>orders</td><td>20,000</td><td>6</td><td>주문 사건이 쌓인 팩트다</td></tr><tr><td>customers</td><td>3,000</td><td>7</td><td>고객을 설명하는 차원이다</td></tr><tr><td>products</td><td>200</td><td>5</td><td>상품을 설명하는 차원이다</td></tr></tbody></table>
-<p class="note">Power BI Desktop 실습에서는 같은 세 표가 들어 있는 shop_orders_clean.xlsx 파일을 사용한다.</p></div></section>
-<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
-<h2>스타 스키마는 분석용 표 배치도다</h2>
-<p class="body">스타 스키마는 가운데에 팩트 테이블을 두고 주변에 차원 테이블을 배치하는 모델이다.</p>
-<ul class="bullets"><li>필터와 축은 차원 테이블에서 가져오고, 합계와 평균은 팩트 테이블을 기준으로 계산한다.</li>
-<li>지역은 customers에서 가져오고, 매출은 orders의 주문 건수와 products의 단가를 이용해 계산한다.</li>
-<li>같은 모델로 지역별, 상품별, 월별 질문에 반복해서 답한다.</li></ul></div></section>
-<section id="s7" class="slide slide-table"><div class="slide-inner"><h2>최종 모델은 세 개의 1:다 관계로 완성된다</h2>
-<table class="deck-table"><thead><tr><th>1쪽 테이블</th><th>1쪽 컬럼</th><th>다쪽 테이블</th><th>다쪽 컬럼</th><th>관계</th></tr></thead><tbody><tr><td>customers</td><td>customer_id</td><td>orders</td><td>customer_id</td><td>1:다</td></tr><tr><td>products</td><td>product_id</td><td>orders</td><td>product_id</td><td>1:다</td></tr><tr><td>날짜테이블</td><td>Date</td><td>orders</td><td>order_date</td><td>1:다</td></tr></tbody></table>
-<p class="note">세 관계는 모두 활성 상태로 두고, 교차 필터 방향은 단일 방향으로 둔다.</p></div></section>
-<section id="s8" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
-<h2>날짜 차원은 시간 계산의 기준표다</h2>
-<p class="body">orders[order_date]는 주문이 있었던 날짜만 담지만, 날짜테이블은 분석 기간의 모든 날짜를 빠짐없이 담는 기준표다.</p>
-<ul class="bullets"><li>주문일 범위는 2024-01-01부터 2024-12-31까지다.</li>
-<li>2024년은 윤년이므로 날짜테이블은 366행이다.</li>
-<li>날짜테이블에는 연도, 월번호, 연월, 연월정렬 컬럼을 만든다.</li>
-<li>전월대비와 누적 같은 S17 시간 계산은 연속된 날짜 차원에 기대어 계산한다.</li></ul></div></section>
-<section id="s9" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 5</div>
-<h2>매출 측정값은 관계가 작동하는지 보여 준다</h2>
-<p class="body">orders에는 매출 컬럼이 없으므로 상품 단가 × 수량 × (1 - 할인율)로 Total Sales를 만든다.</p>
-<ul class="bullets"><li>수량과 할인율은 orders에 있고, 단가는 products와의 관계를 따라 가져온다.</li>
-<li>검산 기준은 Order Count 20,000, Total Sales 1,938,489,803이다.</li>
-<li>지역별 결과는 서울특별시 570,482,124, 경기도 530,726,511 순이다.</li></ul></div></section>
-<section id="s10" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
-<div class="mission-grid"><div class="mission-card"><div class="m-label">막대 차트 만들기</div><div class="m-desc">축에 customers[region]을 넣고, 값에 [Total Sales]를 넣는다.</div></div><div class="mission-card"><div class="m-label">월 슬라이서 붙이기</div><div class="m-desc">슬라이서에 날짜테이블[연월]을 넣고, 월을 바꾸면 지역별 매출 값이 함께 바뀌는지 확인한다.</div></div><div class="mission-card"><div class="m-label">결과 제출하기</div><div class="m-desc">전체 매출, 매출 1위와 2위 지역 및 금액, 지역 수를 제출한다.</div></div></div></div></section>
-<section id="s11" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
-<ul class="bullets"><li>좋은 대시보드는 예쁜 차트보다 좋은 모델에서 시작한다.</li>
-<li>orders는 팩트로 두고 customers, products, 날짜테이블은 분류와 필터를 제공하는 차원으로 둔다.</li>
-<li>관계를 명확히 만들면 같은 모델로 지역별, 상품별, 월별 질문에 반복해서 답할 수 있다.</li></ul>
-<div class="next"><b>다음 차시</b>에서는 S17 시각화·상호작용·DAX 기초에서 슬라이서와 시각화 상호작용을 만들고 전월대비 성장률을 계산한다.</div></div></section>
+<h1>관계와 스타 스키마</h1>
+<p class="subtitle">세 표를 합치지 않고 관계로 연결해 지역별·월별 매출을 계산한다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 학습 목표</h2>
+<ul class="obj-grid"><li>1:다 관계와 필터 방향을 확인한다</li>
+<li>팩트와 차원으로 모델을 읽는다</li>
+<li>날짜 차원으로 월별 기준을 만든다</li></ul></div></section>
+<section id="s3" class="slide slide-image"><div class="slide-inner"><h2>BI 모델은 관계로 읽는다</h2>
+<div class="img-wrap"><img src="../images/deck/bi.png" alt="BI 파트 인포그래픽"/></div>
+<div class="viz-cap">대시보드 품질은 모델에서 시작한다.</div></div></section>
+<section id="s4" class="slide slide-chart"><div class="slide-inner"><h2>팩트는 크고 차원은 작다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="87" y="46" width="141" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="158" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">20,000행</text><text x="158" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">orders</text><rect x="322" y="345" width="141" height="53" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="392" y="333" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3,000행</text><text x="392" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">customers</text><rect x="557" y="394" width="141" height="4" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="628" y="382" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">200행</text><text x="628" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">products</text><rect x="792" y="392" width="141" height="6" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="862" y="380" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">366행</text><text x="862" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">날짜테이블</text><line x1="910" y1="88" x2="158" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="158" cy="40" r="4" fill="#828fff"/><rect x="847" y="46" width="125" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="910" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">주문 2만 행</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>orders는 계산의 중심이고 나머지 표는 분류 기준이다.</div></div></section>
+<section id="s5" class="slide slide-table"><div class="slide-inner"><h2>세 표의 역할을 나눈다</h2>
+<table class="deck-table"><thead><tr><th>표</th><th>주요 값</th><th>역할</th></tr></thead><tbody><tr><td>orders</td><td>수량·할인율</td><td>팩트</td></tr><tr><td>customers</td><td>지역·등급</td><td>고객 차원</td></tr><tr><td>products</td><td>단가·원가</td><td>상품 차원</td></tr><tr><td>날짜테이블</td><td>연월·정렬</td><td>날짜 차원</td></tr></tbody></table>
+<p class="note">축과 필터는 차원에서 가져온다.</p></div></section>
+<section id="s6" class="slide slide-transform"><div class="slide-inner"><h2>복사 대신 관계를 둔다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">S04식 한 표</div><div class="xf-row changed"><span class="k">지역</span><span class="v">orders에 붙임</span></div><div class="xf-row changed"><span class="k">단가</span><span class="v">orders에 붙임</span></div><div class="xf-row"><span class="k">방식</span><span class="v">값 복사</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">S16 관계 모델</div><div class="xf-row changed"><span class="k">지역</span><span class="v">customers 참조</span></div><div class="xf-row changed"><span class="k">단가</span><span class="v">products 참조</span></div><div class="xf-row"><span class="k">방식</span><span class="v">관계 참조</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>값을 붙이지 않아도 차원 필드가 주문을 필터링한다.</div></div></section>
+<section id="s7" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>1쪽은 사전, 다쪽은 거래다</h2>
+<p class="body">customers와 products는 고유한 값의 사전이고 orders는 반복 거래가 쌓인 표다.</p>
+<ul class="bullets"><li>차원은 1쪽이다</li>
+<li>팩트는 다쪽이다</li>
+<li>필터 방향은 단일이다</li></ul></div></section>
+<section id="s8" class="slide slide-table"><div class="slide-inner"><h2>최종 관계는 세 개다</h2>
+<table class="deck-table"><thead><tr><th>차원</th><th>팩트</th><th>관계</th></tr></thead><tbody><tr><td>customers</td><td>orders</td><td>1:다 활성</td></tr><tr><td>products</td><td>orders</td><td>1:다 활성</td></tr><tr><td>날짜테이블</td><td>orders</td><td>1:다 활성</td></tr></tbody></table>
+<p class="note">교차 필터 방향은 모두 단일이다.</p></div></section>
+<section id="s9" class="slide slide-transform"><div class="slide-inner"><h2>날짜 차원이 기준이 된다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">주문일</div><div class="xf-row"><span class="k">역할</span><span class="v">거래 발생일</span></div><div class="xf-row changed"><span class="k">기간</span><span class="v">2024-01-01~12-31</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">날짜테이블</div><div class="xf-row"><span class="k">역할</span><span class="v">시간 기준표</span></div><div class="xf-row changed"><span class="k">행 수</span><span class="v">366</span></div><div class="xf-row"><span class="k">정렬</span><span class="v">연월정렬</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>연속된 날짜 기준이 생겨 월별 계산이 안정된다.</div></div></section>
+<section id="s10" class="slide slide-transform"><div class="slide-inner"><h2>관계로 매출을 계산한다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">orders 단독</div><div class="xf-row"><span class="k">수량</span><span class="v">있음</span></div><div class="xf-row"><span class="k">할인율</span><span class="v">있음</span></div><div class="xf-row changed"><span class="k">단가</span><span class="v">없음</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">products 연결 후</div><div class="xf-row changed"><span class="k">단가</span><span class="v">관계로 참조</span></div><div class="xf-row changed"><span class="k">주문 수</span><span class="v">20,000</span></div><div class="xf-row changed"><span class="k">전체 매출</span><span class="v">1,938,489,803</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>상품 단가를 관계로 가져와 전체 매출을 계산한다.</div></div></section>
+<section id="s11" class="slide slide-chart"><div class="slide-inner"><h2>지역별 매출은 서울이 1위다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="78" y="46" width="113" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="134" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">570,482,124원</text><text x="134" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">서울특별시</text><rect x="266" y="71" width="113" height="327" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="322" y="59" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">530,726,511원</text><text x="322" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">경기도</text><rect x="454" y="316" width="113" height="82" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="304" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">132,704,477원</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">부산광역시</text><rect x="642" y="344" width="113" height="54" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="698" y="332" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">88,043,950원</text><text x="698" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">인천광역시</text><rect x="830" y="350" width="113" height="48" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="886" y="338" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">78,020,547원</text><text x="886" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">경상남도</text><line x1="947" y1="88" x2="134" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="134" cy="40" r="4" fill="#828fff"/><rect x="922" y="46" width="50" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="947" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">1위</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>서울특별시가 <b>570,482,124원</b>으로 가장 크다.</div></div></section>
+<section id="s12" class="slide slide-chart"><div class="slide-inner"><h2>월별 매출은 연말이 높다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="56" y1="398" x2="976" y2="398" stroke="#2b2d33" stroke-width="1.5"/><polyline points="56,193 140,198 223,186 307,160 391,141 474,183 558,135 641,145 725,163 809,150 892,50 976,46" fill="none" stroke="#828fff" stroke-width="3"/><circle cx="56" cy="193" r="6" fill="#828fff"/><text x="56" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2024-01</text><circle cx="140" cy="198" r="6" fill="#828fff"/><text x="140" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2024-02</text><circle cx="223" cy="186" r="6" fill="#828fff"/><text x="223" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2024-03</text><circle cx="307" cy="160" r="6" fill="#828fff"/><text x="307" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2024-04</text><circle cx="391" cy="141" r="6" fill="#828fff"/><text x="391" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2024-05</text><circle cx="474" cy="183" r="6" fill="#828fff"/><text x="474" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2024-06</text><circle cx="558" cy="135" r="6" fill="#828fff"/><text x="558" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2024-07</text><circle cx="641" cy="145" r="6" fill="#828fff"/><text x="641" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2024-08</text><circle cx="725" cy="163" r="6" fill="#828fff"/><text x="725" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2024-09</text><circle cx="809" cy="150" r="6" fill="#828fff"/><text x="809" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2024-10</text><circle cx="892" cy="50" r="6" fill="#828fff"/><text x="892" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2024-11</text><circle cx="976" cy="46" r="6" fill="#828fff"/><text x="976" y="432" text-anchor="middle" fill="#8a8f98" font-size="22" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2024-12</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>12월 <b>225,576,457원</b>, 11월 <b>223,024,439원</b>이다.</div></div></section>
+<section id="s13" class="slide slide-quote"><div class="slide-inner"><blockquote class="quote">orders에 지역 컬럼이 없어도 지역별 매출을 구할 수 있다.</blockquote>
+<div class="attribution">S16 강사 설명</div></div></section>
+<section id="s14" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 실습</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">실습 1. 지역별 매출 차트</div><div class="m-desc">customers의 region과 Total Sales를 함께 사용한다.</div></div><div class="mission-card"><div class="m-label">실습 2. 연월 슬라이서</div><div class="m-desc">날짜테이블의 연월로 매출 변화를 확인한다.</div></div></div></div></section>
+<section id="s15" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>팩트는 orders, 차원은 고객·상품·날짜다.</li>
+<li>관계가 맞으면 같은 측정값으로 여러 질문에 답한다.</li>
+<li>검산 기준은 주문 20,000건, 매출 <b>1,938,489,803원</b>이다.</li></ul>
+<div class="next">다음 차시는 S17 전월대비와 성장률이다.</div></div></section>
 </main>
 <script>
 const deck=document.querySelector('.deck');

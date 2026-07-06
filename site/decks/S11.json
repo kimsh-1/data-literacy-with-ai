@@ -1,175 +1,336 @@
 {
   "session": "S11",
-  "title": "Pandas 입문: Series, DataFrame, CSV 읽기와 필터",
-  "part": "PART 04",
+  "title": "Pandas 입문: CSV 필터",
+  "part": "PART 04 · 파이썬",
   "difficulty": 3,
   "slides": [
     {
       "type": "title",
       "eyebrow": "S11 · PART 04 · 파이썬 · 난이도 3",
-      "title": "Pandas 입문: Series, DataFrame, CSV 읽기와 필터",
-      "subtitle": "파이썬 문법을 실제 표 데이터로 연결하고, pandas로 CSV를 읽어 구조 확인, 필터, 정렬까지 실습한다."
+      "title": "Pandas 입문: CSV 필터",
+      "subtitle": "CSV를 읽고 표 구조를 확인한 뒤 조건 행을 남긴다."
     },
     {
       "type": "objectives",
-      "heading": "오늘 끝나면 할 수 있는 것",
+      "heading": "이번 차시의 목표",
       "items": [
-        "DataFrame을 엑셀 시트, Series를 엑셀의 한 열에 견주어 설명한다.",
-        "pd.read_csv로 UTF-8 CSV 파일을 읽고, 한글 CSV에서 인코딩 문제가 생길 수 있음을 인지한다.",
-        "head, info, describe로 데이터의 첫 행, 컬럼, 타입, 기초 통계를 확인한다.",
-        "불리언 조건식과 loc로 원하는 행만 필터링하고 sort_values로 금액순 정렬을 한다."
+        "DataFrame과 Series를 구분한다",
+        "CSV의 행 수와 열 구조를 확인한다",
+        "불리언 마스크로 행을 필터링한다",
+        "금액 기준으로 결과를 정렬한다"
       ]
+    },
+    {
+      "type": "image",
+      "heading": "파이썬에서 표를 다룬다",
+      "src": "../images/python.png",
+      "alt": "파이썬으로 CSV 표 데이터를 다루는 파트 이미지",
+      "caption": "오늘은 문법을 표 분석으로 연결한다."
+    },
+    {
+      "type": "transform",
+      "heading": "표 전체와 열 하나를 구분한다",
+      "before": {
+        "label": "DataFrame",
+        "rows": [
+          [
+            "형태",
+            "표 전체"
+          ],
+          [
+            "크기",
+            "10,424행 x 12열",
+            true
+          ],
+          [
+            "엑셀 감각",
+            "시트"
+          ]
+        ]
+      },
+      "after": {
+        "label": "Series",
+        "rows": [
+          [
+            "형태",
+            "열 하나"
+          ],
+          [
+            "길이",
+            "10,424",
+            true
+          ],
+          [
+            "대상",
+            "amount"
+          ]
+        ]
+      },
+      "result": "DataFrame에서 한 열을 꺼내면 **Series**가 된다."
+    },
+    {
+      "type": "table",
+      "heading": "CSV를 읽은 뒤 먼저 점검한다",
+      "columns": [
+        "도구",
+        "보는 것",
+        "의미"
+      ],
+      "rows": [
+        [
+          "shape",
+          "행·열 개수",
+          "10,424 x 12"
+        ],
+        [
+          "columns",
+          "열 이름",
+          "머리글 확인"
+        ],
+        [
+          "head",
+          "앞쪽 행",
+          "파일 열림 확인"
+        ],
+        [
+          "info",
+          "타입·빈칸",
+          "구조 점검"
+        ],
+        [
+          "describe",
+          "숫자 요약",
+          "범위 확인"
+        ]
+      ],
+      "note": "CSV를 읽은 뒤 바로 분석하지 않는다."
+    },
+    {
+      "type": "chart",
+      "chartType": "bar",
+      "heading": "주문 금액 범위를 먼저 확인한다",
+      "data": [
+        {
+          "label": "최소",
+          "value": 3000
+        },
+        {
+          "label": "평균",
+          "value": 8681.17
+        },
+        {
+          "label": "최대",
+          "value": 19500
+        }
+      ],
+      "unit": "원",
+      "highlight": [
+        2
+      ],
+      "annotation": {
+        "text": "최대 19,500원",
+        "target": 2
+      },
+      "result": "주문 금액은 **3,000원~19,500원** 범위다."
+    },
+    {
+      "type": "chart",
+      "chartType": "bar",
+      "heading": "강남점 행 수가 더 많다",
+      "data": [
+        {
+          "label": "강남점",
+          "value": 6196
+        },
+        {
+          "label": "홍대점",
+          "value": 4228
+        }
+      ],
+      "unit": "행",
+      "highlight": [
+        0
+      ],
+      "annotation": {
+        "text": "강남점 6,196행",
+        "target": 0
+      },
+      "result": "강남점이 **6,196행**으로 가장 많다."
     },
     {
       "type": "concept",
       "kicker": "핵심 개념 1",
-      "heading": "pandas는 표를 다루는 파이썬 도구다",
-      "body": "S10에서 배운 변수, 리스트, 딕셔너리, 조건문, 반복문을 표 데이터에 맞게 확장한 도구가 pandas다.",
+      "heading": "필터는 먼저 조건을 만든다",
+      "body": "store가 강남점인지 행마다 판단해 결과를 True와 False로 만든다.",
       "bullets": [
-        "import pandas as pd에서 pd는 pandas를 짧게 부르는 별명이다.",
-        "read_csv, head, describe, sort_values는 엑셀의 열기, 확인, 요약, 정렬에 해당하는 기능이다.",
-        "오늘의 목표는 엑셀에서 하던 표 확인, 필터, 정렬을 pandas 코드로 재현하는 것이다."
+        "True인 행만 loc로 남긴다",
+        "여러 조건은 괄호와 &로 연결한다"
       ]
+    },
+    {
+      "type": "transform",
+      "heading": "마스크로 행을 줄인다",
+      "before": {
+        "label": "조건 적용 전",
+        "rows": [
+          [
+            "행수",
+            "10,424",
+            true
+          ],
+          [
+            "지점",
+            "강남점·홍대점"
+          ],
+          [
+            "상태",
+            "전체 DataFrame"
+          ]
+        ]
+      },
+      "after": {
+        "label": "강남점 필터 후",
+        "rows": [
+          [
+            "행수",
+            "6,196",
+            true
+          ],
+          [
+            "지점",
+            "강남점"
+          ],
+          [
+            "상태",
+            "True 행만 남김"
+          ]
+        ]
+      },
+      "result": "불리언 마스크를 적용하면 **강남점 6,196행**만 남는다."
+    },
+    {
+      "type": "chart",
+      "chartType": "bar",
+      "heading": "조건이 늘면 행이 줄어든다",
+      "data": [
+        {
+          "label": "전체",
+          "value": 10424
+        },
+        {
+          "label": "강남점",
+          "value": 6196
+        },
+        {
+          "label": "미션",
+          "value": 1362
+        }
+      ],
+      "unit": "행",
+      "highlight": [
+        2
+      ],
+      "annotation": {
+        "text": "1,362행",
+        "target": 2
+      },
+      "result": "세 조건을 모두 적용하면 **1,362행**만 남는다."
+    },
+    {
+      "type": "transform",
+      "heading": "미션 결과가 숫자로 요약된다",
+      "before": {
+        "label": "필터 전",
+        "rows": [
+          [
+            "행수",
+            "10,424",
+            true
+          ],
+          [
+            "총금액",
+            "전체"
+          ],
+          [
+            "평균금액",
+            "전체"
+          ]
+        ]
+      },
+      "after": {
+        "label": "미션 후",
+        "rows": [
+          [
+            "행수",
+            "1,362",
+            true
+          ],
+          [
+            "총금액",
+            "16,664,500원",
+            true
+          ],
+          [
+            "평균금액",
+            "12,235.32원",
+            true
+          ]
+        ]
+      },
+      "result": "미션은 **1,362행**, 총금액 **16,664,500원**이다."
     },
     {
       "type": "table",
-      "heading": "DataFrame은 표 전체, Series는 열 하나다",
+      "heading": "정렬하면 큰 금액이 위로 온다",
       "columns": [
-        "엑셀 감각",
-        "pandas 감각"
+        "순서",
+        "order_id",
+        "amount"
       ],
       "rows": [
         [
-          "워크시트 전체",
-          "DataFrame"
+          "1",
+          "10029",
+          "16,500"
         ],
         [
-          "열 하나",
-          "Series"
+          "2",
+          "10064",
+          "16,500"
         ],
         [
-          "행 번호",
-          "인덱스"
+          "3",
+          "10085",
+          "16,500"
         ],
         [
-          "열 제목",
-          "컬럼명"
+          "4",
+          "10108",
+          "16,500"
         ],
         [
-          "필터 조건",
-          "불리언 마스크"
+          "5",
+          "10114",
+          "16,500"
         ]
       ],
-      "note": "처음에는 DataFrame과 Series 이름보다 표 전체와 열 하나라는 감각이 더 중요하다."
-    },
-    {
-      "type": "concept",
-      "kicker": "핵심 개념 2",
-      "heading": "CSV 읽기는 경로와 인코딩을 확인하는 일이다",
-      "body": "CSV는 쉼표로 구분된 텍스트 파일이므로 파일 경로와 글자 인코딩이 맞아야 열린다. 이번 차시는 정제된 cafe_sales_clean.csv를 사용한다.",
-      "bullets": [
-        "파일 경로는 02_datasets/cafe_sales/cafe_sales_clean.csv이다.",
-        "실제 확인 결과 데이터 크기는 10,424행 x 12열이고 날짜 범위는 2025-01-01부터 2025-06-30이다.",
-        "컬럼은 order_id, date, weekday, hour, store, category, item, unit_price, qty, amount, payment, member이다.",
-        "UTF-8 CSV는 encoding 옵션 utf-8-sig로 무리 없이 열리며 cp949 원본 처리는 S12에서 다룬다."
-      ]
-    },
-    {
-      "type": "table",
-      "heading": "읽은 뒤에는 바로 분석하지 않고 먼저 점검한다",
-      "columns": [
-        "확인 도구",
-        "하는 일",
-        "엑셀 비교"
-      ],
-      "rows": [
-        [
-          "head",
-          "앞쪽 몇 행 보기",
-          "시트 맨 위 훑어보기"
-        ],
-        [
-          "info",
-          "행수, 컬럼, 결측, 타입 보기",
-          "열 목록과 데이터 형식 확인"
-        ],
-        [
-          "describe",
-          "숫자 열의 기초 통계 보기",
-          "평균, 최소, 최대 빠른 확인"
-        ],
-        [
-          "shape",
-          "행과 열 개수 보기",
-          "시트 크기 확인"
-        ],
-        [
-          "columns",
-          "컬럼명 보기",
-          "머리글 행 확인"
-        ]
-      ],
-      "note": "이번 데이터의 amount 최소값은 3,000원, 최대값은 19,500원이며 date는 문자열로 읽힌다."
-    },
-    {
-      "type": "concept",
-      "kicker": "핵심 개념 3",
-      "heading": "엑셀 필터는 pandas에서 불리언 마스크다",
-      "body": "엑셀에서는 지점 필터에서 강남점만 체크하지만, pandas에서는 각 행이 강남점인지 True 또는 False로 먼저 표시한다.",
-      "bullets": [
-        "불리언 마스크는 True와 False로 된 Series다.",
-        "df.loc에 마스크를 넣으면 True인 행만 남고, 강남점 결과는 6,196행 x 12열이다.",
-        "조건 여러 개를 연결할 때는 and가 아니라 &를 쓰고 각 조건을 괄호로 감싼다."
-      ]
-    },
-    {
-      "type": "concept",
-      "kicker": "핵심 개념 4",
-      "heading": "sort_values는 금액순 정렬이다",
-      "body": "강남점 주문을 만든 뒤 sort_values로 amount를 큰 값부터 본다. 같은 금액은 date, order_id 순서로 보게 했다.",
-      "bullets": [
-        "ascending=False는 큰 값이 위로 오게 하라는 뜻이다.",
-        "display_cols는 원본 데이터를 바꾸지 않고 화면에 보여줄 열만 고르는 장치다.",
-        "sort_values는 원본 df를 자동으로 덮어쓰지 않으므로 결과를 변수에 담아 계속 쓴다."
-      ]
-    },
-    {
-      "type": "table",
-      "heading": "loc와 iloc는 선택 기준이 다르다",
-      "columns": [
-        "도구",
-        "기준",
-        "예시 의미"
-      ],
-      "rows": [
-        [
-          "loc",
-          "인덱스 라벨과 컬럼명",
-          "0번 라벨 행의 store 열"
-        ],
-        [
-          "iloc",
-          "숫자 위치",
-          "0번째 행, 4번째 열"
-        ]
-      ],
-      "note": "이번 데이터에서 두 방식 모두 첫 행의 지점인 홍대점을 반환한다. 입문 단계에서는 컬럼명을 직접 쓰는 loc가 읽기 쉽다."
+      "note": "같은 금액은 날짜와 주문번호로 정렬한다."
     },
     {
       "type": "mission",
       "heading": "오늘의 미션",
       "items": [
         {
-          "label": "조건 만들기",
-          "desc": "강남점, 커피, amount 10,000원 이상이라는 세 조건을 mission_mask로 만든다."
+          "label": "미션 1. 조건 행 추출",
+          "desc": "강남점·커피·10,000원 이상 주문만 남긴다."
         },
         {
-          "label": "행 추출과 정렬",
-          "desc": "df.loc로 조건에 맞는 행만 남기고 amount, date, order_id 순서로 정렬한다."
+          "label": "미션 2. 금액순 정렬",
+          "desc": "amount가 큰 순서로 결과를 정렬한다."
         },
         {
-          "label": "완료 기준",
-          "desc": "실제 확인 값은 미션 행수 1,362행, 총금액 16,664,500원, 평균금액 12,235.32원이다."
+          "label": "미션 3. 결과 요약",
+          "desc": "행수, 총금액, 평균금액을 출력한다."
         }
       ]
     },
@@ -177,12 +338,12 @@
       "type": "closing",
       "heading": "정리",
       "bullets": [
-        "pandas 입문은 CSV를 읽고, 표의 구조를 확인하고, 조건에 맞는 행만 남기는 흐름에서 시작한다.",
-        "DataFrame은 표 전체이고 Series는 그 안의 열 하나다.",
-        "엑셀 필터는 pandas에서 True 또는 False 마스크를 만들고 loc로 적용하는 과정과 같다.",
-        "금액순으로 보려면 sort_values에 정렬할 열과 내림차순 옵션을 준다."
+        "DataFrame은 표 전체, Series는 열 하나다.",
+        "CSV는 shape, info, describe로 먼저 점검한다.",
+        "pandas에서는 엑셀 필터를 **불리언 마스크**로 다룬다.",
+        "loc로 조건 행을 남기고 sort_values로 정렬한다."
       ],
-      "next": "**다음 차시**: S12에서는 일부러 문제가 들어 있는 dirty 데이터를 열고 결측값, 중복, 타입, 문자열 표기, 인코딩 문제를 정리한다."
+      "next": "**다음 차시** — dirty 데이터를 열고 결측, 중복, 타입, 인코딩을 정리한다."
     }
   ]
 }

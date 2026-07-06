@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>S11 · Pandas 입문: Series, DataFrame, CSV 읽기와 필터 — 발표 덱</title>
+<title>S11 · Pandas 입문: CSV 필터 — 발표 덱</title>
 <style>
 @font-face{font-family:"PretendardDeck";
   src:url("../fonts/pretendard-deck-subset.woff2") format("woff2");
@@ -36,13 +36,13 @@ a{color:inherit;text-decoration:none;}
 .kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
   text-transform:uppercase;margin-bottom:0.9rem;}
 .body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
-ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
-ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
-  color:var(--ink);line-height:1.5;}
-ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.8rem;max-width:62ch;}
+ul.bullets>li{position:relative;padding-left:1.6rem;font-size:clamp(1rem,1.35vw,1.24rem);
+  color:var(--ink);line-height:1.42;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.58em;width:7px;height:7px;border-radius:2px;
   background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
 ul.bullets>li b{color:var(--ink);font-weight:640;}
-.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid{display:flex;flex-direction:column;gap:1rem;counter-reset:obj;max-width:58ch;}
 .obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
   font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
 .obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
@@ -53,9 +53,11 @@ ul.bullets>li b{color:var(--ink);font-weight:640;}
   padding:1.3rem 1.5rem;}
 .mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
 .mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
-table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.18rem);}
 table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
-  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+  padding:0.72rem 1.1rem;text-align:left;vertical-align:top;line-height:1.4;}
+table.deck-table.compact{font-size:clamp(0.8rem,1.05vw,0.98rem);}
+table.deck-table.compact th,table.deck-table.compact td{padding:0.42rem 0.8rem;line-height:1.32;}
 table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
   font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
 table.deck-table td{color:var(--ink-muted);}
@@ -69,6 +71,35 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 .closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
   color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
 .closing .next b{color:var(--primary-hover);}
+/* --- visual slides --- */
+.viz{margin-top:1rem;width:100%;max-width:78ch;}
+.viz svg{width:100%;height:auto;display:block;overflow:visible;}
+.viz-cap{margin-top:1rem;color:var(--ink-tertiary);font-size:0.92rem;font-family:var(--font-mono);}
+.result-line{margin-top:1.4rem;padding:0.9rem 1.2rem;border-left:3px solid var(--primary);
+  background:var(--surface-1);border-radius:0 10px 10px 0;color:var(--ink);
+  font-size:clamp(1rem,1.4vw,1.3rem);line-height:1.5;max-width:62ch;}
+.result-line b{color:var(--primary-hover);}
+.result-line .lead{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:1px;
+  text-transform:uppercase;color:var(--ink-subtle);display:block;margin-bottom:0.3rem;}
+.xform{display:flex;align-items:stretch;gap:0;max-width:80ch;margin-top:0.6rem;}
+.xform-card{flex:1;border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;padding:1.2rem 1.3rem;}
+.xform-card .xf-label{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.6px;
+  color:var(--ink-subtle);text-transform:uppercase;margin-bottom:0.9rem;}
+.xform-arrow{display:flex;align-items:center;padding:0 1.1rem;color:var(--primary-hover);font-size:2rem;flex:none;}
+.xf-row{display:flex;justify-content:space-between;gap:1rem;padding:0.55rem 0.6rem;
+  font-size:clamp(0.92rem,1.25vw,1.12rem);border-radius:8px;}
+.xf-row .k{color:var(--ink-subtle);font-family:var(--font-mono);font-size:0.9em;}
+.xf-row .v{color:var(--ink);text-align:right;}
+.xf-row.changed{background:rgba(94,106,210,0.14);outline:1.5px solid var(--primary);}
+.xf-row.changed .v{color:var(--primary-hover);font-weight:640;}
+.img-wrap{position:relative;width:100%;max-width:80ch;margin-top:0.6rem;
+  border:1px solid var(--hairline);border-radius:16px;overflow:hidden;background:var(--surface-1);}
+.img-wrap img{width:100%;display:block;}
+.img-box{position:absolute;border:2px solid var(--primary-hover);border-radius:6px;
+  box-shadow:0 0 0 3px rgba(94,106,210,0.18);}
+.img-box .lbl{position:absolute;top:-1.9em;left:-2px;white-space:nowrap;
+  background:var(--primary);color:#fff;font-size:0.8rem;font-weight:600;
+  padding:2px 8px;border-radius:6px;}
 /* chrome */
 .progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
 .hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
@@ -98,61 +129,59 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <div class="progress"></div>
 <div class="brand">데이터 리터러시 with AI</div>
 <div class="hud">
-  <span class="counter"><span class="cur">1</span> / 11</span>
+  <span class="counter"><span class="cur">1</span> / 14</span>
   <a class="back" href="./S11.html">자료로 돌아가기</a>
 </div>
 <div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
 <main class="deck">
 <section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S11 · PART 04 · 파이썬 · 난이도 3</div>
-<h1>Pandas 입문: Series, DataFrame, CSV 읽기와 필터</h1>
-<p class="subtitle">파이썬 문법을 실제 표 데이터로 연결하고, pandas로 CSV를 읽어 구조 확인, 필터, 정렬까지 실습한다.</p></div></section>
-<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
-<ul class="obj-grid"><li>DataFrame을 엑셀 시트, Series를 엑셀의 한 열에 견주어 설명한다.</li>
-<li>pd.read_csv로 UTF-8 CSV 파일을 읽고, 한글 CSV에서 인코딩 문제가 생길 수 있음을 인지한다.</li>
-<li>head, info, describe로 데이터의 첫 행, 컬럼, 타입, 기초 통계를 확인한다.</li>
-<li>불리언 조건식과 loc로 원하는 행만 필터링하고 sort_values로 금액순 정렬을 한다.</li></ul></div></section>
-<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
-<h2>pandas는 표를 다루는 파이썬 도구다</h2>
-<p class="body">S10에서 배운 변수, 리스트, 딕셔너리, 조건문, 반복문을 표 데이터에 맞게 확장한 도구가 pandas다.</p>
-<ul class="bullets"><li>import pandas as pd에서 pd는 pandas를 짧게 부르는 별명이다.</li>
-<li>read_csv, head, describe, sort_values는 엑셀의 열기, 확인, 요약, 정렬에 해당하는 기능이다.</li>
-<li>오늘의 목표는 엑셀에서 하던 표 확인, 필터, 정렬을 pandas 코드로 재현하는 것이다.</li></ul></div></section>
-<section id="s4" class="slide slide-table"><div class="slide-inner"><h2>DataFrame은 표 전체, Series는 열 하나다</h2>
-<table class="deck-table"><thead><tr><th>엑셀 감각</th><th>pandas 감각</th></tr></thead><tbody><tr><td>워크시트 전체</td><td>DataFrame</td></tr><tr><td>열 하나</td><td>Series</td></tr><tr><td>행 번호</td><td>인덱스</td></tr><tr><td>열 제목</td><td>컬럼명</td></tr><tr><td>필터 조건</td><td>불리언 마스크</td></tr></tbody></table>
-<p class="note">처음에는 DataFrame과 Series 이름보다 표 전체와 열 하나라는 감각이 더 중요하다.</p></div></section>
-<section id="s5" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
-<h2>CSV 읽기는 경로와 인코딩을 확인하는 일이다</h2>
-<p class="body">CSV는 쉼표로 구분된 텍스트 파일이므로 파일 경로와 글자 인코딩이 맞아야 열린다. 이번 차시는 정제된 cafe_sales_clean.csv를 사용한다.</p>
-<ul class="bullets"><li>파일 경로는 02_datasets/cafe_sales/cafe_sales_clean.csv이다.</li>
-<li>실제 확인 결과 데이터 크기는 10,424행 x 12열이고 날짜 범위는 2025-01-01부터 2025-06-30이다.</li>
-<li>컬럼은 order_id, date, weekday, hour, store, category, item, unit_price, qty, amount, payment, member이다.</li>
-<li>UTF-8 CSV는 encoding 옵션 utf-8-sig로 무리 없이 열리며 cp949 원본 처리는 S12에서 다룬다.</li></ul></div></section>
-<section id="s6" class="slide slide-table"><div class="slide-inner"><h2>읽은 뒤에는 바로 분석하지 않고 먼저 점검한다</h2>
-<table class="deck-table"><thead><tr><th>확인 도구</th><th>하는 일</th><th>엑셀 비교</th></tr></thead><tbody><tr><td>head</td><td>앞쪽 몇 행 보기</td><td>시트 맨 위 훑어보기</td></tr><tr><td>info</td><td>행수, 컬럼, 결측, 타입 보기</td><td>열 목록과 데이터 형식 확인</td></tr><tr><td>describe</td><td>숫자 열의 기초 통계 보기</td><td>평균, 최소, 최대 빠른 확인</td></tr><tr><td>shape</td><td>행과 열 개수 보기</td><td>시트 크기 확인</td></tr><tr><td>columns</td><td>컬럼명 보기</td><td>머리글 행 확인</td></tr></tbody></table>
-<p class="note">이번 데이터의 amount 최소값은 3,000원, 최대값은 19,500원이며 date는 문자열로 읽힌다.</p></div></section>
-<section id="s7" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
-<h2>엑셀 필터는 pandas에서 불리언 마스크다</h2>
-<p class="body">엑셀에서는 지점 필터에서 강남점만 체크하지만, pandas에서는 각 행이 강남점인지 True 또는 False로 먼저 표시한다.</p>
-<ul class="bullets"><li>불리언 마스크는 True와 False로 된 Series다.</li>
-<li>df.loc에 마스크를 넣으면 True인 행만 남고, 강남점 결과는 6,196행 x 12열이다.</li>
-<li>조건 여러 개를 연결할 때는 and가 아니라 &amp;를 쓰고 각 조건을 괄호로 감싼다.</li></ul></div></section>
-<section id="s8" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
-<h2>sort_values는 금액순 정렬이다</h2>
-<p class="body">강남점 주문을 만든 뒤 sort_values로 amount를 큰 값부터 본다. 같은 금액은 date, order_id 순서로 보게 했다.</p>
-<ul class="bullets"><li>ascending=False는 큰 값이 위로 오게 하라는 뜻이다.</li>
-<li>display_cols는 원본 데이터를 바꾸지 않고 화면에 보여줄 열만 고르는 장치다.</li>
-<li>sort_values는 원본 df를 자동으로 덮어쓰지 않으므로 결과를 변수에 담아 계속 쓴다.</li></ul></div></section>
-<section id="s9" class="slide slide-table"><div class="slide-inner"><h2>loc와 iloc는 선택 기준이 다르다</h2>
-<table class="deck-table"><thead><tr><th>도구</th><th>기준</th><th>예시 의미</th></tr></thead><tbody><tr><td>loc</td><td>인덱스 라벨과 컬럼명</td><td>0번 라벨 행의 store 열</td></tr><tr><td>iloc</td><td>숫자 위치</td><td>0번째 행, 4번째 열</td></tr></tbody></table>
-<p class="note">이번 데이터에서 두 방식 모두 첫 행의 지점인 홍대점을 반환한다. 입문 단계에서는 컬럼명을 직접 쓰는 loc가 읽기 쉽다.</p></div></section>
-<section id="s10" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
-<div class="mission-grid"><div class="mission-card"><div class="m-label">조건 만들기</div><div class="m-desc">강남점, 커피, amount 10,000원 이상이라는 세 조건을 mission_mask로 만든다.</div></div><div class="mission-card"><div class="m-label">행 추출과 정렬</div><div class="m-desc">df.loc로 조건에 맞는 행만 남기고 amount, date, order_id 순서로 정렬한다.</div></div><div class="mission-card"><div class="m-label">완료 기준</div><div class="m-desc">실제 확인 값은 미션 행수 1,362행, 총금액 16,664,500원, 평균금액 12,235.32원이다.</div></div></div></div></section>
-<section id="s11" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
-<ul class="bullets"><li>pandas 입문은 CSV를 읽고, 표의 구조를 확인하고, 조건에 맞는 행만 남기는 흐름에서 시작한다.</li>
-<li>DataFrame은 표 전체이고 Series는 그 안의 열 하나다.</li>
-<li>엑셀 필터는 pandas에서 True 또는 False 마스크를 만들고 loc로 적용하는 과정과 같다.</li>
-<li>금액순으로 보려면 sort_values에 정렬할 열과 내림차순 옵션을 준다.</li></ul>
-<div class="next"><b>다음 차시</b>: S12에서는 일부러 문제가 들어 있는 dirty 데이터를 열고 결측값, 중복, 타입, 문자열 표기, 인코딩 문제를 정리한다.</div></div></section>
+<h1>Pandas 입문: CSV 필터</h1>
+<p class="subtitle">CSV를 읽고 표 구조를 확인한 뒤 조건 행을 남긴다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>이번 차시의 목표</h2>
+<ul class="obj-grid"><li>DataFrame과 Series를 구분한다</li>
+<li>CSV의 행 수와 열 구조를 확인한다</li>
+<li>불리언 마스크로 행을 필터링한다</li>
+<li>금액 기준으로 결과를 정렬한다</li></ul></div></section>
+<section id="s3" class="slide slide-image"><div class="slide-inner"><h2>파이썬에서 표를 다룬다</h2>
+<div class="img-wrap"><img src="../images/deck/python.png" alt="파이썬으로 CSV 표 데이터를 다루는 파트 이미지"/></div>
+<div class="viz-cap">오늘은 문법을 표 분석으로 연결한다.</div></div></section>
+<section id="s4" class="slide slide-transform"><div class="slide-inner"><h2>표 전체와 열 하나를 구분한다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">DataFrame</div><div class="xf-row"><span class="k">형태</span><span class="v">표 전체</span></div><div class="xf-row changed"><span class="k">크기</span><span class="v">10,424행 x 12열</span></div><div class="xf-row"><span class="k">엑셀 감각</span><span class="v">시트</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">Series</div><div class="xf-row"><span class="k">형태</span><span class="v">열 하나</span></div><div class="xf-row changed"><span class="k">길이</span><span class="v">10,424</span></div><div class="xf-row"><span class="k">대상</span><span class="v">amount</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>DataFrame에서 한 열을 꺼내면 <b>Series</b>가 된다.</div></div></section>
+<section id="s5" class="slide slide-table"><div class="slide-inner"><h2>CSV를 읽은 뒤 먼저 점검한다</h2>
+<table class="deck-table"><thead><tr><th>도구</th><th>보는 것</th><th>의미</th></tr></thead><tbody><tr><td>shape</td><td>행·열 개수</td><td>10,424 x 12</td></tr><tr><td>columns</td><td>열 이름</td><td>머리글 확인</td></tr><tr><td>head</td><td>앞쪽 행</td><td>파일 열림 확인</td></tr><tr><td>info</td><td>타입·빈칸</td><td>구조 점검</td></tr><tr><td>describe</td><td>숫자 요약</td><td>범위 확인</td></tr></tbody></table>
+<p class="note">CSV를 읽은 뒤 바로 분석하지 않는다.</p></div></section>
+<section id="s6" class="slide slide-chart"><div class="slide-inner"><h2>주문 금액 범위를 먼저 확인한다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="122" y="344" width="150" height="54" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="197" y="332" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3,000원</text><text x="197" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">최소</text><rect x="435" y="241" width="150" height="157" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="229" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">8681.17원</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">평균</text><rect x="748" y="46" width="150" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="823" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">19,500원</text><text x="823" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">최대</text><line x1="133" y1="88" x2="823" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="823" cy="40" r="4" fill="#828fff"/><rect x="48" y="46" width="170" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="133" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">최대 19,500원</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>주문 금액은 <b>3,000원~19,500원</b> 범위다.</div></div></section>
+<section id="s7" class="slide slide-chart"><div class="slide-inner"><h2>강남점 행 수가 더 많다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="200" y="46" width="150" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="275" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">6,196행</text><text x="275" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">강남점</text><rect x="670" y="158" width="150" height="240" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="745" y="146" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">4,228행</text><text x="745" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">홍대점</text><line x1="887" y1="88" x2="275" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="275" cy="40" r="4" fill="#828fff"/><rect x="802" y="46" width="170" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="887" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">강남점 6,196행</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>강남점이 <b>6,196행</b>으로 가장 많다.</div></div></section>
+<section id="s8" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>필터는 먼저 조건을 만든다</h2>
+<p class="body">store가 강남점인지 행마다 판단해 결과를 True와 False로 만든다.</p>
+<ul class="bullets"><li>True인 행만 loc로 남긴다</li>
+<li>여러 조건은 괄호와 &amp;로 연결한다</li></ul></div></section>
+<section id="s9" class="slide slide-transform"><div class="slide-inner"><h2>마스크로 행을 줄인다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">조건 적용 전</div><div class="xf-row changed"><span class="k">행수</span><span class="v">10,424</span></div><div class="xf-row"><span class="k">지점</span><span class="v">강남점·홍대점</span></div><div class="xf-row"><span class="k">상태</span><span class="v">전체 DataFrame</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">강남점 필터 후</div><div class="xf-row changed"><span class="k">행수</span><span class="v">6,196</span></div><div class="xf-row"><span class="k">지점</span><span class="v">강남점</span></div><div class="xf-row"><span class="k">상태</span><span class="v">True 행만 남김</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>불리언 마스크를 적용하면 <b>강남점 6,196행</b>만 남는다.</div></div></section>
+<section id="s10" class="slide slide-chart"><div class="slide-inner"><h2>조건이 늘면 행이 줄어든다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="122" y="46" width="150" height="352" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="197" y="34" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">10,424행</text><text x="197" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">전체</text><rect x="435" y="189" width="150" height="209" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="177" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">6,196행</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">강남점</text><rect x="748" y="352" width="150" height="46" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="823" y="340" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">1,362행</text><text x="823" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">미션</text><line x1="103" y1="88" x2="823" y2="346" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="823" cy="346" r="4" fill="#828fff"/><rect x="48" y="46" width="110" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="103" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">1,362행</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>세 조건을 모두 적용하면 <b>1,362행</b>만 남는다.</div></div></section>
+<section id="s11" class="slide slide-transform"><div class="slide-inner"><h2>미션 결과가 숫자로 요약된다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">필터 전</div><div class="xf-row changed"><span class="k">행수</span><span class="v">10,424</span></div><div class="xf-row"><span class="k">총금액</span><span class="v">전체</span></div><div class="xf-row"><span class="k">평균금액</span><span class="v">전체</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">미션 후</div><div class="xf-row changed"><span class="k">행수</span><span class="v">1,362</span></div><div class="xf-row changed"><span class="k">총금액</span><span class="v">16,664,500원</span></div><div class="xf-row changed"><span class="k">평균금액</span><span class="v">12,235.32원</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>미션은 <b>1,362행</b>, 총금액 <b>16,664,500원</b>이다.</div></div></section>
+<section id="s12" class="slide slide-table"><div class="slide-inner"><h2>정렬하면 큰 금액이 위로 온다</h2>
+<table class="deck-table"><thead><tr><th>순서</th><th>order_id</th><th>amount</th></tr></thead><tbody><tr><td>1</td><td>10029</td><td>16,500</td></tr><tr><td>2</td><td>10064</td><td>16,500</td></tr><tr><td>3</td><td>10085</td><td>16,500</td></tr><tr><td>4</td><td>10108</td><td>16,500</td></tr><tr><td>5</td><td>10114</td><td>16,500</td></tr></tbody></table>
+<p class="note">같은 금액은 날짜와 주문번호로 정렬한다.</p></div></section>
+<section id="s13" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 조건 행 추출</div><div class="m-desc">강남점·커피·10,000원 이상 주문만 남긴다.</div></div><div class="mission-card"><div class="m-label">미션 2. 금액순 정렬</div><div class="m-desc">amount가 큰 순서로 결과를 정렬한다.</div></div><div class="mission-card"><div class="m-label">미션 3. 결과 요약</div><div class="m-desc">행수, 총금액, 평균금액을 출력한다.</div></div></div></div></section>
+<section id="s14" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>DataFrame은 표 전체, Series는 열 하나다.</li>
+<li>CSV는 shape, info, describe로 먼저 점검한다.</li>
+<li>pandas에서는 엑셀 필터를 <b>불리언 마스크</b>로 다룬다.</li>
+<li>loc로 조건 행을 남기고 sort_values로 정렬한다.</li></ul>
+<div class="next"><b>다음 차시</b> — dirty 데이터를 열고 결측, 중복, 타입, 인코딩을 정리한다.</div></div></section>
 </main>
 <script>
 const deck=document.querySelector('.deck');

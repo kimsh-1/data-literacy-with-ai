@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>S04 · 실무 함수: VLOOKUP/XLOOKUP과 조건부 집계 — 발표 덱</title>
+<title>S04 · S04 실무 함수: VLOOKUP/XLOOKUP과 조건부 집계 — 발표 덱</title>
 <style>
 @font-face{font-family:"PretendardDeck";
   src:url("../fonts/pretendard-deck-subset.woff2") format("woff2");
@@ -36,13 +36,13 @@ a{color:inherit;text-decoration:none;}
 .kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
   text-transform:uppercase;margin-bottom:0.9rem;}
 .body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
-ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
-ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
-  color:var(--ink);line-height:1.5;}
-ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.8rem;max-width:62ch;}
+ul.bullets>li{position:relative;padding-left:1.6rem;font-size:clamp(1rem,1.35vw,1.24rem);
+  color:var(--ink);line-height:1.42;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.58em;width:7px;height:7px;border-radius:2px;
   background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
 ul.bullets>li b{color:var(--ink);font-weight:640;}
-.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid{display:flex;flex-direction:column;gap:1rem;counter-reset:obj;max-width:58ch;}
 .obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
   font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
 .obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
@@ -53,9 +53,11 @@ ul.bullets>li b{color:var(--ink);font-weight:640;}
   padding:1.3rem 1.5rem;}
 .mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
 .mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
-table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.18rem);}
 table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
-  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+  padding:0.72rem 1.1rem;text-align:left;vertical-align:top;line-height:1.4;}
+table.deck-table.compact{font-size:clamp(0.8rem,1.05vw,0.98rem);}
+table.deck-table.compact th,table.deck-table.compact td{padding:0.42rem 0.8rem;line-height:1.32;}
 table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
   font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
 table.deck-table td{color:var(--ink-muted);}
@@ -69,6 +71,35 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 .closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
   color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
 .closing .next b{color:var(--primary-hover);}
+/* --- visual slides --- */
+.viz{margin-top:1rem;width:100%;max-width:78ch;}
+.viz svg{width:100%;height:auto;display:block;overflow:visible;}
+.viz-cap{margin-top:1rem;color:var(--ink-tertiary);font-size:0.92rem;font-family:var(--font-mono);}
+.result-line{margin-top:1.4rem;padding:0.9rem 1.2rem;border-left:3px solid var(--primary);
+  background:var(--surface-1);border-radius:0 10px 10px 0;color:var(--ink);
+  font-size:clamp(1rem,1.4vw,1.3rem);line-height:1.5;max-width:62ch;}
+.result-line b{color:var(--primary-hover);}
+.result-line .lead{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:1px;
+  text-transform:uppercase;color:var(--ink-subtle);display:block;margin-bottom:0.3rem;}
+.xform{display:flex;align-items:stretch;gap:0;max-width:80ch;margin-top:0.6rem;}
+.xform-card{flex:1;border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;padding:1.2rem 1.3rem;}
+.xform-card .xf-label{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.6px;
+  color:var(--ink-subtle);text-transform:uppercase;margin-bottom:0.9rem;}
+.xform-arrow{display:flex;align-items:center;padding:0 1.1rem;color:var(--primary-hover);font-size:2rem;flex:none;}
+.xf-row{display:flex;justify-content:space-between;gap:1rem;padding:0.55rem 0.6rem;
+  font-size:clamp(0.92rem,1.25vw,1.12rem);border-radius:8px;}
+.xf-row .k{color:var(--ink-subtle);font-family:var(--font-mono);font-size:0.9em;}
+.xf-row .v{color:var(--ink);text-align:right;}
+.xf-row.changed{background:rgba(94,106,210,0.14);outline:1.5px solid var(--primary);}
+.xf-row.changed .v{color:var(--primary-hover);font-weight:640;}
+.img-wrap{position:relative;width:100%;max-width:80ch;margin-top:0.6rem;
+  border:1px solid var(--hairline);border-radius:16px;overflow:hidden;background:var(--surface-1);}
+.img-wrap img{width:100%;display:block;}
+.img-box{position:absolute;border:2px solid var(--primary-hover);border-radius:6px;
+  box-shadow:0 0 0 3px rgba(94,106,210,0.18);}
+.img-box .lbl{position:absolute;top:-1.9em;left:-2px;white-space:nowrap;
+  background:var(--primary);color:#fff;font-size:0.8rem;font-weight:600;
+  padding:2px 8px;border-radius:6px;}
 /* chrome */
 .progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
 .hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
@@ -98,61 +129,59 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <div class="progress"></div>
 <div class="brand">데이터 리터러시 with AI</div>
 <div class="hud">
-  <span class="counter"><span class="cur">1</span> / 11</span>
+  <span class="counter"><span class="cur">1</span> / 14</span>
   <a class="back" href="./S04.html">자료로 돌아가기</a>
 </div>
 <div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
 <main class="deck">
 <section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S04 · PART 01 · 엑셀 · 난이도 2</div>
-<h1>실무 함수: VLOOKUP/XLOOKUP과 조건부 집계</h1>
-<p class="subtitle">orders를 중심 표로 삼아 products와 customers의 값을 붙이고, 매출과 조건부 집계를 계산한다.</p></div></section>
-<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
-<ul class="obj-grid"><li>주문 표의 상품번호와 고객번호를 기준으로 다른 표의 값을 가져온다.</li>
-<li>VLOOKUP과 XLOOKUP의 차이를 설명한다.</li>
-<li>단가, 수량, 할인율을 이용해 주문별 매출을 계산한다.</li>
-<li>SUMIF, COUNTIF로 조건에 맞는 합계와 건수를 계산한다.</li>
-<li>엑셀 함수 방식이 행이 많아질수록 관리하기 어려워지는 이유를 말한다.</li></ul></div></section>
-<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
-<h2>분석은 흩어진 표를 잇는 데서 시작한다</h2>
-<p class="body">orders에는 주문번호, 고객번호, 상품번호, 수량, 할인율만 있다. 지역, 등급, 단가는 customers와 products에서 찾아와야 한다.</p>
-<ul class="bullets"><li>product_id는 상품 정보를 찾는 키다.</li>
-<li>customer_id는 고객 정보를 찾는 키다.</li>
-<li>필요한 값을 한 표에 모은 뒤에야 지역별 매출과 등급별 객단가를 계산할 수 있다.</li></ul></div></section>
-<section id="s4" class="slide slide-table"><div class="slide-inner"><h2>세 시트의 역할을 먼저 확인한다</h2>
-<table class="deck-table"><thead><tr><th>시트</th><th>규모</th><th>확인할 컬럼</th></tr></thead><tbody><tr><td>orders</td><td>20,000행, 6열</td><td>customer_id, product_id, qty, discount_rate</td></tr><tr><td>customers</td><td>3,000행, 7열</td><td>customer_id, region, grade</td></tr><tr><td>products</td><td>200행, 5열</td><td>product_id, price</td></tr></tbody></table>
-<p class="note">orders에는 매출 컬럼이 없으므로 products에서 단가를 가져온 뒤 매출을 계산한다.</p></div></section>
-<section id="s5" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
-<h2>VLOOKUP은 왼쪽 첫 열에서 찾아 오른쪽 값을 가져온다</h2>
-<p class="body">VLOOKUP은 찾을 값, 찾을 표 범위, 가져올 열 번호, 정확히 찾기 여부를 차례로 지정한다.</p>
-<ul class="bullets"><li>상품번호로 상품명, 카테고리, 단가를 가져온다.</li>
-<li>고객번호로 지역과 등급을 가져온다.</li>
-<li>상품번호와 고객번호는 정확히 일치해야 하므로 FALSE를 넣는다.</li>
-<li>가져올 열 번호를 잘못 세면 결과가 조용히 틀릴 수 있다.</li></ul></div></section>
-<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
-<h2>XLOOKUP은 찾을 열과 가져올 열을 직접 지정한다</h2>
-<p class="body">XLOOKUP은 찾을 열과 가져올 열을 따로 지정하므로 열 번호를 셀 필요가 없다.</p>
-<ul class="bullets"><li>최신 엑셀에서는 XLOOKUP이 읽기 쉽고 덜 헷갈린다.</li>
-<li>회사마다 엑셀 버전이 다르므로 VLOOKUP도 읽고 고칠 줄 알아야 한다.</li>
-<li>VLOOKUP으로 이미 값을 채웠다면 XLOOKUP은 같은 작업을 비교하는 방식으로 읽는다.</li></ul></div></section>
-<section id="s7" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
-<h2>매출은 계산 컬럼으로 만든다</h2>
-<p class="body">orders에는 매출이 없으므로 단가, 수량, 할인율을 이용해 직접 계산한다.</p>
-<ul class="bullets"><li>매출 = 단가 × 수량 × (1 - 할인율)이다.</li>
-<li>orders 시트에서는 L2에 =I2*E2*(1-F2)를 입력한다.</li>
-<li>확인할 값은 L2 22,900, L3 35,910, L4 105,800이다.</li></ul></div></section>
-<section id="s8" class="slide slide-table"><div class="slide-inner"><h2>조건부 집계는 질문을 표로 바꾼다</h2>
-<table class="deck-table"><thead><tr><th>질문</th><th>조건 범위</th><th>계산 방식</th></tr></thead><tbody><tr><td>지역별 주문 건수</td><td>orders의 region 열</td><td>COUNTIF로 조건에 맞는 주문을 센다.</td></tr><tr><td>지역별 매출 합계</td><td>orders의 region 열</td><td>SUMIF로 조건에 맞는 sales를 더한다.</td></tr><tr><td>등급별 객단가</td><td>orders의 grade 열</td><td>매출 합계를 주문 건수로 나눈다.</td></tr></tbody></table>
-<p class="note">지역별 검산 기준은 주문 건수 합계 20,000, 매출 합계 1,938,489,803이다.</p></div></section>
-<section id="s9" class="slide slide-table"><div class="slide-inner"><h2>등급별 객단가 정답 기준</h2>
-<table class="deck-table"><thead><tr><th>grade</th><th>order_count</th><th>total_sales</th><th>avg_order_value</th></tr></thead><tbody><tr><td>VIP</td><td>3,757</td><td>393,432,930</td><td>104,719.97</td></tr><tr><td>골드</td><td>5,433</td><td>547,524,985</td><td>100,777.65</td></tr><tr><td>실버</td><td>6,373</td><td>603,583,519</td><td>94,709.48</td></tr><tr><td>브론즈</td><td>4,437</td><td>393,948,369</td><td>88,787.10</td></tr></tbody></table>
-<p class="note">네 등급 중 주문 1건당 평균 매출이 가장 높은 등급은 VIP다.</p></div></section>
-<section id="s10" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
-<div class="mission-grid"><div class="mission-card"><div class="m-label">미션. 등급별 객단가 구하기</div><div class="m-desc">grade_summary 시트를 만들고 고객 등급별 주문 건수, 매출 합계, 객단가를 계산한다.</div></div><div class="mission-card"><div class="m-label">검산하기</div><div class="m-desc">등급별 주문 건수 합계가 20,000이고 매출 합계가 1,938,489,803인지 확인한다.</div></div><div class="mission-card"><div class="m-label">한 문장으로 해석하기</div><div class="m-desc">어떤 등급의 객단가가 가장 높은지 한 문장으로 적는다.</div></div></div></div></section>
-<section id="s11" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
-<ul class="bullets"><li>데이터분석은 필요한 정보를 여러 표에서 끌어와 한 표로 모으는 일에서 출발한다.</li>
-<li>엑셀에서는 VLOOKUP이나 XLOOKUP으로 표를 잇고, SUMIF와 COUNTIF로 조건이 붙은 질문에 답한다.</li>
-<li>함수가 늘고 파일이 무거워질수록 실수가 끼어들 자리도 늘어난다.</li></ul>
-<div class="next"><b>다음 차시</b> — 숫자 열 하나를 제대로 읽기 위해 중심, 산포, 분포, 박스플롯을 다룬다.</div></div></section>
+<h1>조회 함수와 조건부 집계</h1>
+<p class="subtitle">흩어진 표를 이어 매출과 객단가를 계산한다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘의 학습 목표</h2>
+<ul class="obj-grid"><li>키로 다른 표의 값을 가져온다</li>
+<li>단가·수량·할인율로 매출을 계산한다</li>
+<li>SUMIF/COUNTIF로 조건별 지표를 구한다</li></ul></div></section>
+<section id="s3" class="slide slide-image"><div class="slide-inner"><h2>엑셀에서 표를 잇는다</h2>
+<div class="img-wrap"><img src="../images/deck/excel.png" alt="엑셀 수업 파트 인포그래픽"/></div>
+<div class="viz-cap">엑셀에서 세 표를 이어 분석용 표를 만든다.</div></div></section>
+<section id="s4" class="slide slide-chart"><div class="slide-inner"><h2>주문 중심의 데이터 구조</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="122" y="46" width="150" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="197" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">20,000행</text><text x="197" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">orders</text><rect x="435" y="345" width="150" height="53" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="333" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3,000행</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">customers</text><rect x="748" y="394" width="150" height="4" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="823" y="382" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">200행</text><text x="823" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">products</text><line x1="887" y1="88" x2="197" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="197" cy="40" r="4" fill="#828fff"/><rect x="802" y="46" width="170" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="887" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">orders가 중심</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>주문 <b>20,000행</b>에 고객·상품 사전 값을 붙인다.</div></div></section>
+<section id="s5" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>키가 표를 이어 준다</h2>
+<p class="body">orders에는 고객번호와 상품번호만 있다. customers와 products에서 사전처럼 필요한 값을 찾아 붙인다.</p>
+<ul class="bullets"><li>product_id로 단가를 찾는다</li>
+<li>customer_id로 지역과 등급을 찾는다</li></ul></div></section>
+<section id="s6" class="slide slide-table"><div class="slide-inner"><h2>조회 함수 선택 기준</h2>
+<table class="deck-table"><thead><tr><th>함수</th><th>방식</th><th>주의</th></tr></thead><tbody><tr><td>VLOOKUP</td><td>열 번호로 가져온다</td><td>FALSE를 입력한다</td></tr><tr><td>XLOOKUP</td><td>열을 직접 지정한다</td><td>버전을 확인한다</td></tr></tbody></table>
+<p class="note">XLOOKUP은 열 순서 변화에 덜 흔들린다.</p></div></section>
+<section id="s7" class="slide slide-transform"><div class="slide-inner"><h2>주문 표에 분석 열을 만든다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">붙이기 전</div><div class="xf-row"><span class="k">orders</span><span class="v">6열</span></div><div class="xf-row changed"><span class="k">매출</span><span class="v">없음</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">붙인 후</div><div class="xf-row changed"><span class="k">I열</span><span class="v">price</span></div><div class="xf-row"><span class="k">J열</span><span class="v">region</span></div><div class="xf-row"><span class="k">K열</span><span class="v">grade</span></div><div class="xf-row changed"><span class="k">L열</span><span class="v">sales</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>매출 계산에 필요한 단가와 등급이 한 표에 모인다.</div></div></section>
+<section id="s8" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<h2>매출은 계산해서 만든다</h2>
+<p class="body">orders에는 매출이 없다. products에서 가져온 단가에 수량과 할인율을 반영해 sales를 만든다.</p>
+<ul class="bullets"><li>매출 = 단가 × 수량 × (1 - 할인율)</li>
+<li>할인율은 1에서 빼서 반영한다</li></ul></div></section>
+<section id="s9" class="slide slide-chart"><div class="slide-inner"><h2>실버 주문 수가 가장 많다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="87" y="190" width="141" height="208" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="158" y="178" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3,757건</text><text x="158" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">VIP</text><rect x="322" y="98" width="141" height="300" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="392" y="86" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">5,433건</text><text x="392" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">골드</text><rect x="557" y="46" width="141" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="628" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">6,373건</text><text x="628" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">실버</text><rect x="792" y="153" width="141" height="245" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="862" y="141" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">4,437건</text><text x="862" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">브론즈</text><line x1="126" y1="88" x2="628" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="628" cy="40" r="4" fill="#828fff"/><rect x="48" y="46" width="155" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="126" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">최대 6,373건</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>실버가 <b>6,373건</b>으로 주문 수가 가장 많다.</div></div></section>
+<section id="s10" class="slide slide-chart"><div class="slide-inner"><h2>실버 매출이 가장 크다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="87" y="169" width="141" height="229" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="158" y="157" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">393,432,930원</text><text x="158" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">VIP</text><rect x="322" y="79" width="141" height="319" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="392" y="67" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">547,524,985원</text><text x="392" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">골드</text><rect x="557" y="46" width="141" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="628" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">603,583,519원</text><text x="628" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">실버</text><rect x="792" y="168" width="141" height="230" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="862" y="156" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">393,948,369원</text><text x="862" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">브론즈</text><line x1="170" y1="88" x2="628" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="628" cy="40" r="4" fill="#828fff"/><rect x="48" y="46" width="245" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="170" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">최대 603,583,519원</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>실버가 <b>603,583,519원</b>으로 매출이 가장 크다.</div></div></section>
+<section id="s11" class="slide slide-chart"><div class="slide-inner"><h2>객단가는 VIP가 가장 높다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="87" y="46" width="141" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="158" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">104719.97원</text><text x="158" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">VIP</text><rect x="322" y="59" width="141" height="339" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="392" y="47" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">100777.65원</text><text x="392" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">골드</text><rect x="557" y="80" width="141" height="318" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="628" y="68" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">94709.48원</text><text x="628" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">실버</text><rect x="792" y="100" width="141" height="298" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="862" y="88" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">88787.1원</text><text x="862" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">브론즈</text><line x1="857" y1="88" x2="158" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="158" cy="40" r="4" fill="#828fff"/><rect x="742" y="46" width="230" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="857" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">최고 104,719.97원</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>VIP가 <b>104,719.97원</b>으로 객단가가 가장 높다.</div></div></section>
+<section id="s12" class="slide slide-table"><div class="slide-inner"><h2>검산값으로 결과를 확인한다</h2>
+<table class="deck-table"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>전체 주문</td><td>20,000</td></tr><tr><td>전체 매출</td><td>1,938,489,803</td></tr><tr><td>전체 객단가</td><td>96,924.49</td></tr></tbody></table>
+<p class="note">등급별 합계가 전체 값과 일치해야 한다.</p></div></section>
+<section id="s13" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 등급별 객단가</div><div class="m-desc">COUNTIF, SUMIF, 나눗셈으로 객단가를 구한다.</div></div></div></div></section>
+<section id="s14" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>표 연결은 분석의 출발점이다</li>
+<li>sales를 만든 뒤 조건별로 집계한다</li>
+<li>함수가 늘면 관리 비용도 커진다</li></ul>
+<div class="next"><b>다음 차시</b>: 같은 계산을 더 재현 가능하게 만든다.</div></div></section>
 </main>
 <script>
 const deck=document.querySelector('.deck');

@@ -15,7 +15,24 @@ import fitz  # PyMuPDF
 ROOT = Path(__file__).resolve().parent
 SESS = ROOT / "session"
 PDF = ROOT / "pdf"
-BIN = Path.home() / ".cache/ms-playwright/chromium_headless_shell-1228/chrome-headless-shell-linux64/chrome-headless-shell"
+
+
+def _find_chrome():
+    import glob
+    cache = Path.home() / ".cache/ms-playwright"
+    for pat in ("chromium_headless_shell-*/chrome-headless-shell-linux64/chrome-headless-shell",
+                "chromium-*/chrome-linux/chrome"):
+        hits = sorted(glob.glob(str(cache / pat)))
+        if hits:
+            return hits[-1]
+    for p in ("/usr/bin/google-chrome", "/usr/bin/chromium", "/usr/bin/chromium-browser",
+              "/mnt/c/Program Files/Google/Chrome/Application/chrome.exe"):
+        if Path(p).exists():
+            return p
+    raise FileNotFoundError("헤드리스 크롬을 찾지 못함 — npx playwright install chromium-headless-shell 필요")
+
+
+BIN = _find_chrome()
 
 
 def render(sid):

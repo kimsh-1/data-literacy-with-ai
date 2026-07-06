@@ -36,13 +36,13 @@ a{color:inherit;text-decoration:none;}
 .kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
   text-transform:uppercase;margin-bottom:0.9rem;}
 .body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
-ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
-ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
-  color:var(--ink);line-height:1.5;}
-ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.8rem;max-width:62ch;}
+ul.bullets>li{position:relative;padding-left:1.6rem;font-size:clamp(1rem,1.35vw,1.24rem);
+  color:var(--ink);line-height:1.42;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.58em;width:7px;height:7px;border-radius:2px;
   background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
 ul.bullets>li b{color:var(--ink);font-weight:640;}
-.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid{display:flex;flex-direction:column;gap:1rem;counter-reset:obj;max-width:58ch;}
 .obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
   font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
 .obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
@@ -53,9 +53,11 @@ ul.bullets>li b{color:var(--ink);font-weight:640;}
   padding:1.3rem 1.5rem;}
 .mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
 .mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
-table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.18rem);}
 table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
-  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+  padding:0.72rem 1.1rem;text-align:left;vertical-align:top;line-height:1.4;}
+table.deck-table.compact{font-size:clamp(0.8rem,1.05vw,0.98rem);}
+table.deck-table.compact th,table.deck-table.compact td{padding:0.42rem 0.8rem;line-height:1.32;}
 table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
   font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
 table.deck-table td{color:var(--ink-muted);}
@@ -69,6 +71,35 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 .closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
   color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
 .closing .next b{color:var(--primary-hover);}
+/* --- visual slides --- */
+.viz{margin-top:1rem;width:100%;max-width:78ch;}
+.viz svg{width:100%;height:auto;display:block;overflow:visible;}
+.viz-cap{margin-top:1rem;color:var(--ink-tertiary);font-size:0.92rem;font-family:var(--font-mono);}
+.result-line{margin-top:1.4rem;padding:0.9rem 1.2rem;border-left:3px solid var(--primary);
+  background:var(--surface-1);border-radius:0 10px 10px 0;color:var(--ink);
+  font-size:clamp(1rem,1.4vw,1.3rem);line-height:1.5;max-width:62ch;}
+.result-line b{color:var(--primary-hover);}
+.result-line .lead{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:1px;
+  text-transform:uppercase;color:var(--ink-subtle);display:block;margin-bottom:0.3rem;}
+.xform{display:flex;align-items:stretch;gap:0;max-width:80ch;margin-top:0.6rem;}
+.xform-card{flex:1;border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;padding:1.2rem 1.3rem;}
+.xform-card .xf-label{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.6px;
+  color:var(--ink-subtle);text-transform:uppercase;margin-bottom:0.9rem;}
+.xform-arrow{display:flex;align-items:center;padding:0 1.1rem;color:var(--primary-hover);font-size:2rem;flex:none;}
+.xf-row{display:flex;justify-content:space-between;gap:1rem;padding:0.55rem 0.6rem;
+  font-size:clamp(0.92rem,1.25vw,1.12rem);border-radius:8px;}
+.xf-row .k{color:var(--ink-subtle);font-family:var(--font-mono);font-size:0.9em;}
+.xf-row .v{color:var(--ink);text-align:right;}
+.xf-row.changed{background:rgba(94,106,210,0.14);outline:1.5px solid var(--primary);}
+.xf-row.changed .v{color:var(--primary-hover);font-weight:640;}
+.img-wrap{position:relative;width:100%;max-width:80ch;margin-top:0.6rem;
+  border:1px solid var(--hairline);border-radius:16px;overflow:hidden;background:var(--surface-1);}
+.img-wrap img{width:100%;display:block;}
+.img-box{position:absolute;border:2px solid var(--primary-hover);border-radius:6px;
+  box-shadow:0 0 0 3px rgba(94,106,210,0.18);}
+.img-box .lbl{position:absolute;top:-1.9em;left:-2px;white-space:nowrap;
+  background:var(--primary);color:#fff;font-size:0.8rem;font-weight:600;
+  padding:2px 8px;border-radius:6px;}
 /* chrome */
 .progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
 .hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
@@ -98,56 +129,56 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <div class="progress"></div>
 <div class="brand">데이터 리터러시 with AI</div>
 <div class="hud">
-  <span class="counter"><span class="cur">1</span> / 10</span>
+  <span class="counter"><span class="cur">1</span> / 14</span>
   <a class="back" href="./S18.html">자료로 돌아가기</a>
 </div>
 <div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
 <main class="deck">
 <section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S18 · PART 05 · BI · 난이도 4</div>
-<h1>배포와 공유: Looker Studio 주력, Power BI Copilot 선택</h1>
-<p class="subtitle">보고서를 로컬 파일에 머물게 하지 않고 Looker Studio에서 CSV 기반 웹 보고서로 만들며 공유 링크와 보기 권한 검증까지 수행한다.</p></div></section>
-<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
-<ul class="obj-grid"><li>로컬 파일 보고서와 웹 공유 보고서의 차이를 설명한다.</li>
-<li>Looker Studio에 `survey_responses_clean.csv`를 업로드하고 데이터 원본을 연결한다.</li>
-<li>응답 수, 평균 NPS, 평균 만족도, NPS 점수 카드를 만들고 계산 필드 `NPS_그룹`, `NPS_점수_행`을 활용한다.</li>
-<li>공유 링크를 보기 권한으로 만들고 다른 환경에서 열리는지 검증한다.</li>
-<li>Power BI Service 게시와 Power BI Copilot이 개인 무료 계정 표준 실습 범위가 아님을 구분한다.</li></ul></div></section>
-<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
-<h2>공유는 파일을 보내는 것이 아니라 권한을 여는 일이다</h2>
-<p class="body">엑셀 파일 첨부는 받는 사람마다 사본을 만든다. BI 보고서 공유는 웹에 둔 하나의 보고서를 링크와 권한으로 함께 보게 하는 일이다.</p>
-<ul class="bullets"><li>링크를 만들었다고 아무나 볼 수 있는 것은 아니다.</li>
-<li>권한이 닫혀 있으면 링크를 받은 사람도 보고서를 열 수 없다.</li>
-<li>다른 계정이나 시크릿 창에서 <b>보기 권한</b>으로 열리는지 확인해야 한다.</li></ul></div></section>
-<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
-<h2>Looker Studio는 무료 경로의 표준 대안이다</h2>
-<p class="body">Power BI Service 게시와 Copilot은 조직 계정, 유료 라이선스, Fabric이나 Premium 용량에 좌우된다. 개인 Gmail 수강생의 표준 실습 경로는 Looker Studio다.</p>
-<ul class="bullets"><li>Gmail 계정과 브라우저만 있으면 CSV 업로드와 보고서 공유 실습을 진행할 수 있다.</li>
-<li>같은 데이터셋에 파일을 또 올리면 기존 데이터에 얹힐 수 있으므로 중복 업로드를 피한다.</li>
-<li>실제 업무 데이터라면 개인정보, 고객명, 이메일, 전화번호, 내부 매출이 섞여 있지 않은지 확인한다.</li></ul></div></section>
-<section id="s5" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
-<h2>NPS는 점수를 그룹으로 바꿔 읽는다</h2>
-<p class="body">NPS 원점수는 0점부터 10점까지지만, 해석할 때는 추천 고객, 중립 고객, 비추천 고객으로 나누어 본다.</p>
-<ul class="bullets"><li>9점과 10점은 추천 고객, 7점과 8점은 중립 고객, 0점부터 6점까지는 비추천 고객이다.</li>
-<li>NPS 점수는 추천 고객 비율에서 비추천 고객 비율을 뺀 값이다.</li>
-<li>이번 데이터는 추천 고객 481명, 중립 고객 467명, 비추천 고객 552명이며 NPS 점수는 약 -4.73이다.</li></ul></div></section>
-<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
-<h2>계산 필드는 IF와 닮은 분류 규칙이다</h2>
-<p class="body">Looker Studio의 계산 필드는 조건을 따져 맞는 값을 돌려준다. `NPS_그룹`은 차원으로 쓰고, `NPS_점수_행`은 평균을 내서 점수 카드로 쓴다.</p>
-<ul class="bullets"><li>`NPS_그룹`은 NPS 원점수를 추천 고객, 중립 고객, 비추천 고객으로 나눈다.</li>
-<li>`NPS_점수_행`은 추천 고객을 100, 중립 고객을 0, 비추천 고객을 -100으로 바꾼다.</li>
-<li>`NPS_점수_행`을 합계로 잡으면 안 되며 반드시 평균으로 집계한다.</li></ul></div></section>
-<section id="s7" class="slide slide-table"><div class="slide-inner"><h2>오늘 만들 대시보드</h2>
-<table class="deck-table"><thead><tr><th>위치</th><th>요소</th><th>확인할 값 또는 내용</th></tr></thead><tbody><tr><td>상단</td><td>응답 수 카드</td><td>1,500</td></tr><tr><td>상단</td><td>평균 NPS 카드</td><td>약 6.86</td></tr><tr><td>상단</td><td>평균 만족도 카드</td><td>약 3.62</td></tr><tr><td>상단</td><td>NPS 점수 카드</td><td>약 -4.73</td></tr><tr><td>본문</td><td>NPS 그룹별 막대그래프</td><td>추천, 중립, 비추천 고객 수</td></tr><tr><td>본문</td><td>채널별 표</td><td>채널별 응답 수, 평균 NPS, 평균 만족도</td></tr><tr><td>본문</td><td>연령대별 막대그래프</td><td>연령대별 평균 만족도</td></tr></tbody></table></div></section>
-<section id="s8" class="slide slide-table"><div class="slide-inner"><h2>Power BI Service와 Copilot의 위치</h2>
-<table class="deck-table"><thead><tr><th>구분</th><th>수업에서의 처리</th></tr></thead><tbody><tr><td>Looker Studio</td><td>전원 표준 실습</td></tr><tr><td>Power BI Service 게시</td><td>조직 계정이 있는 경우만 개념 설명 또는 선택 시연</td></tr><tr><td>Power BI Copilot</td><td>Fabric 또는 Premium 환경이 준비된 경우만 선택 시연</td></tr><tr><td>개인 Gmail 수강생</td><td>Looker Studio 공유 링크 생성으로 미션 완료</td></tr></tbody></table></div></section>
-<section id="s9" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
-<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 공유 링크 만들기</div><div class="m-desc">보고서 제목을 `S18_설문_공유_대시보드_본인이름` 형식으로 만들고 Looker Studio 공유 링크를 만든다.</div></div><div class="mission-card"><div class="m-label">미션 2. 숫자 검산하기</div><div class="m-desc">응답 수 1,500, 평균 NPS 약 6.86, 평균 만족도 약 3.62, NPS 점수 약 -4.73이 보이는지 확인한다.</div></div><div class="mission-card"><div class="m-label">미션 3. 보기 권한 검증하기</div><div class="m-desc">링크를 시크릿 창 또는 동료 계정에서 열어 보고, 편집 화면이 아니라 보기 화면인지 확인한다.</div></div></div></div></section>
-<section id="s10" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
-<ul class="bullets"><li>보고서 공유는 파일 첨부가 아니라 같은 보고서에 보기 권한을 여는 작업이다.</li>
-<li>Looker Studio는 개인 Gmail과 브라우저로 CSV 업로드, 대시보드 작성, 링크 공유까지 수행하는 표준 실습 경로다.</li>
-<li>핵심 숫자와 권한은 공유 전에 검산하고, 다른 환경에서 링크를 직접 열어 검증한다.</li>
-<li>Power BI Service와 Copilot은 조직 계정, 라이선스, Fabric 또는 Premium 환경 조건이 맞을 때 선택 시연으로 다룬다.</li></ul>
-<div class="next"><b>다음 차시</b> — S19 풀사이클 실습에서 AI 요약, 파이썬 그래프, BI 1페이지를 하나의 흐름으로 엮는다.</div></div></section>
+<h1>배포와 공유</h1>
+<p class="subtitle">보고서를 웹에 올리고 보기 권한 링크로 검증한다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘의 학습 목표</h2>
+<ul class="obj-grid"><li>CSV를 Looker Studio 데이터 원본으로 연결한다</li>
+<li>계산 필드로 NPS 그룹과 점수를 만든다</li>
+<li>Viewer 권한의 공유 링크를 검증한다</li>
+<li>Power BI Copilot 적용 조건을 구분한다</li></ul></div></section>
+<section id="s3" class="slide slide-image"><div class="slide-inner"><h2>BI 보고서는 웹에서 공유된다</h2>
+<div class="img-wrap"><img src="../images/deck/bi.png" alt="BI 배포와 공유 인포그래픽"/></div>
+<div class="viz-cap">보고서 제작 뒤 배포와 검증을 다룬다.</div></div></section>
+<section id="s4" class="slide slide-table"><div class="slide-inner"><h2>파일 전달과 링크 공유의 차이</h2>
+<table class="deck-table"><thead><tr><th>방식</th><th>결과</th></tr></thead><tbody><tr><td>엑셀 파일 첨부</td><td>사본 생성</td></tr><tr><td>수정본 회람</td><td>최신본 혼동</td></tr><tr><td>보고서 링크</td><td>같은 원본 조회</td></tr><tr><td>Viewer 권한</td><td>보기만 가능</td></tr></tbody></table>
+<p class="note">공유는 파일 전송이 아니라 접근 권한을 부여하는 일이다.</p></div></section>
+<section id="s5" class="slide slide-table"><div class="slide-inner"><h2>대시보드 검산 기준</h2>
+<table class="deck-table"><thead><tr><th>카드</th><th>정답 기준</th></tr></thead><tbody><tr><td>응답 수</td><td>1,500</td></tr><tr><td>평균 NPS</td><td>6.86</td></tr><tr><td>평균 만족도</td><td>3.62</td></tr><tr><td>NPS 점수</td><td>-4.73</td></tr></tbody></table>
+<p class="note">숫자가 어긋나면 공유 전에 집계 방식을 고친다.</p></div></section>
+<section id="s6" class="slide slide-transform"><div class="slide-inner"><h2>NPS 원점수를 그룹으로 바꾼다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">원점수</div><div class="xf-row"><span class="k">nps 범위</span><span class="v">0-10점</span></div><div class="xf-row changed"><span class="k">평균 NPS</span><span class="v">6.8553</span></div><div class="xf-row"><span class="k">응답 수</span><span class="v">1,500</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">NPS 그룹</div><div class="xf-row changed"><span class="k">추천 고객</span><span class="v">481</span></div><div class="xf-row"><span class="k">중립 고객</span><span class="v">467</span></div><div class="xf-row changed"><span class="k">비추천 고객</span><span class="v">552</span></div><div class="xf-row changed"><span class="k">NPS 점수</span><span class="v">-4.73</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>그룹으로 바꾸면 추천보다 비추천이 많아 <b>-4.73</b>이 된다.</div></div></section>
+<section id="s7" class="slide slide-chart"><div class="slide-inner"><h2>NPS 그룹은 비추천이 많다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="122" y="46" width="150" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="197" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">552명</text><text x="197" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">비추천 고객</text><rect x="435" y="91" width="150" height="307" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="79" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">481명</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">추천 고객</text><rect x="748" y="100" width="150" height="298" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="823" y="88" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">467명</text><text x="823" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">중립 고객</text><line x1="917" y1="88" x2="197" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="197" cy="40" r="4" fill="#828fff"/><rect x="862" y="46" width="110" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="917" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">비추천 최다</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>비추천 고객이 가장 많아 NPS 점수는 <b>음수</b>다.</div></div></section>
+<section id="s8" class="slide slide-chart"><div class="slide-inner"><h2>유입은 네이버 검색이 앞선다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="67" y="46" width="81" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="107" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">435건</text><text x="107" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">네이버 검색</text><rect x="201" y="188" width="81" height="210" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="241" y="176" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">259건</text><text x="241" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">카카오톡 채널</text><rect x="335" y="195" width="81" height="203" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="376" y="183" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">251건</text><text x="376" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">인스타그램</text><rect x="470" y="259" width="81" height="139" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="247" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">172건</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">지인 추천</text><rect x="604" y="276" width="81" height="122" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="644" y="264" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">151건</text><text x="644" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">오프라인 매장</text><rect x="738" y="303" width="81" height="95" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="779" y="291" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">117건</text><text x="779" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">이메일</text><rect x="873" y="305" width="81" height="93" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="913" y="293" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">115건</text><text x="913" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">앱 푸시</text><line x1="932" y1="88" x2="107" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="107" cy="40" r="4" fill="#828fff"/><rect x="892" y="46" width="80" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="932" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">435건</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>네이버 검색은 <b>435건</b>으로 유입이 가장 많다.</div></div></section>
+<section id="s9" class="slide slide-chart"><div class="slide-inner"><h2>채널 품질은 앱 푸시가 높다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="67" y="46" width="81" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="107" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">7.3점</text><text x="107" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">앱 푸시</text><rect x="201" y="55" width="81" height="343" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="241" y="43" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">7.11점</text><text x="241" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">이메일</text><rect x="335" y="63" width="81" height="335" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="376" y="51" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">6.94점</text><text x="376" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">인스타그램</text><rect x="470" y="64" width="81" height="334" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="52" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">6.93점</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">카카오톡 채널</text><rect x="604" y="67" width="81" height="331" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="644" y="55" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">6.87점</text><text x="644" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">네이버 검색</text><rect x="738" y="86" width="81" height="312" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="779" y="74" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">6.48점</text><text x="779" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">오프라인 매장</text><rect x="873" y="87" width="81" height="311" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="913" y="75" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">6.44점</text><text x="913" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">지인 추천</text><line x1="880" y1="88" x2="107" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="107" cy="40" r="4" fill="#828fff"/><rect x="787" y="46" width="185" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="880" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">평균 NPS 7.30</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>응답 수는 네이버 검색이 가장 많지만 평균 NPS는 <b>앱 푸시</b>가 높다.</div></div></section>
+<section id="s10" class="slide slide-chart"><div class="slide-inner"><h2>연령대 만족도는 40대가 높다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="71" y="46" width="94" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="118" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3.71점</text><text x="118" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">40대</text><rect x="228" y="47" width="94" height="351" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="275" y="35" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3.7점</text><text x="275" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">50대</text><rect x="385" y="54" width="94" height="344" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="432" y="42" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3.63점</text><text x="432" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">30대</text><rect x="541" y="59" width="94" height="339" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="588" y="47" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3.57점</text><text x="588" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">60대 이상</text><rect x="698" y="62" width="94" height="336" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="745" y="50" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3.54점</text><text x="745" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">20대</text><rect x="855" y="73" width="94" height="325" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="902" y="61" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3.43점</text><text x="902" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">10대</text><line x1="902" y1="88" x2="118" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="118" cy="40" r="4" fill="#828fff"/><rect x="832" y="46" width="140" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="902" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">40대 3.71</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>40대와 50대가 높으며, 10대는 <b>3.43점</b>이다.</div></div></section>
+<section id="s11" class="slide slide-table"><div class="slide-inner"><h2>공유 전 보안 점검</h2>
+<table class="deck-table"><thead><tr><th>확인</th><th>기준</th></tr></thead><tbody><tr><td>데이터 범위</td><td>공유 가능한 열</td></tr><tr><td>숫자 검산</td><td>원본과 일치</td></tr><tr><td>보기 권한</td><td>Viewer</td></tr><tr><td>접근 검증</td><td>다른 환경에서 열림</td></tr><tr><td>맥락</td><td>제목만으로 이해</td></tr></tbody></table>
+<p class="note">수업 기준은 공개 게시가 아니라 제한된 링크 공유다.</p></div></section>
+<section id="s12" class="slide slide-table"><div class="slide-inner"><h2>Copilot은 선택 시연이다</h2>
+<table class="deck-table"><thead><tr><th>구분</th><th>수업 처리</th></tr></thead><tbody><tr><td>Looker Studio</td><td>전원 표준 실습</td></tr><tr><td>Power BI Service</td><td>조직 계정일 때만</td></tr><tr><td>Power BI Copilot</td><td>Fabric/Premium 필요</td></tr><tr><td>개인 Gmail</td><td>Looker로 완료</td></tr></tbody></table>
+<p class="note">Copilot 결과도 카드 숫자와 원본 집계로 대조한다.</p></div></section>
+<section id="s13" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 실습 과제</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 대시보드 완성</div><div class="m-desc">응답 수, 평균 NPS, 평균 만족도, NPS 점수 카드를 만든다.</div></div><div class="mission-card"><div class="m-label">미션 2. Viewer 링크 공유</div><div class="m-desc">편집 권한이 아닌 보기 권한으로 공유 링크를 복사한다.</div></div><div class="mission-card"><div class="m-label">미션 3. 다른 환경 검증</div><div class="m-desc">시크릿 창이나 동료 계정에서 1,500과 -4.73을 확인한다.</div></div></div></div></section>
+<section id="s14" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>공유는 파일 전송이 아니라 권한 설정이다</li>
+<li>숫자 검산 뒤 링크를 열어 확인한다</li>
+<li>Copilot 답변은 원본 숫자로 대조한다</li></ul>
+<div class="next"><b>다음 차시</b>: 종합 실습에서 AI 요약, 파이썬 그래프, BI 대시보드를 연결한다.</div></div></section>
 </main>
 <script>
 const deck=document.querySelector('.deck');

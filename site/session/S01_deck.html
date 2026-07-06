@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>S01 · 데이터 분석이란, AI 시대의 작업 흐름 — 발표 덱</title>
+<title>S01 · 데이터 분석과 AI 작업 흐름 — 발표 덱</title>
 <style>
 @font-face{font-family:"PretendardDeck";
   src:url("../fonts/pretendard-deck-subset.woff2") format("woff2");
@@ -36,13 +36,13 @@ a{color:inherit;text-decoration:none;}
 .kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
   text-transform:uppercase;margin-bottom:0.9rem;}
 .body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
-ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
-ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
-  color:var(--ink);line-height:1.5;}
-ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.8rem;max-width:62ch;}
+ul.bullets>li{position:relative;padding-left:1.6rem;font-size:clamp(1rem,1.35vw,1.24rem);
+  color:var(--ink);line-height:1.42;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.58em;width:7px;height:7px;border-radius:2px;
   background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
 ul.bullets>li b{color:var(--ink);font-weight:640;}
-.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid{display:flex;flex-direction:column;gap:1rem;counter-reset:obj;max-width:58ch;}
 .obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
   font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
 .obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
@@ -53,9 +53,11 @@ ul.bullets>li b{color:var(--ink);font-weight:640;}
   padding:1.3rem 1.5rem;}
 .mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
 .mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
-table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.18rem);}
 table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
-  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+  padding:0.72rem 1.1rem;text-align:left;vertical-align:top;line-height:1.4;}
+table.deck-table.compact{font-size:clamp(0.8rem,1.05vw,0.98rem);}
+table.deck-table.compact th,table.deck-table.compact td{padding:0.42rem 0.8rem;line-height:1.32;}
 table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
   font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
 table.deck-table td{color:var(--ink-muted);}
@@ -69,6 +71,35 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 .closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
   color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
 .closing .next b{color:var(--primary-hover);}
+/* --- visual slides --- */
+.viz{margin-top:1rem;width:100%;max-width:78ch;}
+.viz svg{width:100%;height:auto;display:block;overflow:visible;}
+.viz-cap{margin-top:1rem;color:var(--ink-tertiary);font-size:0.92rem;font-family:var(--font-mono);}
+.result-line{margin-top:1.4rem;padding:0.9rem 1.2rem;border-left:3px solid var(--primary);
+  background:var(--surface-1);border-radius:0 10px 10px 0;color:var(--ink);
+  font-size:clamp(1rem,1.4vw,1.3rem);line-height:1.5;max-width:62ch;}
+.result-line b{color:var(--primary-hover);}
+.result-line .lead{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:1px;
+  text-transform:uppercase;color:var(--ink-subtle);display:block;margin-bottom:0.3rem;}
+.xform{display:flex;align-items:stretch;gap:0;max-width:80ch;margin-top:0.6rem;}
+.xform-card{flex:1;border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;padding:1.2rem 1.3rem;}
+.xform-card .xf-label{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.6px;
+  color:var(--ink-subtle);text-transform:uppercase;margin-bottom:0.9rem;}
+.xform-arrow{display:flex;align-items:center;padding:0 1.1rem;color:var(--primary-hover);font-size:2rem;flex:none;}
+.xf-row{display:flex;justify-content:space-between;gap:1rem;padding:0.55rem 0.6rem;
+  font-size:clamp(0.92rem,1.25vw,1.12rem);border-radius:8px;}
+.xf-row .k{color:var(--ink-subtle);font-family:var(--font-mono);font-size:0.9em;}
+.xf-row .v{color:var(--ink);text-align:right;}
+.xf-row.changed{background:rgba(94,106,210,0.14);outline:1.5px solid var(--primary);}
+.xf-row.changed .v{color:var(--primary-hover);font-weight:640;}
+.img-wrap{position:relative;width:100%;max-width:80ch;margin-top:0.6rem;
+  border:1px solid var(--hairline);border-radius:16px;overflow:hidden;background:var(--surface-1);}
+.img-wrap img{width:100%;display:block;}
+.img-box{position:absolute;border:2px solid var(--primary-hover);border-radius:6px;
+  box-shadow:0 0 0 3px rgba(94,106,210,0.18);}
+.img-box .lbl{position:absolute;top:-1.9em;left:-2px;white-space:nowrap;
+  background:var(--primary);color:#fff;font-size:0.8rem;font-weight:600;
+  padding:2px 8px;border-radius:6px;}
 /* chrome */
 .progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
 .hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
@@ -98,43 +129,61 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <div class="progress"></div>
 <div class="brand">데이터 리터러시 with AI</div>
 <div class="hud">
-  <span class="counter"><span class="cur">1</span> / 8</span>
+  <span class="counter"><span class="cur">1</span> / 14</span>
   <a class="back" href="./S01.html">자료로 돌아가기</a>
 </div>
 <div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
 <main class="deck">
-<section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S01 · Part 1 · 난이도 1</div>
-<h1>데이터 분석이란, AI 시대의 작업 흐름</h1>
-<p class="subtitle">엑셀은 쓰지만 데이터 분석은 처음인 분을 위한 첫 시간. 도구를 배우기 전에, 내가 가진 표로 어떤 질문에 답할 수 있는지부터 익힌다.</p></div></section>
-<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
-<ul class="obj-grid"><li>데이터로 답할 수 있는 질문과 답하기 어려운 질문을 구분한다.</li>
-<li>엑셀, AI, 파이썬, BI가 분석 흐름에서 각각 어떤 역할을 하는지 설명한다.</li>
-<li>수업에 필요한 환경(운영체제, 계정, 데이터 폴더)을 점검한다.</li></ul></div></section>
-<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
-<h2>데이터 분석은 질문을 표에 맞게 번역하는 일</h2>
-<p class="body">냉장고 속 재료로 요리하듯, 표에 기록된 값으로만 답을 만들 수 있다. 표에 없는 내용은 분석으로 곧장 답하기 어렵다.</p>
-<ul class="bullets"><li><b>답할 수 있는 질문</b>: 지점별 총매출, 카테고리별 판매 수량, 시간대별 매출</li>
-<li><b>답하기 어려운 질문</b>: 손님이 왜 그 메뉴를 골랐는가, 매장 분위기에 만족했는가</li>
-<li>어려운 질문은 틀린 질문이 아니라, 필요한 열이 아직 표에 없는 질문이다.</li></ul></div></section>
-<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
-<h2>좋은 분석 질문의 모양</h2>
-<p class="body">막연한 궁금증을 표의 열 이름으로 바꾸면 분석이 시작된다. 입문 단계에서는 다음 네 조각을 갖추면 좋다.</p>
-<ul class="bullets"><li><b>대상</b> — 무엇을 보는가 (카페 주문)</li>
-<li><b>기준</b> — 무엇으로 나누는가 (지점별)</li>
-<li><b>비교·집계</b> — 어떤 숫자를 보는가 (총매출)</li>
-<li><b>기간</b> — 언제의 데이터인가 (2025년 1월부터 6월)</li></ul></div></section>
-<section id="s5" class="slide slide-table"><div class="slide-inner"><h2>네 가지 도구는 경쟁이 아니라 역할 분담이다</h2>
-<table class="deck-table"><thead><tr><th>도구</th><th>강점</th><th>주의점</th></tr></thead><tbody><tr><td>엑셀</td><td>눈으로 빠르게 확인, 피벗테이블</td><td>손작업이 많아지면 재현이 어렵다</td></tr><tr><td>AI</td><td>질문 정리와 분석 방향 제안</td><td>틀린 숫자를 낼 수 있어 검증이 필요하다</td></tr><tr><td>파이썬</td><td>반복 가능한 분석 기록</td><td>처음에는 낯설지만 큰 데이터에 강하다</td></tr><tr><td>BI</td><td>대시보드와 공유</td><td>설치와 계정 환경을 확인해야 한다</td></tr></tbody></table>
-<p class="note">Power BI Desktop은 Windows 전용이다. Mac 사용자는 Part 5에서 Looker Studio 경로로 대체한다.</p></div></section>
-<section id="s6" class="slide slide-quote"><div class="slide-inner"><blockquote class="quote">데이터 분석가는 질문을 버리는 사람이 아니라, 질문을 답할 수 있는 형태로 바꾸는 사람입니다.</blockquote>
-<div class="attribution">S01 강사 멘트</div></div></section>
-<section id="s7" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
-<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 분석 질문 3개 만들기</div><div class="m-desc">카페 매출 표로 답할 수 있는 질문 3개를 작성한다. 대상, 기준, 집계할 값, 기간이 들어가면 좋다.</div></div><div class="mission-card"><div class="m-label">미션 2. 내 업무 표 질문화</div><div class="m-desc">평소 자주 보는 표 하나를 떠올리고, 그 표로 답하고 싶은 질문을 1개 작성한다.</div></div></div></div></section>
-<section id="s8" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
-<ul class="bullets"><li>분석은 도구를 배우기 전에 질문을 표의 열로 바꾸는 데서 시작한다.</li>
-<li>엑셀, AI, 파이썬, BI는 같은 질문을 저마다 다른 방식으로 다룬다.</li>
-<li>AI가 낸 숫자는 반드시 다른 도구로 검증한다.</li></ul>
-<div class="next"><b>다음 차시</b> — 좋은 데이터의 모양을 보고, 엑셀에서 분석하기 좋은 표와 그렇지 않은 표를 구분한다.</div></div></section>
+<section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S01 · 오리엔테이션 · 난이도 1</div>
+<h1>데이터 분석과 AI 작업 흐름</h1>
+<p class="subtitle">표의 열로 질문을 세우고, AI 시대의 분석 흐름을 잡는다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 할 수 있게 되는 것</h2>
+<ul class="obj-grid"><li>표의 열로 답할 수 있는 질문을 구분한다</li>
+<li>엑셀, AI, 파이썬, BI의 역할을 설명한다</li>
+<li>수업 환경과 데이터 파일을 확인한다</li></ul></div></section>
+<section id="s3" class="slide slide-image"><div class="slide-inner"><h2>분석 도구의 큰 그림</h2>
+<div class="img-wrap"><img src="../images/deck/hero.png" alt="AI 시대 데이터 분석 작업 흐름 인포그래픽"/></div>
+<div class="viz-cap">엑셀, AI, 파이썬, BI가 한 흐름으로 이어진다.</div></div></section>
+<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>분석은 질문을 번역하는 일이다</h2>
+<p class="body">데이터 분석은 어려운 프로그램을 익히는 일이 아니라 표에 담긴 관찰값으로 업무 질문에 답하는 일이다.</p>
+<ul class="bullets"><li>표에 있는 열로 답할 수 있는지 먼저 본다.</li>
+<li>없는 열이 필요하면 질문을 좁히거나 데이터를 추가한다.</li></ul></div></section>
+<section id="s5" class="slide slide-table"><div class="slide-inner"><h2>표로 답할 수 있는 질문</h2>
+<table class="deck-table"><thead><tr><th>질문</th><th>판단</th><th>근거</th></tr></thead><tbody><tr><td>지점별 총매출</td><td>가능</td><td>store, amount</td></tr><tr><td>카테고리별 수량</td><td>가능</td><td>category, qty</td></tr><tr><td>시간대별 매출</td><td>가능</td><td>hour, amount</td></tr><tr><td>메뉴 선택 이유</td><td>어려움</td><td>이유 열 없음</td></tr><tr><td>매장 만족도</td><td>어려움</td><td>만족도 열 없음</td></tr></tbody></table>
+<p class="note">질문이 이 표의 열로 답할 수 있는지 먼저 본다.</p></div></section>
+<section id="s6" class="slide slide-table"><div class="slide-inner"><h2>오늘 데이터의 구조</h2>
+<table class="deck-table"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>행수</td><td>10,424행</td></tr><tr><td>열수</td><td>12열</td></tr><tr><td>기간</td><td>2025.01.01-06.30</td></tr><tr><td>결측값</td><td>0개</td></tr><tr><td>주요 단위</td><td>주문 1건</td></tr></tbody></table>
+<p class="note">한 행은 주문 한 건, 한 열은 주문의 속성이다.</p></div></section>
+<section id="s7" class="slide slide-table"><div class="slide-inner"><h2>요약 숫자부터 확인한다</h2>
+<table class="deck-table"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>주문 건수</td><td>10,424건</td></tr><tr><td>총매출</td><td>90,492,500원</td></tr><tr><td>평균 주문 금액</td><td>8,681.2원</td></tr></tbody></table>
+<p class="note">이 숫자가 이후 집계 결과의 기준점이다.</p></div></section>
+<section id="s8" class="slide slide-chart"><div class="slide-inner"><h2>지점 매출은 강남점이 높다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="200" y="46" width="150" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="275" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">53,425,000원</text><text x="275" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">강남점</text><rect x="670" y="154" width="150" height="244" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="745" y="142" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">37,067,500원</text><text x="745" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">홍대점</text><line x1="924" y1="88" x2="275" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="275" cy="40" r="4" fill="#828fff"/><rect x="877" y="46" width="95" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="924" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">1위 지점</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>강남점이 홍대점보다 <b>16,357,500원</b> 많다.</div></div></section>
+<section id="s9" class="slide slide-chart"><div class="slide-inner"><h2>카테고리 매출은 커피가 1위다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="122" y="46" width="150" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="197" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">45,606,000원</text><text x="197" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">커피</text><rect x="435" y="201" width="150" height="197" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="189" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">25,550,000원</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">음료</text><rect x="748" y="249" width="150" height="149" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="823" y="237" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">19,336,500원</text><text x="823" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">디저트</text><line x1="924" y1="88" x2="197" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="197" cy="40" r="4" fill="#828fff"/><rect x="877" y="46" width="95" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="924" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">최대 매출</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>커피 매출이 <b>45,606,000원</b>으로 가장 크다.</div></div></section>
+<section id="s10" class="slide slide-table"><div class="slide-inner"><h2>도구별 역할은 다르다</h2>
+<table class="deck-table"><thead><tr><th>도구</th><th>강점</th><th>주의</th></tr></thead><tbody><tr><td>엑셀</td><td>빠른 필터·피벗</td><td>손작업 누적</td></tr><tr><td>AI</td><td>질문 정리·코드</td><td>숫자 검증 필요</td></tr><tr><td>파이썬</td><td>재현 가능한 기록</td><td>초반 낯섦</td></tr><tr><td>BI</td><td>대시보드 공유</td><td>설치·계정 확인</td></tr></tbody></table>
+<p class="note">도구는 경쟁 관계가 아니라 같은 질문을 다루는 서로 다른 방법이다.</p></div></section>
+<section id="s11" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<h2>좋은 질문의 형태</h2>
+<p class="body">대상, 기준, 집계값, 기간을 정하면 막연한 궁금증이 표의 열 이름과 연결된다.</p>
+<ul class="bullets"><li>대상: 카페 주문</li>
+<li>기준: 지점별</li>
+<li>집계: amount 합계</li>
+<li>기간: 2025년 1-6월</li></ul></div></section>
+<section id="s12" class="slide slide-table"><div class="slide-inner"><h2>환경은 오늘 점검한다</h2>
+<table class="deck-table"><thead><tr><th>항목</th><th>확인</th><th>비고</th></tr></thead><tbody><tr><td>운영체제</td><td>Windows 또는 Mac</td><td>기록</td></tr><tr><td>Power BI</td><td>Windows 가능</td><td>Mac은 대체</td></tr><tr><td>Google 계정</td><td>준비</td><td>S10 Colab</td></tr><tr><td>AI 계정</td><td>접속 가능</td><td>유료 기능 주의</td></tr><tr><td>데이터 파일</td><td>존재 확인</td><td>clean.csv</td></tr></tbody></table>
+<p class="note">Colab과 pandas는 S10부터 다룬다.</p></div></section>
+<section id="s13" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 카페 질문 3개</div><div class="m-desc">기간, 기준, 집계값, 필요한 열을 적는다.</div></div><div class="mission-card"><div class="m-label">미션 2. 내 업무 표 질문 만들기</div><div class="m-desc">자주 보는 표 1개를 답할 질문으로 바꾼다.</div></div></div></div></section>
+<section id="s14" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>질문은 먼저 표의 열로 번역한다.</li>
+<li>10,424건 주문은 지점·카테고리 집계로 읽는다.</li>
+<li>AI가 낸 숫자는 다른 도구로 검증한다.</li></ul>
+<div class="next"><b>다음 차시</b>: 좋은 데이터의 모양을 구분한다.</div></div></section>
 </main>
 <script>
 const deck=document.querySelector('.deck');

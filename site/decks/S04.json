@@ -1,177 +1,269 @@
 {
   "session": "S04",
-  "title": "실무 함수: VLOOKUP/XLOOKUP과 조건부 집계",
-  "part": "PART 01",
+  "title": "S04 실무 함수: VLOOKUP/XLOOKUP과 조건부 집계",
+  "part": "PART 01 · 엑셀",
   "difficulty": 2,
   "slides": [
     {
       "type": "title",
       "eyebrow": "S04 · PART 01 · 엑셀 · 난이도 2",
-      "title": "실무 함수: VLOOKUP/XLOOKUP과 조건부 집계",
-      "subtitle": "orders를 중심 표로 삼아 products와 customers의 값을 붙이고, 매출과 조건부 집계를 계산한다."
+      "title": "조회 함수와 조건부 집계",
+      "subtitle": "흩어진 표를 이어 매출과 객단가를 계산한다."
     },
     {
       "type": "objectives",
-      "heading": "오늘 끝나면 할 수 있는 것",
+      "heading": "오늘의 학습 목표",
       "items": [
-        "주문 표의 상품번호와 고객번호를 기준으로 다른 표의 값을 가져온다.",
-        "VLOOKUP과 XLOOKUP의 차이를 설명한다.",
-        "단가, 수량, 할인율을 이용해 주문별 매출을 계산한다.",
-        "SUMIF, COUNTIF로 조건에 맞는 합계와 건수를 계산한다.",
-        "엑셀 함수 방식이 행이 많아질수록 관리하기 어려워지는 이유를 말한다."
+        "키로 다른 표의 값을 가져온다",
+        "단가·수량·할인율로 매출을 계산한다",
+        "SUMIF/COUNTIF로 조건별 지표를 구한다"
       ]
+    },
+    {
+      "type": "image",
+      "heading": "엑셀에서 표를 잇는다",
+      "src": "../images/excel.png",
+      "alt": "엑셀 수업 파트 인포그래픽",
+      "caption": "엑셀에서 세 표를 이어 분석용 표를 만든다."
+    },
+    {
+      "type": "chart",
+      "chartType": "bar",
+      "heading": "주문 중심의 데이터 구조",
+      "data": [
+        {
+          "label": "orders",
+          "value": 20000
+        },
+        {
+          "label": "customers",
+          "value": 3000
+        },
+        {
+          "label": "products",
+          "value": 200
+        }
+      ],
+      "unit": "행",
+      "highlight": [
+        0
+      ],
+      "annotation": {
+        "text": "orders가 중심",
+        "target": 0
+      },
+      "result": "주문 **20,000행**에 고객·상품 사전 값을 붙인다."
     },
     {
       "type": "concept",
       "kicker": "핵심 개념 1",
-      "heading": "분석은 흩어진 표를 잇는 데서 시작한다",
-      "body": "orders에는 주문번호, 고객번호, 상품번호, 수량, 할인율만 있다. 지역, 등급, 단가는 customers와 products에서 찾아와야 한다.",
+      "heading": "키가 표를 이어 준다",
+      "body": "orders에는 고객번호와 상품번호만 있다. customers와 products에서 사전처럼 필요한 값을 찾아 붙인다.",
       "bullets": [
-        "product_id는 상품 정보를 찾는 키다.",
-        "customer_id는 고객 정보를 찾는 키다.",
-        "필요한 값을 한 표에 모은 뒤에야 지역별 매출과 등급별 객단가를 계산할 수 있다."
+        "product_id로 단가를 찾는다",
+        "customer_id로 지역과 등급을 찾는다"
       ]
     },
     {
       "type": "table",
-      "heading": "세 시트의 역할을 먼저 확인한다",
+      "heading": "조회 함수 선택 기준",
       "columns": [
-        "시트",
-        "규모",
-        "확인할 컬럼"
+        "함수",
+        "방식",
+        "주의"
       ],
       "rows": [
         [
-          "orders",
-          "20,000행, 6열",
-          "customer_id, product_id, qty, discount_rate"
+          "VLOOKUP",
+          "열 번호로 가져온다",
+          "FALSE를 입력한다"
         ],
         [
-          "customers",
-          "3,000행, 7열",
-          "customer_id, region, grade"
-        ],
-        [
-          "products",
-          "200행, 5열",
-          "product_id, price"
+          "XLOOKUP",
+          "열을 직접 지정한다",
+          "버전을 확인한다"
         ]
       ],
-      "note": "orders에는 매출 컬럼이 없으므로 products에서 단가를 가져온 뒤 매출을 계산한다."
+      "note": "XLOOKUP은 열 순서 변화에 덜 흔들린다."
+    },
+    {
+      "type": "transform",
+      "heading": "주문 표에 분석 열을 만든다",
+      "before": {
+        "label": "붙이기 전",
+        "rows": [
+          [
+            "orders",
+            "6열"
+          ],
+          [
+            "매출",
+            "없음",
+            true
+          ]
+        ]
+      },
+      "after": {
+        "label": "붙인 후",
+        "rows": [
+          [
+            "I열",
+            "price",
+            true
+          ],
+          [
+            "J열",
+            "region"
+          ],
+          [
+            "K열",
+            "grade"
+          ],
+          [
+            "L열",
+            "sales",
+            true
+          ]
+        ]
+      },
+      "result": "매출 계산에 필요한 단가와 등급이 한 표에 모인다."
     },
     {
       "type": "concept",
       "kicker": "핵심 개념 2",
-      "heading": "VLOOKUP은 왼쪽 첫 열에서 찾아 오른쪽 값을 가져온다",
-      "body": "VLOOKUP은 찾을 값, 찾을 표 범위, 가져올 열 번호, 정확히 찾기 여부를 차례로 지정한다.",
+      "heading": "매출은 계산해서 만든다",
+      "body": "orders에는 매출이 없다. products에서 가져온 단가에 수량과 할인율을 반영해 sales를 만든다.",
       "bullets": [
-        "상품번호로 상품명, 카테고리, 단가를 가져온다.",
-        "고객번호로 지역과 등급을 가져온다.",
-        "상품번호와 고객번호는 정확히 일치해야 하므로 FALSE를 넣는다.",
-        "가져올 열 번호를 잘못 세면 결과가 조용히 틀릴 수 있다."
+        "매출 = 단가 × 수량 × (1 - 할인율)",
+        "할인율은 1에서 빼서 반영한다"
       ]
     },
     {
-      "type": "concept",
-      "kicker": "핵심 개념 3",
-      "heading": "XLOOKUP은 찾을 열과 가져올 열을 직접 지정한다",
-      "body": "XLOOKUP은 찾을 열과 가져올 열을 따로 지정하므로 열 번호를 셀 필요가 없다.",
-      "bullets": [
-        "최신 엑셀에서는 XLOOKUP이 읽기 쉽고 덜 헷갈린다.",
-        "회사마다 엑셀 버전이 다르므로 VLOOKUP도 읽고 고칠 줄 알아야 한다.",
-        "VLOOKUP으로 이미 값을 채웠다면 XLOOKUP은 같은 작업을 비교하는 방식으로 읽는다."
-      ]
+      "type": "chart",
+      "chartType": "bar",
+      "heading": "실버 주문 수가 가장 많다",
+      "data": [
+        {
+          "label": "VIP",
+          "value": 3757
+        },
+        {
+          "label": "골드",
+          "value": 5433
+        },
+        {
+          "label": "실버",
+          "value": 6373
+        },
+        {
+          "label": "브론즈",
+          "value": 4437
+        }
+      ],
+      "unit": "건",
+      "highlight": [
+        2
+      ],
+      "annotation": {
+        "text": "최대 6,373건",
+        "target": 2
+      },
+      "result": "실버가 **6,373건**으로 주문 수가 가장 많다."
     },
     {
-      "type": "concept",
-      "kicker": "핵심 개념 4",
-      "heading": "매출은 계산 컬럼으로 만든다",
-      "body": "orders에는 매출이 없으므로 단가, 수량, 할인율을 이용해 직접 계산한다.",
-      "bullets": [
-        "매출 = 단가 × 수량 × (1 - 할인율)이다.",
-        "orders 시트에서는 L2에 =I2*E2*(1-F2)를 입력한다.",
-        "확인할 값은 L2 22,900, L3 35,910, L4 105,800이다."
-      ]
+      "type": "chart",
+      "chartType": "bar",
+      "heading": "실버 매출이 가장 크다",
+      "data": [
+        {
+          "label": "VIP",
+          "value": 393432930
+        },
+        {
+          "label": "골드",
+          "value": 547524985
+        },
+        {
+          "label": "실버",
+          "value": 603583519
+        },
+        {
+          "label": "브론즈",
+          "value": 393948369
+        }
+      ],
+      "unit": "원",
+      "highlight": [
+        2
+      ],
+      "annotation": {
+        "text": "최대 603,583,519원",
+        "target": 2
+      },
+      "result": "실버가 **603,583,519원**으로 매출이 가장 크다."
+    },
+    {
+      "type": "chart",
+      "chartType": "bar",
+      "heading": "객단가는 VIP가 가장 높다",
+      "data": [
+        {
+          "label": "VIP",
+          "value": 104719.97
+        },
+        {
+          "label": "골드",
+          "value": 100777.65
+        },
+        {
+          "label": "실버",
+          "value": 94709.48
+        },
+        {
+          "label": "브론즈",
+          "value": 88787.1
+        }
+      ],
+      "unit": "원",
+      "highlight": [
+        0
+      ],
+      "annotation": {
+        "text": "최고 104,719.97원",
+        "target": 0
+      },
+      "result": "VIP가 **104,719.97원**으로 객단가가 가장 높다."
     },
     {
       "type": "table",
-      "heading": "조건부 집계는 질문을 표로 바꾼다",
+      "heading": "검산값으로 결과를 확인한다",
       "columns": [
-        "질문",
-        "조건 범위",
-        "계산 방식"
+        "항목",
+        "값"
       ],
       "rows": [
         [
-          "지역별 주문 건수",
-          "orders의 region 열",
-          "COUNTIF로 조건에 맞는 주문을 센다."
+          "전체 주문",
+          "20,000"
         ],
         [
-          "지역별 매출 합계",
-          "orders의 region 열",
-          "SUMIF로 조건에 맞는 sales를 더한다."
+          "전체 매출",
+          "1,938,489,803"
         ],
         [
-          "등급별 객단가",
-          "orders의 grade 열",
-          "매출 합계를 주문 건수로 나눈다."
+          "전체 객단가",
+          "96,924.49"
         ]
       ],
-      "note": "지역별 검산 기준은 주문 건수 합계 20,000, 매출 합계 1,938,489,803이다."
-    },
-    {
-      "type": "table",
-      "heading": "등급별 객단가 정답 기준",
-      "columns": [
-        "grade",
-        "order_count",
-        "total_sales",
-        "avg_order_value"
-      ],
-      "rows": [
-        [
-          "VIP",
-          "3,757",
-          "393,432,930",
-          "104,719.97"
-        ],
-        [
-          "골드",
-          "5,433",
-          "547,524,985",
-          "100,777.65"
-        ],
-        [
-          "실버",
-          "6,373",
-          "603,583,519",
-          "94,709.48"
-        ],
-        [
-          "브론즈",
-          "4,437",
-          "393,948,369",
-          "88,787.10"
-        ]
-      ],
-      "note": "네 등급 중 주문 1건당 평균 매출이 가장 높은 등급은 VIP다."
+      "note": "등급별 합계가 전체 값과 일치해야 한다."
     },
     {
       "type": "mission",
       "heading": "오늘의 미션",
       "items": [
         {
-          "label": "미션. 등급별 객단가 구하기",
-          "desc": "grade_summary 시트를 만들고 고객 등급별 주문 건수, 매출 합계, 객단가를 계산한다."
-        },
-        {
-          "label": "검산하기",
-          "desc": "등급별 주문 건수 합계가 20,000이고 매출 합계가 1,938,489,803인지 확인한다."
-        },
-        {
-          "label": "한 문장으로 해석하기",
-          "desc": "어떤 등급의 객단가가 가장 높은지 한 문장으로 적는다."
+          "label": "미션 1. 등급별 객단가",
+          "desc": "COUNTIF, SUMIF, 나눗셈으로 객단가를 구한다."
         }
       ]
     },
@@ -179,11 +271,11 @@
       "type": "closing",
       "heading": "정리",
       "bullets": [
-        "데이터분석은 필요한 정보를 여러 표에서 끌어와 한 표로 모으는 일에서 출발한다.",
-        "엑셀에서는 VLOOKUP이나 XLOOKUP으로 표를 잇고, SUMIF와 COUNTIF로 조건이 붙은 질문에 답한다.",
-        "함수가 늘고 파일이 무거워질수록 실수가 끼어들 자리도 늘어난다."
+        "표 연결은 분석의 출발점이다",
+        "sales를 만든 뒤 조건별로 집계한다",
+        "함수가 늘면 관리 비용도 커진다"
       ],
-      "next": "**다음 차시** — 숫자 열 하나를 제대로 읽기 위해 중심, 산포, 분포, 박스플롯을 다룬다."
+      "next": "**다음 차시**: 같은 계산을 더 재현 가능하게 만든다."
     }
   ]
 }

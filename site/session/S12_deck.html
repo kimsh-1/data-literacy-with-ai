@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>S12 · 데이터 정제: 결측, 이상치, 타입, 중복, 문자열, 인코딩, 날짜 — 발표 덱</title>
+<title>S12 · 데이터 정제: 7가지 기준 — 발표 덱</title>
 <style>
 @font-face{font-family:"PretendardDeck";
   src:url("../fonts/pretendard-deck-subset.woff2") format("woff2");
@@ -36,13 +36,13 @@ a{color:inherit;text-decoration:none;}
 .kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
   text-transform:uppercase;margin-bottom:0.9rem;}
 .body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
-ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
-ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
-  color:var(--ink);line-height:1.5;}
-ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.8rem;max-width:62ch;}
+ul.bullets>li{position:relative;padding-left:1.6rem;font-size:clamp(1rem,1.35vw,1.24rem);
+  color:var(--ink);line-height:1.42;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.58em;width:7px;height:7px;border-radius:2px;
   background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
 ul.bullets>li b{color:var(--ink);font-weight:640;}
-.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid{display:flex;flex-direction:column;gap:1rem;counter-reset:obj;max-width:58ch;}
 .obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
   font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
 .obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
@@ -53,9 +53,11 @@ ul.bullets>li b{color:var(--ink);font-weight:640;}
   padding:1.3rem 1.5rem;}
 .mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
 .mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
-table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.18rem);}
 table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
-  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+  padding:0.72rem 1.1rem;text-align:left;vertical-align:top;line-height:1.4;}
+table.deck-table.compact{font-size:clamp(0.8rem,1.05vw,0.98rem);}
+table.deck-table.compact th,table.deck-table.compact td{padding:0.42rem 0.8rem;line-height:1.32;}
 table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
   font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
 table.deck-table td{color:var(--ink-muted);}
@@ -69,6 +71,35 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 .closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
   color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
 .closing .next b{color:var(--primary-hover);}
+/* --- visual slides --- */
+.viz{margin-top:1rem;width:100%;max-width:78ch;}
+.viz svg{width:100%;height:auto;display:block;overflow:visible;}
+.viz-cap{margin-top:1rem;color:var(--ink-tertiary);font-size:0.92rem;font-family:var(--font-mono);}
+.result-line{margin-top:1.4rem;padding:0.9rem 1.2rem;border-left:3px solid var(--primary);
+  background:var(--surface-1);border-radius:0 10px 10px 0;color:var(--ink);
+  font-size:clamp(1rem,1.4vw,1.3rem);line-height:1.5;max-width:62ch;}
+.result-line b{color:var(--primary-hover);}
+.result-line .lead{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:1px;
+  text-transform:uppercase;color:var(--ink-subtle);display:block;margin-bottom:0.3rem;}
+.xform{display:flex;align-items:stretch;gap:0;max-width:80ch;margin-top:0.6rem;}
+.xform-card{flex:1;border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;padding:1.2rem 1.3rem;}
+.xform-card .xf-label{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.6px;
+  color:var(--ink-subtle);text-transform:uppercase;margin-bottom:0.9rem;}
+.xform-arrow{display:flex;align-items:center;padding:0 1.1rem;color:var(--primary-hover);font-size:2rem;flex:none;}
+.xf-row{display:flex;justify-content:space-between;gap:1rem;padding:0.55rem 0.6rem;
+  font-size:clamp(0.92rem,1.25vw,1.12rem);border-radius:8px;}
+.xf-row .k{color:var(--ink-subtle);font-family:var(--font-mono);font-size:0.9em;}
+.xf-row .v{color:var(--ink);text-align:right;}
+.xf-row.changed{background:rgba(94,106,210,0.14);outline:1.5px solid var(--primary);}
+.xf-row.changed .v{color:var(--primary-hover);font-weight:640;}
+.img-wrap{position:relative;width:100%;max-width:80ch;margin-top:0.6rem;
+  border:1px solid var(--hairline);border-radius:16px;overflow:hidden;background:var(--surface-1);}
+.img-wrap img{width:100%;display:block;}
+.img-box{position:absolute;border:2px solid var(--primary-hover);border-radius:6px;
+  box-shadow:0 0 0 3px rgba(94,106,210,0.18);}
+.img-box .lbl{position:absolute;top:-1.9em;left:-2px;white-space:nowrap;
+  background:var(--primary);color:#fff;font-size:0.8rem;font-weight:600;
+  padding:2px 8px;border-radius:6px;}
 /* chrome */
 .progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
 .hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
@@ -98,65 +129,55 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <div class="progress"></div>
 <div class="brand">데이터 리터러시 with AI</div>
 <div class="hud">
-  <span class="counter"><span class="cur">1</span> / 11</span>
+  <span class="counter"><span class="cur">1</span> / 14</span>
   <a class="back" href="./S12.html">자료로 돌아가기</a>
 </div>
 <div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
 <main class="deck">
 <section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S12 · PART 04 · 파이썬 · 난이도 4</div>
-<h1>데이터 정제: 결측, 이상치, 타입, 중복, 문자열, 인코딩, 날짜</h1>
-<p class="subtitle">pandas로 데이터를 읽은 뒤 결측, 중복, 타입, 문자열, 이상치, 인코딩, 날짜 문제를 점검하고 계산 가능한 표로 만드는 과정을 익힌다.</p></div></section>
-<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
-<ul class="obj-grid"><li>isna, fillna, dropna로 결측값을 찾고 처리한다.</li>
-<li>to_numeric, astype, to_datetime으로 계산 가능한 타입을 만든다.</li>
-<li>drop_duplicates로 중복 행과 중복 키를 구분한다.</li>
-<li>.str.strip, .str.replace, replace로 문자열 표기 흔들림을 정리한다.</li>
-<li>IQR 기준으로 수량 이상치를 찾아 제거하고 정제 전후 통계를 설명한다.</li>
-<li>cp949 한글 CSV를 encoding 옵션으로 읽고 날짜 문자열을 datetime으로 바꾼다.</li></ul></div></section>
-<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
-<h2>정제는 계산 가능한 표를 만드는 일이다</h2>
-<p class="body">데이터 정제는 표를 예쁘게 꾸미는 일이 아니라 평균, 합계, 피벗테이블, 그래프가 흔들리지 않도록 계산 가능한 상태로 만드는 일이다.</p>
-<ul class="bullets"><li>잘못된 수량 999, 음수 금액, 같은 order_id 중복, 문자로 섞인 단가는 분석 결과를 흔든다.</li>
-<li>정제의 첫 단계는 고치는 것이 아니라 행수, 열, 결측, 중복을 숫자로 남기는 일이다.</li>
-<li>원본 df는 그대로 두고 cleaned 복사본으로 정제 전후를 비교한다.</li></ul></div></section>
-<section id="s4" class="slide slide-table"><div class="slide-inner"><h2>dirty 데이터에서 먼저 확인한 문제</h2>
-<table class="deck-table"><thead><tr><th>점검 항목</th><th>확인값</th></tr></thead><tbody><tr><td>전체 크기</td><td>10,439행 x 12열</td></tr><tr><td>고유 order_id</td><td>10,424개</td></tr><tr><td>중복 order_id 행</td><td>15</td></tr><tr><td>완전 동일 중복 행</td><td>13</td></tr><tr><td>payment 결측</td><td>313</td></tr><tr><td>member 결측</td><td>209</td></tr><tr><td>날짜 형식 혼합</td><td>YYYY/MM/DD 206건, MM-DD-YYYY 104건</td></tr><tr><td>unit_price 문자 포함</td><td>157</td></tr><tr><td>store=&#x27;강남 점&#x27;</td><td>310</td></tr><tr><td>category 앞뒤 공백</td><td>313</td></tr><tr><td>아메리카노 표기 변형</td><td>106</td></tr><tr><td>qty=999</td><td>2</td></tr><tr><td>amount 음수</td><td>1</td></tr></tbody></table></div></section>
-<section id="s5" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
-<h2>결측값은 무조건 삭제하지 않는다</h2>
-<p class="body">결측값은 빈칸이 아니라 처리 기준을 정해야 하는 값이다. 어떤 빈칸은 모름으로 채우고, 어떤 빈칸은 분석에서 제외한다.</p>
-<ul class="bullets"><li>payment 결측 313건은 주문 자체를 버릴 필요가 없으므로 미확인으로 채운다.</li>
-<li>member 결측 209건은 이번 실습 기준으로 False로 채운다.</li>
-<li>필수 열 결측은 dropna(subset=...)로 제외하지만, 이번 데이터에서는 제거 행수가 0행이다.</li></ul></div></section>
-<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
-<h2>눈에 보이는 값과 실제 타입은 다를 수 있다</h2>
-<p class="body">4,500원은 사람에게 단가처럼 보이지만 컴퓨터에는 문자다. 쉼표와 원 표시를 지운 뒤 숫자로 변환해야 합계와 평균을 계산한다.</p>
-<ul class="bullets"><li>unit_price 문자 포함 157건은 쉼표와 원 표시를 제거한 뒤 to_numeric으로 바꾼다.</li>
-<li>날짜는 pd.to_datetime(..., format=&#x27;mixed&#x27;)로 datetime 타입으로 바꾸며, 날짜 변환 실패는 0건이다.</li>
-<li>cp949 원본 파일은 기본 읽기에서 UnicodeDecodeError가 나고, encoding=&#x27;cp949&#x27;로 읽으면 1,947행 x 15열로 정상 로드된다.</li>
-<li>cp949 원본 파일의 날짜 범위는 2013-12-01부터 2019-03-31까지다.</li></ul></div></section>
-<section id="s7" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
-<h2>중복과 문자열은 집계 그룹을 바꾼다</h2>
-<p class="body">같은 주문이나 같은 지점도 표기가 다르면 별도 값으로 집계된다. 분석 기준이 되는 키와 그룹명부터 통일해야 한다.</p>
-<ul class="bullets"><li>거래 1건을 식별하는 키는 order_id이므로 order_id 기준으로 중복 15행을 제거한다.</li>
-<li>강남점과 강남 점은 다른 값이므로 store의 앞뒤 공백과 내부 공백을 정리한다.</li>
-<li>아메리카, Americano, 아메 리카노는 아메리카노로 통일한다.</li></ul></div></section>
-<section id="s8" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 5</div>
-<h2>이상치는 삭제하기 전에 확인한다</h2>
-<p class="body">이상치는 나쁜 값이 아니라 확인해야 할 값이다. 이번 데이터의 qty=999는 카페 주문 수량으로 보기 어렵고 IQR 기준에서도 정상범위를 벗어난다.</p>
-<ul class="bullets"><li>수량의 Q1은 1.0, Q3는 2.0, IQR은 1.0이다.</li>
-<li>IQR 기준 정상범위는 -0.5부터 3.5까지이며, qty=999인 2행이 이상치로 잡힌다.</li>
-<li>amount 음수 1행은 주문 금액 오류로 보고 제거한다.</li></ul></div></section>
-<section id="s9" class="slide slide-table"><div class="slide-inner"><h2>청소 전후 비교</h2>
-<table class="deck-table"><thead><tr><th>비교 항목</th><th>청소 전</th><th>청소 후</th></tr></thead><tbody><tr><td>행수</td><td>10,439</td><td>10,421</td></tr><tr><td>고유 order_id</td><td>10,424</td><td>10,421</td></tr><tr><td>총매출</td><td>90,600,500원</td><td>90,476,000원</td></tr><tr><td>판매수량 합계</td><td>19,259</td><td>17,238</td></tr><tr><td>건당 평균금액</td><td>8,679원</td><td>8,682원</td></tr><tr><td>건당 중앙값</td><td>6,500원</td><td>6,500원</td></tr><tr><td>최대 수량</td><td>999</td><td>3</td></tr><tr><td>최소 금액</td><td>-5,500원</td><td>3,000원</td></tr></tbody></table>
-<p class="note">정제 후에는 중복 order_id, 전체 결측값, 단가 x 수량과 금액 불일치가 모두 0이다.</p></div></section>
-<section id="s10" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
-<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 문제 요약표 만들기</div><div class="m-desc">cafe_sales_dirty.csv에서 결측, 중복, 날짜 형식, 문자 숫자, 문자열 표기, 이상치를 확인하는 요약표를 만든다.</div></div><div class="mission-card"><div class="m-label">미션 2. 정제 전후 비교표 만들기</div><div class="m-desc">정제 전후 행수, 고유 order_id, 총매출, 판매수량 합계, 최대 수량, 최소 금액을 비교한다.</div></div><div class="mission-card"><div class="m-label">미션 3. 해석 문장 작성하기</div><div class="m-desc">정제 전 10,439행에서 중복 15행, qty=999 이상치 2행, amount 음수 1행을 제외해 10,421행이 되었다고 설명한다.</div></div></div></div></section>
-<section id="s11" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
-<ul class="bullets"><li>정제는 계산 가능한 표를 만들고 처리 기준을 코드로 남기는 일이다.</li>
-<li>결측은 의미에 따라 채우거나 제외하고, 문자 숫자와 날짜는 계산 가능한 타입으로 바꾼다.</li>
-<li>중복 order_id 15행, qty=999 이상치 2행, amount 음수 1행을 제외해 정제 후 10,421행으로 분석한다.</li>
-<li>cp949 파일은 encoding 옵션으로 다시 읽고, 날짜 문자열은 datetime으로 변환한다.</li></ul>
-<div class="next"><b>다음 차시</b> — S13에서는 여러 행을 요약표로 바꾸는 그룹화·집계·재구조화를 다룬다.</div></div></section>
+<h1>데이터 정제: 7가지 기준</h1>
+<p class="subtitle">결측과 이상치를 처리해 계산 가능한 표로 만든다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>학습 후 할 수 있는 것</h2>
+<ul class="obj-grid"><li>결측·중복·타입 문제를 수치로 진단한다</li>
+<li>문자열 표기와 날짜를 계산 가능하게 바꾼다</li>
+<li>정제 전후 행수와 통계 변화를 설명한다</li></ul></div></section>
+<section id="s3" class="slide slide-image"><div class="slide-inner"><h2>파이썬으로 기준을 남긴다</h2>
+<div class="img-wrap"><img src="../images/deck/python.png" alt="파이썬 데이터 정제 인포그래픽"/></div>
+<div class="viz-cap">정제 기준을 코드로 남겨 같은 파일에 반복 적용한다.</div></div></section>
+<section id="s4" class="slide slide-chart"><div class="slide-inner"><h2>문제는 먼저 수치로 본다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="78" y="46" width="113" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="134" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">313건</text><text x="134" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">payment 결측</text><rect x="266" y="163" width="113" height="235" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="322" y="151" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">209건</text><text x="322" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">member 결측</text><rect x="454" y="221" width="113" height="177" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="209" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">157건</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">단가 문자</text><rect x="642" y="49" width="113" height="349" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="698" y="37" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">310건</text><text x="698" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">강남 점</text><rect x="830" y="46" width="113" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="886" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">313건</text><text x="886" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">category 공백</text><line x1="910" y1="88" x2="134" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="134" cy="40" r="4" fill="#828fff"/><rect x="847" y="46" width="125" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="910" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">최대 313건</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>결측과 공백 표기가 먼저 크게 드러난다.</div></div></section>
+<section id="s5" class="slide slide-transform"><div class="slide-inner"><h2>결측은 기준으로 채운다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">정제 전</div><div class="xf-row changed"><span class="k">payment</span><span class="v">313건</span></div><div class="xf-row changed"><span class="k">member</span><span class="v">209건</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">정제 후</div><div class="xf-row changed"><span class="k">payment</span><span class="v">미확인</span></div><div class="xf-row changed"><span class="k">member</span><span class="v">False</span></div><div class="xf-row"><span class="k">전체 결측</span><span class="v">0건</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>주문은 유지하고 결측 처리 기준만 <b>명시</b>한다.</div></div></section>
+<section id="s6" class="slide slide-transform"><div class="slide-inner"><h2>표기 차이를 통일한다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">정제 전</div><div class="xf-row changed"><span class="k">강남 점</span><span class="v">310건</span></div><div class="xf-row changed"><span class="k">category 공백</span><span class="v">313건</span></div><div class="xf-row changed"><span class="k">아메리카노 변형</span><span class="v">106건</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">정제 후</div><div class="xf-row changed"><span class="k">store</span><span class="v">공백 제거</span></div><div class="xf-row"><span class="k">category</span><span class="v">strip 적용</span></div><div class="xf-row changed"><span class="k">item</span><span class="v">아메리카노 통일</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>같은 지점과 메뉴가 한 그룹으로 집계된다.</div></div></section>
+<section id="s7" class="slide slide-transform"><div class="slide-inner"><h2>문자와 날짜를 타입화한다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">정제 전</div><div class="xf-row changed"><span class="k">unit_price</span><span class="v">문자 포함 157건</span></div><div class="xf-row"><span class="k">YYYY/MM/DD</span><span class="v">206건</span></div><div class="xf-row"><span class="k">MM-DD-YYYY</span><span class="v">104건</span></div><div class="xf-row"><span class="k">날짜 실패</span><span class="v">0건</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">정제 후</div><div class="xf-row changed"><span class="k">unit_price</span><span class="v">변환 실패 0건</span></div><div class="xf-row changed"><span class="k">date</span><span class="v">datetime</span></div><div class="xf-row"><span class="k">날짜 실패</span><span class="v">0건</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>문자 단가와 섞인 날짜를 계산 가능한 타입으로 바꾼다.</div></div></section>
+<section id="s8" class="slide slide-transform"><div class="slide-inner"><h2>IQR로 수량 999를 탐지한다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">IQR 기준</div><div class="xf-row"><span class="k">Q1</span><span class="v">1.0</span></div><div class="xf-row"><span class="k">Q3</span><span class="v">2.0</span></div><div class="xf-row"><span class="k">정상범위</span><span class="v">-0.5~3.5</span></div><div class="xf-row changed"><span class="k">qty=999</span><span class="v">2행</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">제거 후</div><div class="xf-row changed"><span class="k">이상치</span><span class="v">2행 제거</span></div><div class="xf-row changed"><span class="k">최대 수량</span><span class="v">3</span></div><div class="xf-row"><span class="k">검산 불일치</span><span class="v">0건</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>정상 범위 밖 2행을 제거해 최대 수량은 <b>3</b>이 된다.</div></div></section>
+<section id="s9" class="slide slide-transform"><div class="slide-inner"><h2>행수는 18행 줄어든다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">정제 전</div><div class="xf-row changed"><span class="k">행수</span><span class="v">10,439</span></div><div class="xf-row"><span class="k">고유 order_id</span><span class="v">10,424</span></div><div class="xf-row changed"><span class="k">중복 order_id</span><span class="v">15행</span></div><div class="xf-row changed"><span class="k">최소 금액</span><span class="v">-5,500원</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">정제 후</div><div class="xf-row changed"><span class="k">행수</span><span class="v">10,421</span></div><div class="xf-row"><span class="k">고유 order_id</span><span class="v">10,421</span></div><div class="xf-row changed"><span class="k">중복 order_id</span><span class="v">0행</span></div><div class="xf-row changed"><span class="k">최소 금액</span><span class="v">3,000원</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>중복 15행, 이상치 2행, 음수 1행을 제외한다.</div></div></section>
+<section id="s10" class="slide slide-chart"><div class="slide-inner"><h2>판매수량 합계가 바뀐다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="200" y="46" width="150" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="275" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">19,259개</text><text x="275" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">청소 전</text><rect x="670" y="83" width="150" height="315" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="745" y="71" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">17,238개</text><text x="745" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">청소 후</text><line x1="894" y1="88" x2="275" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="275" cy="40" r="4" fill="#828fff"/><rect x="817" y="46" width="155" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="894" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2,021개 감소</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>qty=999 두 행이 원본 수량 합계를 크게 높였다.</div></div></section>
+<section id="s11" class="slide slide-chart"><div class="slide-inner"><h2>총매출은 거의 유지된다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="200" y="46" width="150" height="352" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="275" y="34" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">90,600,500원</text><text x="275" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">청소 전</text><rect x="670" y="46" width="150" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="745" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">90,476,000원</text><text x="745" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">청소 후</text><line x1="140" y1="88" x2="745" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="745" cy="40" r="4" fill="#828fff"/><rect x="48" y="46" width="185" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="140" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">90,476,000원</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>총매출은 <b>90,476,000원</b>으로 소폭 낮아진다.</div></div></section>
+<section id="s12" class="slide slide-transform"><div class="slide-inner"><h2>cp949는 옵션을 지정해 읽는다</h2>
+<div class="xform"><div class="xform-card"><div class="xf-label">기본 읽기</div><div class="xf-row changed"><span class="k">읽기 결과</span><span class="v">UnicodeDecodeError</span></div></div><div class="xform-arrow" aria-hidden="true">&#8594;</div><div class="xform-card"><div class="xf-label">encoding 지정</div><div class="xf-row changed"><span class="k">encoding</span><span class="v">cp949</span></div><div class="xf-row changed"><span class="k">정상 로드</span><span class="v">1,947행 x 15열</span></div><div class="xf-row"><span class="k">날짜 실패</span><span class="v">0건</span></div><div class="xf-row"><span class="k">날짜 범위</span><span class="v">2013-12-01~2019-03-31</span></div></div></div>
+<div class="result-line"><span class="lead">결과</span>인코딩을 지정하면 한글 CSV와 날짜가 정상 처리된다.</div></div></section>
+<section id="s13" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 문제 요약표</div><div class="m-desc">결측, 중복, 타입, 표기 문제를 수치로 정리한다.</div></div><div class="mission-card"><div class="m-label">미션 2. 정제 전후 비교표</div><div class="m-desc">행수, 매출, 수량, 최댓값·최솟값을 비교한다.</div></div><div class="mission-card"><div class="m-label">미션 3. 해석 문장</div><div class="m-desc">판매수량 변화가 qty=999 두 행 때문임을 설명한다.</div></div></div></div></section>
+<section id="s14" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>결측값은 의미에 따라 채우거나 제외한다.</li>
+<li>문자 숫자와 날짜는 계산 가능한 타입으로 바꾼다.</li>
+<li>정제 후 10,421행으로 분석 기준이 명확해진다.</li></ul>
+<div class="next"><b>다음 차시</b>: 정제한 표로 집계와 시각화를 이어간다.</div></div></section>
 </main>
 <script>
 const deck=document.querySelector('.deck');

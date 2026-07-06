@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>S05 · 중심·산포·분포·박스플롯 — 발표 덱</title>
+<title>S05 · S05 중심·산포·분포·박스플롯 — 발표 덱</title>
 <style>
 @font-face{font-family:"PretendardDeck";
   src:url("../fonts/pretendard-deck-subset.woff2") format("woff2");
@@ -36,13 +36,13 @@ a{color:inherit;text-decoration:none;}
 .kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
   text-transform:uppercase;margin-bottom:0.9rem;}
 .body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
-ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
-ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
-  color:var(--ink);line-height:1.5;}
-ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:0.8rem;max-width:62ch;}
+ul.bullets>li{position:relative;padding-left:1.6rem;font-size:clamp(1rem,1.35vw,1.24rem);
+  color:var(--ink);line-height:1.42;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.58em;width:7px;height:7px;border-radius:2px;
   background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
 ul.bullets>li b{color:var(--ink);font-weight:640;}
-.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid{display:flex;flex-direction:column;gap:1rem;counter-reset:obj;max-width:58ch;}
 .obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
   font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
 .obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
@@ -53,9 +53,11 @@ ul.bullets>li b{color:var(--ink);font-weight:640;}
   padding:1.3rem 1.5rem;}
 .mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
 .mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
-table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.18rem);}
 table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
-  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+  padding:0.72rem 1.1rem;text-align:left;vertical-align:top;line-height:1.4;}
+table.deck-table.compact{font-size:clamp(0.8rem,1.05vw,0.98rem);}
+table.deck-table.compact th,table.deck-table.compact td{padding:0.42rem 0.8rem;line-height:1.32;}
 table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
   font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
 table.deck-table td{color:var(--ink-muted);}
@@ -69,6 +71,35 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 .closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
   color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
 .closing .next b{color:var(--primary-hover);}
+/* --- visual slides --- */
+.viz{margin-top:1rem;width:100%;max-width:78ch;}
+.viz svg{width:100%;height:auto;display:block;overflow:visible;}
+.viz-cap{margin-top:1rem;color:var(--ink-tertiary);font-size:0.92rem;font-family:var(--font-mono);}
+.result-line{margin-top:1.4rem;padding:0.9rem 1.2rem;border-left:3px solid var(--primary);
+  background:var(--surface-1);border-radius:0 10px 10px 0;color:var(--ink);
+  font-size:clamp(1rem,1.4vw,1.3rem);line-height:1.5;max-width:62ch;}
+.result-line b{color:var(--primary-hover);}
+.result-line .lead{font-family:var(--font-mono);font-size:0.78rem;letter-spacing:1px;
+  text-transform:uppercase;color:var(--ink-subtle);display:block;margin-bottom:0.3rem;}
+.xform{display:flex;align-items:stretch;gap:0;max-width:80ch;margin-top:0.6rem;}
+.xform-card{flex:1;border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;padding:1.2rem 1.3rem;}
+.xform-card .xf-label{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:0.6px;
+  color:var(--ink-subtle);text-transform:uppercase;margin-bottom:0.9rem;}
+.xform-arrow{display:flex;align-items:center;padding:0 1.1rem;color:var(--primary-hover);font-size:2rem;flex:none;}
+.xf-row{display:flex;justify-content:space-between;gap:1rem;padding:0.55rem 0.6rem;
+  font-size:clamp(0.92rem,1.25vw,1.12rem);border-radius:8px;}
+.xf-row .k{color:var(--ink-subtle);font-family:var(--font-mono);font-size:0.9em;}
+.xf-row .v{color:var(--ink);text-align:right;}
+.xf-row.changed{background:rgba(94,106,210,0.14);outline:1.5px solid var(--primary);}
+.xf-row.changed .v{color:var(--primary-hover);font-weight:640;}
+.img-wrap{position:relative;width:100%;max-width:80ch;margin-top:0.6rem;
+  border:1px solid var(--hairline);border-radius:16px;overflow:hidden;background:var(--surface-1);}
+.img-wrap img{width:100%;display:block;}
+.img-box{position:absolute;border:2px solid var(--primary-hover);border-radius:6px;
+  box-shadow:0 0 0 3px rgba(94,106,210,0.18);}
+.img-box .lbl{position:absolute;top:-1.9em;left:-2px;white-space:nowrap;
+  background:var(--primary);color:#fff;font-size:0.8rem;font-weight:600;
+  padding:2px 8px;border-radius:6px;}
 /* chrome */
 .progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
 .hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
@@ -98,63 +129,60 @@ table.deck-table td:first-child{color:var(--ink);font-weight:560;}
 <div class="progress"></div>
 <div class="brand">데이터 리터러시 with AI</div>
 <div class="hud">
-  <span class="counter"><span class="cur">1</span> / 12</span>
+  <span class="counter"><span class="cur">1</span> / 14</span>
   <a class="back" href="./S05.html">자료로 돌아가기</a>
 </div>
 <div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
 <main class="deck">
 <section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S05 · PART 02 · 통계 · 난이도 2</div>
 <h1>중심·산포·분포·박스플롯</h1>
-<p class="subtitle">숫자 열 하나에서 대표값, 퍼짐, 이상치, 보통의 값을 함께 읽는 법을 다룬다.</p></div></section>
-<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
-<ul class="obj-grid"><li>평균, 중앙값, 최빈값의 차이를 설명한다.</li>
-<li>범위와 표준편차가 값의 퍼짐을 나타낸다는 점을 이해한다.</li>
-<li>사분위수, IQR, 이상치의 기본 의미를 말한다.</li>
-<li>박스플롯을 보고 그룹별 분포의 위치, 퍼짐, 이상치를 비교한다.</li>
-<li>평균이 왜곡될 수 있는 상황을 찾아 중앙값과 함께 해석한다.</li></ul></div></section>
-<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
-<h2>평균은 중요하지만 혼자서는 부족하다</h2>
-<p class="body">평균은 전체적인 수준을 빠르게 알려 주지만, 보통의 값과 값의 퍼짐, 극단적으로 큰 값의 존재까지 설명하지는 못한다.</p>
-<ul class="bullets"><li>핵심 질문은 이 숫자들의 대표값이 무엇인지 묻는 데서 시작한다.</li>
-<li>값들이 얼마나 흩어져 있는지 확인해야 한다.</li>
-<li>평균을 그대로 믿어도 되는지 중앙값과 산포로 함께 확인해야 한다.</li></ul></div></section>
-<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
-<h2>대표값 세 가지는 서로 다른 질문에 답한다</h2>
-<p class="body">대표값은 숫자 목록을 한 숫자로 요약하려는 시도다. 평균, 중앙값, 최빈값은 같은 데이터를 보더라도 서로 다른 관점을 제공한다.</p>
-<ul class="bullets"><li><b>평균</b>: 전체 합계를 개수로 나눈 값이며 모든 값을 반영하지만 극단값에 민감하다.</li>
-<li><b>중앙값</b>: 값을 줄 세웠을 때 가운데 있는 값이며 보통의 값을 설명할 때 유용하다.</li>
-<li><b>최빈값</b>: 가장 많이 반복된 값이며 가격, 등급, 점수처럼 같은 값이 반복되는 데이터에서 의미가 있다.</li></ul></div></section>
-<section id="s5" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
-<h2>평균과 중앙값의 차이는 분포의 힌트다</h2>
-<p class="body">입문 단계에서는 평균과 중앙값을 함께 보는 습관이 중요하다.</p>
-<ul class="bullets"><li>평균과 중앙값이 비슷하면 값들이 비교적 균형 있게 퍼져 있을 가능성이 있다.</li>
-<li>평균이 중앙값보다 크면 큰 값 몇 개가 평균을 끌어올렸을 가능성이 있다.</li>
-<li>평균이 중앙값보다 작으면 작은 값들이 평균을 끌어내렸을 가능성이 있다.</li></ul></div></section>
-<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
-<h2>산포는 중심만으로 보이지 않는 차이를 보여 준다</h2>
-<p class="body">두 부서의 평균 연봉이 비슷해도 한 부서는 모두 비슷하게 받고, 다른 부서는 낮은 연봉과 높은 연봉이 섞여 있을 수 있다. 이 차이를 보는 것이 산포다.</p>
-<ul class="bullets"><li>범위는 최댓값에서 최솟값을 뺀 값이다.</li>
-<li>표준편차가 작으면 값들이 평균 근처에 모여 있다.</li>
-<li>표준편차가 크면 값들이 평균에서 넓게 퍼져 있다.</li></ul></div></section>
-<section id="s7" class="slide slide-table"><div class="slide-inner"><h2>박스플롯은 분포를 한 장으로 접어 보여 준다</h2>
-<table class="deck-table"><thead><tr><th>요소</th><th>의미</th></tr></thead><tbody><tr><td>박스의 아래쪽</td><td>1사분위수, 하위 25% 지점</td></tr><tr><td>박스 안의 선</td><td>중앙값</td></tr><tr><td>박스의 위쪽</td><td>3사분위수, 상위 25% 지점</td></tr><tr><td>박스 높이</td><td>가운데 50% 값의 퍼짐</td></tr><tr><td>수염</td><td>일반적인 최솟값과 최댓값 범위</td></tr><tr><td>따로 찍힌 점</td><td>이상치 후보</td></tr></tbody></table>
-<p class="note">박스플롯은 평균 하나보다 많은 정보를 주며, 그룹별 위치와 퍼짐과 이상치 후보를 함께 비교하게 한다.</p></div></section>
-<section id="s8" class="slide slide-table"><div class="slide-inner"><h2>엑셀에서는 계산과 해석을 함께 진행한다</h2>
-<table class="deck-table"><thead><tr><th>하고 싶은 일</th><th>엑셀 함수 또는 기능</th><th>이번 차시에서의 사용</th></tr></thead><tbody><tr><td>평균 구하기</td><td>AVERAGE, AVERAGEIF</td><td>부서별 평균 연봉</td></tr><tr><td>중앙값 구하기</td><td>MEDIAN</td><td>부서별 중앙 연봉</td></tr><tr><td>최빈값 구하기</td><td>MODE.SNGL</td><td>가장 자주 나오는 연봉 또는 주문금액</td></tr><tr><td>최솟값·최댓값</td><td>MINIFS, MAXIFS</td><td>부서별 연봉 범위</td></tr><tr><td>표준편차</td><td>STDEV.S</td><td>부서별 연봉 산포</td></tr><tr><td>사분위수</td><td>QUARTILE.INC</td><td>박스플롯을 해석하기 위한 기준</td></tr><tr><td>분포 시각화</td><td>상자 수염 그림</td><td>부서별 연봉 분포 비교</td></tr></tbody></table>
-<p class="note">평균만 보고 결론을 내리면 보통의 값, 값의 퍼짐, 이상치 여부를 놓칠 수 있다.</p></div></section>
-<section id="s9" class="slide slide-table"><div class="slide-inner"><h2>HR 연봉 요약은 부서 간 위치와 퍼짐을 드러낸다</h2>
-<table class="deck-table"><thead><tr><th>부서</th><th>직원 수</th><th>평균</th><th>중앙값</th><th>표준편차</th><th>이상치 수</th></tr></thead><tbody><tr><td>개발본부</td><td>370</td><td>74,190,541</td><td>73,950,000</td><td>8,094,278</td><td>6</td></tr><tr><td>데이터전략팀</td><td>250</td><td>68,902,000</td><td>68,450,000</td><td>8,955,824</td><td>2</td></tr><tr><td>영업본부</td><td>240</td><td>63,087,500</td><td>62,700,000</td><td>8,070,936</td><td>3</td></tr><tr><td>인사총무팀</td><td>180</td><td>59,414,444</td><td>59,100,000</td><td>8,771,463</td><td>3</td></tr><tr><td>고객운영팀</td><td>160</td><td>53,445,625</td><td>53,300,000</td><td>8,456,056</td><td>0</td></tr></tbody></table>
-<p class="note">개발본부는 평균과 중앙값이 가장 높고, 고객운영팀은 평균과 중앙값이 가장 낮다. 데이터전략팀은 표준편차가 가장 커서 부서 안 연봉의 퍼짐이 비교적 크다.</p></div></section>
-<section id="s10" class="slide slide-table"><div class="slide-inner"><h2>카페 주문에서는 평균이 보통 주문금액을 과장할 수 있다</h2>
-<table class="deck-table"><thead><tr><th>상품</th><th>주문 건수</th><th>평균</th><th>중앙값</th><th>평균 - 중앙값</th></tr></thead><tbody><tr><td>치즈케이크</td><td>633</td><td>10,740.92</td><td>6,500</td><td>4,240.92</td></tr><tr><td>레몬에이드</td><td>644</td><td>9,940.99</td><td>6,000</td><td>3,940.99</td></tr><tr><td>크로플</td><td>609</td><td>9,112.48</td><td>5,500</td><td>3,612.48</td></tr><tr><td>바닐라라떼</td><td>1,151</td><td>9,098.18</td><td>5,500</td><td>3,598.18</td></tr><tr><td>복숭아아이스티</td><td>652</td><td>9,051.38</td><td>5,500</td><td>3,551.38</td></tr></tbody></table>
-<p class="note">치즈케이크는 1개 주문 331건, 2개 주문 191건, 3개 주문 111건이어서 평균이 10,740.92원까지 올라간다.</p></div></section>
-<section id="s11" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
-<div class="mission-grid"><div class="mission-card"><div class="m-label">따라하기 1. 부서별 연봉 요약표 만들기</div><div class="m-desc">hr_employees_clean.xlsx의 employees 시트에서 부서별 직원 수, 평균, 중앙값, 최빈값, 범위, 표준편차, 사분위수, IQR, 이상치 수를 계산한다.</div></div><div class="mission-card"><div class="m-label">따라하기 2. 부서별 연봉 박스플롯 만들기</div><div class="m-desc">dept_boxplot 시트에 부서별 salary를 열로 펼치고 상자 수염 그림으로 부서별 연봉 분포를 비교한다.</div></div><div class="mission-card"><div class="m-label">직접 해보기. 평균 왜곡 사례 찾기</div><div class="m-desc">cafe_sales_clean.xlsx의 sales 시트에서 상품별 주문금액 amount의 평균과 중앙값을 비교하고 mean_minus_median이 가장 큰 상품을 해석한다.</div></div></div></div></section>
-<section id="s12" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
-<ul class="bullets"><li>평균은 전체 수준을 빠르게 짚어 주지만, 보통의 위치와 극단값 여부까지 설명하지는 못한다.</li>
-<li>중앙값, 최빈값, 범위, 표준편차, 박스플롯을 함께 보면 중심과 산포를 함께 말할 수 있다.</li>
-<li>치즈케이크 사례처럼 평균이 중앙값보다 높을 때는 주문 수량 같은 원인을 확인해야 한다.</li></ul>
-<div class="next"><b>다음 차시</b>: S06에서는 상관 vs 인과, 심슨의 역설을 다루고 두 수치형 변수가 함께 움직이는 사실과 원인 주장을 구분한다.</div></div></section>
+<p class="subtitle">평균만 보지 않고 보통값, 퍼짐, 이상치도 함께 읽는다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>학습 후 할 수 있는 것</h2>
+<ul class="obj-grid"><li>평균·중앙값·최빈값을 구분한다</li>
+<li>범위와 표준편차로 퍼짐을 읽는다</li>
+<li>박스플롯으로 이상치 후보를 찾는다</li>
+<li>평균이 왜곡되는 사례를 설명한다</li></ul></div></section>
+<section id="s3" class="slide slide-image"><div class="slide-inner"><h2>숫자 한 열을 읽는 지도</h2>
+<div class="img-wrap"><img src="../images/deck/stats.png" alt="통계 개념 인포그래픽"/></div>
+<div class="viz-cap">중심, 산포, 분포를 함께 보면 평균의 한계가 보인다.</div></div></section>
+<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>대표값마다 역할이 다르다</h2>
+<p class="body">평균은 전체 수준, 중앙값은 보통의 위치, 최빈값은 가장 자주 나온 값을 나타낸다.</p>
+<ul class="bullets"><li>평균: 전체 합계 ÷ 개수</li>
+<li>중앙값: 순서대로 세웠을 때 가운데</li>
+<li>최빈값: 가장 자주 나온 값</li>
+<li>평균이 높으면 큰 값이 끌어올렸을 수 있다</li></ul></div></section>
+<section id="s5" class="slide slide-chart"><div class="slide-inner"><h2>평균 연봉은 개발본부가 높다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="78" y="46" width="113" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="134" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">74,190,541원</text><text x="134" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">개발본부</text><rect x="266" y="71" width="113" height="327" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="322" y="59" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">68,902,000원</text><text x="322" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">데이터전략팀</text><rect x="454" y="99" width="113" height="299" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="87" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">63,087,500원</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">영업본부</text><rect x="642" y="116" width="113" height="282" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="698" y="104" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">59,414,444원</text><text x="698" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">인사총무팀</text><rect x="830" y="144" width="113" height="254" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="886" y="132" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">53,445,625원</text><text x="886" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">고객운영팀</text><line x1="880" y1="88" x2="134" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="134" cy="40" r="4" fill="#828fff"/><rect x="787" y="46" width="185" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="880" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">74,190,541원</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>개발본부 평균이 가장 높고 고객운영팀이 가장 낮다.</div></div></section>
+<section id="s6" class="slide slide-chart"><div class="slide-inner"><h2>중앙값도 같은 순서다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="78" y="46" width="113" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="134" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">73,950,000원</text><text x="134" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">개발본부</text><rect x="266" y="72" width="113" height="326" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="322" y="60" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">68,450,000원</text><text x="322" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">데이터전략팀</text><rect x="454" y="100" width="113" height="298" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="88" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">62,700,000원</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">영업본부</text><rect x="642" y="117" width="113" height="281" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="698" y="105" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">59,100,000원</text><text x="698" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">인사총무팀</text><rect x="830" y="144" width="113" height="254" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="886" y="132" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">53,300,000원</text><text x="886" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">고객운영팀</text><line x1="880" y1="88" x2="134" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="134" cy="40" r="4" fill="#828fff"/><rect x="787" y="46" width="185" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="880" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">73,950,000원</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>보통 위치로 보아도 개발본부가 높고 고객운영팀이 낮다.</div></div></section>
+<section id="s7" class="slide slide-chart"><div class="slide-inner"><h2>퍼짐은 데이터전략팀이 크다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="78" y="80" width="113" height="318" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="134" y="68" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">8,094,278원</text><text x="134" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">개발본부</text><rect x="266" y="46" width="113" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="322" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">8,955,824원</text><text x="322" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">데이터전략팀</text><rect x="454" y="81" width="113" height="317" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="69" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">8,070,936원</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">영업본부</text><rect x="642" y="53" width="113" height="345" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="698" y="41" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">8,771,463원</text><text x="698" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">인사총무팀</text><rect x="830" y="66" width="113" height="332" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="886" y="54" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">8,456,056원</text><text x="886" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">고객운영팀</text><line x1="887" y1="88" x2="322" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="322" cy="40" r="4" fill="#828fff"/><rect x="802" y="46" width="170" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="887" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">8,955,824원</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>데이터전략팀은 부서 내 연봉 퍼짐이 가장 크다.</div></div></section>
+<section id="s8" class="slide slide-chart"><div class="slide-inner"><h2>이상치 후보는 개발본부가 많다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="78" y="46" width="113" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="134" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">6건</text><text x="134" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">개발본부</text><rect x="266" y="281" width="113" height="117" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="322" y="269" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2건</text><text x="322" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">데이터전략팀</text><rect x="454" y="222" width="113" height="176" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="210" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3건</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">영업본부</text><rect x="642" y="222" width="113" height="176" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="698" y="210" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3건</text><text x="698" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">인사총무팀</text><rect x="830" y="398" width="113" height="0" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="886" y="386" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">0건</text><text x="886" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">고객운영팀</text><line x1="947" y1="88" x2="134" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="134" cy="40" r="4" fill="#828fff"/><rect x="922" y="46" width="50" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="947" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">6건</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>개발본부에는 위쪽 이상치 후보가 있고 고객운영팀에는 없다.</div></div></section>
+<section id="s9" class="slide slide-table"><div class="slide-inner"><h2>박스플롯은 분포를 접어 보여준다</h2>
+<table class="deck-table"><thead><tr><th>요소</th><th>뜻</th></tr></thead><tbody><tr><td>박스 아래쪽</td><td>1사분위수</td></tr><tr><td>박스 안의 선</td><td>중앙값</td></tr><tr><td>박스 위쪽</td><td>3사분위수</td></tr><tr><td>박스 높이</td><td>가운데 50% 퍼짐</td></tr><tr><td>따로 찍힌 점</td><td>이상치 후보</td></tr></tbody></table>
+<p class="note">수염은 일반적인 최솟값과 최댓값 범위를 나타낸다.</p></div></section>
+<section id="s10" class="slide slide-chart"><div class="slide-inner"><h2>전체 주문금액은 평균이 높다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="78" y="241" width="113" height="157" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="134" y="229" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">8681.17원</text><text x="134" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">평균</text><rect x="266" y="281" width="113" height="117" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="322" y="269" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">6,500원</text><text x="322" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">중앙값</text><rect x="454" y="299" width="113" height="99" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="287" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">5,500원</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">최빈값</text><rect x="642" y="344" width="113" height="54" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="698" y="332" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3,000원</text><text x="698" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">최솟값</text><rect x="830" y="46" width="113" height="352" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="886" y="34" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">19,500원</text><text x="886" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">최댓값</text><line x1="872" y1="88" x2="134" y2="235" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="134" cy="235" r="4" fill="#828fff"/><rect x="772" y="46" width="200" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="872" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">평균 8,681.17원</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>평균이 중앙값보다 높아 큰 주문의 영향을 받는다.</div></div></section>
+<section id="s11" class="slide slide-chart"><div class="slide-inner"><h2>평균 왜곡 후보는 치즈케이크다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="78" y="46" width="113" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="134" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">4240.92원</text><text x="134" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">치즈케이크</text><rect x="266" y="71" width="113" height="327" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="322" y="59" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3940.99원</text><text x="322" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">레몬에이드</text><rect x="454" y="98" width="113" height="300" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="86" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3612.48원</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">크로플</text><rect x="642" y="99" width="113" height="299" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="698" y="87" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3598.18원</text><text x="698" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">바닐라라떼</text><rect x="830" y="103" width="113" height="295" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="886" y="91" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3551.38원</text><text x="886" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">복숭아아이스티</text><line x1="894" y1="88" x2="134" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="134" cy="40" r="4" fill="#828fff"/><rect x="817" y="46" width="155" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="894" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">4,240.92원</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>치즈케이크의 평균-중앙값 차이가 가장 크다.</div></div></section>
+<section id="s12" class="slide slide-chart"><div class="slide-inner"><h2>수량 분포가 평균을 끌어올린다</h2>
+<div class="viz"><svg viewBox="0 0 1000 470" role="img"><line x1="40" y1="398" x2="980" y2="398" stroke="#2b2d33" stroke-width="1.5"/><rect x="122" y="46" width="150" height="352" rx="6" fill="#828fff" stroke="#828fff" stroke-width="1.5"/><text x="197" y="34" text-anchor="middle" fill="#f7f8f8" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">331건</text><text x="197" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">1개 주문</text><rect x="435" y="195" width="150" height="203" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="510" y="183" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">191건</text><text x="510" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">2개 주문</text><rect x="748" y="280" width="150" height="118" rx="6" fill="#1b1c1e" stroke="#2b2d33" stroke-width="1.5"/><text x="823" y="268" text-anchor="middle" fill="#d0d6e0" font-size="26" font-weight="600" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">111건</text><text x="823" y="432" text-anchor="middle" fill="#8a8f98" font-size="24" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">3개 주문</text><line x1="887" y1="88" x2="197" y2="40" stroke="#828fff" stroke-width="1.5" stroke-dasharray="4 4" opacity="0.7"/><circle cx="197" cy="40" r="4" fill="#828fff"/><rect x="802" y="46" width="170" height="42" rx="9" fill="#1b1c1e" stroke="#828fff" stroke-width="2"/><text x="887" y="74" text-anchor="middle" fill="#828fff" font-size="24" font-weight="700" font-family="PretendardDeck, -apple-system, BlinkMacSystemFont, sans-serif">1개 주문 331건</text></svg></div>
+<div class="result-line"><span class="lead">결과</span>1개 주문이 가장 많지만 2·3개 주문 302건이 평균을 올린다.</div></div></section>
+<section id="s13" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 부서별 연봉 요약</div><div class="m-desc">평균, 중앙값, 범위, 표준편차, 이상치 수를 구한다.</div></div><div class="mission-card"><div class="m-label">미션 2. 평균 왜곡 찾기</div><div class="m-desc">치즈케이크처럼 평균이 보통값을 과장하는 사례를 설명한다.</div></div></div></div></section>
+<section id="s14" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>평균은 전체 수준을 빠르게 보여 준다.</li>
+<li>중앙값과 최빈값은 보통의 위치를 보완한다.</li>
+<li>표준편차와 박스플롯은 퍼짐과 이상치를 보여 준다.</li></ul>
+<div class="next"><b>다음 차시</b> — 평균 해석을 다음 분석 실습에 연결한다.</div></div></section>
 </main>
 <script>
 const deck=document.querySelector('.deck');
