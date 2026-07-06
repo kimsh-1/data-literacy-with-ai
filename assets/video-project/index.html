@@ -1,58 +1,338 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=1920, height=1080" />
+    <title>데이터 리터러시 with AI — Intro</title>
     <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
     <style>
-      * {
-        margin: 0;
-        padding: 0;
-        box-sizing: border-box;
+      @font-face {
+        font-family: "Pretendard Variable";
+        src: url("assets/fonts/PretendardVariable.woff2") format("woff2-variations"),
+             local("Pretendard Variable"), local("Pretendard");
+        font-weight: 45 920;
+        font-display: block;
       }
-      html,
-      body {
-        margin: 0;
-        width: 1920px;
-        height: 1080px;
-        overflow: hidden;
-        background: #000;
+      * { margin: 0; padding: 0; box-sizing: border-box; }
+      :root {
+        --bg: #010102;
+        --accent: #5E6AD2;
+        --accent-2: #8B93E8;
+        --text: #F7F8F8;
+        --muted: #8A8F98;
+        --hair: rgba(247, 248, 248, 0.09);
+        --hair-soft: rgba(247, 248, 248, 0.045);
+        --glow: rgba(94, 106, 210, 0.55);
       }
-      body {
-        font-family: "Inter", sans-serif;
+      html, body {
+        width: 1920px; height: 1080px; overflow: hidden;
+        background: var(--bg);
+        font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont, sans-serif;
+        color: var(--text);
+        -webkit-font-smoothing: antialiased;
       }
-      code,
-      pre,
-      .monospace {
-        font-family: "JetBrains Mono", monospace;
+      #root { position: relative; width: 1920px; height: 1080px; overflow: hidden; background: var(--bg); }
+
+      .clip { position: absolute; inset: 0; }
+      .scene-inner { position: absolute; inset: 0; }
+      .tnum { font-variant-numeric: tabular-nums; font-feature-settings: "tnum" 1; }
+
+      /* ---------- Background ---------- */
+      .bgfill { position: absolute; inset: 0; background: var(--bg); }
+      .bg-glow {
+        position: absolute; width: 1400px; height: 1400px; left: 50%; top: 50%;
+        transform: translate(-50%, -50%);
+        background: radial-gradient(circle, rgba(94,106,210,0.18) 0%, rgba(94,106,210,0.06) 30%, rgba(94,106,210,0) 62%);
+        will-change: transform, opacity;
       }
+      .bg-frame { position: absolute; inset: 44px; border: 1px solid var(--hair); }
+      .bg-vline { position: absolute; top: 44px; bottom: 44px; width: 1px; background: var(--hair-soft); }
+      .bg-label { position: absolute; font-size: 15px; letter-spacing: 0.28em; color: var(--muted); text-transform: uppercase; font-weight: 500; }
+      .prog-wrap { position: absolute; left: 44px; right: 44px; bottom: 44px; height: 1px; background: var(--hair); }
+      .prog-bar { position: absolute; left: 0; top: 0; height: 1px; width: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transform: scaleX(0); transform-origin: left center; box-shadow: 0 0 10px var(--glow); }
+
+      /* ---------- Shared type ---------- */
+      .center-col { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      .kicker { font-size: 17px; letter-spacing: 0.42em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+      /* S1 */
+      .s1-word { font-size: 168px; font-weight: 800; letter-spacing: -0.05em; line-height: 1.02; display: block; }
+      .s1-wai { font-size: 120px; font-weight: 800; letter-spacing: -0.04em; color: var(--accent); margin-top: 14px; display: flex; gap: 2px; }
+      .s1-wai .ch { display: inline-block; text-shadow: 0 0 34px var(--glow); }
+      .s1-underline { width: 0; height: 2px; margin-top: 34px; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
+
+      /* S2 journey */
+      .s2-step { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+      .s2-ghost { position: absolute; font-size: 560px; font-weight: 800; color: rgba(94,106,210,0.06); letter-spacing: -0.04em; line-height: 1; user-select: none; }
+      .s2-kick { font-size: 20px; letter-spacing: 0.4em; color: var(--accent-2); font-weight: 600; margin-bottom: 22px; text-transform: uppercase; }
+      .s2-word { font-size: 210px; font-weight: 800; letter-spacing: -0.05em; line-height: 1; }
+      .s2-desc { font-size: 26px; color: var(--muted); margin-top: 30px; letter-spacing: -0.01em; font-weight: 500; }
+      .s2-rail { position: absolute; left: 50%; transform: translateX(-50%); bottom: 150px; width: 1080px; height: 2px; }
+      .s2-rail-track { position: absolute; inset: 0; background: var(--hair); }
+      .s2-rail-fill { position: absolute; left: 0; top: 0; height: 2px; width: 100%; background: var(--accent); transform: scaleX(0); transform-origin: left; box-shadow: 0 0 8px var(--glow); }
+      .s2-node { position: absolute; top: 50%; width: 12px; height: 12px; border-radius: 50%; background: var(--bg); border: 1px solid var(--muted); transform: translate(-50%, -50%) scale(0.8); }
+      .s2-node-lbl { position: absolute; top: 26px; transform: translateX(-50%); font-size: 15px; letter-spacing: 0.24em; color: var(--muted); text-transform: uppercase; font-weight: 600; white-space: nowrap; }
+
+      /* S3 stats + chart */
+      .s3-grid { position: absolute; inset: 0; display: grid; grid-template-columns: 720px 1fr; gap: 88px; padding: 158px 120px 130px; align-items: center; }
+      .s3-title { position: absolute; top: 100px; left: 120px; }
+      .stat-row { display: flex; align-items: baseline; gap: 20px; padding: 28px 0; border-top: 1px solid var(--hair); }
+      .stat-row:last-child { border-bottom: 1px solid var(--hair); }
+      .stat-num { font-size: 128px; font-weight: 800; letter-spacing: -0.05em; line-height: 0.9; color: var(--text); }
+      .stat-unit { font-size: 38px; font-weight: 700; color: var(--accent); letter-spacing: -0.02em; }
+      .stat-lbl { margin-left: auto; text-align: right; font-size: 21px; color: var(--muted); font-weight: 500; letter-spacing: 0.01em; align-self: center; line-height: 1.4; }
+      .stat-lbl span { display: block; }
+      .chart-panel { position: relative; height: 560px; border: 1px solid var(--hair); background: rgba(94,106,210,0.02); }
+      .chart-cap { position: absolute; top: 20px; left: 44px; font-size: 15px; letter-spacing: 0.24em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+      .chart-hline { position: absolute; left: 44px; right: 44px; height: 1px; background: var(--hair-soft); }
+      .chart-svg { position: absolute; left: 44px; right: 44px; top: 62px; bottom: 78px; width: calc(100% - 88px); height: auto; overflow: visible; }
+      .chart-bars { position: absolute; left: 44px; right: 44px; bottom: 40px; height: 300px; display: flex; align-items: flex-end; justify-content: space-between; gap: 22px; }
+      .bar { flex: 1; background: linear-gradient(180deg, rgba(94,106,210,0.9), rgba(94,106,210,0.22)); transform: scaleY(0); transform-origin: bottom center; border-radius: 2px 2px 0 0; }
+
+      /* S4 message */
+      .s4-line { overflow: hidden; padding: 4px 0; }
+      .s4-inner { display: block; font-size: 96px; font-weight: 700; letter-spacing: -0.045em; line-height: 1.14; }
+      .s4-accent { color: var(--accent); }
+      .s4-underline { height: 2px; width: 0; margin: 30px auto 0; background: linear-gradient(90deg, transparent, var(--accent), transparent); }
+
+      /* S5 lockup */
+      .s5-lock { font-size: 150px; font-weight: 800; letter-spacing: -0.05em; line-height: 1.0; text-align: center; }
+      .s5-ai { color: var(--accent); text-shadow: 0 0 44px var(--glow); }
+      .s5-tag { margin-top: 40px; font-size: 22px; letter-spacing: 0.34em; text-transform: uppercase; color: var(--muted); font-weight: 600; text-align: center; }
+      .s5-bloom { position: absolute; left: 50%; top: 50%; width: 1200px; height: 800px; transform: translate(-50%,-50%); background: radial-gradient(ellipse, rgba(94,106,210,0.22) 0%, rgba(94,106,210,0) 60%); opacity: 0; }
     </style>
   </head>
   <body>
-    <div
-      id="root"
-      data-composition-id="main"
-      data-start="0"
-      data-duration="10"
-      data-width="1920"
-      data-height="1080"
-    >
-      
-      
+    <div id="root" data-composition-id="main" data-start="0" data-width="1920" data-height="1080" data-duration="30" data-fps="30">
 
-      <!--
-        Add your clips here. Example:
-        <div id="title" class="clip" data-start="0" data-duration="5" data-track-index="1"
-             style="font-size: 64px; color: #fff; padding: 40px">
-          Hello World
+      <!-- BGM: direct child of root, framework owns playback -->
+      <audio id="bgm" src="assets/bgm/track.mp3" data-start="0" data-duration="30" data-track-index="10" data-volume="0.9"></audio>
+
+      <!-- ============ BACKGROUND (persistent) ============ -->
+      <div id="bg" class="clip" data-start="0" data-duration="30" data-track-index="0" style="z-index:0">
+        <div class="bgfill"></div>
+        <div class="bg-glow" id="bgGlow"></div>
+        <div class="bg-vline" style="left:33.33%"></div>
+        <div class="bg-vline" style="left:66.66%"></div>
+        <div class="bg-frame"></div>
+        <div class="bg-label" style="left:64px; top:66px">데이터 리터러시 · AI</div>
+        <div class="bg-label" style="right:64px; top:66px">16 : 9 · 00:30</div>
+        <div class="bg-label" id="bgSceneNo" style="left:64px; bottom:66px">01 / 05</div>
+        <div class="bg-label" style="right:64px; bottom:66px">AI DATA ANALYSIS</div>
+        <div class="prog-wrap"><div class="prog-bar" id="progBar"></div></div>
+      </div>
+
+      <!-- ============ S1 — TITLE EMERGENCE ============ -->
+      <div id="s1" class="clip" data-start="0" data-duration="4.4" data-track-index="1" style="z-index:1">
+        <div class="scene-inner" id="s1in">
+          <div class="center-col">
+            <div class="s1-word" id="s1w1">데이터 리터러시</div>
+            <div class="s1-wai" id="s1wai">
+              <span class="ch">w</span><span class="ch">i</span><span class="ch">t</span><span class="ch">h</span><span class="ch" style="width:36px"></span><span class="ch">A</span><span class="ch">I</span>
+            </div>
+            <div class="s1-underline" id="s1ul"></div>
+          </div>
         </div>
-      -->
+      </div>
+
+      <!-- ============ S2 — JOURNEY: 엑셀 → AI → 파이썬 → BI ============ -->
+      <div id="s2" class="clip" data-start="4" data-duration="8.4" data-track-index="2" style="z-index:2">
+        <div class="scene-inner" id="s2in">
+          <div class="s2-step" id="s2s0">
+            <div class="s2-ghost">01</div>
+            <div class="s2-kick">STEP 01 · EXCEL</div>
+            <div class="s2-word">엑셀</div>
+            <div class="s2-desc">익숙한 스프레드시트에서 출발한다</div>
+          </div>
+          <div class="s2-step" id="s2s1">
+            <div class="s2-ghost">02</div>
+            <div class="s2-kick">STEP 02 · AI</div>
+            <div class="s2-word">AI</div>
+            <div class="s2-desc">생성형 AI로 분석의 속도를 끌어올린다</div>
+          </div>
+          <div class="s2-step" id="s2s2">
+            <div class="s2-ghost">03</div>
+            <div class="s2-kick">STEP 03 · PYTHON</div>
+            <div class="s2-word">파이썬</div>
+            <div class="s2-desc">코드로 데이터를 다루는 폭을 넓힌다</div>
+          </div>
+          <div class="s2-step" id="s2s3">
+            <div class="s2-ghost">04</div>
+            <div class="s2-kick">STEP 04 · BI</div>
+            <div class="s2-word">BI</div>
+            <div class="s2-desc">대시보드로 의사결정을 완성한다</div>
+          </div>
+          <div class="s2-rail">
+            <div class="s2-rail-track"></div>
+            <div class="s2-rail-fill" id="s2fill"></div>
+            <div class="s2-node" id="s2n0" style="left:4%"><div class="s2-node-lbl">Excel</div></div>
+            <div class="s2-node" id="s2n1" style="left:36%"><div class="s2-node-lbl">AI</div></div>
+            <div class="s2-node" id="s2n2" style="left:68%"><div class="s2-node-lbl">Python</div></div>
+            <div class="s2-node" id="s2n3" style="left:100%"><div class="s2-node-lbl">BI</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ S3 — COUNT-UP + CHARTS ============ -->
+      <div id="s3" class="clip" data-start="12" data-duration="8.4" data-track-index="3" style="z-index:3">
+        <div class="scene-inner" id="s3in">
+          <div class="s3-title"><div class="kicker">숫자로 보는 과정</div></div>
+          <div class="s3-grid">
+            <div>
+              <div class="stat-row" id="st0">
+                <div class="stat-num tnum" id="n0">0</div>
+                <div class="stat-unit">종</div>
+                <div class="stat-lbl"><span>실무 그대로의</span><span>실데이터셋</span></div>
+              </div>
+              <div class="stat-row" id="st1">
+                <div class="stat-num tnum" id="n1">0</div>
+                <div class="stat-unit">차시</div>
+                <div class="stat-lbl"><span>엑셀에서 BI까지</span><span>전체 커리큘럼</span></div>
+              </div>
+              <div class="stat-row" id="st2">
+                <div class="stat-num tnum" id="n2">0</div>
+                <div class="stat-unit">만+ 행</div>
+                <div class="stat-lbl"><span>수업에서 직접</span><span>다루는 데이터량</span></div>
+              </div>
+            </div>
+            <div class="chart-panel" id="s3chart">
+              <div class="chart-cap">GROWTH · 분석 역량</div>
+              <div class="chart-hline" style="top:150px"></div>
+              <div class="chart-hline" style="top:260px"></div>
+              <div class="chart-hline" style="top:370px"></div>
+              <div class="chart-bars">
+                <div class="bar" id="b0" style="height:34%"></div>
+                <div class="bar" id="b1" style="height:46%"></div>
+                <div class="bar" id="b2" style="height:55%"></div>
+                <div class="bar" id="b3" style="height:70%"></div>
+                <div class="bar" id="b4" style="height:82%"></div>
+                <div class="bar" id="b5" style="height:96%"></div>
+              </div>
+              <svg class="chart-svg" viewBox="0 0 720 320" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="rgba(94,106,210,0.34)"/>
+                    <stop offset="100%" stop-color="rgba(94,106,210,0)"/>
+                  </linearGradient>
+                </defs>
+                <path id="chartArea" d="M15,270 L135,240 L255,215 L375,160 L495,120 L615,66 L705,40 L705,320 L15,320 Z" fill="url(#areaGrad)" opacity="0"/>
+                <path id="chartLine" d="M15,270 L135,240 L255,215 L375,160 L495,120 L615,66 L705,40" fill="none" stroke="#5E6AD2" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" pathLength="1" style="stroke-dasharray:1;stroke-dashoffset:1; filter: drop-shadow(0 0 8px rgba(94,106,210,0.6))"/>
+                <circle class="cdot" cx="15" cy="270" r="5" fill="#8B93E8"/>
+                <circle class="cdot" cx="255" cy="215" r="5" fill="#8B93E8"/>
+                <circle class="cdot" cx="495" cy="120" r="5" fill="#8B93E8"/>
+                <circle class="cdot" cx="705" cy="40" r="6" fill="#F7F8F8"/>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ S4 — KEY MESSAGE ============ -->
+      <div id="s4" class="clip" data-start="20" data-duration="7.4" data-track-index="4" style="z-index:4">
+        <div class="scene-inner" id="s4in">
+          <div class="center-col">
+            <div class="s4-line"><div class="s4-inner" id="s4l1">엑셀만 쓰던 당신이,</div></div>
+            <div class="s4-line"><div class="s4-inner" id="s4l2"><span class="s4-accent" id="s4acc">AI와 함께</span> 데이터로 답한다</div></div>
+            <div class="s4-underline" id="s4ul"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ============ S5 — TITLE LOCKUP ============ -->
+      <div id="s5" class="clip" data-start="27" data-duration="3" data-track-index="5" style="z-index:5">
+        <div class="scene-inner" id="s5in">
+          <div class="s5-bloom" id="s5bloom"></div>
+          <div class="center-col">
+            <div class="s5-lock" id="s5lock">데이터 리터러시 <span class="s5-ai" id="s5ai">with AI</span></div>
+            <div class="s5-tag" id="s5tag">AI 데이터 분석 실무 과정</div>
+          </div>
+        </div>
+      </div>
+
     </div>
 
     <script>
       window.__timelines = window.__timelines || {};
       const tl = gsap.timeline({ paused: true });
-      // Example: tl.from("#title", { opacity: 0, y: -50, duration: 1 }, 0);
+      const E = "power3.out";
+
+      /* ---------- Background ---------- */
+      tl.to("#progBar", { scaleX: 1, duration: 30, ease: "none" }, 0);
+      tl.to("#bgGlow", { scale: 1.16, opacity: 0.78, duration: 10, ease: "sine.inOut", yoyo: true, repeat: 2 }, 0);
+      // seek-safe scene counter, recomputed from timeline time (no TextPlugin dependency)
+      const scProxy = { p: 0 };
+      tl.to(scProxy, { p: 1, duration: 30, ease: "none", onUpdate: () => {
+        const t = tl.time();
+        const n = t < 4 ? 1 : t < 12 ? 2 : t < 20 ? 3 : t < 27 ? 4 : 5;
+        const el = document.getElementById("bgSceneNo");
+        if (el) el.textContent = "0" + n + " / 05";
+      } }, 0);
+
+      /* ---------- S1 ---------- */
+      tl.from("#s1w1", { yPercent: 60, opacity: 0, duration: 0.9, ease: E }, 0.3);
+      tl.from("#s1wai .ch", {
+        opacity: 0, duration: 0.7, ease: "back.out(1.7)",
+        y: (i) => (i % 2 ? 46 : -46), scale: 0.5, rotationZ: (i) => (i % 2 ? 9 : -9),
+        stagger: 0.06
+      }, 1.5);
+      tl.to("#s1ul", { width: 620, duration: 0.8, ease: E }, 1.7);
+      tl.to("#s1in", { opacity: 0, duration: 0.45, ease: "power2.in" }, 3.95);
+
+      /* ---------- S2 journey ---------- */
+      const stepAt = [4.3, 6.3, 8.3, 10.3];
+      gsap.set(["#s2s0", "#s2s1", "#s2s2", "#s2s3"], { opacity: 0 });
+      stepAt.forEach((T, i) => {
+        const s = "#s2s" + i;
+        if (i > 0) tl.to("#s2s" + (i - 1), { opacity: 0, y: -34, duration: 0.5, ease: "power2.in" }, T - 0.15);
+        tl.to(s, { opacity: 1, duration: 0.5, ease: "power2.out" }, T);
+        tl.from(s + " .s2-word", { yPercent: 22, opacity: 0, scale: 1.06, duration: 0.75, ease: E, immediateRender: false }, T);
+        tl.from(s + " .s2-ghost", { opacity: 0, scale: 1.25, duration: 0.85, ease: E, immediateRender: false }, T);
+        tl.from(s + " .s2-kick", { opacity: 0, y: 16, duration: 0.5, ease: E, immediateRender: false }, T + 0.08);
+        tl.from(s + " .s2-desc", { opacity: 0, y: 16, duration: 0.55, ease: E, immediateRender: false }, T + 0.16);
+        tl.to("#s2fill", { scaleX: (i + 1) / 4, duration: 0.6, ease: E }, T);
+        tl.to("#s2n" + i, { scale: 1.25, backgroundColor: "#5E6AD2", borderColor: "#5E6AD2", boxShadow: "0 0 14px rgba(94,106,210,0.7)", duration: 0.4, ease: E }, T);
+        tl.to("#s2n" + i + " .s2-node-lbl", { color: "#F7F8F8", duration: 0.4 }, T);
+      });
+      tl.to("#s2in", { opacity: 0, duration: 0.45, ease: "power2.in" }, 11.95);
+
+      /* ---------- S3 count-up + charts ---------- */
+      function countUp(sel, from, to, dur, pos) {
+        const o = { v: from };
+        tl.to(o, {
+          v: to, duration: dur, ease: "power2.out", immediateRender: false,
+          onUpdate: () => { const e = document.querySelector(sel); if (e) e.textContent = Math.round(o.v); }
+        }, pos);
+      }
+      tl.from("#s3in .kicker", { opacity: 0, y: 18, duration: 0.6, ease: E, immediateRender: false }, 12.35);
+      ["#st0", "#st1", "#st2"].forEach((s, i) => {
+        tl.from(s, { opacity: 0, x: -40, duration: 0.7, ease: E, immediateRender: false }, 12.4 + i * 0.28);
+      });
+      countUp("#n0", 0, 52, 1.7, 12.6);
+      countUp("#n1", 0, 20, 1.7, 12.9);
+      countUp("#n2", 0, 20, 2.0, 13.2);
+      tl.from("#s3chart", { opacity: 0, scale: 0.97, duration: 0.7, ease: E, immediateRender: false }, 12.6);
+      ["#b0", "#b1", "#b2", "#b3", "#b4", "#b5"].forEach((b, i) => {
+        tl.to(b, { scaleY: 1, duration: 0.7, ease: "power2.out" }, 13.1 + i * 0.09);
+      });
+      tl.to("#chartLine", { strokeDashoffset: 0, duration: 3.6, ease: "power1.inOut" }, 13.6);
+      tl.to("#chartArea", { opacity: 1, duration: 1.8, ease: "power2.out" }, 14.8);
+      tl.from(".cdot", { opacity: 0, scale: 0, transformOrigin: "center", duration: 0.4, ease: "back.out(2)", stagger: 0.5, immediateRender: false }, 14.4);
+      tl.to("#s3in", { opacity: 0, duration: 0.45, ease: "power2.in" }, 19.95);
+
+      /* ---------- S4 message ---------- */
+      tl.from("#s4l1", { yPercent: 115, opacity: 0, duration: 0.85, ease: "power4.out", immediateRender: false }, 20.4);
+      tl.from("#s4l2", { yPercent: 115, opacity: 0, duration: 0.85, ease: "power4.out", immediateRender: false }, 20.72);
+      tl.to("#s4ul", { width: 520, duration: 0.9, ease: E }, 21.7);
+      tl.fromTo("#s4acc", { color: "#5E6AD2" }, { textShadow: "0 0 34px rgba(94,106,210,0.85)", duration: 0.8, ease: "sine.out", immediateRender: false }, 21.6);
+      tl.to("#s4in", { opacity: 0, duration: 0.45, ease: "power2.in" }, 26.95);
+
+      /* ---------- S5 lockup ---------- */
+      tl.from("#s5lock", { scale: 0.9, opacity: 0, duration: 0.9, ease: "power3.out", immediateRender: false }, 27.2);
+      tl.from("#s5tag", { opacity: 0, y: 18, duration: 0.8, ease: E, immediateRender: false }, 27.6);
+      tl.to("#s5bloom", { opacity: 1, duration: 1.1, ease: "sine.out" }, 27.4);
+      tl.fromTo("#s5ai", { textShadow: "0 0 18px rgba(94,106,210,0.4)" }, { textShadow: "0 0 60px rgba(94,106,210,0.95)", duration: 1.3, ease: "sine.inOut", yoyo: true, repeat: 1, immediateRender: false }, 28.2);
+
+      tl.seek(0);
       window.__timelines["main"] = tl;
     </script>
   </body>
