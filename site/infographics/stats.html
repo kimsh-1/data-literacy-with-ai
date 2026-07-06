@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>분포와 상관을 읽는다</title>
+<style>
+  :root{
+    --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a; --surface-4:#191a1b;
+    --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+    --primary:#5e6ad2; --primary-hover:#828fff; --primary-focus:#5e69d1;
+    --hairline:#23252a; --hairline-strong:#34343a; --hairline-tertiary:#3e3e44; --success:#27a644;
+    --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{width:1672px; height:941px; overflow:hidden; background:var(--canvas);}
+  body{position:relative; font-family:var(--font-text); color:var(--ink);}
+
+  .glow{
+    position:absolute; top:-320px; right:-220px; width:900px; height:900px;
+    background: radial-gradient(circle, rgba(94,106,210,0.22) 0%, rgba(94,106,210,0.07) 42%, transparent 72%);
+    pointer-events:none; z-index:1;
+  }
+
+  .caption{
+    position:absolute; top:56px; left:64px; z-index:5;
+    font-family:var(--font-mono); font-size:15px; letter-spacing:0.09em;
+    color:var(--primary-hover);
+  }
+  .title{
+    position:absolute; top:88px; left:64px; z-index:5;
+    font-family:var(--font-display); font-size:46px; font-weight:650; letter-spacing:-1.3px;
+    color:var(--ink);
+  }
+
+  .panels{
+    position:absolute; left:64px; right:64px; top:266px; height:420px; z-index:4;
+    display:flex; gap:24px;
+  }
+  .panel{
+    flex:1; min-width:0; background:var(--surface-2); border:1px solid var(--hairline); border-radius:14px;
+    padding:22px 22px 18px;
+  }
+  .panel .p-title{ font-family:var(--font-display); font-size:19px; font-weight:650; letter-spacing:-0.3px; color:var(--ink); }
+  .panel .p-sub{ margin-top:5px; font-family:var(--font-mono); font-size:12px; color:var(--ink-tertiary); }
+  .panel svg{ display:block; margin-top:10px; }
+
+  .warn{
+    position:absolute; left:64px; top:712px; width:1544px; height:88px; z-index:4;
+    background:rgba(94,106,210,0.08); border:1px solid var(--hairline-strong); border-radius:12px;
+    display:flex; align-items:center; padding:0 30px; gap:20px;
+  }
+  .warn .w-icon{
+    flex-shrink:0; width:36px; height:36px; border-radius:50%;
+    border:1.5px solid var(--primary-hover); color:var(--primary-hover);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-weight:800; font-size:18px;
+  }
+  .warn .w-main{ font-size:18px; color:var(--ink); font-weight:600; }
+  .warn .w-sub{ margin-top:4px; font-size:14px; color:var(--ink-subtle); }
+
+  .footnote{
+    position:absolute; left:64px; right:64px; top:848px; z-index:5;
+    display:flex; justify-content:space-between; align-items:center;
+    border-top:1px solid var(--hairline); padding-top:18px;
+    font-family:var(--font-mono); font-size:14px; color:var(--ink-tertiary); letter-spacing:0.02em;
+  }
+  .footnote .f-strong{ color:var(--primary-hover); }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+
+  <div class="caption">PART 02 · 통계</div>
+  <div class="title">분포와 상관을 읽는다</div>
+
+  <div class="panels">
+    <!-- (a) Histogram + normal curve -->
+    <div class="panel">
+      <div class="p-title">분포 · 히스토그램</div>
+      <div class="p-sub">빈도 + 정규곡선</div>
+      <svg width="458" height="290" viewBox="0 0 458 290">
+        <line x1="15" y1="252" x2="443" y2="252" stroke="#23252a" stroke-width="1.5"/>
+        <g fill="#34343a">
+          <rect x="25" y="222" width="38" height="30" rx="3"/>
+          <rect x="69" y="197" width="38" height="55" rx="3"/>
+          <rect x="113" y="162" width="38" height="90" rx="3"/>
+          <rect x="157" y="112" width="38" height="140" rx="3" fill="#3e3e44"/>
+          <rect x="201" y="72" width="38" height="180" rx="3" fill="#5e6ad2"/>
+          <rect x="245" y="112" width="38" height="140" rx="3" fill="#3e3e44"/>
+          <rect x="289" y="162" width="38" height="90" rx="3"/>
+          <rect x="333" y="197" width="38" height="55" rx="3"/>
+          <rect x="377" y="222" width="38" height="30" rx="3"/>
+        </g>
+        <path d="M 25 235 C 90 210, 150 90, 220 72 C 290 90, 350 210, 415 235"
+              fill="none" stroke="#828fff" stroke-width="2.5" opacity="0.9" stroke-linecap="round"/>
+      </svg>
+    </div>
+
+    <!-- (b) Boxplot -->
+    <div class="panel">
+      <div class="p-title">분포 · 박스플롯</div>
+      <div class="p-sub">사분위수 · 이상치</div>
+      <svg width="458" height="290" viewBox="0 0 458 290">
+        <line x1="15" y1="270" x2="443" y2="270" stroke="#23252a" stroke-width="1.5"/>
+        <!-- whiskers -->
+        <line x1="229" y1="35" x2="229" y2="95" stroke="#8a8f98" stroke-width="1.6"/>
+        <line x1="200" y1="35" x2="258" y2="35" stroke="#8a8f98" stroke-width="1.6"/>
+        <line x1="229" y1="185" x2="229" y2="235" stroke="#8a8f98" stroke-width="1.6"/>
+        <line x1="200" y1="235" x2="258" y2="235" stroke="#8a8f98" stroke-width="1.6"/>
+        <!-- box -->
+        <rect x="169" y="95" width="120" height="90" rx="4" fill="#18191a" stroke="#828fff" stroke-width="2"/>
+        <line x1="169" y1="140" x2="289" y2="140" stroke="#828fff" stroke-width="2.4"/>
+        <!-- outliers -->
+        <circle cx="229" cy="252" r="4" fill="none" stroke="#8a8f98" stroke-width="1.6"/>
+        <circle cx="229" cy="263" r="4" fill="none" stroke="#8a8f98" stroke-width="1.6"/>
+
+        <!-- labels -->
+        <text x="300" y="39" font-family="ui-monospace, monospace" font-size="12" fill="#62666d">최댓값</text>
+        <text x="300" y="99" font-family="ui-monospace, monospace" font-size="12" fill="#8a8f98">Q3</text>
+        <text x="300" y="144" font-family="ui-monospace, monospace" font-size="12" fill="#828fff">중앙값</text>
+        <text x="300" y="189" font-family="ui-monospace, monospace" font-size="12" fill="#8a8f98">Q1</text>
+        <text x="300" y="239" font-family="ui-monospace, monospace" font-size="12" fill="#62666d">최솟값</text>
+        <text x="248" y="261" font-family="ui-monospace, monospace" font-size="12" fill="#62666d">이상치</text>
+      </svg>
+    </div>
+
+    <!-- (c) Scatter + trendline -->
+    <div class="panel">
+      <div class="p-title">상관관계</div>
+      <div class="p-sub">molit 실거래가 · 전용면적 ↔ 거래금액</div>
+      <svg width="458" height="290" viewBox="0 0 458 290">
+        <line x1="20" y1="20" x2="20" y2="280" stroke="#23252a" stroke-width="1.5"/>
+        <line x1="20" y1="280" x2="440" y2="280" stroke="#23252a" stroke-width="1.5"/>
+
+        <g fill="#828fff" opacity="0.85">
+          <circle cx="45" cy="265" r="4.5"/>
+          <circle cx="68" cy="250" r="4.5"/>
+          <circle cx="92" cy="256" r="4.5"/>
+          <circle cx="112" cy="230" r="4.5"/>
+          <circle cx="132" cy="215" r="4.5"/>
+          <circle cx="150" cy="226" r="4.5"/>
+          <circle cx="170" cy="200" r="4.5"/>
+          <circle cx="190" cy="186" r="4.5"/>
+          <circle cx="210" cy="196" r="4.5"/>
+          <circle cx="230" cy="170" r="4.5"/>
+          <circle cx="250" cy="160" r="4.5"/>
+          <circle cx="270" cy="176" r="4.5"/>
+          <circle cx="292" cy="140" r="4.5"/>
+          <circle cx="312" cy="130" r="4.5"/>
+          <circle cx="332" cy="146" r="4.5"/>
+          <circle cx="352" cy="110" r="4.5"/>
+          <circle cx="372" cy="100" r="4.5"/>
+          <circle cx="392" cy="116" r="4.5"/>
+          <circle cx="412" cy="80" r="4.5"/>
+          <circle cx="426" cy="68" r="4.5"/>
+        </g>
+        <line x1="35" y1="272" x2="432" y2="55" stroke="#5e6ad2" stroke-width="2.4" opacity="0.95"/>
+
+        <text x="337" y="283" text-anchor="start" font-family="-apple-system,sans-serif" font-size="12.5" fill="#62666d">전용면적 &#8594;</text>
+        <text x="20" y="14" text-anchor="start" font-family="-apple-system,sans-serif" font-size="12.5" fill="#62666d">거래금액 &#8593;</text>
+
+        <text x="120" y="58" font-family="-apple-system,sans-serif" font-size="21" font-weight="700" fill="#828fff">r = 0.806</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="warn">
+    <div class="w-icon">!</div>
+    <div>
+      <div class="w-main">상관은 인과가 아니다 — 심슨의 역설 주의</div>
+      <div class="w-sub">hr_employees 데이터에서 전체 경향과 그룹별 경향이 반대로 나타나는 사례가 확인됨</div>
+    </div>
+  </div>
+
+  <div class="footnote">
+    <span>데이터셋 &nbsp;·&nbsp; <span class="f-strong">molit 실거래가</span> (r = 0.806) &nbsp;·&nbsp; <span class="f-strong">hr_employees</span> (심슨의 역설)</span>
+    <span>STATISTICS</span>
+  </div>
+</body>
+</html>

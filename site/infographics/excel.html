@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>좋은 데이터의 모양</title>
+<style>
+  :root{
+    --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a; --surface-4:#191a1b;
+    --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+    --primary:#5e6ad2; --primary-hover:#828fff; --primary-focus:#5e69d1;
+    --hairline:#23252a; --hairline-strong:#34343a; --hairline-tertiary:#3e3e44; --success:#27a644;
+    --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{width:1672px; height:941px; overflow:hidden; background:var(--canvas);}
+  body{position:relative; font-family:var(--font-text); color:var(--ink);}
+
+  .glow{
+    position:absolute; top:-320px; right:-220px; width:900px; height:900px;
+    background: radial-gradient(circle, rgba(94,106,210,0.22) 0%, rgba(94,106,210,0.07) 42%, transparent 72%);
+    pointer-events:none; z-index:1;
+  }
+
+  .caption{
+    position:absolute; top:56px; left:64px; z-index:5;
+    font-family:var(--font-mono); font-size:15px; letter-spacing:0.09em;
+    color:var(--primary-hover);
+  }
+  .title{
+    position:absolute; top:88px; left:64px; z-index:5;
+    font-family:var(--font-display); font-size:46px; font-weight:650; letter-spacing:-1.3px;
+    color:var(--ink);
+  }
+
+  /* ---- table block ---- */
+  .table-label{
+    position:absolute; left:356px; top:246px; z-index:4;
+    font-family:var(--font-mono); font-size:14px; color:var(--ink-tertiary); letter-spacing:0.02em;
+  }
+  .datatable{
+    position:absolute; left:356px; top:284px; width:560px; z-index:3;
+    background:var(--surface-2); border:1px solid var(--hairline); border-radius:12px; overflow:hidden;
+  }
+  .datatable .row{
+    display:flex; height:56px; align-items:center;
+    border-bottom:1px solid var(--hairline);
+  }
+  .datatable .row:last-child{ border-bottom:none; }
+  .datatable .row.head{
+    background:var(--surface-3);
+    font-family:var(--font-mono); font-size:13px; color:var(--ink-subtle); letter-spacing:0.04em; text-transform:uppercase;
+  }
+  .datatable .row.hl{
+    background:rgba(94,106,210,0.10);
+  }
+  .datatable .c{ padding:0 22px; font-size:16px; color:var(--ink-muted); }
+  .datatable .c.store{ width:180px; }
+  .datatable .c.category{ width:200px; position:relative; }
+  .datatable .c.amount{ width:180px; text-align:right; font-family:var(--font-mono); color:var(--ink); }
+  .col-box{
+    position:absolute; left:536px; top:284px; width:200px; height:56px; z-index:6;
+    border:1.5px solid var(--primary-hover); border-radius:8px; pointer-events:none;
+  }
+
+  /* callouts */
+  .callout{
+    position:absolute; z-index:6;
+    background:var(--surface-3); border:1px solid var(--hairline-strong); border-radius:8px;
+    padding:10px 16px; font-size:15px; color:var(--ink); font-weight:600; white-space:nowrap;
+  }
+  .callout-row{ top:390px; left:64px; }
+  .callout-col{ top:170px; left:590px; }
+
+  svg.connectors{ position:absolute; inset:0; z-index:5; pointer-events:none; }
+
+  /* pivot arrow */
+  .pivot-arrow{
+    position:absolute; top:398px; left:944px; z-index:4;
+    font-size:30px; color:var(--ink-tertiary);
+  }
+
+  /* pivot result card */
+  .pivot-card{
+    position:absolute; left:1010px; top:284px; width:598px; height:280px; z-index:3;
+    background:var(--surface-2); border:1px solid var(--hairline); border-radius:12px;
+    padding:26px 30px;
+  }
+  .pivot-card .p-title{
+    font-family:var(--font-display); font-size:23px; font-weight:650; letter-spacing:-0.4px; color:var(--ink);
+  }
+  .pivot-card .p-sub{
+    margin-top:6px; font-family:var(--font-mono); font-size:13px; color:var(--ink-tertiary);
+  }
+  .bar-row{ display:flex; align-items:center; gap:16px; margin-top:26px; }
+  .bar-row .b-label{ width:76px; font-size:15px; color:var(--ink-muted); flex-shrink:0; }
+  .bar-track{ flex:1; height:22px; background:var(--surface-3); border-radius:6px; overflow:hidden; }
+  .bar-fill{ height:100%; border-radius:6px; }
+  .bar-fill.g1{ width:88%; background:linear-gradient(90deg,var(--primary),var(--primary-hover)); }
+  .bar-fill.g2{ width:58%; background:var(--hairline-strong); }
+  .bar-row .b-rank{ width:30px; text-align:right; font-family:var(--font-mono); font-size:13px; color:var(--ink-tertiary); }
+  .pivot-note{
+    margin-top:22px; font-size:15.5px; color:var(--ink-subtle);
+  }
+  .pivot-note b{ color:var(--primary-hover); font-weight:700; }
+
+  .footnote{
+    position:absolute; left:64px; right:64px; top:706px; z-index:5;
+    display:flex; justify-content:space-between; align-items:center;
+    border-top:1px solid var(--hairline); padding-top:20px;
+    font-family:var(--font-mono); font-size:14px; color:var(--ink-tertiary); letter-spacing:0.02em;
+  }
+  .footnote .f-strong{ color:var(--primary-hover); }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+
+  <div class="caption">PART 01 · 엑셀</div>
+  <div class="title">좋은 데이터의 모양</div>
+
+  <div class="table-label">cafe_sales · 예시 행</div>
+
+  <div class="col-box"></div>
+  <div class="datatable">
+    <div class="row head">
+      <div class="c store">store</div>
+      <div class="c category">category</div>
+      <div class="c amount">amount</div>
+    </div>
+    <div class="row">
+      <div class="c store">강남점</div>
+      <div class="c category">커피</div>
+      <div class="c amount">4,500</div>
+    </div>
+    <div class="row hl">
+      <div class="c store">강남점</div>
+      <div class="c category">디저트</div>
+      <div class="c amount">6,200</div>
+    </div>
+    <div class="row">
+      <div class="c store">홍대점</div>
+      <div class="c category">음료</div>
+      <div class="c amount">3,800</div>
+    </div>
+    <div class="row">
+      <div class="c store">홍대점</div>
+      <div class="c category">커피</div>
+      <div class="c amount">4,200</div>
+    </div>
+  </div>
+
+  <div class="callout callout-row">한 행 = 한 관측</div>
+  <div class="callout callout-col">한 열 = 한 변수</div>
+
+  <svg class="connectors" width="1672" height="941" viewBox="0 0 1672 941">
+    <!-- row callout to highlighted row (row3, y center 284+56*2+28=424) -->
+    <path d="M 195 405 C 260 405, 300 424, 356 424" fill="none" stroke="#5e6ad2" stroke-width="1.8" opacity="0.8"/>
+    <circle cx="356" cy="424" r="3.5" fill="#828fff"/>
+    <!-- col callout to category header box (box center x=636, top y=284) -->
+    <path d="M 636 210 C 636 240, 636 255, 636 284" fill="none" stroke="#5e6ad2" stroke-width="1.8" opacity="0.8"/>
+    <circle cx="636" cy="284" r="3.5" fill="#828fff"/>
+  </svg>
+
+  <div class="pivot-arrow">&#8594;</div>
+
+  <div class="pivot-card">
+    <div class="p-title">지점별 합계</div>
+    <div class="p-sub">cafe_sales · store 기준 피벗 (그룹합)</div>
+    <div class="bar-row">
+      <div class="b-label">강남점</div>
+      <div class="bar-track"><div class="bar-fill g1"></div></div>
+      <div class="b-rank">1위</div>
+    </div>
+    <div class="bar-row">
+      <div class="b-label">홍대점</div>
+      <div class="bar-track"><div class="bar-fill g2"></div></div>
+      <div class="b-rank">2위</div>
+    </div>
+    <div class="pivot-note">피벗 결과 &nbsp;<b>강남점 매출 &gt; 홍대점 매출</b></div>
+  </div>
+
+  <div class="footnote">
+    <span>데이터셋 &nbsp;·&nbsp; <span class="f-strong">cafe_sales</span> &nbsp;·&nbsp; 10,424행 &nbsp;·&nbsp; 열: store, category, amount</span>
+    <span>TIDY DATA</span>
+  </div>
+</body>
+</html>

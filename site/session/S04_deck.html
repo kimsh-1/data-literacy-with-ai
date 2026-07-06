@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S04 · 실무 함수: VLOOKUP/XLOOKUP과 조건부 집계 — 발표 덱</title>
+<style>
+@font-face{font-family:"PretendardDeck";
+  src:url("../fonts/pretendard-deck-subset.woff2") format("woff2");
+  font-weight:100 900;font-style:normal;font-display:swap;}
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a; --surface-4:#191a1b;
+  --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+  --primary:#5e6ad2; --primary-hover:#828fff; --primary-focus:#5e69d1;
+  --hairline:#23252a; --hairline-strong:#34343a; --hairline-tertiary:#3e3e44; --success:#27a644;
+  --font-display:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;
+  --font-text:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,"PretendardDeck",monospace;
+}
+html,body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font-text);
+  -webkit-font-smoothing:antialiased;letter-spacing:-0.2px;}
+a{color:inherit;text-decoration:none;}
+.deck{scroll-snap-type:y mandatory;overflow-y:scroll;height:100vh;scroll-behavior:smooth;}
+.slide{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:6vh 8vw;position:relative;background:var(--canvas);}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 82% 8%,rgba(94,106,210,0.10),transparent 55%);}
+.eyebrow{font-family:var(--font-mono);font-size:0.82rem;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--primary-hover);margin-bottom:1.4rem;}
+.slide h1{font-family:var(--font-display);font-weight:640;font-size:clamp(2.4rem,5.4vw,4.6rem);
+  line-height:1.02;letter-spacing:-1.6px;margin:0 0 1.4rem;max-width:20ch;}
+.slide h2{font-family:var(--font-display);font-weight:620;font-size:clamp(1.7rem,3.4vw,2.9rem);
+  line-height:1.08;letter-spacing:-1px;margin:0 0 2rem;max-width:24ch;}
+.subtitle{font-size:clamp(1.05rem,1.7vw,1.5rem);color:var(--ink-muted);max-width:44ch;line-height:1.5;}
+.kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
+  text-transform:uppercase;margin-bottom:0.9rem;}
+.body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
+ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
+  color:var(--ink);line-height:1.5;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+  background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
+ul.bullets>li b{color:var(--ink);font-weight:640;}
+.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
+  font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
+.obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
+  font-family:var(--font-mono);font-size:0.95rem;color:var(--primary-hover);
+  border:1px solid var(--hairline-strong);border-radius:8px;padding:0.35em 0.55em;flex:none;margin-top:0.1em;}
+.mission-grid{display:flex;flex-direction:column;gap:1rem;max-width:64ch;}
+.mission-card{border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;
+  padding:1.3rem 1.5rem;}
+.mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
+.mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
+  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
+  font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
+table.deck-table td{color:var(--ink-muted);}
+table.deck-table td:first-child{color:var(--ink);font-weight:560;}
+.note{color:var(--ink-tertiary);font-size:0.95rem;margin-top:1.2rem;max-width:60ch;line-height:1.5;}
+.quote{font-family:var(--font-display);font-weight:560;font-size:clamp(1.5rem,3vw,2.6rem);
+  line-height:1.28;letter-spacing:-0.8px;max-width:26ch;color:var(--ink);}
+.quote::before{content:"\201C";color:var(--primary);}
+.quote::after{content:"\201D";color:var(--primary);}
+.attribution{margin-top:1.6rem;color:var(--ink-subtle);font-size:1.05rem;font-family:var(--font-mono);}
+.closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
+  color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
+.closing .next b{color:var(--primary-hover);}
+/* chrome */
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
+.hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
+  color:var(--ink-subtle);display:flex;gap:14px;align-items:center;}
+.hud .counter{color:var(--ink-muted);}
+.hud a.back{border:1px solid var(--hairline-strong);border-radius:8px;padding:6px 12px;color:var(--ink-muted);
+  background:rgba(15,16,17,0.7);backdrop-filter:blur(6px);transition:border-color .15s,color .15s;}
+.hud a.back:hover{border-color:var(--primary);color:var(--ink);}
+.brand{position:fixed;top:20px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  letter-spacing:0.6px;color:var(--ink-tertiary);}
+.nav-hint{position:fixed;bottom:22px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  color:var(--ink-tertiary);}
+@media (max-width:640px){.slide{padding:8vh 7vw;}.nav-hint{display:none;}}
+@media print{
+  @page{size:1280px 720px;margin:0;}
+  html,body{height:auto;}
+  .deck{height:auto;overflow:visible;scroll-snap-type:none;}
+  .slide{height:720px;min-height:720px;page-break-after:always;break-after:page;background:#06070a;}
+  .progress,.hud,.nav-hint,.brand{display:none;}
+  /* 배포 PDF 경량화: 페이지마다 래스터화되는 그라디언트 글로우 제거 -> 텍스트 벡터만 남겨 용량 최소화 */
+  .slide::after{display:none;}
+  ul.bullets>li::before{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+<div class="brand">데이터 리터러시 with AI</div>
+<div class="hud">
+  <span class="counter"><span class="cur">1</span> / 11</span>
+  <a class="back" href="./S04.html">자료로 돌아가기</a>
+</div>
+<div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
+<main class="deck">
+<section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S04 · PART 01 · 엑셀 · 난이도 2</div>
+<h1>실무 함수: VLOOKUP/XLOOKUP과 조건부 집계</h1>
+<p class="subtitle">orders를 중심 표로 삼아 products와 customers의 값을 붙이고, 매출과 조건부 집계를 계산한다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
+<ul class="obj-grid"><li>주문 표의 상품번호와 고객번호를 기준으로 다른 표의 값을 가져온다.</li>
+<li>VLOOKUP과 XLOOKUP의 차이를 설명한다.</li>
+<li>단가, 수량, 할인율을 이용해 주문별 매출을 계산한다.</li>
+<li>SUMIF, COUNTIF로 조건에 맞는 합계와 건수를 계산한다.</li>
+<li>엑셀 함수 방식이 행이 많아질수록 관리하기 어려워지는 이유를 말한다.</li></ul></div></section>
+<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>분석은 흩어진 표를 잇는 데서 시작한다</h2>
+<p class="body">orders에는 주문번호, 고객번호, 상품번호, 수량, 할인율만 있다. 지역, 등급, 단가는 customers와 products에서 찾아와야 한다.</p>
+<ul class="bullets"><li>product_id는 상품 정보를 찾는 키다.</li>
+<li>customer_id는 고객 정보를 찾는 키다.</li>
+<li>필요한 값을 한 표에 모은 뒤에야 지역별 매출과 등급별 객단가를 계산할 수 있다.</li></ul></div></section>
+<section id="s4" class="slide slide-table"><div class="slide-inner"><h2>세 시트의 역할을 먼저 확인한다</h2>
+<table class="deck-table"><thead><tr><th>시트</th><th>규모</th><th>확인할 컬럼</th></tr></thead><tbody><tr><td>orders</td><td>20,000행, 6열</td><td>customer_id, product_id, qty, discount_rate</td></tr><tr><td>customers</td><td>3,000행, 7열</td><td>customer_id, region, grade</td></tr><tr><td>products</td><td>200행, 5열</td><td>product_id, price</td></tr></tbody></table>
+<p class="note">orders에는 매출 컬럼이 없으므로 products에서 단가를 가져온 뒤 매출을 계산한다.</p></div></section>
+<section id="s5" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<h2>VLOOKUP은 왼쪽 첫 열에서 찾아 오른쪽 값을 가져온다</h2>
+<p class="body">VLOOKUP은 찾을 값, 찾을 표 범위, 가져올 열 번호, 정확히 찾기 여부를 차례로 지정한다.</p>
+<ul class="bullets"><li>상품번호로 상품명, 카테고리, 단가를 가져온다.</li>
+<li>고객번호로 지역과 등급을 가져온다.</li>
+<li>상품번호와 고객번호는 정확히 일치해야 하므로 FALSE를 넣는다.</li>
+<li>가져올 열 번호를 잘못 세면 결과가 조용히 틀릴 수 있다.</li></ul></div></section>
+<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
+<h2>XLOOKUP은 찾을 열과 가져올 열을 직접 지정한다</h2>
+<p class="body">XLOOKUP은 찾을 열과 가져올 열을 따로 지정하므로 열 번호를 셀 필요가 없다.</p>
+<ul class="bullets"><li>최신 엑셀에서는 XLOOKUP이 읽기 쉽고 덜 헷갈린다.</li>
+<li>회사마다 엑셀 버전이 다르므로 VLOOKUP도 읽고 고칠 줄 알아야 한다.</li>
+<li>VLOOKUP으로 이미 값을 채웠다면 XLOOKUP은 같은 작업을 비교하는 방식으로 읽는다.</li></ul></div></section>
+<section id="s7" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
+<h2>매출은 계산 컬럼으로 만든다</h2>
+<p class="body">orders에는 매출이 없으므로 단가, 수량, 할인율을 이용해 직접 계산한다.</p>
+<ul class="bullets"><li>매출 = 단가 × 수량 × (1 - 할인율)이다.</li>
+<li>orders 시트에서는 L2에 =I2*E2*(1-F2)를 입력한다.</li>
+<li>확인할 값은 L2 22,900, L3 35,910, L4 105,800이다.</li></ul></div></section>
+<section id="s8" class="slide slide-table"><div class="slide-inner"><h2>조건부 집계는 질문을 표로 바꾼다</h2>
+<table class="deck-table"><thead><tr><th>질문</th><th>조건 범위</th><th>계산 방식</th></tr></thead><tbody><tr><td>지역별 주문 건수</td><td>orders의 region 열</td><td>COUNTIF로 조건에 맞는 주문을 센다.</td></tr><tr><td>지역별 매출 합계</td><td>orders의 region 열</td><td>SUMIF로 조건에 맞는 sales를 더한다.</td></tr><tr><td>등급별 객단가</td><td>orders의 grade 열</td><td>매출 합계를 주문 건수로 나눈다.</td></tr></tbody></table>
+<p class="note">지역별 검산 기준은 주문 건수 합계 20,000, 매출 합계 1,938,489,803이다.</p></div></section>
+<section id="s9" class="slide slide-table"><div class="slide-inner"><h2>등급별 객단가 정답 기준</h2>
+<table class="deck-table"><thead><tr><th>grade</th><th>order_count</th><th>total_sales</th><th>avg_order_value</th></tr></thead><tbody><tr><td>VIP</td><td>3,757</td><td>393,432,930</td><td>104,719.97</td></tr><tr><td>골드</td><td>5,433</td><td>547,524,985</td><td>100,777.65</td></tr><tr><td>실버</td><td>6,373</td><td>603,583,519</td><td>94,709.48</td></tr><tr><td>브론즈</td><td>4,437</td><td>393,948,369</td><td>88,787.10</td></tr></tbody></table>
+<p class="note">네 등급 중 주문 1건당 평균 매출이 가장 높은 등급은 VIP다.</p></div></section>
+<section id="s10" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션. 등급별 객단가 구하기</div><div class="m-desc">grade_summary 시트를 만들고 고객 등급별 주문 건수, 매출 합계, 객단가를 계산한다.</div></div><div class="mission-card"><div class="m-label">검산하기</div><div class="m-desc">등급별 주문 건수 합계가 20,000이고 매출 합계가 1,938,489,803인지 확인한다.</div></div><div class="mission-card"><div class="m-label">한 문장으로 해석하기</div><div class="m-desc">어떤 등급의 객단가가 가장 높은지 한 문장으로 적는다.</div></div></div></div></section>
+<section id="s11" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>데이터분석은 필요한 정보를 여러 표에서 끌어와 한 표로 모으는 일에서 출발한다.</li>
+<li>엑셀에서는 VLOOKUP이나 XLOOKUP으로 표를 잇고, SUMIF와 COUNTIF로 조건이 붙은 질문에 답한다.</li>
+<li>함수가 늘고 파일이 무거워질수록 실수가 끼어들 자리도 늘어난다.</li></ul>
+<div class="next"><b>다음 차시</b> — 숫자 열 하나를 제대로 읽기 위해 중심, 산포, 분포, 박스플롯을 다룬다.</div></div></section>
+</main>
+<script>
+const deck=document.querySelector('.deck');
+const slides=[...document.querySelectorAll('.slide')];
+const prog=document.querySelector('.progress');
+const counter=document.querySelector('.counter .cur');
+function cur(){let i=0,best=1e9;slides.forEach((s,k)=>{const d=Math.abs(s.getBoundingClientRect().top);if(d<best){best=d;i=k;}});return i;}
+function upd(){const i=cur();prog.style.width=((i+1)/slides.length*100)+'%';if(counter)counter.textContent=i+1;}
+function go(n){const i=Math.max(0,Math.min(slides.length-1,n));slides[i].scrollIntoView({behavior:'smooth'});}
+deck.addEventListener('scroll',()=>{window.requestAnimationFrame(upd);},{passive:true});
+window.addEventListener('keydown',e=>{
+  if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur()+1);}
+  else if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur()-1);}
+  else if(e.key==='Home'){e.preventDefault();go(0);}
+  else if(e.key==='End'){e.preventDefault();go(slides.length-1);}
+  else if(e.key==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+upd();
+</script>
+</body>
+</html>

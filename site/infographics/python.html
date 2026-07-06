@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>코드로 남기는 분석</title>
+<style>
+  :root{
+    --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a; --surface-4:#191a1b;
+    --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+    --primary:#5e6ad2; --primary-hover:#828fff; --primary-focus:#5e69d1;
+    --hairline:#23252a; --hairline-strong:#34343a; --hairline-tertiary:#3e3e44; --success:#27a644;
+    --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{width:1672px; height:941px; overflow:hidden; background:var(--canvas);}
+  body{position:relative; font-family:var(--font-text); color:var(--ink);}
+
+  .glow{
+    position:absolute; top:-320px; right:-220px; width:900px; height:900px;
+    background: radial-gradient(circle, rgba(94,106,210,0.22) 0%, rgba(94,106,210,0.07) 42%, transparent 72%);
+    pointer-events:none; z-index:1;
+  }
+
+  .caption{
+    position:absolute; top:56px; left:64px; z-index:5;
+    font-family:var(--font-mono); font-size:15px; letter-spacing:0.09em;
+    color:var(--primary-hover);
+  }
+  .title{
+    position:absolute; top:88px; left:64px; z-index:5;
+    font-family:var(--font-display); font-size:46px; font-weight:650; letter-spacing:-1.3px;
+    color:var(--ink);
+  }
+
+  /* code editor panel */
+  .code-panel{
+    position:absolute; left:64px; top:280px; width:680px; height:380px; z-index:3;
+    background:var(--surface-2); border:1px solid var(--hairline); border-radius:12px; overflow:hidden;
+  }
+  .code-header{
+    height:46px; display:flex; align-items:center; gap:8px; padding:0 18px;
+    background:var(--surface-3); border-bottom:1px solid var(--hairline);
+  }
+  .code-header .cdot{ width:9px; height:9px; border-radius:50%; background:var(--hairline-strong); }
+  .code-header .fname{
+    margin-left:8px; font-family:var(--font-mono); font-size:13px; color:var(--ink-tertiary);
+  }
+  .code-body{ padding:24px 28px; }
+  .code-line{ display:flex; font-family:var(--font-mono); font-size:16.5px; line-height:2.05; }
+  .code-line .ln{ width:28px; flex-shrink:0; color:var(--ink-tertiary); user-select:none; }
+  .code-line .code{ color:var(--ink-muted); white-space:pre; }
+  .kw{ color:var(--ink-subtle); }
+  .fn{ color:var(--ink); }
+  .str{ color:var(--primary-hover); }
+  .cm{ color:var(--ink-tertiary); font-style:italic; }
+
+  .flow-arrow{
+    position:absolute; top:452px; left:760px; z-index:4; font-size:32px; color:var(--ink-tertiary);
+  }
+
+  /* chart panel */
+  .chart-panel{
+    position:absolute; left:808px; top:280px; width:800px; height:380px; z-index:3;
+    background:var(--surface-2); border:1px solid var(--hairline); border-radius:12px;
+    padding:28px 34px;
+  }
+  .chart-panel .c-title{
+    font-family:var(--font-display); font-size:23px; font-weight:650; letter-spacing:-0.4px; color:var(--ink);
+  }
+  .chart-panel .c-sub{
+    margin-top:6px; font-family:var(--font-mono); font-size:13px; color:var(--ink-tertiary);
+  }
+
+  .footnote{
+    position:absolute; left:64px; right:64px; top:706px; z-index:5;
+    display:flex; justify-content:space-between; align-items:center;
+    border-top:1px solid var(--hairline); padding-top:20px;
+    font-family:var(--font-mono); font-size:14px; color:var(--ink-tertiary); letter-spacing:0.02em;
+  }
+  .footnote .f-strong{ color:var(--primary-hover); }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+
+  <div class="caption">PART 04 · 파이썬</div>
+  <div class="title">코드로 남기는 분석</div>
+
+  <div class="code-panel">
+    <div class="code-header">
+      <div class="cdot"></div><div class="cdot"></div><div class="cdot"></div>
+      <div class="fname">analysis.py</div>
+    </div>
+    <div class="code-body">
+      <div class="code-line"><span class="ln">1</span><span class="code"><span class="kw">import</span> pandas <span class="kw">as</span> pd</span></div>
+      <div class="code-line"><span class="ln">2</span><span class="code">&nbsp;</span></div>
+      <div class="code-line"><span class="ln">3</span><span class="code">df = pd.<span class="fn">read_csv</span>(<span class="str">"cafe_sales.csv"</span>)</span></div>
+      <div class="code-line"><span class="ln">4</span><span class="code">&nbsp;</span></div>
+      <div class="code-line"><span class="ln">5</span><span class="code"><span class="cm"># 지점별 매출 합계</span></span></div>
+      <div class="code-line"><span class="ln">6</span><span class="code">df.<span class="fn">groupby</span>(<span class="str">"store"</span>)[<span class="str">"amount"</span>].<span class="fn">sum</span>()</span></div>
+    </div>
+  </div>
+
+  <div class="flow-arrow">&#8594;</div>
+
+  <div class="chart-panel">
+    <div class="c-title">지점별 매출</div>
+    <div class="c-sub">cafe_sales · store 기준 groupby().sum()</div>
+    <svg width="732" height="250" viewBox="0 0 732 250">
+      <defs>
+        <linearGradient id="barGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stop-color="#828fff"/>
+          <stop offset="100%" stop-color="#5e6ad2"/>
+        </linearGradient>
+      </defs>
+      <line x1="40" y1="210" x2="700" y2="210" stroke="#23252a" stroke-width="1.5"/>
+      <line x1="40" y1="150" x2="700" y2="150" stroke="#23252a" stroke-width="1" stroke-dasharray="4 6"/>
+      <line x1="40" y1="90" x2="700" y2="90" stroke="#23252a" stroke-width="1" stroke-dasharray="4 6"/>
+      <line x1="40" y1="30" x2="700" y2="30" stroke="#23252a" stroke-width="1" stroke-dasharray="4 6"/>
+
+      <rect x="180" y="46" width="120" height="164" rx="6" fill="url(#barGrad)"/>
+      <text x="240" y="34" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" fill="#828fff" font-weight="600">1위</text>
+      <text x="240" y="236" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="17" fill="#d0d6e0">강남점</text>
+
+      <rect x="440" y="108" width="120" height="102" rx="6" fill="#34343a"/>
+      <text x="500" y="96" text-anchor="middle" font-family="ui-monospace, monospace" font-size="14" fill="#8a8f98" font-weight="600">2위</text>
+      <text x="500" y="236" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="17" fill="#d0d6e0">홍대점</text>
+    </svg>
+  </div>
+
+  <div class="footnote">
+    <span>결과 &nbsp;·&nbsp; <span class="f-strong">강남점 매출 &gt; 홍대점 매출</span> &nbsp;·&nbsp; 코드 6줄로 재현 가능</span>
+    <span>REPRODUCIBLE ANALYSIS</span>
+  </div>
+</body>
+</html>

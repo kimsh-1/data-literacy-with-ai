@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S14 · 시각화 실전: matplotlib·seaborn, 한글폰트, BI 핸드오프 — 발표 덱</title>
+<style>
+@font-face{font-family:"PretendardDeck";
+  src:url("../fonts/pretendard-deck-subset.woff2") format("woff2");
+  font-weight:100 900;font-style:normal;font-display:swap;}
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a; --surface-4:#191a1b;
+  --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+  --primary:#5e6ad2; --primary-hover:#828fff; --primary-focus:#5e69d1;
+  --hairline:#23252a; --hairline-strong:#34343a; --hairline-tertiary:#3e3e44; --success:#27a644;
+  --font-display:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;
+  --font-text:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,"PretendardDeck",monospace;
+}
+html,body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font-text);
+  -webkit-font-smoothing:antialiased;letter-spacing:-0.2px;}
+a{color:inherit;text-decoration:none;}
+.deck{scroll-snap-type:y mandatory;overflow-y:scroll;height:100vh;scroll-behavior:smooth;}
+.slide{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:6vh 8vw;position:relative;background:var(--canvas);}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 82% 8%,rgba(94,106,210,0.10),transparent 55%);}
+.eyebrow{font-family:var(--font-mono);font-size:0.82rem;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--primary-hover);margin-bottom:1.4rem;}
+.slide h1{font-family:var(--font-display);font-weight:640;font-size:clamp(2.4rem,5.4vw,4.6rem);
+  line-height:1.02;letter-spacing:-1.6px;margin:0 0 1.4rem;max-width:20ch;}
+.slide h2{font-family:var(--font-display);font-weight:620;font-size:clamp(1.7rem,3.4vw,2.9rem);
+  line-height:1.08;letter-spacing:-1px;margin:0 0 2rem;max-width:24ch;}
+.subtitle{font-size:clamp(1.05rem,1.7vw,1.5rem);color:var(--ink-muted);max-width:44ch;line-height:1.5;}
+.kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
+  text-transform:uppercase;margin-bottom:0.9rem;}
+.body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
+ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
+  color:var(--ink);line-height:1.5;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+  background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
+ul.bullets>li b{color:var(--ink);font-weight:640;}
+.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
+  font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
+.obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
+  font-family:var(--font-mono);font-size:0.95rem;color:var(--primary-hover);
+  border:1px solid var(--hairline-strong);border-radius:8px;padding:0.35em 0.55em;flex:none;margin-top:0.1em;}
+.mission-grid{display:flex;flex-direction:column;gap:1rem;max-width:64ch;}
+.mission-card{border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;
+  padding:1.3rem 1.5rem;}
+.mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
+.mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
+  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
+  font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
+table.deck-table td{color:var(--ink-muted);}
+table.deck-table td:first-child{color:var(--ink);font-weight:560;}
+.note{color:var(--ink-tertiary);font-size:0.95rem;margin-top:1.2rem;max-width:60ch;line-height:1.5;}
+.quote{font-family:var(--font-display);font-weight:560;font-size:clamp(1.5rem,3vw,2.6rem);
+  line-height:1.28;letter-spacing:-0.8px;max-width:26ch;color:var(--ink);}
+.quote::before{content:"\201C";color:var(--primary);}
+.quote::after{content:"\201D";color:var(--primary);}
+.attribution{margin-top:1.6rem;color:var(--ink-subtle);font-size:1.05rem;font-family:var(--font-mono);}
+.closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
+  color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
+.closing .next b{color:var(--primary-hover);}
+/* chrome */
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
+.hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
+  color:var(--ink-subtle);display:flex;gap:14px;align-items:center;}
+.hud .counter{color:var(--ink-muted);}
+.hud a.back{border:1px solid var(--hairline-strong);border-radius:8px;padding:6px 12px;color:var(--ink-muted);
+  background:rgba(15,16,17,0.7);backdrop-filter:blur(6px);transition:border-color .15s,color .15s;}
+.hud a.back:hover{border-color:var(--primary);color:var(--ink);}
+.brand{position:fixed;top:20px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  letter-spacing:0.6px;color:var(--ink-tertiary);}
+.nav-hint{position:fixed;bottom:22px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  color:var(--ink-tertiary);}
+@media (max-width:640px){.slide{padding:8vh 7vw;}.nav-hint{display:none;}}
+@media print{
+  @page{size:1280px 720px;margin:0;}
+  html,body{height:auto;}
+  .deck{height:auto;overflow:visible;scroll-snap-type:none;}
+  .slide{height:720px;min-height:720px;page-break-after:always;break-after:page;background:#06070a;}
+  .progress,.hud,.nav-hint,.brand{display:none;}
+  /* 배포 PDF 경량화: 페이지마다 래스터화되는 그라디언트 글로우 제거 -> 텍스트 벡터만 남겨 용량 최소화 */
+  .slide::after{display:none;}
+  ul.bullets>li::before{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+<div class="brand">데이터 리터러시 with AI</div>
+<div class="hud">
+  <span class="counter"><span class="cur">1</span> / 10</span>
+  <a class="back" href="./S14.html">자료로 돌아가기</a>
+</div>
+<div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
+<main class="deck">
+<section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S14 · PART 04 · 파이썬 · 난이도 4</div>
+<h1>시각화 실전: matplotlib·seaborn, 한글폰트, BI 핸드오프</h1>
+<p class="subtitle">pandas로 정리한 데이터를 질문에 맞는 그래프로 만들고, 한글폰트를 설정한 뒤 차트용 집계 결과를 CSV로 저장해 BI로 넘긴다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
+<ul class="obj-grid"><li>한글폰트를 설정하고 axes.unicode_minus=False가 필요한 이유를 설명한다.</li>
+<li>숫자 분포를 히스토그램과 박스플롯으로 확인한다.</li>
+<li>두 숫자 변수의 관계를 산점도와 추세선으로 표현하고 상관계수를 보조 정보로 해석한다.</li>
+<li>대용량 데이터를 먼저 집계한 뒤 히트맵이나 라인차트로 시각화한다.</li>
+<li>차트에 사용한 정제·집계 결과를 to_csv()로 저장해 BI 도구에 넘긴다.</li></ul></div></section>
+<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>차트는 질문에 답하도록 표를 줄이는 일이다</h2>
+<p class="body">파이썬 시각화는 표를 선택한 뒤 차트 종류를 고르는 작업에서 멈추지 않는다. 무엇을 알고 싶은지 정하고, 필요한 열만 고른 뒤, 큰 데이터는 필터링하거나 집계해 차트에 맞는 크기로 줄인다.</p>
+<ul class="bullets"><li>지하철 원본 199,424행은 그대로 그리지 않고 승차 행만 남긴다.</li>
+<li>역별·시간대별 합계로 줄인 뒤 총 승차 상위 10개 역만 히트맵에 사용한다.</li>
+<li>히트맵 집계 결과는 상위 10개 역 × 20개 시간대 = 200행이다.</li></ul></div></section>
+<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<h2>한글폰트 설정은 차트의 전처리다</h2>
+<p class="body">한글 CSV를 잘 읽었더라도 그래프 제목과 축 글자가 깨질 수 있다. 이때는 데이터 오류가 아니라 matplotlib이 한글 글꼴을 찾지 못한 상태일 수 있다.</p>
+<ul class="bullets"><li>font.family는 한글을 표시할 글꼴을 정한다.</li>
+<li>axes.unicode_minus=False는 음수 부호가 네모로 깨지는 문제를 줄인다.</li>
+<li>수강생 환경에서는 NanumGothic 또는 NanumGothicCoding이 선택되는지 확인한다.</li></ul></div></section>
+<section id="s5" class="slide slide-table"><div class="slide-inner"><h2>오늘 다루는 데이터와 시각화 역할</h2>
+<table class="deck-table"><thead><tr><th>데이터</th><th>확인값</th><th>수업에서 쓰는 역할</th></tr></thead><tbody><tr><td>seoulmetro_daily_hourly_2025.csv</td><td>199,424행, 26열</td><td>승차 기준 역별×시간대 히트맵</td></tr><tr><td>molit_apt_sale_seoul_gangnam_2024.csv</td><td>3,754행, 20열</td><td>거래금액 분포, 면적구간 박스플롯, 면적-가격 산점도</td></tr><tr><td>fred_korea_cpi_all_items_monthly.csv</td><td>767행, 2열</td><td>월별 CPI 시계열</td></tr><tr><td>cafe_sales_clean.csv</td><td>10,424행, 12열</td><td>미션용 월별 매출 추세</td></tr></tbody></table>
+<p class="note">행수와 열수는 python3와 pandas 3.0.3으로 실제 파일을 열어 확인한 값이다.</p></div></section>
+<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
+<h2>분포는 히스토그램과 박스플롯으로 본다</h2>
+<p class="body">강남구 아파트 실거래 데이터는 거래금액을 숫자로 바꾼 뒤 차트용 억원 단위를 만든다. 히스토그램은 어느 가격대 거래가 많은지 보고, 박스플롯은 면적구간별 중앙값과 퍼짐을 함께 본다.</p>
+<ul class="bullets"><li>거래금액(만원)은 쉼표가 들어간 문자열이므로 숫자형 거래금액_만원으로 변환한다.</li>
+<li>면적구간은 40㎡ 이하, 40-60㎡, 60-85㎡, 85-120㎡, 120㎡ 초과로 나눈다.</li>
+<li>박스플롯은 엑셀 피벗에서 그룹별 평균만 볼 때보다 분포 차이까지 함께 읽게 한다.</li></ul></div></section>
+<section id="s7" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
+<h2>관계와 시간 흐름은 차트 모양이 다르다</h2>
+<p class="body">산점도는 한 행을 점 하나로 표현해 두 숫자 사이의 관계를 본다. 라인차트는 시간 순서가 있는 데이터에서 값의 흐름을 본다.</p>
+<ul class="bullets"><li>강남구 아파트 데이터의 전용면적과 거래금액 상관계수는 r = 0.806으로 강한 양의 상관이다.</li>
+<li>상관계수와 추세선은 관계를 요약하지만 원인을 증명하지는 않는다.</li>
+<li>FRED CPI는 원본 767행 중 2000년 이후 287행만 사용해 월별 라인차트를 만든다.</li></ul></div></section>
+<section id="s8" class="slide slide-quote"><div class="slide-inner"><blockquote class="quote">그래프는 표를 예쁘게 꾸미는 일이 아니라 질문에 답하는 일이다.</blockquote>
+<div class="attribution">S14 강사대본</div></div></section>
+<section id="s9" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">데이터 준비</div><div class="m-desc">cafe_sales_clean.csv를 읽고 date를 날짜형으로 변환한다.</div></div><div class="mission-card"><div class="m-label">월별 집계와 라인차트</div><div class="m-desc">월별 amount 합계를 계산하고, monthly_sales 6행 표와 월별 매출 라인차트를 만든다.</div></div><div class="mission-card"><div class="m-label">BI 핸드오프 저장</div><div class="m-desc">s14_monthly_sales.csv와 s14_monthly_sales_trend.png를 저장하고, 6월 16,816,500원이 가장 높고 2월 13,157,000원이 가장 낮은지 확인한다.</div></div></div></div></section>
+<section id="s10" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>한글 차트가 깨지면 데이터가 아니라 matplotlib 글꼴 설정을 먼저 확인한다.</li>
+<li>큰 데이터는 원본을 바로 그리지 않고 질문에 맞게 필터링하거나 집계한다.</li>
+<li>히스토그램은 분포, 박스플롯은 그룹별 퍼짐, 산점도는 두 숫자의 관계, 라인차트는 시간 흐름에 쓴다.</li>
+<li>BI로 넘길 때는 차트에 쓴 정제·집계 결과를 to_csv()로 저장할 수 있다.</li></ul>
+<div class="next"><b>다음 차시</b> — Power BI를 설치 또는 실행하고, 정제된 카페 매출 CSV를 불러와 첫 차트를 만든다.</div></div></section>
+</main>
+<script>
+const deck=document.querySelector('.deck');
+const slides=[...document.querySelectorAll('.slide')];
+const prog=document.querySelector('.progress');
+const counter=document.querySelector('.counter .cur');
+function cur(){let i=0,best=1e9;slides.forEach((s,k)=>{const d=Math.abs(s.getBoundingClientRect().top);if(d<best){best=d;i=k;}});return i;}
+function upd(){const i=cur();prog.style.width=((i+1)/slides.length*100)+'%';if(counter)counter.textContent=i+1;}
+function go(n){const i=Math.max(0,Math.min(slides.length-1,n));slides[i].scrollIntoView({behavior:'smooth'});}
+deck.addEventListener('scroll',()=>{window.requestAnimationFrame(upd);},{passive:true});
+window.addEventListener('keydown',e=>{
+  if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur()+1);}
+  else if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur()-1);}
+  else if(e.key==='Home'){e.preventDefault();go(0);}
+  else if(e.key==='End'){e.preventDefault();go(slides.length-1);}
+  else if(e.key==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+upd();
+</script>
+</body>
+</html>

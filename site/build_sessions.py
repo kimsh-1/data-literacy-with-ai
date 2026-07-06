@@ -365,6 +365,17 @@ h1,h2,h3,h4,p{ margin:0; }
 .markdown-body tbody tr:last-child td{ border-bottom: none; }
 .markdown-body tbody tr:hover{ background: var(--surface-1); }
 
+.deck-cta{
+  display:inline-flex; align-items:center; gap:8px; margin-top:20px;
+  font-size:14px; font-weight:560; color: var(--ink);
+  border:1px solid var(--hairline-strong); border-radius: var(--radius-pill);
+  padding:9px 18px; background: var(--surface-1);
+  transition: border-color .18s ease, color .18s ease, background-color .18s ease;
+}
+.deck-cta span{ color: var(--primary-hover); transition: transform .18s ease; }
+.deck-cta:hover{ border-color: var(--primary); background: var(--surface-2); }
+.deck-cta:hover span{ transform: translateX(3px); }
+
 /* ---------- pager ---------- */
 .session-pager{
   display:flex;
@@ -524,6 +535,7 @@ def build_page(n: int) -> str:
       {dots_html(diff)}
     </div>
     <h1>{html.escape(title)}</h1>
+    <a class="deck-cta" href="./{sess_id}_deck.html">발표 덱으로 보기 <span aria-hidden="true">&rarr;</span></a>
   </div>
   <div class="container">
     <div class="tabs-bar" role="tablist">

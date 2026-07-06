@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S11 · Pandas 입문: Series, DataFrame, CSV 읽기와 필터 — 발표 덱</title>
+<style>
+@font-face{font-family:"PretendardDeck";
+  src:url("../fonts/pretendard-deck-subset.woff2") format("woff2");
+  font-weight:100 900;font-style:normal;font-display:swap;}
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a; --surface-4:#191a1b;
+  --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+  --primary:#5e6ad2; --primary-hover:#828fff; --primary-focus:#5e69d1;
+  --hairline:#23252a; --hairline-strong:#34343a; --hairline-tertiary:#3e3e44; --success:#27a644;
+  --font-display:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;
+  --font-text:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,"PretendardDeck",monospace;
+}
+html,body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font-text);
+  -webkit-font-smoothing:antialiased;letter-spacing:-0.2px;}
+a{color:inherit;text-decoration:none;}
+.deck{scroll-snap-type:y mandatory;overflow-y:scroll;height:100vh;scroll-behavior:smooth;}
+.slide{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:6vh 8vw;position:relative;background:var(--canvas);}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 82% 8%,rgba(94,106,210,0.10),transparent 55%);}
+.eyebrow{font-family:var(--font-mono);font-size:0.82rem;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--primary-hover);margin-bottom:1.4rem;}
+.slide h1{font-family:var(--font-display);font-weight:640;font-size:clamp(2.4rem,5.4vw,4.6rem);
+  line-height:1.02;letter-spacing:-1.6px;margin:0 0 1.4rem;max-width:20ch;}
+.slide h2{font-family:var(--font-display);font-weight:620;font-size:clamp(1.7rem,3.4vw,2.9rem);
+  line-height:1.08;letter-spacing:-1px;margin:0 0 2rem;max-width:24ch;}
+.subtitle{font-size:clamp(1.05rem,1.7vw,1.5rem);color:var(--ink-muted);max-width:44ch;line-height:1.5;}
+.kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
+  text-transform:uppercase;margin-bottom:0.9rem;}
+.body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
+ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
+  color:var(--ink);line-height:1.5;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+  background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
+ul.bullets>li b{color:var(--ink);font-weight:640;}
+.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
+  font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
+.obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
+  font-family:var(--font-mono);font-size:0.95rem;color:var(--primary-hover);
+  border:1px solid var(--hairline-strong);border-radius:8px;padding:0.35em 0.55em;flex:none;margin-top:0.1em;}
+.mission-grid{display:flex;flex-direction:column;gap:1rem;max-width:64ch;}
+.mission-card{border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;
+  padding:1.3rem 1.5rem;}
+.mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
+.mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
+  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
+  font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
+table.deck-table td{color:var(--ink-muted);}
+table.deck-table td:first-child{color:var(--ink);font-weight:560;}
+.note{color:var(--ink-tertiary);font-size:0.95rem;margin-top:1.2rem;max-width:60ch;line-height:1.5;}
+.quote{font-family:var(--font-display);font-weight:560;font-size:clamp(1.5rem,3vw,2.6rem);
+  line-height:1.28;letter-spacing:-0.8px;max-width:26ch;color:var(--ink);}
+.quote::before{content:"\201C";color:var(--primary);}
+.quote::after{content:"\201D";color:var(--primary);}
+.attribution{margin-top:1.6rem;color:var(--ink-subtle);font-size:1.05rem;font-family:var(--font-mono);}
+.closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
+  color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
+.closing .next b{color:var(--primary-hover);}
+/* chrome */
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
+.hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
+  color:var(--ink-subtle);display:flex;gap:14px;align-items:center;}
+.hud .counter{color:var(--ink-muted);}
+.hud a.back{border:1px solid var(--hairline-strong);border-radius:8px;padding:6px 12px;color:var(--ink-muted);
+  background:rgba(15,16,17,0.7);backdrop-filter:blur(6px);transition:border-color .15s,color .15s;}
+.hud a.back:hover{border-color:var(--primary);color:var(--ink);}
+.brand{position:fixed;top:20px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  letter-spacing:0.6px;color:var(--ink-tertiary);}
+.nav-hint{position:fixed;bottom:22px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  color:var(--ink-tertiary);}
+@media (max-width:640px){.slide{padding:8vh 7vw;}.nav-hint{display:none;}}
+@media print{
+  @page{size:1280px 720px;margin:0;}
+  html,body{height:auto;}
+  .deck{height:auto;overflow:visible;scroll-snap-type:none;}
+  .slide{height:720px;min-height:720px;page-break-after:always;break-after:page;background:#06070a;}
+  .progress,.hud,.nav-hint,.brand{display:none;}
+  /* 배포 PDF 경량화: 페이지마다 래스터화되는 그라디언트 글로우 제거 -> 텍스트 벡터만 남겨 용량 최소화 */
+  .slide::after{display:none;}
+  ul.bullets>li::before{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+<div class="brand">데이터 리터러시 with AI</div>
+<div class="hud">
+  <span class="counter"><span class="cur">1</span> / 11</span>
+  <a class="back" href="./S11.html">자료로 돌아가기</a>
+</div>
+<div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
+<main class="deck">
+<section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S11 · PART 04 · 파이썬 · 난이도 3</div>
+<h1>Pandas 입문: Series, DataFrame, CSV 읽기와 필터</h1>
+<p class="subtitle">파이썬 문법을 실제 표 데이터로 연결하고, pandas로 CSV를 읽어 구조 확인, 필터, 정렬까지 실습한다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
+<ul class="obj-grid"><li>DataFrame을 엑셀 시트, Series를 엑셀의 한 열에 견주어 설명한다.</li>
+<li>pd.read_csv로 UTF-8 CSV 파일을 읽고, 한글 CSV에서 인코딩 문제가 생길 수 있음을 인지한다.</li>
+<li>head, info, describe로 데이터의 첫 행, 컬럼, 타입, 기초 통계를 확인한다.</li>
+<li>불리언 조건식과 loc로 원하는 행만 필터링하고 sort_values로 금액순 정렬을 한다.</li></ul></div></section>
+<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>pandas는 표를 다루는 파이썬 도구다</h2>
+<p class="body">S10에서 배운 변수, 리스트, 딕셔너리, 조건문, 반복문을 표 데이터에 맞게 확장한 도구가 pandas다.</p>
+<ul class="bullets"><li>import pandas as pd에서 pd는 pandas를 짧게 부르는 별명이다.</li>
+<li>read_csv, head, describe, sort_values는 엑셀의 열기, 확인, 요약, 정렬에 해당하는 기능이다.</li>
+<li>오늘의 목표는 엑셀에서 하던 표 확인, 필터, 정렬을 pandas 코드로 재현하는 것이다.</li></ul></div></section>
+<section id="s4" class="slide slide-table"><div class="slide-inner"><h2>DataFrame은 표 전체, Series는 열 하나다</h2>
+<table class="deck-table"><thead><tr><th>엑셀 감각</th><th>pandas 감각</th></tr></thead><tbody><tr><td>워크시트 전체</td><td>DataFrame</td></tr><tr><td>열 하나</td><td>Series</td></tr><tr><td>행 번호</td><td>인덱스</td></tr><tr><td>열 제목</td><td>컬럼명</td></tr><tr><td>필터 조건</td><td>불리언 마스크</td></tr></tbody></table>
+<p class="note">처음에는 DataFrame과 Series 이름보다 표 전체와 열 하나라는 감각이 더 중요하다.</p></div></section>
+<section id="s5" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<h2>CSV 읽기는 경로와 인코딩을 확인하는 일이다</h2>
+<p class="body">CSV는 쉼표로 구분된 텍스트 파일이므로 파일 경로와 글자 인코딩이 맞아야 열린다. 이번 차시는 정제된 cafe_sales_clean.csv를 사용한다.</p>
+<ul class="bullets"><li>파일 경로는 02_datasets/cafe_sales/cafe_sales_clean.csv이다.</li>
+<li>실제 확인 결과 데이터 크기는 10,424행 x 12열이고 날짜 범위는 2025-01-01부터 2025-06-30이다.</li>
+<li>컬럼은 order_id, date, weekday, hour, store, category, item, unit_price, qty, amount, payment, member이다.</li>
+<li>UTF-8 CSV는 encoding 옵션 utf-8-sig로 무리 없이 열리며 cp949 원본 처리는 S12에서 다룬다.</li></ul></div></section>
+<section id="s6" class="slide slide-table"><div class="slide-inner"><h2>읽은 뒤에는 바로 분석하지 않고 먼저 점검한다</h2>
+<table class="deck-table"><thead><tr><th>확인 도구</th><th>하는 일</th><th>엑셀 비교</th></tr></thead><tbody><tr><td>head</td><td>앞쪽 몇 행 보기</td><td>시트 맨 위 훑어보기</td></tr><tr><td>info</td><td>행수, 컬럼, 결측, 타입 보기</td><td>열 목록과 데이터 형식 확인</td></tr><tr><td>describe</td><td>숫자 열의 기초 통계 보기</td><td>평균, 최소, 최대 빠른 확인</td></tr><tr><td>shape</td><td>행과 열 개수 보기</td><td>시트 크기 확인</td></tr><tr><td>columns</td><td>컬럼명 보기</td><td>머리글 행 확인</td></tr></tbody></table>
+<p class="note">이번 데이터의 amount 최소값은 3,000원, 최대값은 19,500원이며 date는 문자열로 읽힌다.</p></div></section>
+<section id="s7" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
+<h2>엑셀 필터는 pandas에서 불리언 마스크다</h2>
+<p class="body">엑셀에서는 지점 필터에서 강남점만 체크하지만, pandas에서는 각 행이 강남점인지 True 또는 False로 먼저 표시한다.</p>
+<ul class="bullets"><li>불리언 마스크는 True와 False로 된 Series다.</li>
+<li>df.loc에 마스크를 넣으면 True인 행만 남고, 강남점 결과는 6,196행 x 12열이다.</li>
+<li>조건 여러 개를 연결할 때는 and가 아니라 &amp;를 쓰고 각 조건을 괄호로 감싼다.</li></ul></div></section>
+<section id="s8" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
+<h2>sort_values는 금액순 정렬이다</h2>
+<p class="body">강남점 주문을 만든 뒤 sort_values로 amount를 큰 값부터 본다. 같은 금액은 date, order_id 순서로 보게 했다.</p>
+<ul class="bullets"><li>ascending=False는 큰 값이 위로 오게 하라는 뜻이다.</li>
+<li>display_cols는 원본 데이터를 바꾸지 않고 화면에 보여줄 열만 고르는 장치다.</li>
+<li>sort_values는 원본 df를 자동으로 덮어쓰지 않으므로 결과를 변수에 담아 계속 쓴다.</li></ul></div></section>
+<section id="s9" class="slide slide-table"><div class="slide-inner"><h2>loc와 iloc는 선택 기준이 다르다</h2>
+<table class="deck-table"><thead><tr><th>도구</th><th>기준</th><th>예시 의미</th></tr></thead><tbody><tr><td>loc</td><td>인덱스 라벨과 컬럼명</td><td>0번 라벨 행의 store 열</td></tr><tr><td>iloc</td><td>숫자 위치</td><td>0번째 행, 4번째 열</td></tr></tbody></table>
+<p class="note">이번 데이터에서 두 방식 모두 첫 행의 지점인 홍대점을 반환한다. 입문 단계에서는 컬럼명을 직접 쓰는 loc가 읽기 쉽다.</p></div></section>
+<section id="s10" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">조건 만들기</div><div class="m-desc">강남점, 커피, amount 10,000원 이상이라는 세 조건을 mission_mask로 만든다.</div></div><div class="mission-card"><div class="m-label">행 추출과 정렬</div><div class="m-desc">df.loc로 조건에 맞는 행만 남기고 amount, date, order_id 순서로 정렬한다.</div></div><div class="mission-card"><div class="m-label">완료 기준</div><div class="m-desc">실제 확인 값은 미션 행수 1,362행, 총금액 16,664,500원, 평균금액 12,235.32원이다.</div></div></div></div></section>
+<section id="s11" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>pandas 입문은 CSV를 읽고, 표의 구조를 확인하고, 조건에 맞는 행만 남기는 흐름에서 시작한다.</li>
+<li>DataFrame은 표 전체이고 Series는 그 안의 열 하나다.</li>
+<li>엑셀 필터는 pandas에서 True 또는 False 마스크를 만들고 loc로 적용하는 과정과 같다.</li>
+<li>금액순으로 보려면 sort_values에 정렬할 열과 내림차순 옵션을 준다.</li></ul>
+<div class="next"><b>다음 차시</b>: S12에서는 일부러 문제가 들어 있는 dirty 데이터를 열고 결측값, 중복, 타입, 문자열 표기, 인코딩 문제를 정리한다.</div></div></section>
+</main>
+<script>
+const deck=document.querySelector('.deck');
+const slides=[...document.querySelectorAll('.slide')];
+const prog=document.querySelector('.progress');
+const counter=document.querySelector('.counter .cur');
+function cur(){let i=0,best=1e9;slides.forEach((s,k)=>{const d=Math.abs(s.getBoundingClientRect().top);if(d<best){best=d;i=k;}});return i;}
+function upd(){const i=cur();prog.style.width=((i+1)/slides.length*100)+'%';if(counter)counter.textContent=i+1;}
+function go(n){const i=Math.max(0,Math.min(slides.length-1,n));slides[i].scrollIntoView({behavior:'smooth'});}
+deck.addEventListener('scroll',()=>{window.requestAnimationFrame(upd);},{passive:true});
+window.addEventListener('keydown',e=>{
+  if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur()+1);}
+  else if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur()-1);}
+  else if(e.key==='Home'){e.preventDefault();go(0);}
+  else if(e.key==='End'){e.preventDefault();go(slides.length-1);}
+  else if(e.key==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+upd();
+</script>
+</body>
+</html>

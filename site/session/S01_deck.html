@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S01 · 데이터 분석이란, AI 시대의 작업 흐름 — 발표 덱</title>
+<style>
+@font-face{font-family:"PretendardDeck";
+  src:url("../fonts/pretendard-deck-subset.woff2") format("woff2");
+  font-weight:100 900;font-style:normal;font-display:swap;}
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a; --surface-4:#191a1b;
+  --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+  --primary:#5e6ad2; --primary-hover:#828fff; --primary-focus:#5e69d1;
+  --hairline:#23252a; --hairline-strong:#34343a; --hairline-tertiary:#3e3e44; --success:#27a644;
+  --font-display:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;
+  --font-text:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,"PretendardDeck",monospace;
+}
+html,body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font-text);
+  -webkit-font-smoothing:antialiased;letter-spacing:-0.2px;}
+a{color:inherit;text-decoration:none;}
+.deck{scroll-snap-type:y mandatory;overflow-y:scroll;height:100vh;scroll-behavior:smooth;}
+.slide{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:6vh 8vw;position:relative;background:var(--canvas);}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 82% 8%,rgba(94,106,210,0.10),transparent 55%);}
+.eyebrow{font-family:var(--font-mono);font-size:0.82rem;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--primary-hover);margin-bottom:1.4rem;}
+.slide h1{font-family:var(--font-display);font-weight:640;font-size:clamp(2.4rem,5.4vw,4.6rem);
+  line-height:1.02;letter-spacing:-1.6px;margin:0 0 1.4rem;max-width:20ch;}
+.slide h2{font-family:var(--font-display);font-weight:620;font-size:clamp(1.7rem,3.4vw,2.9rem);
+  line-height:1.08;letter-spacing:-1px;margin:0 0 2rem;max-width:24ch;}
+.subtitle{font-size:clamp(1.05rem,1.7vw,1.5rem);color:var(--ink-muted);max-width:44ch;line-height:1.5;}
+.kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
+  text-transform:uppercase;margin-bottom:0.9rem;}
+.body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
+ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
+  color:var(--ink);line-height:1.5;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+  background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
+ul.bullets>li b{color:var(--ink);font-weight:640;}
+.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
+  font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
+.obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
+  font-family:var(--font-mono);font-size:0.95rem;color:var(--primary-hover);
+  border:1px solid var(--hairline-strong);border-radius:8px;padding:0.35em 0.55em;flex:none;margin-top:0.1em;}
+.mission-grid{display:flex;flex-direction:column;gap:1rem;max-width:64ch;}
+.mission-card{border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;
+  padding:1.3rem 1.5rem;}
+.mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
+.mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
+  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
+  font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
+table.deck-table td{color:var(--ink-muted);}
+table.deck-table td:first-child{color:var(--ink);font-weight:560;}
+.note{color:var(--ink-tertiary);font-size:0.95rem;margin-top:1.2rem;max-width:60ch;line-height:1.5;}
+.quote{font-family:var(--font-display);font-weight:560;font-size:clamp(1.5rem,3vw,2.6rem);
+  line-height:1.28;letter-spacing:-0.8px;max-width:26ch;color:var(--ink);}
+.quote::before{content:"\201C";color:var(--primary);}
+.quote::after{content:"\201D";color:var(--primary);}
+.attribution{margin-top:1.6rem;color:var(--ink-subtle);font-size:1.05rem;font-family:var(--font-mono);}
+.closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
+  color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
+.closing .next b{color:var(--primary-hover);}
+/* chrome */
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
+.hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
+  color:var(--ink-subtle);display:flex;gap:14px;align-items:center;}
+.hud .counter{color:var(--ink-muted);}
+.hud a.back{border:1px solid var(--hairline-strong);border-radius:8px;padding:6px 12px;color:var(--ink-muted);
+  background:rgba(15,16,17,0.7);backdrop-filter:blur(6px);transition:border-color .15s,color .15s;}
+.hud a.back:hover{border-color:var(--primary);color:var(--ink);}
+.brand{position:fixed;top:20px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  letter-spacing:0.6px;color:var(--ink-tertiary);}
+.nav-hint{position:fixed;bottom:22px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  color:var(--ink-tertiary);}
+@media (max-width:640px){.slide{padding:8vh 7vw;}.nav-hint{display:none;}}
+@media print{
+  @page{size:1280px 720px;margin:0;}
+  html,body{height:auto;}
+  .deck{height:auto;overflow:visible;scroll-snap-type:none;}
+  .slide{height:720px;min-height:720px;page-break-after:always;break-after:page;background:#06070a;}
+  .progress,.hud,.nav-hint,.brand{display:none;}
+  /* 배포 PDF 경량화: 페이지마다 래스터화되는 그라디언트 글로우 제거 -> 텍스트 벡터만 남겨 용량 최소화 */
+  .slide::after{display:none;}
+  ul.bullets>li::before{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+<div class="brand">데이터 리터러시 with AI</div>
+<div class="hud">
+  <span class="counter"><span class="cur">1</span> / 8</span>
+  <a class="back" href="./S01.html">자료로 돌아가기</a>
+</div>
+<div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
+<main class="deck">
+<section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S01 · Part 1 · 난이도 1</div>
+<h1>데이터 분석이란, AI 시대의 작업 흐름</h1>
+<p class="subtitle">엑셀은 쓰지만 데이터 분석은 처음인 분을 위한 첫 시간. 도구를 배우기 전에, 내가 가진 표로 어떤 질문에 답할 수 있는지부터 익힌다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
+<ul class="obj-grid"><li>데이터로 답할 수 있는 질문과 답하기 어려운 질문을 구분한다.</li>
+<li>엑셀, AI, 파이썬, BI가 분석 흐름에서 각각 어떤 역할을 하는지 설명한다.</li>
+<li>수업에 필요한 환경(운영체제, 계정, 데이터 폴더)을 점검한다.</li></ul></div></section>
+<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>데이터 분석은 질문을 표에 맞게 번역하는 일</h2>
+<p class="body">냉장고 속 재료로 요리하듯, 표에 기록된 값으로만 답을 만들 수 있다. 표에 없는 내용은 분석으로 곧장 답하기 어렵다.</p>
+<ul class="bullets"><li><b>답할 수 있는 질문</b>: 지점별 총매출, 카테고리별 판매 수량, 시간대별 매출</li>
+<li><b>답하기 어려운 질문</b>: 손님이 왜 그 메뉴를 골랐는가, 매장 분위기에 만족했는가</li>
+<li>어려운 질문은 틀린 질문이 아니라, 필요한 열이 아직 표에 없는 질문이다.</li></ul></div></section>
+<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<h2>좋은 분석 질문의 모양</h2>
+<p class="body">막연한 궁금증을 표의 열 이름으로 바꾸면 분석이 시작된다. 입문 단계에서는 다음 네 조각을 갖추면 좋다.</p>
+<ul class="bullets"><li><b>대상</b> — 무엇을 보는가 (카페 주문)</li>
+<li><b>기준</b> — 무엇으로 나누는가 (지점별)</li>
+<li><b>비교·집계</b> — 어떤 숫자를 보는가 (총매출)</li>
+<li><b>기간</b> — 언제의 데이터인가 (2025년 1월부터 6월)</li></ul></div></section>
+<section id="s5" class="slide slide-table"><div class="slide-inner"><h2>네 가지 도구는 경쟁이 아니라 역할 분담이다</h2>
+<table class="deck-table"><thead><tr><th>도구</th><th>강점</th><th>주의점</th></tr></thead><tbody><tr><td>엑셀</td><td>눈으로 빠르게 확인, 피벗테이블</td><td>손작업이 많아지면 재현이 어렵다</td></tr><tr><td>AI</td><td>질문 정리와 분석 방향 제안</td><td>틀린 숫자를 낼 수 있어 검증이 필요하다</td></tr><tr><td>파이썬</td><td>반복 가능한 분석 기록</td><td>처음에는 낯설지만 큰 데이터에 강하다</td></tr><tr><td>BI</td><td>대시보드와 공유</td><td>설치와 계정 환경을 확인해야 한다</td></tr></tbody></table>
+<p class="note">Power BI Desktop은 Windows 전용이다. Mac 사용자는 Part 5에서 Looker Studio 경로로 대체한다.</p></div></section>
+<section id="s6" class="slide slide-quote"><div class="slide-inner"><blockquote class="quote">데이터 분석가는 질문을 버리는 사람이 아니라, 질문을 답할 수 있는 형태로 바꾸는 사람입니다.</blockquote>
+<div class="attribution">S01 강사 멘트</div></div></section>
+<section id="s7" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 분석 질문 3개 만들기</div><div class="m-desc">카페 매출 표로 답할 수 있는 질문 3개를 작성한다. 대상, 기준, 집계할 값, 기간이 들어가면 좋다.</div></div><div class="mission-card"><div class="m-label">미션 2. 내 업무 표 질문화</div><div class="m-desc">평소 자주 보는 표 하나를 떠올리고, 그 표로 답하고 싶은 질문을 1개 작성한다.</div></div></div></div></section>
+<section id="s8" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>분석은 도구를 배우기 전에 질문을 표의 열로 바꾸는 데서 시작한다.</li>
+<li>엑셀, AI, 파이썬, BI는 같은 질문을 저마다 다른 방식으로 다룬다.</li>
+<li>AI가 낸 숫자는 반드시 다른 도구로 검증한다.</li></ul>
+<div class="next"><b>다음 차시</b> — 좋은 데이터의 모양을 보고, 엑셀에서 분석하기 좋은 표와 그렇지 않은 표를 구분한다.</div></div></section>
+</main>
+<script>
+const deck=document.querySelector('.deck');
+const slides=[...document.querySelectorAll('.slide')];
+const prog=document.querySelector('.progress');
+const counter=document.querySelector('.counter .cur');
+function cur(){let i=0,best=1e9;slides.forEach((s,k)=>{const d=Math.abs(s.getBoundingClientRect().top);if(d<best){best=d;i=k;}});return i;}
+function upd(){const i=cur();prog.style.width=((i+1)/slides.length*100)+'%';if(counter)counter.textContent=i+1;}
+function go(n){const i=Math.max(0,Math.min(slides.length-1,n));slides[i].scrollIntoView({behavior:'smooth'});}
+deck.addEventListener('scroll',()=>{window.requestAnimationFrame(upd);},{passive:true});
+window.addEventListener('keydown',e=>{
+  if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur()+1);}
+  else if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur()-1);}
+  else if(e.key==='Home'){e.preventDefault();go(0);}
+  else if(e.key==='End'){e.preventDefault();go(slides.length-1);}
+  else if(e.key==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+upd();
+</script>
+</body>
+</html>

@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S09 · AI 답 검증하기: 환각과 계산오류 잡기 — 발표 덱</title>
+<style>
+@font-face{font-family:"PretendardDeck";
+  src:url("../fonts/pretendard-deck-subset.woff2") format("woff2");
+  font-weight:100 900;font-style:normal;font-display:swap;}
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a; --surface-4:#191a1b;
+  --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+  --primary:#5e6ad2; --primary-hover:#828fff; --primary-focus:#5e69d1;
+  --hairline:#23252a; --hairline-strong:#34343a; --hairline-tertiary:#3e3e44; --success:#27a644;
+  --font-display:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;
+  --font-text:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,"PretendardDeck",monospace;
+}
+html,body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font-text);
+  -webkit-font-smoothing:antialiased;letter-spacing:-0.2px;}
+a{color:inherit;text-decoration:none;}
+.deck{scroll-snap-type:y mandatory;overflow-y:scroll;height:100vh;scroll-behavior:smooth;}
+.slide{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:6vh 8vw;position:relative;background:var(--canvas);}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 82% 8%,rgba(94,106,210,0.10),transparent 55%);}
+.eyebrow{font-family:var(--font-mono);font-size:0.82rem;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--primary-hover);margin-bottom:1.4rem;}
+.slide h1{font-family:var(--font-display);font-weight:640;font-size:clamp(2.4rem,5.4vw,4.6rem);
+  line-height:1.02;letter-spacing:-1.6px;margin:0 0 1.4rem;max-width:20ch;}
+.slide h2{font-family:var(--font-display);font-weight:620;font-size:clamp(1.7rem,3.4vw,2.9rem);
+  line-height:1.08;letter-spacing:-1px;margin:0 0 2rem;max-width:24ch;}
+.subtitle{font-size:clamp(1.05rem,1.7vw,1.5rem);color:var(--ink-muted);max-width:44ch;line-height:1.5;}
+.kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
+  text-transform:uppercase;margin-bottom:0.9rem;}
+.body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
+ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
+  color:var(--ink);line-height:1.5;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+  background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
+ul.bullets>li b{color:var(--ink);font-weight:640;}
+.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
+  font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
+.obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
+  font-family:var(--font-mono);font-size:0.95rem;color:var(--primary-hover);
+  border:1px solid var(--hairline-strong);border-radius:8px;padding:0.35em 0.55em;flex:none;margin-top:0.1em;}
+.mission-grid{display:flex;flex-direction:column;gap:1rem;max-width:64ch;}
+.mission-card{border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;
+  padding:1.3rem 1.5rem;}
+.mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
+.mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
+  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
+  font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
+table.deck-table td{color:var(--ink-muted);}
+table.deck-table td:first-child{color:var(--ink);font-weight:560;}
+.note{color:var(--ink-tertiary);font-size:0.95rem;margin-top:1.2rem;max-width:60ch;line-height:1.5;}
+.quote{font-family:var(--font-display);font-weight:560;font-size:clamp(1.5rem,3vw,2.6rem);
+  line-height:1.28;letter-spacing:-0.8px;max-width:26ch;color:var(--ink);}
+.quote::before{content:"\201C";color:var(--primary);}
+.quote::after{content:"\201D";color:var(--primary);}
+.attribution{margin-top:1.6rem;color:var(--ink-subtle);font-size:1.05rem;font-family:var(--font-mono);}
+.closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
+  color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
+.closing .next b{color:var(--primary-hover);}
+/* chrome */
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
+.hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
+  color:var(--ink-subtle);display:flex;gap:14px;align-items:center;}
+.hud .counter{color:var(--ink-muted);}
+.hud a.back{border:1px solid var(--hairline-strong);border-radius:8px;padding:6px 12px;color:var(--ink-muted);
+  background:rgba(15,16,17,0.7);backdrop-filter:blur(6px);transition:border-color .15s,color .15s;}
+.hud a.back:hover{border-color:var(--primary);color:var(--ink);}
+.brand{position:fixed;top:20px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  letter-spacing:0.6px;color:var(--ink-tertiary);}
+.nav-hint{position:fixed;bottom:22px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  color:var(--ink-tertiary);}
+@media (max-width:640px){.slide{padding:8vh 7vw;}.nav-hint{display:none;}}
+@media print{
+  @page{size:1280px 720px;margin:0;}
+  html,body{height:auto;}
+  .deck{height:auto;overflow:visible;scroll-snap-type:none;}
+  .slide{height:720px;min-height:720px;page-break-after:always;break-after:page;background:#06070a;}
+  .progress,.hud,.nav-hint,.brand{display:none;}
+  /* 배포 PDF 경량화: 페이지마다 래스터화되는 그라디언트 글로우 제거 -> 텍스트 벡터만 남겨 용량 최소화 */
+  .slide::after{display:none;}
+  ul.bullets>li::before{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+<div class="brand">데이터 리터러시 with AI</div>
+<div class="hud">
+  <span class="counter"><span class="cur">1</span> / 11</span>
+  <a class="back" href="./S09.html">자료로 돌아가기</a>
+</div>
+<div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
+<main class="deck">
+<section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S09 · PART 03 · AI · 난이도 3</div>
+<h1>AI 답 검증하기: 환각과 계산오류 잡기</h1>
+<p class="subtitle">AI가 빠르게 요약한 숫자를 피벗테이블과 원본 점검으로 검산하고, clean과 dirty 데이터에서 결론 신뢰 여부를 구분한다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
+<ul class="obj-grid"><li>AI가 낸 총매출, 지점별 매출, 카테고리별 매출을 엑셀 피벗테이블로 교차확인한다.</li>
+<li>행수, 기간, 사용 열, 집계 기준을 확인해 계산오류와 환각을 구분한다.</li>
+<li>dirty 데이터의 중복, 결측, 표기 흔들림, 이상값이 숫자 답을 왜곡하는 방식을 설명한다.</li>
+<li>업무에 쓸 수 있는 AI 답 검증 체크리스트를 작성한다.</li></ul></div></section>
+<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>AI 답은 결론이 아니라 검토 대상이다</h2>
+<p class="body">그럴듯한 문장은 증거가 아니다. AI 답은 신입 동료가 보내온 요약표처럼 다루고, 보고서나 의사결정에 쓰기 전에는 원본 데이터로 검산한다.</p>
+<ul class="bullets"><li>빠르게 방향을 잡는 능력은 활용한다.</li>
+<li>숫자 결론은 엑셀 피벗테이블과 원본 점검으로 확인한다.</li></ul></div></section>
+<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<h2>검증 루틴은 같은 질문을 두 번 계산하는 일이다</h2>
+<p class="body">질문을 고정한 뒤 AI와 피벗테이블에 같은 계산을 시킨다. 차이가 나면 사용 열, 필터, 행수, 기간, 단위를 확인한다.</p>
+<ul class="bullets"><li>총매출은 amount 열의 합계로 고정한다.</li>
+<li>지점별 매출은 store별 amount 합계로 확인한다.</li>
+<li>카테고리별 매출은 category별 amount 합계로 확인한다.</li>
+<li>dirty 데이터에서는 중복, 결측, 표기 흔들림, 이상값을 별도로 확인한다.</li></ul></div></section>
+<section id="s5" class="slide slide-table"><div class="slide-inner"><h2>clean 파일의 피벗 기준값</h2>
+<table class="deck-table"><thead><tr><th>점검 항목</th><th>기준값</th></tr></thead><tbody><tr><td>행수</td><td>10,424행</td></tr><tr><td>기간</td><td>2025-01-01부터 2025-06-30까지</td></tr><tr><td>총매출</td><td>90,492,500원</td></tr><tr><td>판매수량 합계</td><td>17,241개</td></tr><tr><td>강남점 매출</td><td>53,425,000원</td></tr><tr><td>홍대점 매출</td><td>37,067,500원</td></tr><tr><td>커피 매출</td><td>45,606,000원</td></tr><tr><td>음료 매출</td><td>25,550,000원</td></tr><tr><td>디저트 매출</td><td>19,336,500원</td></tr></tbody></table>
+<p class="note">지점별 합계와 카테고리별 합계는 총매출과 같아야 한다.</p></div></section>
+<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
+<h2>clean에서 맞은 방식이 dirty에서도 충분하지는 않다</h2>
+<p class="body">dirty 원본을 그대로 피벗하면 총매출 90,600,500원이 나온다. AI도 같은 값을 낼 수 있지만, 중복과 이상값을 처리한 최종 확정값이라는 뜻은 아니다.</p>
+<ul class="bullets"><li>clean 총매출 90,492,500원과 dirty 원본 총매출은 108,000원 차이가 난다.</li>
+<li>AI와 피벗이 일치하면 계산 검산은 통과다.</li>
+<li>dirty 데이터에서는 데이터품질 검증이 남아 있다.</li></ul></div></section>
+<section id="s7" class="slide slide-table"><div class="slide-inner"><h2>dirty 파일에서 확인할 품질 문제</h2>
+<table class="deck-table"><thead><tr><th>점검 항목</th><th>확인값</th></tr></thead><tbody><tr><td>행수</td><td>10,439행</td></tr><tr><td>주문번호 중복 행</td><td>15행</td></tr><tr><td>payment 결측</td><td>313행</td></tr><tr><td>member 결측</td><td>209행</td></tr><tr><td>store가 강남 점인 행</td><td>310행</td></tr><tr><td>category 앞뒤 공백</td><td>313행</td></tr><tr><td>qty=999</td><td>2행</td></tr><tr><td>amount 음수</td><td>1행</td></tr><tr><td>unit_price × qty와 amount 불일치</td><td>3행</td></tr></tbody></table>
+<p class="note">dirty 파일의 총매출 90,600,500원은 원본을 그대로 합산한 값이며, 정제 기준을 정한 최종 확정값이 아니다.</p></div></section>
+<section id="s8" class="slide slide-table"><div class="slide-inner"><h2>문제 유형별 대응</h2>
+<table class="deck-table"><thead><tr><th>유형</th><th>예시</th><th>대응</th></tr></thead><tbody><tr><td>환각</td><td>파일에 없는 profit 열을 만들거나 없는 지점을 언급한다.</td><td>사용한 열 이름과 원본 근거를 요구한다.</td></tr><tr><td>계산오류</td><td>총합계, 그룹합계, 월별 합계가 피벗과 다르다.</td><td>같은 열과 같은 필터로 다시 계산하게 한다.</td></tr><tr><td>기준오류</td><td>총매출을 합계가 아니라 평균으로 말한다.</td><td>집계함수는 합계처럼 기준을 명시한다.</td></tr><tr><td>데이터품질 누락</td><td>중복과 이상값을 무시하고 결론만 말한다.</td><td>답변 전에 품질 점검을 요구한다.</td></tr></tbody></table></div></section>
+<section id="s9" class="slide slide-quote"><div class="slide-inner"><blockquote class="quote">보고서에 들어갈 숫자는 <b>AI가 말한 숫자</b>가 아니라 <b>검증 과정을 통과한 숫자</b>여야 한다.</blockquote>
+<div class="attribution">S09 강사 멘트</div></div></section>
+<section id="s10" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. dirty 보고 검토</div><div class="m-desc">동료가 cafe_sales_dirty.xlsx에 대해 총매출 90,600,500원이며 6월 매출이 가장 높다고 보고한 답을 그대로 보고서에 넣어도 되는지 검토한다.</div></div><div class="mission-card"><div class="m-label">미션 2. 검증 체크리스트 작성</div><div class="m-desc">파일명, 시트명, 행수, 날짜 기간, 사용 금액 열, 총매출, 그룹별 합계, 중복, 결측, 표기 흔들림, 수량 이상값, 음수 금액, 단가와 수량을 곱한 값이 금액과 일치하는지를 점검한다.</div></div><div class="mission-card"><div class="m-label">미션 3. 최종 판단 3문장 작성</div><div class="m-desc">원본 합계로는 맞는 값인지, 최종 확정값으로는 쓸 수 있는지, 정제 기준이 왜 필요한지를 구분해 쓴다.</div></div></div></div></section>
+<section id="s11" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>AI 답은 빠른 초안이지만 보고서 숫자는 피벗과 원본 점검으로 검산한다.</li>
+<li>clean 파일에서는 총매출 90,492,500원과 지점별 및 카테고리별 기준값이 맞는지 확인한다.</li>
+<li>dirty 파일의 원본 총매출 90,600,500원은 원본 합계로는 맞지만, 중복, 표기 흔들림, 이상값 때문에 최종 확정값으로는 보류한다.</li>
+<li>AI 답 검증은 AI를 의심하는 태도가 아니라 숫자를 업무에 쓸 수 있게 만드는 절차다.</li></ul>
+<div class="next"><b>다음 차시</b> — S10에서는 Colab과 파이썬 기초로 넘어가 셀 실행, 변수, 리스트, 딕셔너리, 조건문, 반복문을 익힌다.</div></div></section>
+</main>
+<script>
+const deck=document.querySelector('.deck');
+const slides=[...document.querySelectorAll('.slide')];
+const prog=document.querySelector('.progress');
+const counter=document.querySelector('.counter .cur');
+function cur(){let i=0,best=1e9;slides.forEach((s,k)=>{const d=Math.abs(s.getBoundingClientRect().top);if(d<best){best=d;i=k;}});return i;}
+function upd(){const i=cur();prog.style.width=((i+1)/slides.length*100)+'%';if(counter)counter.textContent=i+1;}
+function go(n){const i=Math.max(0,Math.min(slides.length-1,n));slides[i].scrollIntoView({behavior:'smooth'});}
+deck.addEventListener('scroll',()=>{window.requestAnimationFrame(upd);},{passive:true});
+window.addEventListener('keydown',e=>{
+  if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur()+1);}
+  else if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur()-1);}
+  else if(e.key==='Home'){e.preventDefault();go(0);}
+  else if(e.key==='End'){e.preventDefault();go(slides.length-1);}
+  else if(e.key==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+upd();
+</script>
+</body>
+</html>

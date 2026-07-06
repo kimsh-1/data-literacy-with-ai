@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S17 · 시각화·상호작용·DAX 기초 — 발표 덱</title>
+<style>
+@font-face{font-family:"PretendardDeck";
+  src:url("../fonts/pretendard-deck-subset.woff2") format("woff2");
+  font-weight:100 900;font-style:normal;font-display:swap;}
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a; --surface-4:#191a1b;
+  --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+  --primary:#5e6ad2; --primary-hover:#828fff; --primary-focus:#5e69d1;
+  --hairline:#23252a; --hairline-strong:#34343a; --hairline-tertiary:#3e3e44; --success:#27a644;
+  --font-display:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;
+  --font-text:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,"PretendardDeck",monospace;
+}
+html,body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font-text);
+  -webkit-font-smoothing:antialiased;letter-spacing:-0.2px;}
+a{color:inherit;text-decoration:none;}
+.deck{scroll-snap-type:y mandatory;overflow-y:scroll;height:100vh;scroll-behavior:smooth;}
+.slide{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:6vh 8vw;position:relative;background:var(--canvas);}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 82% 8%,rgba(94,106,210,0.10),transparent 55%);}
+.eyebrow{font-family:var(--font-mono);font-size:0.82rem;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--primary-hover);margin-bottom:1.4rem;}
+.slide h1{font-family:var(--font-display);font-weight:640;font-size:clamp(2.4rem,5.4vw,4.6rem);
+  line-height:1.02;letter-spacing:-1.6px;margin:0 0 1.4rem;max-width:20ch;}
+.slide h2{font-family:var(--font-display);font-weight:620;font-size:clamp(1.7rem,3.4vw,2.9rem);
+  line-height:1.08;letter-spacing:-1px;margin:0 0 2rem;max-width:24ch;}
+.subtitle{font-size:clamp(1.05rem,1.7vw,1.5rem);color:var(--ink-muted);max-width:44ch;line-height:1.5;}
+.kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
+  text-transform:uppercase;margin-bottom:0.9rem;}
+.body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
+ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
+  color:var(--ink);line-height:1.5;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+  background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
+ul.bullets>li b{color:var(--ink);font-weight:640;}
+.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
+  font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
+.obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
+  font-family:var(--font-mono);font-size:0.95rem;color:var(--primary-hover);
+  border:1px solid var(--hairline-strong);border-radius:8px;padding:0.35em 0.55em;flex:none;margin-top:0.1em;}
+.mission-grid{display:flex;flex-direction:column;gap:1rem;max-width:64ch;}
+.mission-card{border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;
+  padding:1.3rem 1.5rem;}
+.mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
+.mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
+  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
+  font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
+table.deck-table td{color:var(--ink-muted);}
+table.deck-table td:first-child{color:var(--ink);font-weight:560;}
+.note{color:var(--ink-tertiary);font-size:0.95rem;margin-top:1.2rem;max-width:60ch;line-height:1.5;}
+.quote{font-family:var(--font-display);font-weight:560;font-size:clamp(1.5rem,3vw,2.6rem);
+  line-height:1.28;letter-spacing:-0.8px;max-width:26ch;color:var(--ink);}
+.quote::before{content:"\201C";color:var(--primary);}
+.quote::after{content:"\201D";color:var(--primary);}
+.attribution{margin-top:1.6rem;color:var(--ink-subtle);font-size:1.05rem;font-family:var(--font-mono);}
+.closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
+  color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
+.closing .next b{color:var(--primary-hover);}
+/* chrome */
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
+.hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
+  color:var(--ink-subtle);display:flex;gap:14px;align-items:center;}
+.hud .counter{color:var(--ink-muted);}
+.hud a.back{border:1px solid var(--hairline-strong);border-radius:8px;padding:6px 12px;color:var(--ink-muted);
+  background:rgba(15,16,17,0.7);backdrop-filter:blur(6px);transition:border-color .15s,color .15s;}
+.hud a.back:hover{border-color:var(--primary);color:var(--ink);}
+.brand{position:fixed;top:20px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  letter-spacing:0.6px;color:var(--ink-tertiary);}
+.nav-hint{position:fixed;bottom:22px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  color:var(--ink-tertiary);}
+@media (max-width:640px){.slide{padding:8vh 7vw;}.nav-hint{display:none;}}
+@media print{
+  @page{size:1280px 720px;margin:0;}
+  html,body{height:auto;}
+  .deck{height:auto;overflow:visible;scroll-snap-type:none;}
+  .slide{height:720px;min-height:720px;page-break-after:always;break-after:page;background:#06070a;}
+  .progress,.hud,.nav-hint,.brand{display:none;}
+  /* 배포 PDF 경량화: 페이지마다 래스터화되는 그라디언트 글로우 제거 -> 텍스트 벡터만 남겨 용량 최소화 */
+  .slide::after{display:none;}
+  ul.bullets>li::before{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+<div class="brand">데이터 리터러시 with AI</div>
+<div class="hud">
+  <span class="counter"><span class="cur">1</span> / 11</span>
+  <a class="back" href="./S17.html">자료로 돌아가기</a>
+</div>
+<div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
+<main class="deck">
+<section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S17 · PART 05 · BI · 난이도 4</div>
+<h1>시각화·상호작용·DAX 기초</h1>
+<p class="subtitle">S16에서 만든 관계형 모델을 슬라이서, 상호작용, DAX 측정값으로 움직이는 대시보드로 바꾸는 시간이다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
+<ul class="obj-grid"><li>슬라이서, 드릴다운, 시각화 간 상호작용의 역할을 설명한다.</li>
+<li>Power BI 모델에서 DAX 측정값을 만들고 카드, 차트, 표에 재사용한다.</li>
+<li>SUMX, DIVIDE, CALCULATE의 입문 수준 용도를 이해한다.</li>
+<li>날짜테이블을 사용해 전월매출과 전월대비 성장률을 계산한다.</li>
+<li>고객 등급 슬라이서와 월별 KPI를 포함한 시계열 대시보드를 만들고 해석한다.</li></ul></div></section>
+<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>슬라이서는 대시보드 전체를 바꾸는 필터다</h2>
+<p class="body">Power BI의 슬라이서는 같은 모델에 연결된 여러 시각화를 동시에 바꾼다. 고객 등급에서 VIP를 선택하면 총매출 카드, 월별 선그래프, 카테고리 막대그래프가 모두 VIP 고객 기준으로 다시 계산된다.</p>
+<ul class="bullets"><li>엑셀 피벗테이블 슬라이서와 비슷하지만 한 시각화에만 머물지 않는다.</li>
+<li>숫자가 단순히 가려지는 것이 아니라 측정값이 필터 조건 아래에서 다시 계산된다.</li></ul></div></section>
+<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<h2>드릴다운은 큰 묶음에서 작은 항목으로 내려가는 기능이다</h2>
+<p class="body">막대그래프 축에 products[category]와 products[product_name]을 순서대로 올리면 처음에는 카테고리별 매출이 보이고, 디지털 막대를 누르면 디지털 카테고리 안의 상품별 매출로 내려간다.</p>
+<ul class="bullets"><li>전체에서 어디가 큰지 본 뒤 그 안에서 무엇이 큰지 이어서 볼 때 유용하다.</li>
+<li>카테고리별 매출 막대그래프는 products[category]에서 products[product_name]으로 드릴다운되어야 한다.</li></ul></div></section>
+<section id="s5" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
+<h2>DAX 측정값은 모델 안에 저장하는 계산식이다</h2>
+<p class="body">엑셀은 셀에 수식을 적지만 Power BI는 모델 안에 측정값을 만들어 둔다. 주문 테이블에는 매출 컬럼이 없으므로 상품 단가, 주문 수량, 할인율을 조합해 총매출 측정값을 만든다.</p>
+<ul class="bullets"><li>총매출은 products[price] × orders[qty] × (1 - orders[discount_rate])로 계산한다.</li>
+<li>SUMX는 주문 행을 한 줄씩 보며 매출을 계산한 뒤 모두 더한다.</li>
+<li>RELATED(products[price])는 연결된 상품 테이블에서 단가를 가져온다.</li></ul></div></section>
+<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
+<h2>비율과 시간 계산은 필터 맥락을 바꿔 읽는다</h2>
+<p class="body">매출비중은 현재 카테고리 매출을 전체 카테고리 매출로 나누어 만든다. 전월대비 성장률은 날짜테이블을 기준으로 현재 보고 있는 달의 전월을 찾아 계산한다.</p>
+<ul class="bullets"><li>DIVIDE는 분모가 0이거나 비어 있을 때 오류를 줄여 준다.</li>
+<li>CALCULATE는 계산 맥락을 바꾸어 분모를 전체 카테고리 기준으로 다시 계산한다.</li>
+<li>전월대비 카드는 월 슬라이서처럼 현재 월을 정하는 맥락이 있어야 제대로 읽힌다.</li></ul></div></section>
+<section id="s7" class="slide slide-table"><div class="slide-inner"><h2>데이터와 핵심 검증값</h2>
+<table class="deck-table"><thead><tr><th>항목</th><th>값</th></tr></thead><tbody><tr><td>orders</td><td>20,000행</td></tr><tr><td>customers</td><td>3,000행</td></tr><tr><td>products</td><td>200행</td></tr><tr><td>주문 기간</td><td>2024-01-01 ~ 2024-12-31</td></tr><tr><td>날짜테이블 행수</td><td>366</td></tr><tr><td>전체 주문건수</td><td>20,000</td></tr><tr><td>전체 판매수량</td><td>29,535</td></tr><tr><td>전체 매출</td><td>1,938,489,803</td></tr><tr><td>평균주문금액</td><td>96,924.49</td></tr></tbody></table>
+<p class="note">고객 조인 누락과 상품 조인 누락은 모두 0건이다.</p></div></section>
+<section id="s8" class="slide slide-table"><div class="slide-inner"><h2>카테고리별 매출비중 검증값</h2>
+<table class="deck-table"><thead><tr><th>카테고리</th><th>매출</th><th>매출비중</th></tr></thead><tbody><tr><td>디지털</td><td>673,862,749</td><td>34.76%</td></tr><tr><td>패션</td><td>281,835,909</td><td>14.54%</td></tr><tr><td>스포츠</td><td>217,531,145</td><td>11.22%</td></tr><tr><td>뷰티</td><td>179,845,362</td><td>9.28%</td></tr><tr><td>생활용품</td><td>178,042,374</td><td>9.18%</td></tr></tbody></table>
+<p class="note">표나 막대그래프에서 products[category]와 나란히 놓을 때 매출비중의 의미가 살아난다.</p></div></section>
+<section id="s9" class="slide slide-quote"><div class="slide-inner"><blockquote class="quote">오늘 만든 대시보드는 그냥 예쁜 그림이 아니다. 관계형 모델 위에 측정값을 올리고, 그 측정값이 필터 맥락에 따라 스스로 다시 계산되도록 짜 놓은 결과물이다.</blockquote>
+<div class="attribution">S17 강사 멘트</div></div></section>
+<section id="s10" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 시계열 KPI 대시보드 완성</div><div class="m-desc">총매출, 주문건수, 평균주문금액, 전월대비 성장률 카드와 월별 총매출 선그래프를 한 페이지에 배치한다.</div></div><div class="mission-card"><div class="m-label">미션 2. 슬라이서와 드릴다운 동작 확인</div><div class="m-desc">고객 등급 슬라이서와 월 슬라이서를 만들고, 카테고리별 매출 막대그래프가 상품명으로 드릴다운되도록 구성한다.</div></div><div class="mission-card"><div class="m-label">미션 3. 검증값과 해석 문장 확인</div><div class="m-desc">월 슬라이서에서 2024-12를 선택하면 전월대비 성장률 1.14%가 보여야 하며, 해석 문장 2개를 적는다.</div></div></div></div></section>
+<section id="s11" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>슬라이서는 대시보드 전체를 바꾸는 필터이며, 상호작용 설정에 따라 차트끼리 서로 영향을 준다.</li>
+<li>DAX 측정값은 시각화에서 반복해서 쓰는 계산식이며, 같은 측정값이 필터 맥락에 따라 다시 계산된다.</li>
+<li>전월대비 계산에는 날짜테이블과 주문일 관계가 필요하며, 카드로 읽을 때는 현재 월 맥락이 필요하다.</li></ul>
+<div class="next"><b>다음 차시</b>는 S18 배포와 공유이며, Looker Studio를 표준 경로로 보고서를 공유 링크 형태로 다듬는다.</div></div></section>
+</main>
+<script>
+const deck=document.querySelector('.deck');
+const slides=[...document.querySelectorAll('.slide')];
+const prog=document.querySelector('.progress');
+const counter=document.querySelector('.counter .cur');
+function cur(){let i=0,best=1e9;slides.forEach((s,k)=>{const d=Math.abs(s.getBoundingClientRect().top);if(d<best){best=d;i=k;}});return i;}
+function upd(){const i=cur();prog.style.width=((i+1)/slides.length*100)+'%';if(counter)counter.textContent=i+1;}
+function go(n){const i=Math.max(0,Math.min(slides.length-1,n));slides[i].scrollIntoView({behavior:'smooth'});}
+deck.addEventListener('scroll',()=>{window.requestAnimationFrame(upd);},{passive:true});
+window.addEventListener('keydown',e=>{
+  if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur()+1);}
+  else if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur()-1);}
+  else if(e.key==='Home'){e.preventDefault();go(0);}
+  else if(e.key==='End'){e.preventDefault();go(slides.length-1);}
+  else if(e.key==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+upd();
+</script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S18 · 배포와 공유: Looker Studio 주력, Power BI Copilot 선택 — 발표 덱</title>
+<style>
+@font-face{font-family:"PretendardDeck";
+  src:url("../fonts/pretendard-deck-subset.woff2") format("woff2");
+  font-weight:100 900;font-style:normal;font-display:swap;}
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a; --surface-4:#191a1b;
+  --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+  --primary:#5e6ad2; --primary-hover:#828fff; --primary-focus:#5e69d1;
+  --hairline:#23252a; --hairline-strong:#34343a; --hairline-tertiary:#3e3e44; --success:#27a644;
+  --font-display:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;
+  --font-text:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,"PretendardDeck",monospace;
+}
+html,body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font-text);
+  -webkit-font-smoothing:antialiased;letter-spacing:-0.2px;}
+a{color:inherit;text-decoration:none;}
+.deck{scroll-snap-type:y mandatory;overflow-y:scroll;height:100vh;scroll-behavior:smooth;}
+.slide{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:6vh 8vw;position:relative;background:var(--canvas);}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 82% 8%,rgba(94,106,210,0.10),transparent 55%);}
+.eyebrow{font-family:var(--font-mono);font-size:0.82rem;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--primary-hover);margin-bottom:1.4rem;}
+.slide h1{font-family:var(--font-display);font-weight:640;font-size:clamp(2.4rem,5.4vw,4.6rem);
+  line-height:1.02;letter-spacing:-1.6px;margin:0 0 1.4rem;max-width:20ch;}
+.slide h2{font-family:var(--font-display);font-weight:620;font-size:clamp(1.7rem,3.4vw,2.9rem);
+  line-height:1.08;letter-spacing:-1px;margin:0 0 2rem;max-width:24ch;}
+.subtitle{font-size:clamp(1.05rem,1.7vw,1.5rem);color:var(--ink-muted);max-width:44ch;line-height:1.5;}
+.kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
+  text-transform:uppercase;margin-bottom:0.9rem;}
+.body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
+ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
+  color:var(--ink);line-height:1.5;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+  background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
+ul.bullets>li b{color:var(--ink);font-weight:640;}
+.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
+  font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
+.obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
+  font-family:var(--font-mono);font-size:0.95rem;color:var(--primary-hover);
+  border:1px solid var(--hairline-strong);border-radius:8px;padding:0.35em 0.55em;flex:none;margin-top:0.1em;}
+.mission-grid{display:flex;flex-direction:column;gap:1rem;max-width:64ch;}
+.mission-card{border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;
+  padding:1.3rem 1.5rem;}
+.mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
+.mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
+  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
+  font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
+table.deck-table td{color:var(--ink-muted);}
+table.deck-table td:first-child{color:var(--ink);font-weight:560;}
+.note{color:var(--ink-tertiary);font-size:0.95rem;margin-top:1.2rem;max-width:60ch;line-height:1.5;}
+.quote{font-family:var(--font-display);font-weight:560;font-size:clamp(1.5rem,3vw,2.6rem);
+  line-height:1.28;letter-spacing:-0.8px;max-width:26ch;color:var(--ink);}
+.quote::before{content:"\201C";color:var(--primary);}
+.quote::after{content:"\201D";color:var(--primary);}
+.attribution{margin-top:1.6rem;color:var(--ink-subtle);font-size:1.05rem;font-family:var(--font-mono);}
+.closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
+  color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
+.closing .next b{color:var(--primary-hover);}
+/* chrome */
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
+.hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
+  color:var(--ink-subtle);display:flex;gap:14px;align-items:center;}
+.hud .counter{color:var(--ink-muted);}
+.hud a.back{border:1px solid var(--hairline-strong);border-radius:8px;padding:6px 12px;color:var(--ink-muted);
+  background:rgba(15,16,17,0.7);backdrop-filter:blur(6px);transition:border-color .15s,color .15s;}
+.hud a.back:hover{border-color:var(--primary);color:var(--ink);}
+.brand{position:fixed;top:20px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  letter-spacing:0.6px;color:var(--ink-tertiary);}
+.nav-hint{position:fixed;bottom:22px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  color:var(--ink-tertiary);}
+@media (max-width:640px){.slide{padding:8vh 7vw;}.nav-hint{display:none;}}
+@media print{
+  @page{size:1280px 720px;margin:0;}
+  html,body{height:auto;}
+  .deck{height:auto;overflow:visible;scroll-snap-type:none;}
+  .slide{height:720px;min-height:720px;page-break-after:always;break-after:page;background:#06070a;}
+  .progress,.hud,.nav-hint,.brand{display:none;}
+  /* 배포 PDF 경량화: 페이지마다 래스터화되는 그라디언트 글로우 제거 -> 텍스트 벡터만 남겨 용량 최소화 */
+  .slide::after{display:none;}
+  ul.bullets>li::before{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+<div class="brand">데이터 리터러시 with AI</div>
+<div class="hud">
+  <span class="counter"><span class="cur">1</span> / 10</span>
+  <a class="back" href="./S18.html">자료로 돌아가기</a>
+</div>
+<div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
+<main class="deck">
+<section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S18 · PART 05 · BI · 난이도 4</div>
+<h1>배포와 공유: Looker Studio 주력, Power BI Copilot 선택</h1>
+<p class="subtitle">보고서를 로컬 파일에 머물게 하지 않고 Looker Studio에서 CSV 기반 웹 보고서로 만들며 공유 링크와 보기 권한 검증까지 수행한다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
+<ul class="obj-grid"><li>로컬 파일 보고서와 웹 공유 보고서의 차이를 설명한다.</li>
+<li>Looker Studio에 `survey_responses_clean.csv`를 업로드하고 데이터 원본을 연결한다.</li>
+<li>응답 수, 평균 NPS, 평균 만족도, NPS 점수 카드를 만들고 계산 필드 `NPS_그룹`, `NPS_점수_행`을 활용한다.</li>
+<li>공유 링크를 보기 권한으로 만들고 다른 환경에서 열리는지 검증한다.</li>
+<li>Power BI Service 게시와 Power BI Copilot이 개인 무료 계정 표준 실습 범위가 아님을 구분한다.</li></ul></div></section>
+<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>공유는 파일을 보내는 것이 아니라 권한을 여는 일이다</h2>
+<p class="body">엑셀 파일 첨부는 받는 사람마다 사본을 만든다. BI 보고서 공유는 웹에 둔 하나의 보고서를 링크와 권한으로 함께 보게 하는 일이다.</p>
+<ul class="bullets"><li>링크를 만들었다고 아무나 볼 수 있는 것은 아니다.</li>
+<li>권한이 닫혀 있으면 링크를 받은 사람도 보고서를 열 수 없다.</li>
+<li>다른 계정이나 시크릿 창에서 <b>보기 권한</b>으로 열리는지 확인해야 한다.</li></ul></div></section>
+<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<h2>Looker Studio는 무료 경로의 표준 대안이다</h2>
+<p class="body">Power BI Service 게시와 Copilot은 조직 계정, 유료 라이선스, Fabric이나 Premium 용량에 좌우된다. 개인 Gmail 수강생의 표준 실습 경로는 Looker Studio다.</p>
+<ul class="bullets"><li>Gmail 계정과 브라우저만 있으면 CSV 업로드와 보고서 공유 실습을 진행할 수 있다.</li>
+<li>같은 데이터셋에 파일을 또 올리면 기존 데이터에 얹힐 수 있으므로 중복 업로드를 피한다.</li>
+<li>실제 업무 데이터라면 개인정보, 고객명, 이메일, 전화번호, 내부 매출이 섞여 있지 않은지 확인한다.</li></ul></div></section>
+<section id="s5" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
+<h2>NPS는 점수를 그룹으로 바꿔 읽는다</h2>
+<p class="body">NPS 원점수는 0점부터 10점까지지만, 해석할 때는 추천 고객, 중립 고객, 비추천 고객으로 나누어 본다.</p>
+<ul class="bullets"><li>9점과 10점은 추천 고객, 7점과 8점은 중립 고객, 0점부터 6점까지는 비추천 고객이다.</li>
+<li>NPS 점수는 추천 고객 비율에서 비추천 고객 비율을 뺀 값이다.</li>
+<li>이번 데이터는 추천 고객 481명, 중립 고객 467명, 비추천 고객 552명이며 NPS 점수는 약 -4.73이다.</li></ul></div></section>
+<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
+<h2>계산 필드는 IF와 닮은 분류 규칙이다</h2>
+<p class="body">Looker Studio의 계산 필드는 조건을 따져 맞는 값을 돌려준다. `NPS_그룹`은 차원으로 쓰고, `NPS_점수_행`은 평균을 내서 점수 카드로 쓴다.</p>
+<ul class="bullets"><li>`NPS_그룹`은 NPS 원점수를 추천 고객, 중립 고객, 비추천 고객으로 나눈다.</li>
+<li>`NPS_점수_행`은 추천 고객을 100, 중립 고객을 0, 비추천 고객을 -100으로 바꾼다.</li>
+<li>`NPS_점수_행`을 합계로 잡으면 안 되며 반드시 평균으로 집계한다.</li></ul></div></section>
+<section id="s7" class="slide slide-table"><div class="slide-inner"><h2>오늘 만들 대시보드</h2>
+<table class="deck-table"><thead><tr><th>위치</th><th>요소</th><th>확인할 값 또는 내용</th></tr></thead><tbody><tr><td>상단</td><td>응답 수 카드</td><td>1,500</td></tr><tr><td>상단</td><td>평균 NPS 카드</td><td>약 6.86</td></tr><tr><td>상단</td><td>평균 만족도 카드</td><td>약 3.62</td></tr><tr><td>상단</td><td>NPS 점수 카드</td><td>약 -4.73</td></tr><tr><td>본문</td><td>NPS 그룹별 막대그래프</td><td>추천, 중립, 비추천 고객 수</td></tr><tr><td>본문</td><td>채널별 표</td><td>채널별 응답 수, 평균 NPS, 평균 만족도</td></tr><tr><td>본문</td><td>연령대별 막대그래프</td><td>연령대별 평균 만족도</td></tr></tbody></table></div></section>
+<section id="s8" class="slide slide-table"><div class="slide-inner"><h2>Power BI Service와 Copilot의 위치</h2>
+<table class="deck-table"><thead><tr><th>구분</th><th>수업에서의 처리</th></tr></thead><tbody><tr><td>Looker Studio</td><td>전원 표준 실습</td></tr><tr><td>Power BI Service 게시</td><td>조직 계정이 있는 경우만 개념 설명 또는 선택 시연</td></tr><tr><td>Power BI Copilot</td><td>Fabric 또는 Premium 환경이 준비된 경우만 선택 시연</td></tr><tr><td>개인 Gmail 수강생</td><td>Looker Studio 공유 링크 생성으로 미션 완료</td></tr></tbody></table></div></section>
+<section id="s9" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 공유 링크 만들기</div><div class="m-desc">보고서 제목을 `S18_설문_공유_대시보드_본인이름` 형식으로 만들고 Looker Studio 공유 링크를 만든다.</div></div><div class="mission-card"><div class="m-label">미션 2. 숫자 검산하기</div><div class="m-desc">응답 수 1,500, 평균 NPS 약 6.86, 평균 만족도 약 3.62, NPS 점수 약 -4.73이 보이는지 확인한다.</div></div><div class="mission-card"><div class="m-label">미션 3. 보기 권한 검증하기</div><div class="m-desc">링크를 시크릿 창 또는 동료 계정에서 열어 보고, 편집 화면이 아니라 보기 화면인지 확인한다.</div></div></div></div></section>
+<section id="s10" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>보고서 공유는 파일 첨부가 아니라 같은 보고서에 보기 권한을 여는 작업이다.</li>
+<li>Looker Studio는 개인 Gmail과 브라우저로 CSV 업로드, 대시보드 작성, 링크 공유까지 수행하는 표준 실습 경로다.</li>
+<li>핵심 숫자와 권한은 공유 전에 검산하고, 다른 환경에서 링크를 직접 열어 검증한다.</li>
+<li>Power BI Service와 Copilot은 조직 계정, 라이선스, Fabric 또는 Premium 환경 조건이 맞을 때 선택 시연으로 다룬다.</li></ul>
+<div class="next"><b>다음 차시</b> — S19 풀사이클 실습에서 AI 요약, 파이썬 그래프, BI 1페이지를 하나의 흐름으로 엮는다.</div></div></section>
+</main>
+<script>
+const deck=document.querySelector('.deck');
+const slides=[...document.querySelectorAll('.slide')];
+const prog=document.querySelector('.progress');
+const counter=document.querySelector('.counter .cur');
+function cur(){let i=0,best=1e9;slides.forEach((s,k)=>{const d=Math.abs(s.getBoundingClientRect().top);if(d<best){best=d;i=k;}});return i;}
+function upd(){const i=cur();prog.style.width=((i+1)/slides.length*100)+'%';if(counter)counter.textContent=i+1;}
+function go(n){const i=Math.max(0,Math.min(slides.length-1,n));slides[i].scrollIntoView({behavior:'smooth'});}
+deck.addEventListener('scroll',()=>{window.requestAnimationFrame(upd);},{passive:true});
+window.addEventListener('keydown',e=>{
+  if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur()+1);}
+  else if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur()-1);}
+  else if(e.key==='Home'){e.preventDefault();go(0);}
+  else if(e.key==='End'){e.preventDefault();go(slides.length-1);}
+  else if(e.key==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+upd();
+</script>
+</body>
+</html>

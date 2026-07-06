@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>한 페이지 대시보드</title>
+<style>
+  :root{
+    --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a; --surface-4:#191a1b;
+    --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+    --primary:#5e6ad2; --primary-hover:#828fff; --primary-focus:#5e69d1;
+    --hairline:#23252a; --hairline-strong:#34343a; --hairline-tertiary:#3e3e44; --success:#27a644;
+    --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{width:1672px; height:941px; overflow:hidden; background:var(--canvas);}
+  body{position:relative; font-family:var(--font-text); color:var(--ink);}
+
+  .glow{
+    position:absolute; top:-320px; right:-220px; width:900px; height:900px;
+    background: radial-gradient(circle, rgba(94,106,210,0.22) 0%, rgba(94,106,210,0.07) 42%, transparent 72%);
+    pointer-events:none; z-index:1;
+  }
+
+  .caption{
+    position:absolute; top:56px; left:64px; z-index:5;
+    font-family:var(--font-mono); font-size:15px; letter-spacing:0.09em;
+    color:var(--primary-hover);
+  }
+  .title{
+    position:absolute; top:88px; left:64px; z-index:5;
+    font-family:var(--font-display); font-size:46px; font-weight:650; letter-spacing:-1.3px;
+    color:var(--ink);
+  }
+
+  .chips{
+    position:absolute; top:170px; left:64px; z-index:5; display:flex; gap:12px;
+  }
+  .chip{
+    display:flex; align-items:center; gap:8px;
+    background:var(--surface-3); border:1px solid var(--hairline-strong); border-radius:20px;
+    padding:9px 18px; font-size:14.5px; color:var(--ink-muted);
+  }
+  .chip .car{ font-size:11px; color:var(--ink-tertiary); }
+
+  .kpi-row{
+    position:absolute; top:226px; left:64px; right:64px; height:130px; z-index:4;
+    display:flex; gap:24px;
+  }
+  .kpi{
+    flex:1; background:var(--surface-2); border:1px solid var(--hairline); border-radius:12px;
+    padding:20px 26px; position:relative;
+  }
+  .kpi .k-label{ font-family:var(--font-mono); font-size:13px; color:var(--ink-tertiary); letter-spacing:0.04em; }
+  .kpi .k-value{ margin-top:10px; font-family:var(--font-display); font-size:38px; font-weight:700; letter-spacing:-1px; color:var(--ink); }
+  .kpi .k-value .unit{ font-size:19px; font-weight:500; color:var(--ink-subtle); margin-left:4px; }
+  .kpi .k-sub{ margin-top:8px; font-size:13.5px; color:var(--ink-subtle); }
+  .kpi .k-dot{
+    position:absolute; top:22px; right:24px; width:7px; height:7px; border-radius:50%;
+    background:var(--primary); box-shadow:0 0 10px 2px rgba(94,106,210,0.5);
+  }
+
+  .tiles{ position:absolute; top:380px; left:64px; right:64px; height:444px; z-index:4; display:flex; gap:24px; }
+  .tile{
+    background:var(--surface-2); border:1px solid var(--hairline); border-radius:14px;
+    padding:26px 32px;
+  }
+  .tile-bar{ width:912px; }
+  .tile-donut{ width:608px; }
+  .tile .t-title{ font-family:var(--font-display); font-size:22px; font-weight:650; letter-spacing:-0.4px; color:var(--ink); }
+  .tile .t-title .tag{
+    font-family:var(--font-mono); font-size:12px; font-weight:500; color:var(--ink-tertiary);
+    border:1px solid var(--hairline-strong); border-radius:5px; padding:2px 7px; margin-left:8px; letter-spacing:0;
+  }
+  .tile .t-sub{ margin-top:6px; font-family:var(--font-mono); font-size:13px; color:var(--ink-tertiary); }
+
+  .legend{ display:flex; gap:22px; margin-top:18px; justify-content:center; }
+  .legend .l-item{ display:flex; align-items:center; gap:8px; font-size:14.5px; color:var(--ink-muted); }
+  .legend .l-dot{ width:10px; height:10px; border-radius:50%; }
+  .donut-caption{ text-align:center; margin-top:16px; font-size:15px; color:var(--ink-subtle); }
+  .donut-caption b{ color:var(--primary-hover); font-weight:700; }
+
+  .footnote{
+    position:absolute; left:64px; right:64px; top:846px; z-index:5;
+    display:flex; justify-content:space-between; align-items:center;
+    border-top:1px solid var(--hairline); padding-top:20px;
+    font-family:var(--font-mono); font-size:14px; color:var(--ink-tertiary); letter-spacing:0.02em;
+  }
+  .footnote .f-strong{ color:var(--primary-hover); }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+
+  <div class="caption">PART 05 · BI</div>
+  <div class="title">한 페이지 대시보드</div>
+
+  <div class="chips">
+    <div class="chip">지점 <span class="car">&#9662;</span></div>
+    <div class="chip">기간 <span class="car">&#9662;</span></div>
+  </div>
+
+  <div class="kpi-row">
+    <div class="kpi">
+      <div class="k-dot"></div>
+      <div class="k-label">거래 건수</div>
+      <div class="k-value">10,424<span class="unit">건</span></div>
+      <div class="k-sub">cafe_sales 전체 행</div>
+    </div>
+    <div class="kpi">
+      <div class="k-dot"></div>
+      <div class="k-label">지점 수</div>
+      <div class="k-value">2<span class="unit">개</span></div>
+      <div class="k-sub">강남점 · 홍대점</div>
+    </div>
+    <div class="kpi">
+      <div class="k-dot"></div>
+      <div class="k-label">카테고리 수</div>
+      <div class="k-value">3<span class="unit">개</span></div>
+      <div class="k-sub">커피 · 음료 · 디저트</div>
+    </div>
+  </div>
+
+  <div class="tiles">
+    <div class="tile tile-bar">
+      <div class="t-title">카테고리별 구성<span class="tag">예시</span></div>
+      <div class="t-sub">cafe_sales · category</div>
+      <svg width="848" height="290" viewBox="0 0 848 290">
+        <defs>
+          <linearGradient id="bg1" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stop-color="#828fff"/><stop offset="100%" stop-color="#5e6ad2"/>
+          </linearGradient>
+        </defs>
+        <line x1="30" y1="240" x2="818" y2="240" stroke="#23252a" stroke-width="1.5"/>
+        <line x1="30" y1="180" x2="818" y2="180" stroke="#23252a" stroke-width="1" stroke-dasharray="4 6"/>
+        <line x1="30" y1="120" x2="818" y2="120" stroke="#23252a" stroke-width="1" stroke-dasharray="4 6"/>
+        <line x1="30" y1="60" x2="818" y2="60" stroke="#23252a" stroke-width="1" stroke-dasharray="4 6"/>
+
+        <rect x="144" y="30" width="150" height="210" rx="7" fill="url(#bg1)"/>
+        <text x="219" y="266" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="16.5" fill="#d0d6e0">커피</text>
+
+        <rect x="349" y="100" width="150" height="140" rx="7" fill="#292a34"/>
+        <text x="424" y="266" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="16.5" fill="#d0d6e0">음료</text>
+
+        <rect x="554" y="70" width="150" height="170" rx="7" fill="#34343a"/>
+        <text x="629" y="266" text-anchor="middle" font-family="-apple-system,sans-serif" font-size="16.5" fill="#d0d6e0">디저트</text>
+      </svg>
+    </div>
+
+    <div class="tile tile-donut">
+      <div class="t-title">지점별 비중</div>
+      <div class="t-sub">store 기준</div>
+      <svg width="540" height="230" viewBox="0 0 280 230">
+        <defs>
+          <linearGradient id="donutGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#828fff"/><stop offset="100%" stop-color="#5e6ad2"/>
+          </linearGradient>
+        </defs>
+        <circle r="92" cx="140" cy="108" fill="none" stroke="#292a34" stroke-width="30"/>
+        <circle r="92" cx="140" cy="108" fill="none" stroke="url(#donutGrad)" stroke-width="30"
+                stroke-dasharray="378 578" stroke-linecap="round" transform="rotate(-90 140 108)"/>
+      </svg>
+      <div class="legend">
+        <div class="l-item"><span class="l-dot" style="background:#828fff"></span>강남점</div>
+        <div class="l-item"><span class="l-dot" style="background:#292a34;border:1px solid #34343a"></span>홍대점</div>
+      </div>
+      <div class="donut-caption"><b>강남점 매출 &gt; 홍대점 매출</b></div>
+    </div>
+  </div>
+
+  <div class="footnote">
+    <span>대시보드 &nbsp;·&nbsp; <span class="f-strong">필터 → KPI → 상세 차트</span> 한 화면 구성</span>
+    <span>BI DASHBOARD</span>
+  </div>
+</body>
+</html>

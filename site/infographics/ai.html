@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>질문하고, 반드시 검증한다</title>
+<style>
+  :root{
+    --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a; --surface-4:#191a1b;
+    --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+    --primary:#5e6ad2; --primary-hover:#828fff; --primary-focus:#5e69d1;
+    --hairline:#23252a; --hairline-strong:#34343a; --hairline-tertiary:#3e3e44; --success:#27a644;
+    --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{width:1672px; height:941px; overflow:hidden; background:var(--canvas);}
+  body{position:relative; font-family:var(--font-text); color:var(--ink);}
+
+  .glow{
+    position:absolute; top:-320px; right:-220px; width:900px; height:900px;
+    background: radial-gradient(circle, rgba(94,106,210,0.22) 0%, rgba(94,106,210,0.07) 42%, transparent 72%);
+    pointer-events:none; z-index:1;
+  }
+
+  .caption{
+    position:absolute; top:56px; left:64px; z-index:5;
+    font-family:var(--font-mono); font-size:15px; letter-spacing:0.09em;
+    color:var(--primary-hover);
+  }
+  .title{
+    position:absolute; top:88px; left:64px; z-index:5;
+    font-family:var(--font-display); font-size:46px; font-weight:650; letter-spacing:-1.3px;
+    color:var(--ink);
+  }
+
+  .node{
+    position:absolute; top:300px; width:340px; height:230px; z-index:4;
+    background:var(--surface-2); border:1px solid var(--hairline); border-radius:14px;
+    padding:26px 28px;
+  }
+  .node .num{ font-family:var(--font-mono); font-size:13px; color:var(--ink-tertiary); }
+  .node .n-title{
+    margin-top:14px; font-family:var(--font-display); font-size:25px; font-weight:650;
+    letter-spacing:-0.5px; color:var(--ink); line-height:1.35;
+  }
+  .node .n-desc{ margin-top:14px; font-size:15px; line-height:1.6; color:var(--ink-subtle); }
+  .node .dot{
+    position:absolute; top:26px; right:28px; width:8px; height:8px; border-radius:50%;
+    background:var(--primary); box-shadow:0 0 12px 2px rgba(94,106,210,0.55);
+  }
+  .node-1{ left:226px; }
+  .node-2{ left:666px; }
+  .node-3{ left:1106px; }
+
+  .h-arrow{
+    position:absolute; top:397px; z-index:4; font-size:28px; color:var(--ink-tertiary);
+  }
+  .h-arrow-1{ left:592px; }
+  .h-arrow-2{ left:1032px; }
+
+  svg.loop{ position:absolute; inset:0; z-index:3; pointer-events:none; }
+  .loop-label{
+    position:absolute; top:591px; left:50%; transform:translateX(-50%); z-index:4;
+    font-family:var(--font-mono); font-size:14px; color:var(--ink-subtle); letter-spacing:0.03em;
+    background:var(--canvas); padding:6px 16px; border-radius:6px; white-space:nowrap;
+    border:1px solid var(--hairline);
+  }
+
+  .warn{
+    position:absolute; left:64px; top:646px; width:1544px; height:84px; z-index:4;
+    background:rgba(94,106,210,0.08); border:1px solid var(--hairline-strong); border-radius:12px;
+    display:flex; align-items:center; padding:0 30px; gap:20px;
+  }
+  .warn .w-icon{
+    flex-shrink:0; width:36px; height:36px; border-radius:50%;
+    border:1.5px solid var(--primary-hover); color:var(--primary-hover);
+    display:flex; align-items:center; justify-content:center;
+    font-family:var(--font-display); font-weight:800; font-size:18px;
+  }
+  .warn .w-text{ font-size:18px; color:var(--ink); font-weight:500; }
+  .warn .w-text b{ color:var(--primary-hover); }
+
+  .footnote{
+    position:absolute; left:64px; right:64px; top:796px; z-index:5;
+    display:flex; justify-content:space-between; align-items:center;
+    border-top:1px solid var(--hairline); padding-top:20px;
+    font-family:var(--font-mono); font-size:14px; color:var(--ink-tertiary); letter-spacing:0.02em;
+  }
+  .footnote .f-strong{ color:var(--primary-hover); }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+
+  <div class="caption">PART 03 · AI</div>
+  <div class="title">질문하고, 반드시 검증한다</div>
+
+  <div class="node node-1">
+    <div class="dot"></div>
+    <span class="num">01</span>
+    <div class="n-title">질문을 표의 열로</div>
+    <div class="n-desc">무엇을 알고 싶은지 store, category, amount 같은 열 이름으로 바꿔 묻는다</div>
+  </div>
+  <div class="h-arrow h-arrow-1">&#8594;</div>
+
+  <div class="node node-2">
+    <div class="dot"></div>
+    <span class="num">02</span>
+    <div class="n-title">AI 분석 제안</div>
+    <div class="n-desc">그룹합·평균·상관 등 분석 방법과 코드를 AI가 제안한다</div>
+  </div>
+  <div class="h-arrow h-arrow-2">&#8594;</div>
+
+  <div class="node node-3">
+    <div class="dot"></div>
+    <span class="num">03</span>
+    <div class="n-title">숫자 검증</div>
+    <div class="n-desc">나온 결과값을 다른 방법으로 다시 계산해 맞는지 확인한다</div>
+  </div>
+
+  <svg class="loop" width="1672" height="941" viewBox="0 0 1672 941">
+    <defs>
+      <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="7" refY="5" orient="auto">
+        <path d="M0,0 L10,5 L0,10 Z" fill="#828fff"/>
+      </marker>
+    </defs>
+    <path d="M 1276 530 C 1276 600, 1000 610, 836 610 C 672 610, 396 600, 396 530"
+          fill="none" stroke="#5e6ad2" stroke-width="1.8" stroke-dasharray="5 6" opacity="0.75"
+          marker-end="url(#arrowhead)"/>
+  </svg>
+  <div class="loop-label">검증에서 문제가 보이면 처음으로 돌아가 다시 묻는다</div>
+
+  <div class="warn">
+    <div class="w-icon">!</div>
+    <div class="w-text">AI가 낸 숫자는 <b>엑셀·파이썬·BI 중 하나로</b> 반드시 검증한다</div>
+  </div>
+
+  <div class="footnote">
+    <span>검증 원칙 &nbsp;·&nbsp; <span class="f-strong">AI 제안 → 재계산 → 일치 확인</span></span>
+    <span>AI-ASSISTED ANALYSIS</span>
+  </div>
+</body>
+</html>

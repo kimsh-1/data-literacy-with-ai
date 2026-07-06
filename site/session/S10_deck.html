@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S10 · Colab과 파이썬 기초 — 발표 덱</title>
+<style>
+@font-face{font-family:"PretendardDeck";
+  src:url("../fonts/pretendard-deck-subset.woff2") format("woff2");
+  font-weight:100 900;font-style:normal;font-display:swap;}
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a; --surface-4:#191a1b;
+  --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+  --primary:#5e6ad2; --primary-hover:#828fff; --primary-focus:#5e69d1;
+  --hairline:#23252a; --hairline-strong:#34343a; --hairline-tertiary:#3e3e44; --success:#27a644;
+  --font-display:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;
+  --font-text:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,"PretendardDeck",monospace;
+}
+html,body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font-text);
+  -webkit-font-smoothing:antialiased;letter-spacing:-0.2px;}
+a{color:inherit;text-decoration:none;}
+.deck{scroll-snap-type:y mandatory;overflow-y:scroll;height:100vh;scroll-behavior:smooth;}
+.slide{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:6vh 8vw;position:relative;background:var(--canvas);}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 82% 8%,rgba(94,106,210,0.10),transparent 55%);}
+.eyebrow{font-family:var(--font-mono);font-size:0.82rem;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--primary-hover);margin-bottom:1.4rem;}
+.slide h1{font-family:var(--font-display);font-weight:640;font-size:clamp(2.4rem,5.4vw,4.6rem);
+  line-height:1.02;letter-spacing:-1.6px;margin:0 0 1.4rem;max-width:20ch;}
+.slide h2{font-family:var(--font-display);font-weight:620;font-size:clamp(1.7rem,3.4vw,2.9rem);
+  line-height:1.08;letter-spacing:-1px;margin:0 0 2rem;max-width:24ch;}
+.subtitle{font-size:clamp(1.05rem,1.7vw,1.5rem);color:var(--ink-muted);max-width:44ch;line-height:1.5;}
+.kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
+  text-transform:uppercase;margin-bottom:0.9rem;}
+.body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
+ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
+  color:var(--ink);line-height:1.5;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+  background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
+ul.bullets>li b{color:var(--ink);font-weight:640;}
+.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
+  font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
+.obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
+  font-family:var(--font-mono);font-size:0.95rem;color:var(--primary-hover);
+  border:1px solid var(--hairline-strong);border-radius:8px;padding:0.35em 0.55em;flex:none;margin-top:0.1em;}
+.mission-grid{display:flex;flex-direction:column;gap:1rem;max-width:64ch;}
+.mission-card{border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;
+  padding:1.3rem 1.5rem;}
+.mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
+.mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
+  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
+  font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
+table.deck-table td{color:var(--ink-muted);}
+table.deck-table td:first-child{color:var(--ink);font-weight:560;}
+.note{color:var(--ink-tertiary);font-size:0.95rem;margin-top:1.2rem;max-width:60ch;line-height:1.5;}
+.quote{font-family:var(--font-display);font-weight:560;font-size:clamp(1.5rem,3vw,2.6rem);
+  line-height:1.28;letter-spacing:-0.8px;max-width:26ch;color:var(--ink);}
+.quote::before{content:"\201C";color:var(--primary);}
+.quote::after{content:"\201D";color:var(--primary);}
+.attribution{margin-top:1.6rem;color:var(--ink-subtle);font-size:1.05rem;font-family:var(--font-mono);}
+.closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
+  color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
+.closing .next b{color:var(--primary-hover);}
+/* chrome */
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
+.hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
+  color:var(--ink-subtle);display:flex;gap:14px;align-items:center;}
+.hud .counter{color:var(--ink-muted);}
+.hud a.back{border:1px solid var(--hairline-strong);border-radius:8px;padding:6px 12px;color:var(--ink-muted);
+  background:rgba(15,16,17,0.7);backdrop-filter:blur(6px);transition:border-color .15s,color .15s;}
+.hud a.back:hover{border-color:var(--primary);color:var(--ink);}
+.brand{position:fixed;top:20px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  letter-spacing:0.6px;color:var(--ink-tertiary);}
+.nav-hint{position:fixed;bottom:22px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  color:var(--ink-tertiary);}
+@media (max-width:640px){.slide{padding:8vh 7vw;}.nav-hint{display:none;}}
+@media print{
+  @page{size:1280px 720px;margin:0;}
+  html,body{height:auto;}
+  .deck{height:auto;overflow:visible;scroll-snap-type:none;}
+  .slide{height:720px;min-height:720px;page-break-after:always;break-after:page;background:#06070a;}
+  .progress,.hud,.nav-hint,.brand{display:none;}
+  /* 배포 PDF 경량화: 페이지마다 래스터화되는 그라디언트 글로우 제거 -> 텍스트 벡터만 남겨 용량 최소화 */
+  .slide::after{display:none;}
+  ul.bullets>li::before{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+<div class="brand">데이터 리터러시 with AI</div>
+<div class="hud">
+  <span class="counter"><span class="cur">1</span> / 11</span>
+  <a class="back" href="./S10.html">자료로 돌아가기</a>
+</div>
+<div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
+<main class="deck">
+<section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S10 · PART 04 · 파이썬 · 난이도 3</div>
+<h1>Colab과 파이썬 기초</h1>
+<p class="subtitle">엑셀에서 파이썬으로 넘어가는 첫 수업으로, 다음 차시부터 쓸 pandas 문법이 낯설지 않도록 기본 언어 감각을 익힌다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
+<ul class="obj-grid"><li>Colab 노트북을 만들고 코드 셀을 실행할 수 있다.</li>
+<li>변수, 자료형, 리스트, 딕셔너리의 역할을 엑셀 표와 비교해 설명할 수 있다.</li>
+<li>if 조건문으로 원하는 경우만 골라낼 수 있다.</li>
+<li>for 반복문으로 여러 값을 하나씩 처리하고 합계와 평균을 계산할 수 있다.</li>
+<li>함수는 자주 쓰는 절차에 이름을 붙이는 것이라고 이해할 수 있다.</li></ul></div></section>
+<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>Colab은 브라우저에서 쓰는 파이썬 작업장이다</h2>
+<p class="body">Colab은 구글 계정으로 사용하는 온라인 노트북이다. 엑셀 파일이 셀 격자로 되어 있다면, Colab 노트북은 코드 셀과 텍스트 셀로 되어 있다.</p>
+<ul class="bullets"><li>코드 셀을 실행하면 결과가 셀 아래에 표시된다.</li>
+<li>위 셀에서 만든 변수는 아래 셀에서 다시 쓸 수 있다.</li>
+<li>위 셀을 실행하지 않았거나 런타임을 재시작했다면 아래 셀에서 그 변수를 찾지 못한다.</li></ul></div></section>
+<section id="s4" class="slide slide-table"><div class="slide-inner"><h2>엑셀과 Colab의 감각 비교</h2>
+<table class="deck-table"><thead><tr><th>엑셀에서의 감각</th><th>Colab에서의 감각</th></tr></thead><tbody><tr><td>셀에 수식 입력</td><td>코드 셀에 파이썬 코드 입력</td></tr><tr><td>Enter로 셀 이동</td><td>Shift + Enter로 코드 실행 후 다음 셀 이동</td></tr><tr><td>워크시트 저장</td><td>구글 드라이브에 노트북 저장</td></tr><tr><td>수식 결과가 셀에 표시</td><td>코드 실행 결과가 셀 아래에 표시</td></tr><tr><td>잘못된 수식은 오류 표시</td><td>잘못된 코드는 빨간 오류 메시지 표시</td></tr></tbody></table></div></section>
+<section id="s5" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<h2>변수와 자료형은 값의 이름과 종류를 구분한다</h2>
+<p class="body">변수는 값에 붙이는 이름이다. 엑셀에서 B2 같은 셀 주소가 값을 가리키듯, 파이썬에서는 today_sales처럼 사람이 읽을 수 있는 이름을 붙인다.</p>
+<ul class="bullets"><li>등호 =는 오른쪽 값을 왼쪽 이름에 담는다는 뜻이다.</li>
+<li>같은지 비교할 때는 ==를 쓴다.</li>
+<li>자료형은 값의 종류이며 str, int, float, bool을 구분한다.</li>
+<li>계산이 안 될 때는 숫자인 줄 알았는데 글자였는지부터 확인한다.</li></ul></div></section>
+<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
+<h2>리스트는 한 열, 딕셔너리는 한 행처럼 생각한다</h2>
+<p class="body">리스트는 여러 값을 순서대로 담는 상자이고, 딕셔너리는 값마다 이름표가 붙어 있는 구조다. 리스트 안에 딕셔너리를 여러 개 넣으면 작은 표처럼 다룰 수 있다.</p>
+<ul class="bullets"><li>sales_list는 월요일부터 금요일까지 매출 5개를 담은 리스트다.</li>
+<li>len()은 리스트 안의 값이 몇 개인지 세는 함수다.</li>
+<li>one_day는 요일과 매출을 담은 한 행처럼 볼 수 있다.</li>
+<li>이 구조가 다음 차시의 pandas DataFrame으로 이어진다.</li></ul></div></section>
+<section id="s7" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
+<h2>조건문과 반복문은 필터와 아래로 채우기의 출발점이다</h2>
+<p class="body">조건문은 원하는 경우만 실행하게 하는 문법이고, 반복문은 같은 작업을 여러 값에 적용하는 방법이다. 엑셀 필터와 아래로 채우기에 빗대어 이해할 수 있다.</p>
+<ul class="bullets"><li>if 뒤에는 조건을 쓰고 조건 끝에는 콜론을 붙인다.</li>
+<li>if나 for 아래에서 실행할 코드는 한 단계 안쪽으로 들여쓴다.</li>
+<li>for amount in sales_list는 리스트에서 값을 하나씩 꺼내 이번 값을 amount라고 부른다는 뜻이다.</li>
+<li>pandas 필터는 if 조건문을 표 전체 열에 한 번에 적용하는 방식이다.</li></ul></div></section>
+<section id="s8" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 5</div>
+<h2>함수는 자주 쓰는 절차에 이름을 붙이는 것이다</h2>
+<p class="body">이번 차시에서 함수는 깊게 다루지 않는다. 다만 다음 차시부터 read_csv(), head(), mean() 같은 함수를 계속 만나므로, 정해진 일을 해주는 도구라는 감각을 잡는다.</p>
+<ul class="bullets"><li>평균은 합계를 개수로 나눈 값이다.</li>
+<li>엑셀 AVERAGE 함수가 하던 일을 파이썬 코드로 손으로 써 본다.</li>
+<li>average(numbers)는 평균 계산 절차에 이름을 붙인 예다.</li></ul></div></section>
+<section id="s9" class="slide slide-table"><div class="slide-inner"><h2>오류가 났을 때 먼저 볼 것</h2>
+<table class="deck-table"><thead><tr><th>오류</th><th>흔한 원인</th><th>확인할 것</th></tr></thead><tbody><tr><td>NameError</td><td>변수를 만들기 전에 사용함</td><td>위 셀을 실행했는가</td></tr><tr><td>SyntaxError</td><td>문법이 틀림</td><td>콜론, 따옴표, 괄호가 빠졌는가</td></tr><tr><td>IndentationError</td><td>들여쓰기가 틀림</td><td>if, for 아래 줄이 들여쓰기 되었는가</td></tr><tr><td>TypeError</td><td>자료형이 맞지 않음</td><td>숫자와 글자를 섞어 계산하지 않았는가</td></tr></tbody></table>
+<p class="note">오류가 나면 빨간 메시지의 맨 아래 줄부터 읽는다.</p></div></section>
+<section id="s10" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 평일 행만 고르기</div><div class="m-desc">daily_sales에서 평일인 월, 화, 수, 목, 금 행만 골라 weekday_rows 리스트에 담는다.</div></div><div class="mission-card"><div class="m-label">미션 2. 평일 매출 계산하기</div><div class="m-desc">평일 행수 5, 평일 매출 합계 678000, 평일 매출 평균 135600.0을 출력한다.</div></div><div class="mission-card"><div class="m-label">미션 3. pandas 필터와 연결하기</div><div class="m-desc">오늘의 if 조건문이 다음 차시 pandas 필터의 바탕이라는 점을 설명한다.</div></div></div></div></section>
+<section id="s11" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>Colab은 코드 셀을 위에서 아래로 실행하는 브라우저 기반 파이썬 작업장이다.</li>
+<li>변수는 값을 다시 쓰기 위해 붙이는 이름이고, 자료형은 값의 종류다.</li>
+<li>리스트는 여러 값을 순서대로 담고, 딕셔너리는 이름표가 붙은 값을 담는다.</li>
+<li>반복문은 값을 하나씩 처리하고, 조건문은 원하는 경우만 남긴다.</li>
+<li>함수는 자주 쓰는 절차에 이름을 붙여 다시 쓰는 방법이다.</li></ul>
+<div class="next"><b>다음 차시 S11</b>에서는 pandas 입문으로, CSV를 불러오고 조건을 표 전체에 적용하는 방법을 다룬다.</div></div></section>
+</main>
+<script>
+const deck=document.querySelector('.deck');
+const slides=[...document.querySelectorAll('.slide')];
+const prog=document.querySelector('.progress');
+const counter=document.querySelector('.counter .cur');
+function cur(){let i=0,best=1e9;slides.forEach((s,k)=>{const d=Math.abs(s.getBoundingClientRect().top);if(d<best){best=d;i=k;}});return i;}
+function upd(){const i=cur();prog.style.width=((i+1)/slides.length*100)+'%';if(counter)counter.textContent=i+1;}
+function go(n){const i=Math.max(0,Math.min(slides.length-1,n));slides[i].scrollIntoView({behavior:'smooth'});}
+deck.addEventListener('scroll',()=>{window.requestAnimationFrame(upd);},{passive:true});
+window.addEventListener('keydown',e=>{
+  if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur()+1);}
+  else if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur()-1);}
+  else if(e.key==='Home'){e.preventDefault();go(0);}
+  else if(e.key==='End'){e.preventDefault();go(slides.length-1);}
+  else if(e.key==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+upd();
+</script>
+</body>
+</html>

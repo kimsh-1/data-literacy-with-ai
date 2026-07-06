@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S20 · 인사이트 보고: 그래서 뭘 하나 — 발표 덱</title>
+<style>
+@font-face{font-family:"PretendardDeck";
+  src:url("../fonts/pretendard-deck-subset.woff2") format("woff2");
+  font-weight:100 900;font-style:normal;font-display:swap;}
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a; --surface-4:#191a1b;
+  --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+  --primary:#5e6ad2; --primary-hover:#828fff; --primary-focus:#5e69d1;
+  --hairline:#23252a; --hairline-strong:#34343a; --hairline-tertiary:#3e3e44; --success:#27a644;
+  --font-display:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;
+  --font-text:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,"PretendardDeck",monospace;
+}
+html,body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font-text);
+  -webkit-font-smoothing:antialiased;letter-spacing:-0.2px;}
+a{color:inherit;text-decoration:none;}
+.deck{scroll-snap-type:y mandatory;overflow-y:scroll;height:100vh;scroll-behavior:smooth;}
+.slide{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:6vh 8vw;position:relative;background:var(--canvas);}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 82% 8%,rgba(94,106,210,0.10),transparent 55%);}
+.eyebrow{font-family:var(--font-mono);font-size:0.82rem;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--primary-hover);margin-bottom:1.4rem;}
+.slide h1{font-family:var(--font-display);font-weight:640;font-size:clamp(2.4rem,5.4vw,4.6rem);
+  line-height:1.02;letter-spacing:-1.6px;margin:0 0 1.4rem;max-width:20ch;}
+.slide h2{font-family:var(--font-display);font-weight:620;font-size:clamp(1.7rem,3.4vw,2.9rem);
+  line-height:1.08;letter-spacing:-1px;margin:0 0 2rem;max-width:24ch;}
+.subtitle{font-size:clamp(1.05rem,1.7vw,1.5rem);color:var(--ink-muted);max-width:44ch;line-height:1.5;}
+.kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
+  text-transform:uppercase;margin-bottom:0.9rem;}
+.body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
+ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
+  color:var(--ink);line-height:1.5;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+  background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
+ul.bullets>li b{color:var(--ink);font-weight:640;}
+.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
+  font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
+.obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
+  font-family:var(--font-mono);font-size:0.95rem;color:var(--primary-hover);
+  border:1px solid var(--hairline-strong);border-radius:8px;padding:0.35em 0.55em;flex:none;margin-top:0.1em;}
+.mission-grid{display:flex;flex-direction:column;gap:1rem;max-width:64ch;}
+.mission-card{border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;
+  padding:1.3rem 1.5rem;}
+.mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
+.mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
+  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
+  font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
+table.deck-table td{color:var(--ink-muted);}
+table.deck-table td:first-child{color:var(--ink);font-weight:560;}
+.note{color:var(--ink-tertiary);font-size:0.95rem;margin-top:1.2rem;max-width:60ch;line-height:1.5;}
+.quote{font-family:var(--font-display);font-weight:560;font-size:clamp(1.5rem,3vw,2.6rem);
+  line-height:1.28;letter-spacing:-0.8px;max-width:26ch;color:var(--ink);}
+.quote::before{content:"\201C";color:var(--primary);}
+.quote::after{content:"\201D";color:var(--primary);}
+.attribution{margin-top:1.6rem;color:var(--ink-subtle);font-size:1.05rem;font-family:var(--font-mono);}
+.closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
+  color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
+.closing .next b{color:var(--primary-hover);}
+/* chrome */
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
+.hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
+  color:var(--ink-subtle);display:flex;gap:14px;align-items:center;}
+.hud .counter{color:var(--ink-muted);}
+.hud a.back{border:1px solid var(--hairline-strong);border-radius:8px;padding:6px 12px;color:var(--ink-muted);
+  background:rgba(15,16,17,0.7);backdrop-filter:blur(6px);transition:border-color .15s,color .15s;}
+.hud a.back:hover{border-color:var(--primary);color:var(--ink);}
+.brand{position:fixed;top:20px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  letter-spacing:0.6px;color:var(--ink-tertiary);}
+.nav-hint{position:fixed;bottom:22px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  color:var(--ink-tertiary);}
+@media (max-width:640px){.slide{padding:8vh 7vw;}.nav-hint{display:none;}}
+@media print{
+  @page{size:1280px 720px;margin:0;}
+  html,body{height:auto;}
+  .deck{height:auto;overflow:visible;scroll-snap-type:none;}
+  .slide{height:720px;min-height:720px;page-break-after:always;break-after:page;background:#06070a;}
+  .progress,.hud,.nav-hint,.brand{display:none;}
+  /* 배포 PDF 경량화: 페이지마다 래스터화되는 그라디언트 글로우 제거 -> 텍스트 벡터만 남겨 용량 최소화 */
+  .slide::after{display:none;}
+  ul.bullets>li::before{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+<div class="brand">데이터 리터러시 with AI</div>
+<div class="hud">
+  <span class="counter"><span class="cur">1</span> / 11</span>
+  <a class="back" href="./S20.html">자료로 돌아가기</a>
+</div>
+<div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
+<main class="deck">
+<section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S20 · PART 06 · 캡스톤 · 난이도 5</div>
+<h1>인사이트 보고: 그래서 뭘 하나</h1>
+<p class="subtitle">S19 산출물을 바탕으로 무엇을 발견했는가, 그래서 어떤 의미인가, 다음 행동은 무엇인가를 1페이지 보고서와 3분 발표로 정리한다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
+<ul class="obj-grid"><li>분석 결과를 발견, 시사점, 액션의 3단 구조로 정리한다.</li>
+<li>차트를 많이 넣는 대신 결론을 가장 잘 받쳐 주는 시각화 1개를 고른다.</li>
+<li>1페이지 보고서와 3분 발표의 구조를 익힌다.</li>
+<li>동료 피드백을 받아 결론, 근거, 액션을 더 명확하게 고친다.</li></ul></div></section>
+<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>보고서는 작업 기록이 아니라 판단을 돕는 문서다</h2>
+<p class="body">이번 차시는 분석을 더 하는 시간이 아니라, 분석 결과를 의사결정에 쓸 수 있는 보고서로 바꾸는 시간이다.</p>
+<ul class="bullets"><li>S19에서 만든 AI 요약, 파이썬 그래프, BI 1페이지 가운데 하나 이상을 출발점으로 삼는다.</li>
+<li>보고서는 <b>무엇을 발견했는가</b>, <b>그래서 어떤 의미인가</b>, <b>다음 행동은 무엇인가</b>를 압축한다.</li>
+<li>회의 자료에는 작업 과정 전체가 아니라 결론, 근거, 액션이 먼저 보여야 한다.</li></ul></div></section>
+<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<h2>발견은 데이터가 말한 사실이다</h2>
+<p class="body">발견은 데이터에서 눈으로 확인한 관찰이며, 아직 의견도 제안도 아니다.</p>
+<ul class="bullets"><li>서울 음식점·카페 상권 데이터는 119,158행이다.</li>
+<li>구별 점포수는 강남구 12,095개, 마포구 7,396개, 송파구 7,106개 순으로 많다.</li>
+<li>강남구 상권이 무조건 성공한다는 문장은 지금 데이터만으로 확인한 사실이 아니다.</li></ul></div></section>
+<section id="s5" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
+<h2>시사점은 발견의 의미다</h2>
+<p class="body">시사점은 그 사실이 왜 중요한가를 짚어 주는 문장으로, 발견과 액션을 잇는 다리 역할을 한다.</p>
+<ul class="bullets"><li>강남구와 마포구의 점포수가 많고, 한식과 커피점/카페 조합이 상위에 있다는 발견을 업무 의미로 바꾼다.</li>
+<li>상권 후보를 넓게 찾을 때는 강남구, 마포구, 송파구를 먼저 비교한다.</li>
+<li>실제 조사에서는 전체 점포수만 보지 말고 한식과 커피점/카페처럼 업종별 밀집도를 함께 확인한다.</li></ul></div></section>
+<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
+<h2>액션은 누가 무엇을 할지다</h2>
+<p class="body">액션은 보고서를 읽은 사람이 다음에 할 수 있는 행동이다. 좋은 액션은 담당자, 대상, 기준, 다음 산출물을 함께 담는다.</p>
+<ul class="bullets"><li><b>약한 액션</b>: 추가 분석이 필요하다.</li>
+<li><b>좋은 액션</b>: 상권 조사 담당자는 강남구, 마포구, 송파구의 한식과 커피점/카페 점포수를 먼저 비교하고, 다음 회의 전까지 후보 구별 경쟁 강도 표를 만든다.</li>
+<li>수업에서는 분석 담당자, 영업 담당자, 의사결정자 같은 일반 표현을 써도 충분하다.</li></ul></div></section>
+<section id="s7" class="slide slide-table"><div class="slide-inner"><h2>1페이지 보고서에 들어갈 것</h2>
+<table class="deck-table"><thead><tr><th>영역</th><th>내용</th></tr></thead><tbody><tr><td>제목</td><td>결론이 드러나는 한 문장</td></tr><tr><td>핵심 발견</td><td>숫자로 확인한 사실 2-3개</td></tr><tr><td>핵심 시각화</td><td>결론을 가장 잘 보여주는 차트 1개</td></tr><tr><td>시사점</td><td>왜 중요한지 1-2문장</td></tr><tr><td>권장 액션</td><td>다음 행동 2-3개</td></tr><tr><td>주의</td><td>데이터 한계, 해석 주의점</td></tr></tbody></table>
+<p class="note">보고서는 모든 차트를 담는 문서가 아니라 판단을 돕는 문서다.</p></div></section>
+<section id="s8" class="slide slide-table"><div class="slide-inner"><h2>결론에 맞는 시각화를 고른다</h2>
+<table class="deck-table"><thead><tr><th>말하고 싶은 내용</th><th>적합한 시각화</th></tr></thead><tbody><tr><td>두 숫자가 함께 움직인다</td><td>산점도, 추세선</td></tr><tr><td>그룹별 크기를 비교한다</td><td>막대그래프</td></tr><tr><td>시간 흐름을 본다</td><td>선그래프</td></tr><tr><td>구성비를 본다</td><td>100% 누적 막대, 작은 표</td></tr><tr><td>많은 지역과 시간대를 동시에 본다</td><td>집계 후 히트맵</td></tr></tbody></table>
+<p class="note">상권 점포수 예시는 구별·업종별 비교가 핵심이라 막대그래프가 가장 잘 맞는다.</p></div></section>
+<section id="s9" class="slide slide-quote"><div class="slide-inner"><blockquote class="quote">피벗테이블은 근거다. 보고서는 그 근거를 읽고 판단할 수 있게 바꾼 문서다.</blockquote>
+<div class="attribution">S20 강사대본</div></div></section>
+<section id="s10" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 1페이지 보고서 작성</div><div class="m-desc">본인의 S19 결과물을 제목, 핵심 발견, 핵심 시각화, 시사점, 권장 액션, 주의점이 있는 1페이지 보고서로 바꾼다.</div></div><div class="mission-card"><div class="m-label">미션 2. 3분 발표 원고 작성</div><div class="m-desc">결론, 근거, 액션 순서로 3분 발표 원고를 작성한다.</div></div><div class="mission-card"><div class="m-label">미션 3. 동료 피드백 반영</div><div class="m-desc">동료 피드백 2개 이상을 받고 최소 1개 이상을 보고서나 발표 원고에 반영한다.</div></div></div></div></section>
+<section id="s11" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>보고서는 분석 과정 전체가 아니라 결론, 근거, 액션을 압축한 문서다.</li>
+<li>발견은 데이터에서 확인한 사실이고, 시사점은 그 사실의 의미이며, 액션은 다음 행동이다.</li>
+<li>차트는 많이 넣는 것이 아니라 결론을 가장 잘 받쳐 주는 것을 고른다.</li>
+<li>동료가 결론을 한 번에 이해하지 못하면 제목과 첫 문장을 고친다.</li></ul></div></section>
+</main>
+<script>
+const deck=document.querySelector('.deck');
+const slides=[...document.querySelectorAll('.slide')];
+const prog=document.querySelector('.progress');
+const counter=document.querySelector('.counter .cur');
+function cur(){let i=0,best=1e9;slides.forEach((s,k)=>{const d=Math.abs(s.getBoundingClientRect().top);if(d<best){best=d;i=k;}});return i;}
+function upd(){const i=cur();prog.style.width=((i+1)/slides.length*100)+'%';if(counter)counter.textContent=i+1;}
+function go(n){const i=Math.max(0,Math.min(slides.length-1,n));slides[i].scrollIntoView({behavior:'smooth'});}
+deck.addEventListener('scroll',()=>{window.requestAnimationFrame(upd);},{passive:true});
+window.addEventListener('keydown',e=>{
+  if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur()+1);}
+  else if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur()-1);}
+  else if(e.key==='Home'){e.preventDefault();go(0);}
+  else if(e.key==='End'){e.preventDefault();go(slides.length-1);}
+  else if(e.key==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+upd();
+</script>
+</body>
+</html>

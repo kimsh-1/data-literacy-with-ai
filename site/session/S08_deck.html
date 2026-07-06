@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S08 · 좋은 분석 프롬프트 설계 — 발표 덱</title>
+<style>
+@font-face{font-family:"PretendardDeck";
+  src:url("../fonts/pretendard-deck-subset.woff2") format("woff2");
+  font-weight:100 900;font-style:normal;font-display:swap;}
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a; --surface-4:#191a1b;
+  --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+  --primary:#5e6ad2; --primary-hover:#828fff; --primary-focus:#5e69d1;
+  --hairline:#23252a; --hairline-strong:#34343a; --hairline-tertiary:#3e3e44; --success:#27a644;
+  --font-display:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;
+  --font-text:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,"PretendardDeck",monospace;
+}
+html,body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font-text);
+  -webkit-font-smoothing:antialiased;letter-spacing:-0.2px;}
+a{color:inherit;text-decoration:none;}
+.deck{scroll-snap-type:y mandatory;overflow-y:scroll;height:100vh;scroll-behavior:smooth;}
+.slide{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:6vh 8vw;position:relative;background:var(--canvas);}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 82% 8%,rgba(94,106,210,0.10),transparent 55%);}
+.eyebrow{font-family:var(--font-mono);font-size:0.82rem;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--primary-hover);margin-bottom:1.4rem;}
+.slide h1{font-family:var(--font-display);font-weight:640;font-size:clamp(2.4rem,5.4vw,4.6rem);
+  line-height:1.02;letter-spacing:-1.6px;margin:0 0 1.4rem;max-width:20ch;}
+.slide h2{font-family:var(--font-display);font-weight:620;font-size:clamp(1.7rem,3.4vw,2.9rem);
+  line-height:1.08;letter-spacing:-1px;margin:0 0 2rem;max-width:24ch;}
+.subtitle{font-size:clamp(1.05rem,1.7vw,1.5rem);color:var(--ink-muted);max-width:44ch;line-height:1.5;}
+.kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
+  text-transform:uppercase;margin-bottom:0.9rem;}
+.body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
+ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
+  color:var(--ink);line-height:1.5;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+  background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
+ul.bullets>li b{color:var(--ink);font-weight:640;}
+.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
+  font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
+.obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
+  font-family:var(--font-mono);font-size:0.95rem;color:var(--primary-hover);
+  border:1px solid var(--hairline-strong);border-radius:8px;padding:0.35em 0.55em;flex:none;margin-top:0.1em;}
+.mission-grid{display:flex;flex-direction:column;gap:1rem;max-width:64ch;}
+.mission-card{border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;
+  padding:1.3rem 1.5rem;}
+.mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
+.mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
+  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
+  font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
+table.deck-table td{color:var(--ink-muted);}
+table.deck-table td:first-child{color:var(--ink);font-weight:560;}
+.note{color:var(--ink-tertiary);font-size:0.95rem;margin-top:1.2rem;max-width:60ch;line-height:1.5;}
+.quote{font-family:var(--font-display);font-weight:560;font-size:clamp(1.5rem,3vw,2.6rem);
+  line-height:1.28;letter-spacing:-0.8px;max-width:26ch;color:var(--ink);}
+.quote::before{content:"\201C";color:var(--primary);}
+.quote::after{content:"\201D";color:var(--primary);}
+.attribution{margin-top:1.6rem;color:var(--ink-subtle);font-size:1.05rem;font-family:var(--font-mono);}
+.closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
+  color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
+.closing .next b{color:var(--primary-hover);}
+/* chrome */
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
+.hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
+  color:var(--ink-subtle);display:flex;gap:14px;align-items:center;}
+.hud .counter{color:var(--ink-muted);}
+.hud a.back{border:1px solid var(--hairline-strong);border-radius:8px;padding:6px 12px;color:var(--ink-muted);
+  background:rgba(15,16,17,0.7);backdrop-filter:blur(6px);transition:border-color .15s,color .15s;}
+.hud a.back:hover{border-color:var(--primary);color:var(--ink);}
+.brand{position:fixed;top:20px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  letter-spacing:0.6px;color:var(--ink-tertiary);}
+.nav-hint{position:fixed;bottom:22px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  color:var(--ink-tertiary);}
+@media (max-width:640px){.slide{padding:8vh 7vw;}.nav-hint{display:none;}}
+@media print{
+  @page{size:1280px 720px;margin:0;}
+  html,body{height:auto;}
+  .deck{height:auto;overflow:visible;scroll-snap-type:none;}
+  .slide{height:720px;min-height:720px;page-break-after:always;break-after:page;background:#06070a;}
+  .progress,.hud,.nav-hint,.brand{display:none;}
+  /* 배포 PDF 경량화: 페이지마다 래스터화되는 그라디언트 글로우 제거 -> 텍스트 벡터만 남겨 용량 최소화 */
+  .slide::after{display:none;}
+  ul.bullets>li::before{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+<div class="brand">데이터 리터러시 with AI</div>
+<div class="hud">
+  <span class="counter"><span class="cur">1</span> / 10</span>
+  <a class="back" href="./S08.html">자료로 돌아가기</a>
+</div>
+<div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
+<main class="deck">
+<section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S08 · PART 03 · AI · 난이도 3</div>
+<h1>좋은 분석 프롬프트 설계</h1>
+<p class="subtitle">AI에게 단순히 분석해달라고 맡기는 대신, 맥락과 질문과 출력형식을 갖춘 분석 요청서로 검토 가능한 결과를 받는 법을 익힌다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
+<ul class="obj-grid"><li>좋은 분석 프롬프트의 세 요소인 맥락, 질문, 출력형식을 설명한다.</li>
+<li>한 번에 큰 답을 요구하지 않고 코드북 설계, 행별 분류, 요약, 검증 순서로 프롬프트를 심화한다.</li>
+<li>설문 주관식 응답을 주제와 감성으로 분류하도록 AI에게 요청한다.</li>
+<li>같은 데이터에 대해 프롬프트 3개를 비교하고 어떤 프롬프트가 더 재현 가능한지 판단한다.</li></ul></div></section>
+<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>프롬프트는 AI에게 보내는 분석 요청서</h2>
+<p class="body">단순히 이 데이터를 분석해달라는 요청은 피벗테이블에서 행, 열, 값 영역을 비워 둔 것과 비슷하다. AI가 답을 내더라도 원하는 질문에 답한다는 보장은 없다.</p>
+<ul class="bullets"><li>좋은 프롬프트는 AI를 똑똑하게 만드는 주문이 아니라 분석 기준을 좁히는 업무 지시서다.</li>
+<li>결과는 검토 가능한 표로 받아야 엑셀 집계와 원본 대조로 이어진다.</li>
+<li>원문 근거가 없는 요약은 보고서에 바로 쓰지 않는다.</li></ul></div></section>
+<section id="s4" class="slide slide-table"><div class="slide-inner"><h2>좋은 분석 프롬프트의 세 요소</h2>
+<table class="deck-table"><thead><tr><th>요소</th><th>확인 질문</th><th>설문 분석 예시</th></tr></thead><tbody><tr><td>맥락</td><td>이 데이터가 무엇이고 왜 분석하는가</td><td>온라인 쇼핑 고객 설문이며, 운영 개선 목적으로 주관식 의견을 본다</td></tr><tr><td>질문</td><td>AI가 정확히 무엇을 해야 하는가</td><td>free_text를 읽고 주제와 감성으로 분류한다</td></tr><tr><td>출력형식</td><td>결과를 어떤 표와 문장으로 받을 것인가</td><td>respondent_id, topic, sentiment, evidence, confidence, needs_review 표로 받는다</td></tr></tbody></table></div></section>
+<section id="s5" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<h2>맥락은 기준을 세우는 재료</h2>
+<p class="body">같은 배송 지연 문장도 분석 목적에 따라 다르게 해석될 수 있다. AI가 기준을 세우려면 데이터의 출처, 단위, 목적, 제한 조건을 알아야 한다.</p>
+<ul class="bullets"><li>기본 파일은 survey_responses_clean.csv이며, 설문 clean 데이터는 1,500행 × 8열이다.</li>
+<li>한 행은 응답 1건이고, 주요 컬럼은 respondent_id, nps, satisfaction, free_text다.</li>
+<li>dirty 파일은 1,510행 × 8열이며, 중복 응답자 ID 10건과 NPS 결측 60건이 확인된다.</li>
+<li>모르면 추측하지 말고 판단 어려움으로 표시하게 하고, 원문 근거와 응답자 ID를 포함하게 한다.</li></ul></div></section>
+<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
+<h2>질문은 한 번에 하나씩 좁힌다</h2>
+<p class="body">고객 반응을 분석해달라는 요청은 너무 넓다. 먼저 기준표를 만들고, 그 기준으로 행을 분류한 다음, 요약과 검증을 마지막에 요청한다.</p>
+<ul class="bullets"><li>free_text를 분류할 주제 코드북 6-8개를 먼저 제안하게 한다.</li>
+<li>제안한 코드북으로 표본 18행을 주제와 감성으로 분류하게 한다.</li>
+<li>분류 결과를 주제별 응답수, 평균 NPS, 대표 근거로 요약하게 한다.</li>
+<li>모호하거나 다시 검토해야 할 행을 따로 표시하게 한다.</li></ul></div></section>
+<section id="s7" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
+<h2>출력형식은 검증 가능해야 한다</h2>
+<p class="body">줄글 답변은 읽기 쉽지만 검증하기 어렵다. 표로 받으면 엑셀에 붙여 넣어 필터, 정렬, 피벗테이블로 이어 갈 수 있다.</p>
+<ul class="bullets"><li>respondent_id는 원본 행과 대조하는 기준이다.</li>
+<li>topic과 sentiment는 주제와 긍정, 부정, 혼합, 중립 판단을 담는다.</li>
+<li>evidence는 판단 근거가 된 원문 일부다.</li>
+<li>confidence와 needs_review는 애매한 행을 사람이 다시 보게 만드는 장치다.</li>
+<li>주관식 분류는 최종 정답이 아니라 검토 가능한 초안이다.</li></ul></div></section>
+<section id="s8" class="slide slide-table"><div class="slide-inner"><h2>프롬프트 A/B/C 비교 기준</h2>
+<table class="deck-table"><thead><tr><th>항목</th><th>프롬프트 A</th><th>프롬프트 B</th><th>프롬프트 C</th></tr></thead><tbody><tr><td>맥락</td><td>부족</td><td>있음</td><td>충분</td></tr><tr><td>질문</td><td>부족</td><td>구체적</td><td>단계별로 구체적</td></tr><tr><td>출력형식</td><td>불안정</td><td>고정</td><td>고정</td></tr><tr><td>원문 근거</td><td>보장 안 됨</td><td>포함 요청</td><td>포함 요청</td></tr><tr><td>검토 필요 행</td><td>보장 안 됨</td><td>일부 가능</td><td>명시적으로 요청</td></tr><tr><td>업무 활용</td><td>낮음</td><td>보통 이상</td><td>가장 좋음</td></tr></tbody></table>
+<p class="note">프롬프트 C는 코드북을 먼저 확인한 뒤 같은 기준으로 행별 분류와 요약을 진행하므로 가장 안정적이다.</p></div></section>
+<section id="s9" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 일부러 짧은 프롬프트 A</div><div class="m-desc">같은 파일 또는 표본 18행으로 분석해달라는 수준의 요청을 실행하고, 기준과 근거와 표 출력 가능성을 확인한다.</div></div><div class="mission-card"><div class="m-label">미션 2. 구조화한 프롬프트 B</div><div class="m-desc">맥락, 질문, 출력형식을 넣고 respondent_id, topic, sentiment, evidence, confidence, needs_review 표를 요구한다.</div></div><div class="mission-card"><div class="m-label">미션 3. 단계화한 프롬프트 C</div><div class="m-desc">코드북 설계, 행별 분류, 요약, 검증 요청으로 나누고 최종 프롬프트 선택 이유를 작성한다.</div></div></div></div></section>
+<section id="s10" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>좋은 분석 프롬프트에는 맥락, 질문, 출력형식이 모두 들어간다.</li>
+<li>큰 질문은 코드북 설계, 행별 분류, 요약, 검증 순서로 나눈다.</li>
+<li>AI가 만든 주관식 분류는 정답이 아니라 respondent_id, evidence, needs_review로 검토하는 초안이다.</li>
+<li>표본 18행 결과는 전체 1,500행 결론처럼 쓰지 않는다.</li></ul>
+<div class="next"><b>다음 차시</b>에서는 AI 답 검증하기: 환각과 계산오류 잡기를 다루며, AI 답을 엑셀 피벗테이블과 원본 점검으로 검산한다.</div></div></section>
+</main>
+<script>
+const deck=document.querySelector('.deck');
+const slides=[...document.querySelectorAll('.slide')];
+const prog=document.querySelector('.progress');
+const counter=document.querySelector('.counter .cur');
+function cur(){let i=0,best=1e9;slides.forEach((s,k)=>{const d=Math.abs(s.getBoundingClientRect().top);if(d<best){best=d;i=k;}});return i;}
+function upd(){const i=cur();prog.style.width=((i+1)/slides.length*100)+'%';if(counter)counter.textContent=i+1;}
+function go(n){const i=Math.max(0,Math.min(slides.length-1,n));slides[i].scrollIntoView({behavior:'smooth'});}
+deck.addEventListener('scroll',()=>{window.requestAnimationFrame(upd);},{passive:true});
+window.addEventListener('keydown',e=>{
+  if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur()+1);}
+  else if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur()-1);}
+  else if(e.key==='Home'){e.preventDefault();go(0);}
+  else if(e.key==='End'){e.preventDefault();go(slides.length-1);}
+  else if(e.key==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+upd();
+</script>
+</body>
+</html>

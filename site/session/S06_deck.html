@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S06 · 상관 vs 인과, 심슨의 역설 — 발표 덱</title>
+<style>
+@font-face{font-family:"PretendardDeck";
+  src:url("../fonts/pretendard-deck-subset.woff2") format("woff2");
+  font-weight:100 900;font-style:normal;font-display:swap;}
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a; --surface-4:#191a1b;
+  --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+  --primary:#5e6ad2; --primary-hover:#828fff; --primary-focus:#5e69d1;
+  --hairline:#23252a; --hairline-strong:#34343a; --hairline-tertiary:#3e3e44; --success:#27a644;
+  --font-display:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;
+  --font-text:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,"PretendardDeck",monospace;
+}
+html,body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font-text);
+  -webkit-font-smoothing:antialiased;letter-spacing:-0.2px;}
+a{color:inherit;text-decoration:none;}
+.deck{scroll-snap-type:y mandatory;overflow-y:scroll;height:100vh;scroll-behavior:smooth;}
+.slide{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:6vh 8vw;position:relative;background:var(--canvas);}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 82% 8%,rgba(94,106,210,0.10),transparent 55%);}
+.eyebrow{font-family:var(--font-mono);font-size:0.82rem;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--primary-hover);margin-bottom:1.4rem;}
+.slide h1{font-family:var(--font-display);font-weight:640;font-size:clamp(2.4rem,5.4vw,4.6rem);
+  line-height:1.02;letter-spacing:-1.6px;margin:0 0 1.4rem;max-width:20ch;}
+.slide h2{font-family:var(--font-display);font-weight:620;font-size:clamp(1.7rem,3.4vw,2.9rem);
+  line-height:1.08;letter-spacing:-1px;margin:0 0 2rem;max-width:24ch;}
+.subtitle{font-size:clamp(1.05rem,1.7vw,1.5rem);color:var(--ink-muted);max-width:44ch;line-height:1.5;}
+.kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
+  text-transform:uppercase;margin-bottom:0.9rem;}
+.body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
+ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
+  color:var(--ink);line-height:1.5;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+  background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
+ul.bullets>li b{color:var(--ink);font-weight:640;}
+.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
+  font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
+.obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
+  font-family:var(--font-mono);font-size:0.95rem;color:var(--primary-hover);
+  border:1px solid var(--hairline-strong);border-radius:8px;padding:0.35em 0.55em;flex:none;margin-top:0.1em;}
+.mission-grid{display:flex;flex-direction:column;gap:1rem;max-width:64ch;}
+.mission-card{border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;
+  padding:1.3rem 1.5rem;}
+.mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
+.mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
+  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
+  font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
+table.deck-table td{color:var(--ink-muted);}
+table.deck-table td:first-child{color:var(--ink);font-weight:560;}
+.note{color:var(--ink-tertiary);font-size:0.95rem;margin-top:1.2rem;max-width:60ch;line-height:1.5;}
+.quote{font-family:var(--font-display);font-weight:560;font-size:clamp(1.5rem,3vw,2.6rem);
+  line-height:1.28;letter-spacing:-0.8px;max-width:26ch;color:var(--ink);}
+.quote::before{content:"\201C";color:var(--primary);}
+.quote::after{content:"\201D";color:var(--primary);}
+.attribution{margin-top:1.6rem;color:var(--ink-subtle);font-size:1.05rem;font-family:var(--font-mono);}
+.closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
+  color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
+.closing .next b{color:var(--primary-hover);}
+/* chrome */
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
+.hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
+  color:var(--ink-subtle);display:flex;gap:14px;align-items:center;}
+.hud .counter{color:var(--ink-muted);}
+.hud a.back{border:1px solid var(--hairline-strong);border-radius:8px;padding:6px 12px;color:var(--ink-muted);
+  background:rgba(15,16,17,0.7);backdrop-filter:blur(6px);transition:border-color .15s,color .15s;}
+.hud a.back:hover{border-color:var(--primary);color:var(--ink);}
+.brand{position:fixed;top:20px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  letter-spacing:0.6px;color:var(--ink-tertiary);}
+.nav-hint{position:fixed;bottom:22px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  color:var(--ink-tertiary);}
+@media (max-width:640px){.slide{padding:8vh 7vw;}.nav-hint{display:none;}}
+@media print{
+  @page{size:1280px 720px;margin:0;}
+  html,body{height:auto;}
+  .deck{height:auto;overflow:visible;scroll-snap-type:none;}
+  .slide{height:720px;min-height:720px;page-break-after:always;break-after:page;background:#06070a;}
+  .progress,.hud,.nav-hint,.brand{display:none;}
+  /* 배포 PDF 경량화: 페이지마다 래스터화되는 그라디언트 글로우 제거 -> 텍스트 벡터만 남겨 용량 최소화 */
+  .slide::after{display:none;}
+  ul.bullets>li::before{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+<div class="brand">데이터 리터러시 with AI</div>
+<div class="hud">
+  <span class="counter"><span class="cur">1</span> / 11</span>
+  <a class="back" href="./S06.html">자료로 돌아가기</a>
+</div>
+<div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
+<main class="deck">
+<section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S06 · PART 02 · 통계 · 난이도 3</div>
+<h1>상관 vs 인과, 심슨의 역설</h1>
+<p class="subtitle">숫자 두 개가 함께 움직인다는 사실과, 한쪽이 다른 한쪽의 원인이라는 주장을 구분한다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
+<ul class="obj-grid"><li>산점도와 상관계수로 두 수치형 변수의 관계를 읽는다.</li>
+<li>상관계수가 높아도 원인이라고 단정할 수 없음을 설명한다.</li>
+<li>전체 평균만 보면 틀릴 수 있고, 필요한 기준으로 나누어 봐야 함을 이해한다.</li>
+<li>기온이 오르면 매출이 늘어난다는 주장을 데이터 관점에서 검토하고 반박한다.</li></ul></div></section>
+<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>상관계수는 두 열이 같이 움직이는 정도다</h2>
+<p class="body">상관계수는 보통 r로 표시하며, 값은 -1부터 1 사이에 있다. 엑셀에서는 CORREL 함수로 구하고, 파이썬 pandas에서는 .corr()로 구한다.</p>
+<ul class="bullets"><li><b>1에 가까움</b>: 한쪽이 커질수록 다른 쪽도 커지는 경향이 강하다.</li>
+<li><b>0에 가까움</b>: 두 값이 함께 움직이는 경향이 거의 없다.</li>
+<li><b>-1에 가까움</b>: 한쪽이 커질수록 다른 쪽은 작아지는 경향이 강하다.</li></ul></div></section>
+<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<h2>산점도는 한 행을 한 점으로 보는 차트다</h2>
+<p class="body">산점도는 원자료의 각 행을 하나의 점으로 찍어서 두 숫자 사이의 관계를 눈으로 본다.</p>
+<ul class="bullets"><li>강남구 아파트 실거래 데이터에서 한 행은 한 건의 거래다.</li>
+<li>x축은 전용면적(㎡), y축은 거래금액_만원, 점 하나는 아파트 거래 한 건이다.</li>
+<li>강남구 아파트 실거래 3,754건에서 전용면적과 거래금액의 Pearson 상관계수는 r = 0.806이다.</li></ul></div></section>
+<section id="s5" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
+<h2>상관은 인과가 아니다</h2>
+<p class="body">상관은 같이 움직였다는 말이고, 인과는 A가 B를 일으켰다는 말이다. 상관계수가 높아도 원인은 아닐 수 있다.</p>
+<ul class="bullets"><li>전용면적과 거래금액은 강한 양의 상관을 보이지만, 면적이 가격의 유일한 원인이라는 뜻은 아니다.</li>
+<li>같은 면적이라도 단지, 위치, 층, 연식, 거래 시점, 조망, 학군 같은 요소가 가격을 바꿀 수 있다.</li>
+<li>배달 통화건수와 평균기온은 직관적으로 관련 있어 보일 수 있지만, 참고 데이터에서는 상관계수가 r = 0.015로 거의 0에 가깝다.</li></ul></div></section>
+<section id="s6" class="slide slide-table"><div class="slide-inner"><h2>상관을 인과로 착각할 때 생기는 문제</h2>
+<table class="deck-table"><thead><tr><th>문제</th><th>설명</th></tr></thead><tbody><tr><td>제3의 요인</td><td>A와 B가 같이 움직이지만 실제로는 C가 둘 다에 영향을 줄 수 있다.</td></tr><tr><td>방향 혼동</td><td>A가 B를 만든 것인지, B가 A를 만든 것인지 알 수 없다.</td></tr><tr><td>우연한 동행</td><td>기간을 잘라 보면 우연히 같이 움직일 수 있다.</td></tr></tbody></table>
+<p class="note">데이터 분석에서 그럴듯한 말은 결론이 아니라 가설이다.</p></div></section>
+<section id="s7" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
+<h2>심슨의 역설은 나누어 보면 결론이 뒤집히는 현상이다</h2>
+<p class="body">심슨의 역설은 전체로 보면 A가 높아 보이지만, 중요한 그룹으로 나누어 보면 모든 그룹에서 B가 높게 나오는 현상이다.</p>
+<ul class="bullets"><li>HR 직원 데이터는 1,200행이다.</li>
+<li>전체 평균 연봉만 보면 남성 평균은 67,296,571원, 여성 평균은 63,910,600원이다.</li>
+<li>전체만 보면 남성 평균이 3,385,971원 높지만, 부서별로 나누면 5개 부서 모두에서 여성 평균이 남성 평균보다 높다.</li></ul></div></section>
+<section id="s8" class="slide slide-table"><div class="slide-inner"><h2>부서별 평균은 전체 평균과 다른 결론을 보인다</h2>
+<table class="deck-table"><thead><tr><th>부서</th><th>남성 평균</th><th>여성 평균</th><th>여성 - 남성</th></tr></thead><tbody><tr><td>개발본부</td><td>73,541,000원</td><td>76,974,286원</td><td>3,433,286원</td></tr><tr><td>고객운영팀</td><td>51,497,500원</td><td>54,095,000원</td><td>2,597,500원</td></tr><tr><td>데이터전략팀</td><td>67,437,778원</td><td>72,667,143원</td><td>5,229,365원</td></tr><tr><td>영업본부</td><td>61,020,000원</td><td>65,530,909원</td><td>4,510,909원</td></tr><tr><td>인사총무팀</td><td>58,280,000원</td><td>59,850,769원</td><td>1,570,769원</td></tr></tbody></table>
+<p class="note">성별 자체보다 부서 구성이 전체 평균에 큰 영향을 준다.</p></div></section>
+<section id="s9" class="slide slide-quote"><div class="slide-inner"><blockquote class="quote">핵심은 반박의 태도다. 틀렸다라고만 말하는 것이 아니라 이 주장에는 어떤 확인이 빠져 있다고 말해야 한다.</blockquote>
+<div class="attribution">S06 강사대본</div></div></section>
+<section id="s10" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 아파트 상관 해석하기</div><div class="m-desc">강남구 아파트 실거래 3,754건에서 전용면적과 거래금액의 상관계수 r = 0.806을 한 문장으로 해석하고, 인과 단정이 아님을 함께 쓴다.</div></div><div class="mission-card"><div class="m-label">미션 2. HR 평균 뒤집힘 설명하기</div><div class="m-desc">전체 평균은 남성이 높지만, 부서별로 비교하면 5개 부서 모두에서 여성 평균 연봉이 더 높다는 결론을 설명한다.</div></div><div class="mission-card"><div class="m-label">미션 3. 기온과 매출 주장 반박하기</div><div class="m-desc">같은 날짜 기준의 기온과 매출 데이터가 필요하다는 점, 산점도와 상관계수 확인, 상관과 인과의 구분, 요일과 계절과 행사 같은 다른 요인을 포함해 반박문을 작성한다.</div></div></div></div></section>
+<section id="s11" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>상관계수는 두 숫자 열이 함께 움직이는 정도를 요약하지만, 원인을 증명하지는 않는다.</li>
+<li>산점도는 원자료의 행을 점으로 보여 주므로 상관계수 하나보다 먼저 확인해야 한다.</li>
+<li>전체 평균만 보면 남성이 높지만, 부서별로 나누면 모든 부서에서 여성 평균이 높으므로 그룹 기준을 함께 봐야 한다.</li></ul>
+<div class="next"><b>다음 차시</b> — 엑셀 파일을 AI에 올려 자연어로 분석하고, AI가 만든 표와 차트의 집계 기준과 제외 기준을 확인한다.</div></div></section>
+</main>
+<script>
+const deck=document.querySelector('.deck');
+const slides=[...document.querySelectorAll('.slide')];
+const prog=document.querySelector('.progress');
+const counter=document.querySelector('.counter .cur');
+function cur(){let i=0,best=1e9;slides.forEach((s,k)=>{const d=Math.abs(s.getBoundingClientRect().top);if(d<best){best=d;i=k;}});return i;}
+function upd(){const i=cur();prog.style.width=((i+1)/slides.length*100)+'%';if(counter)counter.textContent=i+1;}
+function go(n){const i=Math.max(0,Math.min(slides.length-1,n));slides[i].scrollIntoView({behavior:'smooth'});}
+deck.addEventListener('scroll',()=>{window.requestAnimationFrame(upd);},{passive:true});
+window.addEventListener('keydown',e=>{
+  if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur()+1);}
+  else if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur()-1);}
+  else if(e.key==='Home'){e.preventDefault();go(0);}
+  else if(e.key==='End'){e.preventDefault();go(slides.length-1);}
+  else if(e.key==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+upd();
+</script>
+</body>
+</html>

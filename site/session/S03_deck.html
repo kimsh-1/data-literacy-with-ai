@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S03 · 피벗테이블로 질문에 답하기 — 발표 덱</title>
+<style>
+@font-face{font-family:"PretendardDeck";
+  src:url("../fonts/pretendard-deck-subset.woff2") format("woff2");
+  font-weight:100 900;font-style:normal;font-display:swap;}
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a; --surface-4:#191a1b;
+  --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+  --primary:#5e6ad2; --primary-hover:#828fff; --primary-focus:#5e69d1;
+  --hairline:#23252a; --hairline-strong:#34343a; --hairline-tertiary:#3e3e44; --success:#27a644;
+  --font-display:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;
+  --font-text:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,"PretendardDeck",monospace;
+}
+html,body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font-text);
+  -webkit-font-smoothing:antialiased;letter-spacing:-0.2px;}
+a{color:inherit;text-decoration:none;}
+.deck{scroll-snap-type:y mandatory;overflow-y:scroll;height:100vh;scroll-behavior:smooth;}
+.slide{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:6vh 8vw;position:relative;background:var(--canvas);}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 82% 8%,rgba(94,106,210,0.10),transparent 55%);}
+.eyebrow{font-family:var(--font-mono);font-size:0.82rem;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--primary-hover);margin-bottom:1.4rem;}
+.slide h1{font-family:var(--font-display);font-weight:640;font-size:clamp(2.4rem,5.4vw,4.6rem);
+  line-height:1.02;letter-spacing:-1.6px;margin:0 0 1.4rem;max-width:20ch;}
+.slide h2{font-family:var(--font-display);font-weight:620;font-size:clamp(1.7rem,3.4vw,2.9rem);
+  line-height:1.08;letter-spacing:-1px;margin:0 0 2rem;max-width:24ch;}
+.subtitle{font-size:clamp(1.05rem,1.7vw,1.5rem);color:var(--ink-muted);max-width:44ch;line-height:1.5;}
+.kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
+  text-transform:uppercase;margin-bottom:0.9rem;}
+.body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
+ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
+  color:var(--ink);line-height:1.5;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+  background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
+ul.bullets>li b{color:var(--ink);font-weight:640;}
+.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
+  font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
+.obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
+  font-family:var(--font-mono);font-size:0.95rem;color:var(--primary-hover);
+  border:1px solid var(--hairline-strong);border-radius:8px;padding:0.35em 0.55em;flex:none;margin-top:0.1em;}
+.mission-grid{display:flex;flex-direction:column;gap:1rem;max-width:64ch;}
+.mission-card{border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;
+  padding:1.3rem 1.5rem;}
+.mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
+.mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
+  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
+  font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
+table.deck-table td{color:var(--ink-muted);}
+table.deck-table td:first-child{color:var(--ink);font-weight:560;}
+.note{color:var(--ink-tertiary);font-size:0.95rem;margin-top:1.2rem;max-width:60ch;line-height:1.5;}
+.quote{font-family:var(--font-display);font-weight:560;font-size:clamp(1.5rem,3vw,2.6rem);
+  line-height:1.28;letter-spacing:-0.8px;max-width:26ch;color:var(--ink);}
+.quote::before{content:"\201C";color:var(--primary);}
+.quote::after{content:"\201D";color:var(--primary);}
+.attribution{margin-top:1.6rem;color:var(--ink-subtle);font-size:1.05rem;font-family:var(--font-mono);}
+.closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
+  color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
+.closing .next b{color:var(--primary-hover);}
+/* chrome */
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
+.hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
+  color:var(--ink-subtle);display:flex;gap:14px;align-items:center;}
+.hud .counter{color:var(--ink-muted);}
+.hud a.back{border:1px solid var(--hairline-strong);border-radius:8px;padding:6px 12px;color:var(--ink-muted);
+  background:rgba(15,16,17,0.7);backdrop-filter:blur(6px);transition:border-color .15s,color .15s;}
+.hud a.back:hover{border-color:var(--primary);color:var(--ink);}
+.brand{position:fixed;top:20px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  letter-spacing:0.6px;color:var(--ink-tertiary);}
+.nav-hint{position:fixed;bottom:22px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  color:var(--ink-tertiary);}
+@media (max-width:640px){.slide{padding:8vh 7vw;}.nav-hint{display:none;}}
+@media print{
+  @page{size:1280px 720px;margin:0;}
+  html,body{height:auto;}
+  .deck{height:auto;overflow:visible;scroll-snap-type:none;}
+  .slide{height:720px;min-height:720px;page-break-after:always;break-after:page;background:#06070a;}
+  .progress,.hud,.nav-hint,.brand{display:none;}
+  /* 배포 PDF 경량화: 페이지마다 래스터화되는 그라디언트 글로우 제거 -> 텍스트 벡터만 남겨 용량 최소화 */
+  .slide::after{display:none;}
+  ul.bullets>li::before{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+<div class="brand">데이터 리터러시 with AI</div>
+<div class="hud">
+  <span class="counter"><span class="cur">1</span> / 11</span>
+  <a class="back" href="./S03.html">자료로 돌아가기</a>
+</div>
+<div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
+<main class="deck">
+<section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S03 · PART 01 · 엑셀 · 난이도 2</div>
+<h1>피벗테이블로 질문에 답하기</h1>
+<p class="subtitle">원본 주문 목록을 지점별, 카테고리별, 요일별, 시간대별 요약표로 접어 질문에 답한다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
+<ul class="obj-grid"><li>피벗테이블의 행, 열, 값 영역이 각각 어떤 역할을 하는지 설명한다.</li>
+<li>매출 합계, 판매수량 합계, 주문건수처럼 질문에 맞는 집계함수를 고른다.</li>
+<li>지점×카테고리, 요일×시간대 교차표를 보고 어느 구간이 큰지 해석한다.</li>
+<li>가장 잘 팔리는 시간대라는 질문을 피벗테이블로 답한다.</li></ul></div></section>
+<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>수업 데이터는 주문 한 건 단위로 쌓인 표다</h2>
+<p class="body">사용 파일은 /mnt/d/ai-data-analysis-course/02_datasets/cafe_sales/cafe_sales_clean.xlsx이고, 시트 이름은 sales다.</p>
+<ul class="bullets"><li>확인된 데이터 규모는 10,424행 × 12열이다.</li>
+<li>주요 컬럼은 store, category, weekday, hour, amount, qty, order_id다.</li>
+<li>이번 차시에서는 계산식을 새로 만들지 않고 amount, qty, order_id를 피벗테이블로 요약한다.</li></ul></div></section>
+<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<h2>피벗테이블은 긴 영수증 묶음을 요약표로 접는다</h2>
+<p class="body">원본에는 주문 한 건 한 건이 있지만, 점장이 알고 싶은 것은 보통 지점별 매출, 카테고리별 매출, 시간대별 흐름 같은 요약 질문이다.</p>
+<ul class="bullets"><li>피벗테이블은 원본을 바꾸지 않고 같은 데이터를 다른 방식으로 요약한다.</li>
+<li>행과 열은 나누는 기준이고, 값은 계산할 숫자다.</li>
+<li>필터는 특정 지점이나 특정 카테고리처럼 일부만 보는 조건이다.</li></ul></div></section>
+<section id="s5" class="slide slide-table"><div class="slide-inner"><h2>피벗테이블 네 영역은 역할이 다르다</h2>
+<table class="deck-table"><thead><tr><th>영역</th><th>넣는 것</th><th>예시</th></tr></thead><tbody><tr><td>행</td><td>세로로 나눌 기준</td><td>store, weekday, hour</td></tr><tr><td>열</td><td>가로로 나눌 기준</td><td>category, hour</td></tr><tr><td>값</td><td>계산할 숫자</td><td>amount 합계, qty 합계</td></tr><tr><td>필터</td><td>일부만 볼 조건</td><td>특정 지점, 특정 카테고리</td></tr></tbody></table>
+<p class="note">중요한 질문은 무엇별로 나눌 것인지와 무엇을 계산할 것인지다.</p></div></section>
+<section id="s6" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
+<h2>질문은 필드 배치로 번역한다</h2>
+<p class="body">지점별 카테고리별 매출이라는 질문은 행에 store, 열에 category, 값에 amount 합계를 두는 구조로 바뀐다.</p>
+<ul class="bullets"><li>행에는 강남점과 홍대점이 생긴다.</li>
+<li>열에는 디저트, 음료, 커피가 자리를 잡는다.</li>
+<li>각 칸은 그 지점과 카테고리가 만나는 주문금액의 합계다.</li></ul></div></section>
+<section id="s7" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
+<h2>집계함수는 질문의 뜻을 정한다</h2>
+<p class="body">많이 팔렸다는 말은 기준에 따라 다른 답이 된다.</p>
+<ul class="bullets"><li>매출이 큰지는 amount의 합계로 판단한다.</li>
+<li>수량이 많은지는 qty의 합계로 판단한다.</li>
+<li>주문이 자주 들어왔는지는 order_id의 개수로 판단한다.</li>
+<li>결과를 말할 때는 합계, 개수, 평균 중 어떤 기준인지 함께 말한다.</li></ul></div></section>
+<section id="s8" class="slide slide-table"><div class="slide-inner"><h2>지점×카테고리 매출 피벗은 커피 비중을 보여 준다</h2>
+<table class="deck-table"><thead><tr><th>지점</th><th>디저트</th><th>음료</th><th>커피</th><th>총합계</th></tr></thead><tbody><tr><td>강남점</td><td>11,604,000</td><td>15,281,500</td><td>26,539,500</td><td>53,425,000</td></tr><tr><td>홍대점</td><td>7,732,500</td><td>10,268,500</td><td>19,066,500</td><td>37,067,500</td></tr><tr><td>총합계</td><td>19,336,500</td><td>25,550,000</td><td>45,606,000</td><td>90,492,500</td></tr></tbody></table>
+<p class="note">금액 단위는 원이다.</p></div></section>
+<section id="s9" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 5</div>
+<h2>교차표는 한 칸씩 외우지 않고 패턴을 본다</h2>
+<p class="body">요일×시간대 피벗은 숫자가 많으므로 큰 숫자가 몰리는 시간대를 먼저 찾고, 특정 요일에서 유난히 큰 칸이 있는지 확인한다.</p>
+<ul class="bullets"><li>매출액 합계 기준으로 13시가 전체 1위다.</li>
+<li>요일과 시간대를 함께 보면 Sun 13시가 2,260,500원으로 가장 큰 조합이다.</li>
+<li>Sun은 일요일을 뜻한다.</li></ul></div></section>
+<section id="s10" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션. 가장 잘 팔리는 시간대 찾기</div><div class="m-desc">hour를 행에 넣고 amount 합계, qty 합계, order_id 개수를 값에 넣은 새 피벗테이블을 만든다.</div></div><div class="mission-card"><div class="m-label">정렬과 답변</div><div class="m-desc">amount 합계를 기준으로 내림차순 정렬하고, 매출액 합계 기준 1위 시간대와 매출, 판매수량, 주문건수를 한 문장으로 작성한다.</div></div><div class="mission-card"><div class="m-label">추가 확인</div><div class="m-desc">판매수량 기준 1위, 주문건수 기준 1위, 요일×시간대의 가장 큰 조합이 무엇인지 확인한다.</div></div></div></div></section>
+<section id="s11" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>피벗테이블은 원본을 바꾸지 않고 주문 한 건 단위 데이터를 요약표로 만든다.</li>
+<li>행과 열은 분류 기준이고 값은 계산 대상이다.</li>
+<li>이 데이터에서는 매출액 합계 기준 13시가 1위이며, 매출은 11,626,000원, 판매수량은 2,220개, 주문건수는 1,348건이다.</li></ul>
+<div class="next"><b>다음 차시</b>: S04에서는 VLOOKUP/XLOOKUP으로 여러 표를 이어 붙이고 조건부 집계로 지역별 매출과 등급별 객단가를 구한다.</div></div></section>
+</main>
+<script>
+const deck=document.querySelector('.deck');
+const slides=[...document.querySelectorAll('.slide')];
+const prog=document.querySelector('.progress');
+const counter=document.querySelector('.counter .cur');
+function cur(){let i=0,best=1e9;slides.forEach((s,k)=>{const d=Math.abs(s.getBoundingClientRect().top);if(d<best){best=d;i=k;}});return i;}
+function upd(){const i=cur();prog.style.width=((i+1)/slides.length*100)+'%';if(counter)counter.textContent=i+1;}
+function go(n){const i=Math.max(0,Math.min(slides.length-1,n));slides[i].scrollIntoView({behavior:'smooth'});}
+deck.addEventListener('scroll',()=>{window.requestAnimationFrame(upd);},{passive:true});
+window.addEventListener('keydown',e=>{
+  if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur()+1);}
+  else if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur()-1);}
+  else if(e.key==='Home'){e.preventDefault();go(0);}
+  else if(e.key==='End'){e.preventDefault();go(slides.length-1);}
+  else if(e.key==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+upd();
+</script>
+</body>
+</html>

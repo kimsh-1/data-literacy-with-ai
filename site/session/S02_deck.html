@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>S02 · 좋은 데이터의 모양: tidy 데이터와 척도 — 발표 덱</title>
+<style>
+@font-face{font-family:"PretendardDeck";
+  src:url("../fonts/pretendard-deck-subset.woff2") format("woff2");
+  font-weight:100 900;font-style:normal;font-display:swap;}
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a; --surface-4:#191a1b;
+  --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+  --primary:#5e6ad2; --primary-hover:#828fff; --primary-focus:#5e69d1;
+  --hairline:#23252a; --hairline-strong:#34343a; --hairline-tertiary:#3e3e44; --success:#27a644;
+  --font-display:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;
+  --font-text:"PretendardDeck",-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,sans-serif;
+  --font-mono:ui-monospace,"SF Mono","JetBrains Mono",Menlo,Consolas,"PretendardDeck",monospace;
+}
+html,body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font-text);
+  -webkit-font-smoothing:antialiased;letter-spacing:-0.2px;}
+a{color:inherit;text-decoration:none;}
+.deck{scroll-snap-type:y mandatory;overflow-y:scroll;height:100vh;scroll-behavior:smooth;}
+.slide{scroll-snap-align:start;min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding:6vh 8vw;position:relative;background:var(--canvas);}
+.slide::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 82% 8%,rgba(94,106,210,0.10),transparent 55%);}
+.eyebrow{font-family:var(--font-mono);font-size:0.82rem;letter-spacing:1.4px;text-transform:uppercase;
+  color:var(--primary-hover);margin-bottom:1.4rem;}
+.slide h1{font-family:var(--font-display);font-weight:640;font-size:clamp(2.4rem,5.4vw,4.6rem);
+  line-height:1.02;letter-spacing:-1.6px;margin:0 0 1.4rem;max-width:20ch;}
+.slide h2{font-family:var(--font-display);font-weight:620;font-size:clamp(1.7rem,3.4vw,2.9rem);
+  line-height:1.08;letter-spacing:-1px;margin:0 0 2rem;max-width:24ch;}
+.subtitle{font-size:clamp(1.05rem,1.7vw,1.5rem);color:var(--ink-muted);max-width:44ch;line-height:1.5;}
+.kicker{font-family:var(--font-mono);font-size:0.8rem;letter-spacing:1px;color:var(--ink-subtle);
+  text-transform:uppercase;margin-bottom:0.9rem;}
+.body{font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink-muted);max-width:52ch;line-height:1.62;margin-bottom:1.6rem;}
+ul.bullets{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:1.05rem;max-width:60ch;}
+ul.bullets>li{position:relative;padding-left:1.7rem;font-size:clamp(1.02rem,1.5vw,1.4rem);
+  color:var(--ink);line-height:1.5;}
+ul.bullets>li::before{content:"";position:absolute;left:0;top:0.62em;width:8px;height:8px;border-radius:2px;
+  background:var(--primary);box-shadow:0 0 0 4px rgba(94,106,210,0.16);}
+ul.bullets>li b{color:var(--ink);font-weight:640;}
+.obj-grid{display:flex;flex-direction:column;gap:1.3rem;counter-reset:obj;max-width:58ch;}
+.obj-grid>li{list-style:none;display:flex;gap:1.2rem;align-items:flex-start;
+  font-size:clamp(1.05rem,1.55vw,1.45rem);color:var(--ink);line-height:1.45;}
+.obj-grid>li::before{counter-increment:obj;content:counter(obj,decimal-leading-zero);
+  font-family:var(--font-mono);font-size:0.95rem;color:var(--primary-hover);
+  border:1px solid var(--hairline-strong);border-radius:8px;padding:0.35em 0.55em;flex:none;margin-top:0.1em;}
+.mission-grid{display:flex;flex-direction:column;gap:1rem;max-width:64ch;}
+.mission-card{border:1px solid var(--hairline);background:var(--surface-1);border-radius:14px;
+  padding:1.3rem 1.5rem;}
+.mission-card .m-label{font-weight:640;font-size:clamp(1.05rem,1.5vw,1.4rem);margin-bottom:0.4rem;}
+.mission-card .m-desc{color:var(--ink-subtle);font-size:clamp(0.95rem,1.3vw,1.15rem);line-height:1.5;}
+table.deck-table{border-collapse:collapse;width:100%;max-width:76ch;font-size:clamp(0.92rem,1.3vw,1.2rem);}
+table.deck-table th,table.deck-table td{border-bottom:1px solid var(--hairline);
+  padding:0.85rem 1.1rem;text-align:left;vertical-align:top;line-height:1.45;}
+table.deck-table th{color:var(--ink-subtle);font-weight:560;font-family:var(--font-mono);
+  font-size:0.82em;letter-spacing:0.4px;text-transform:uppercase;border-bottom:1px solid var(--hairline-strong);}
+table.deck-table td{color:var(--ink-muted);}
+table.deck-table td:first-child{color:var(--ink);font-weight:560;}
+.note{color:var(--ink-tertiary);font-size:0.95rem;margin-top:1.2rem;max-width:60ch;line-height:1.5;}
+.quote{font-family:var(--font-display);font-weight:560;font-size:clamp(1.5rem,3vw,2.6rem);
+  line-height:1.28;letter-spacing:-0.8px;max-width:26ch;color:var(--ink);}
+.quote::before{content:"\201C";color:var(--primary);}
+.quote::after{content:"\201D";color:var(--primary);}
+.attribution{margin-top:1.6rem;color:var(--ink-subtle);font-size:1.05rem;font-family:var(--font-mono);}
+.closing .next{margin-top:2rem;padding-top:1.4rem;border-top:1px solid var(--hairline);
+  color:var(--ink-subtle);font-size:clamp(1rem,1.4vw,1.25rem);}
+.closing .next b{color:var(--primary-hover);}
+/* chrome */
+.progress{position:fixed;top:0;left:0;height:3px;background:var(--primary);width:0;z-index:40;transition:width .2s;}
+.hud{position:fixed;bottom:22px;right:26px;z-index:40;font-family:var(--font-mono);font-size:0.85rem;
+  color:var(--ink-subtle);display:flex;gap:14px;align-items:center;}
+.hud .counter{color:var(--ink-muted);}
+.hud a.back{border:1px solid var(--hairline-strong);border-radius:8px;padding:6px 12px;color:var(--ink-muted);
+  background:rgba(15,16,17,0.7);backdrop-filter:blur(6px);transition:border-color .15s,color .15s;}
+.hud a.back:hover{border-color:var(--primary);color:var(--ink);}
+.brand{position:fixed;top:20px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  letter-spacing:0.6px;color:var(--ink-tertiary);}
+.nav-hint{position:fixed;bottom:22px;left:26px;z-index:40;font-family:var(--font-mono);font-size:0.78rem;
+  color:var(--ink-tertiary);}
+@media (max-width:640px){.slide{padding:8vh 7vw;}.nav-hint{display:none;}}
+@media print{
+  @page{size:1280px 720px;margin:0;}
+  html,body{height:auto;}
+  .deck{height:auto;overflow:visible;scroll-snap-type:none;}
+  .slide{height:720px;min-height:720px;page-break-after:always;break-after:page;background:#06070a;}
+  .progress,.hud,.nav-hint,.brand{display:none;}
+  /* 배포 PDF 경량화: 페이지마다 래스터화되는 그라디언트 글로우 제거 -> 텍스트 벡터만 남겨 용량 최소화 */
+  .slide::after{display:none;}
+  ul.bullets>li::before{box-shadow:none;}
+}
+</style>
+</head>
+<body>
+<div class="progress"></div>
+<div class="brand">데이터 리터러시 with AI</div>
+<div class="hud">
+  <span class="counter"><span class="cur">1</span> / 11</span>
+  <a class="back" href="./S02.html">자료로 돌아가기</a>
+</div>
+<div class="nav-hint">화살표 · 스페이스로 이동 · F 전체화면</div>
+<main class="deck">
+<section id="s1" class="slide slide-title"><div class="slide-inner"><div class="eyebrow">S02 · PART 01 · 엑셀 · 난이도 1</div>
+<h1>좋은 데이터의 모양: tidy 데이터와 척도</h1>
+<p class="subtitle">엑셀 표가 피벗테이블, AI 분석, 파이썬, BI 도구에서 안정적으로 작동하려면 어떤 모양이어야 하는지 익힌다.</p></div></section>
+<section id="s2" class="slide slide-objectives"><div class="slide-inner"><h2>오늘 끝나면 할 수 있는 것</h2>
+<ul class="obj-grid"><li>분석하기 좋은 표의 기본 모양을 설명한다.</li>
+<li>한 셀 한 값, 한 행 한 관찰, 한 열 한 변수의 의미를 엑셀 표에서 찾는다.</li>
+<li>병합셀, 빈 셀, 표기 혼재, 숫자와 문자의 혼합이 분석을 방해하는 이유를 이해한다.</li>
+<li>컬럼별로 범주형, 순서형, 수치형, 날짜형, 논리형 척도를 구분한다.</li>
+<li>dirty 데이터에서 tidy 원칙을 어기는 지점을 찾아 교정 방향을 말한다.</li></ul></div></section>
+<section id="s3" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 1</div>
+<h2>분석용 표는 보기 좋은 보고서와 다르다</h2>
+<p class="body">회의 자료로 읽기 좋은 표와 분석 도구가 좋아하는 표는 다르다. 분석용 표는 장식보다 규칙이 중요하다.</p>
+<ul class="bullets"><li>제목, 병합셀, 중간 소계, 설명이 많은 표는 사람이 읽기에는 편하지만 분석에는 걸림돌이 된다.</li>
+<li>카페 매출 데이터에서는 주문 한 건이 한 행이다.</li>
+<li>`date`, `store`, `item`, `qty`, `amount`처럼 각 열은 주문을 설명하는 한 가지 속성만 담는다.</li></ul></div></section>
+<section id="s4" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 2</div>
+<h2>tidy 데이터는 세 가지 규칙으로 기억한다</h2>
+<p class="body">tidy 데이터는 분석하기 좋은 표의 기본형이다. 입문 단계에서는 다음 세 문장으로 충분하다.</p>
+<ul class="bullets"><li><b>한 행은 한 관찰이다</b>. 한 줄은 주문 한 건, 고객 한 명, 직원 한 명처럼 같은 단위여야 한다.</li>
+<li><b>한 열은 한 변수다</b>. 한 열에는 날짜, 지점, 상품명, 수량처럼 하나의 의미만 있어야 한다.</li>
+<li><b>한 셀은 한 값이다</b>. 셀 하나에는 하나의 값만 들어가야 한다.</li></ul></div></section>
+<section id="s5" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 3</div>
+<h2>병합셀과 섞인 값은 분석 구조를 무너뜨린다</h2>
+<p class="body">병합셀은 사람 눈에는 같은 그룹처럼 보이지만, 컴퓨터는 첫 셀만 값이 있고 나머지는 빈 칸으로 처리하는 경우가 많다.</p>
+<ul class="bullets"><li>`4,500원`은 사람에게는 친절하지만 숫자 4500이 아니라 글자가 섞인 값일 수 있다.</li>
+<li>`강남점`과 `강남 점`은 사람에게는 같은 지점이지만 피벗테이블은 다른 지점으로 볼 수 있다.</li>
+<li>분석용 원본 표에는 병합셀을 피하고, 값은 계산 가능한 형태로 저장한다.</li></ul></div></section>
+<section id="s6" class="slide slide-table"><div class="slide-inner"><h2>이번 차시의 데이터 규모</h2>
+<table class="deck-table"><thead><tr><th>파일</th><th>행</th><th>열</th><th>시트 또는 파일</th></tr></thead><tbody><tr><td>`cafe_sales_clean.csv`</td><td>10,424</td><td>12</td><td>CSV</td></tr><tr><td>`cafe_sales_dirty.csv`</td><td>10,439</td><td>12</td><td>CSV</td></tr><tr><td>`cafe_sales_clean.xlsx`</td><td>10,424</td><td>12</td><td>`sales`</td></tr><tr><td>`cafe_sales_dirty.xlsx`</td><td>10,439</td><td>12</td><td>`sales`</td></tr></tbody></table>
+<p class="note">두 파일의 컬럼은 `order_id`, `date`, `weekday`, `hour`, `store`, `category`, `item`, `unit_price`, `qty`, `amount`, `payment`, `member`로 같다.</p></div></section>
+<section id="s7" class="slide slide-table"><div class="slide-inner"><h2>dirty 데이터에서 확인한 대표 문제</h2>
+<table class="deck-table"><thead><tr><th>컬럼</th><th>발견한 문제</th><th>확인한 개수</th><th>교정 방향</th></tr></thead><tbody><tr><td>`order_id`</td><td>같은 주문번호가 반복됨</td><td>중복 주문번호 15건</td><td>실제 중복이면 한 건만 남기고, 재주문이면 별도 주문번호를 부여한다.</td></tr><tr><td>전체 행</td><td>완전히 동일한 행이 있음</td><td>13행</td><td>중복 제거 전후 행수와 매출 합계를 비교한다.</td></tr><tr><td>`payment`</td><td>결제수단 결측</td><td>313행</td><td>원자료 확인, 불명 처리, 분석 제외 중 선택한다.</td></tr><tr><td>`member`</td><td>회원 여부 결측</td><td>209행</td><td>원자료 확인, 불명 처리, 분석 제외 중 선택한다.</td></tr><tr><td>`unit_price`</td><td>숫자와 문자가 섞임</td><td>157행</td><td>`원`과 쉼표 제거 후 숫자형으로 변환한다.</td></tr><tr><td>`qty`</td><td>비현실적 수량</td><td>999가 2행</td><td>원자료 확인 후 수정 또는 제외한다.</td></tr></tbody></table></div></section>
+<section id="s8" class="slide slide-concept"><div class="slide-inner"><div class="kicker">핵심 개념 4</div>
+<h2>척도는 분석 방법을 고르는 기준이다</h2>
+<p class="body">컬럼을 볼 때는 값의 모양뿐 아니라 이 값으로 무엇을 할 수 있는지를 함께 본다. 이것이 척도 구분이다.</p>
+<ul class="bullets"><li>범주형은 지점, 상품명, 결제수단처럼 그룹을 구분한다.</li>
+<li>수치형은 수량, 단가, 주문금액처럼 합계와 평균을 계산할 수 있다.</li>
+<li>날짜형은 주문일처럼 시간의 흐름을 나타낸다.</li>
+<li>논리형은 회원 여부처럼 참과 거짓 또는 예와 아니오를 나타낸다.</li>
+<li>식별자는 주문번호처럼 각 행을 구분하는 이름표다.</li></ul></div></section>
+<section id="s9" class="slide slide-table"><div class="slide-inner"><h2>clean 데이터의 컬럼별 척도</h2>
+<table class="deck-table"><thead><tr><th>컬럼</th><th>척도</th><th>가능한 분석</th><th>주의할 점</th></tr></thead><tbody><tr><td>`order_id`</td><td>식별자</td><td>중복 확인, 주문 추적</td><td>숫자로 보여도 평균이나 합계는 의미 없음</td></tr><tr><td>`date`</td><td>날짜형</td><td>일별, 월별, 요일별 추세</td><td>날짜 형식이 섞이면 먼저 통일 필요</td></tr><tr><td>`weekday`</td><td>순서가 있는 범주형</td><td>요일별 매출, 주중·주말 비교</td><td>평균 요일 계산은 의미 없음</td></tr><tr><td>`hour`</td><td>시간형 수치</td><td>시간대별 주문 수, 피크 시간 확인</td><td>8~21시 범위의 시간대로 해석</td></tr><tr><td>`store`</td><td>범주형</td><td>지점별 매출, 지점별 주문 수</td><td>`강남점`과 `강남 점` 같은 표기 혼재 주의</td></tr><tr><td>`amount`</td><td>수치형</td><td>총매출, 평균 주문금액</td><td>음수 금액 또는 단가×수량 불일치 확인 필요</td></tr><tr><td>`member`</td><td>논리형</td><td>회원 여부별 매출, 회원 비율</td><td>결측값 처리 기준 필요</td></tr></tbody></table>
+<p class="note">`weekday`는 범주형으로 볼 수 있고, 월요일부터 일요일까지 순서가 있는 범주로도 다룰 수 있다. 다만 평균을 내는 숫자는 아니다.</p></div></section>
+<section id="s10" class="slide slide-mission"><div class="slide-inner"><h2>오늘의 미션</h2>
+<div class="mission-grid"><div class="mission-card"><div class="m-label">미션 1. 컬럼별 척도 분류</div><div class="m-desc">`cafe_sales_clean.xlsx`의 12개 컬럼을 척도별로 분류한 표를 작성한다. 가능한 분석과 주의할 점을 함께 적는다.</div></div><div class="mission-card"><div class="m-label">미션 2. dirty 데이터 문제 찾기</div><div class="m-desc">`cafe_sales_dirty.xlsx`에서 발견한 문제 5개 이상과 교정 방향을 작성한다. 표기 혼재, 결측, 날짜 형식 혼합, 숫자와 문자 혼합, 이상치를 확인한다.</div></div></div></div></section>
+<section id="s11" class="slide slide-closing closing"><div class="slide-inner"><h2>정리</h2>
+<ul class="bullets"><li>분석용 표는 예쁜 표가 아니라 규칙적인 표여야 한다.</li>
+<li>tidy 데이터는 한 행 한 관찰, 한 열 한 변수, 한 셀 한 값이라는 구조를 지킨다.</li>
+<li>숫자로 보여도 `order_id`처럼 계산 대상이 아닌 식별자가 있다.</li>
+<li>표기 혼재와 문자 섞인 숫자는 피벗테이블 결과를 틀어지게 만들 수 있다.</li></ul>
+<div class="next"><b>다음 차시</b>에서는 피벗테이블로 지점별, 카테고리별, 요일별 매출 질문에 답한다.</div></div></section>
+</main>
+<script>
+const deck=document.querySelector('.deck');
+const slides=[...document.querySelectorAll('.slide')];
+const prog=document.querySelector('.progress');
+const counter=document.querySelector('.counter .cur');
+function cur(){let i=0,best=1e9;slides.forEach((s,k)=>{const d=Math.abs(s.getBoundingClientRect().top);if(d<best){best=d;i=k;}});return i;}
+function upd(){const i=cur();prog.style.width=((i+1)/slides.length*100)+'%';if(counter)counter.textContent=i+1;}
+function go(n){const i=Math.max(0,Math.min(slides.length-1,n));slides[i].scrollIntoView({behavior:'smooth'});}
+deck.addEventListener('scroll',()=>{window.requestAnimationFrame(upd);},{passive:true});
+window.addEventListener('keydown',e=>{
+  if(['ArrowDown','ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();go(cur()+1);}
+  else if(['ArrowUp','ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();go(cur()-1);}
+  else if(e.key==='Home'){e.preventDefault();go(0);}
+  else if(e.key==='End'){e.preventDefault();go(slides.length-1);}
+  else if(e.key==='f'){if(!document.fullscreenElement)document.documentElement.requestFullscreen();else document.exitFullscreen();}
+});
+upd();
+</script>
+</body>
+</html>

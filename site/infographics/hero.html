@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<title>엑셀에서 시작해 BI까지</title>
+<style>
+  :root{
+    --canvas:#010102; --surface-1:#0f1011; --surface-2:#141516; --surface-3:#18191a; --surface-4:#191a1b;
+    --ink:#f7f8f8; --ink-muted:#d0d6e0; --ink-subtle:#8a8f98; --ink-tertiary:#62666d;
+    --primary:#5e6ad2; --primary-hover:#828fff; --primary-focus:#5e69d1;
+    --hairline:#23252a; --hairline-strong:#34343a; --hairline-tertiary:#3e3e44; --success:#27a644;
+    --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{width:1672px; height:941px; overflow:hidden; background:var(--canvas);}
+  body{position:relative; font-family:var(--font-text); color:var(--ink);}
+
+  .glow{
+    position:absolute; top:-320px; right:-220px; width:900px; height:900px;
+    background: radial-gradient(circle, rgba(94,106,210,0.22) 0%, rgba(94,106,210,0.07) 42%, transparent 72%);
+    pointer-events:none; z-index:1;
+  }
+  .bg-grid{ position:absolute; inset:0; z-index:0; }
+  .bg-trend{ position:absolute; inset:0; z-index:2; }
+
+  .caption{
+    position:absolute; top:56px; left:64px; z-index:5;
+    font-family:var(--font-mono); font-size:15px; letter-spacing:0.09em;
+    color:var(--primary-hover);
+  }
+  .title{
+    position:absolute; top:88px; left:64px; z-index:5;
+    font-family:var(--font-display); font-size:48px; font-weight:650; letter-spacing:-1.4px;
+    color:var(--ink);
+  }
+
+  .pipeline{
+    position:absolute; left:64px; right:64px; top:398px; height:280px; z-index:5;
+    display:flex; align-items:stretch; justify-content:center; gap:22px;
+  }
+  .card{
+    flex:0 0 230px; height:280px;
+    background:var(--surface-2); border:1px solid var(--hairline); border-radius:14px;
+    padding:26px 24px; position:relative;
+    display:flex; flex-direction:column; gap:14px;
+  }
+  .card .num{
+    font-family:var(--font-mono); font-size:13px; color:var(--ink-tertiary); letter-spacing:0.05em;
+  }
+  .card .label{
+    font-family:var(--font-display); font-size:28px; font-weight:650; letter-spacing:-0.6px; color:var(--ink);
+  }
+  .card .desc{
+    font-size:15.5px; line-height:1.6; color:var(--ink-subtle); margin-top:2px;
+  }
+  .card .dot{
+    position:absolute; top:26px; right:24px; width:8px; height:8px; border-radius:50%;
+    background:var(--primary); box-shadow:0 0 12px 2px rgba(94,106,210,0.55);
+  }
+  .arrow{
+    flex:0 0 40px; display:flex; align-items:center; justify-content:center;
+    color:var(--ink-tertiary); font-size:26px;
+  }
+
+  .footer-line{
+    position:absolute; left:64px; right:64px; top:706px; z-index:5;
+    display:flex; justify-content:space-between; align-items:center;
+    border-top:1px solid var(--hairline); padding-top:20px;
+  }
+  .footer-line .f-label{
+    font-family:var(--font-mono); font-size:14px; color:var(--ink-tertiary); letter-spacing:0.04em;
+  }
+  .footer-line .f-strong{ color:var(--primary-hover); }
+</style>
+</head>
+<body>
+  <div class="glow"></div>
+
+  <svg class="bg-grid" width="1672" height="941" viewBox="0 0 1672 941">
+    <defs>
+      <pattern id="grid" width="64" height="64" patternUnits="userSpaceOnUse">
+        <path d="M 64 0 L 0 0 0 64" fill="none" stroke="#23252a" stroke-width="1" opacity="0.35"/>
+      </pattern>
+    </defs>
+    <rect width="1672" height="941" fill="url(#grid)" />
+  </svg>
+
+  <svg class="bg-trend" width="1672" height="941" viewBox="0 0 1672 941">
+    <defs>
+      <linearGradient id="trendGrad" x1="0%" y1="100%" x2="100%" y2="0%">
+        <stop offset="0%" stop-color="#5e6ad2" stop-opacity="0.05"/>
+        <stop offset="100%" stop-color="#828fff" stop-opacity="0.45"/>
+      </linearGradient>
+    </defs>
+    <path d="M 40 860 C 300 820, 480 760, 680 700 C 900 630, 1050 560, 1260 420 C 1420 320, 1520 230, 1620 120"
+          fill="none" stroke="url(#trendGrad)" stroke-width="2.5" stroke-linecap="round" opacity="0.9"/>
+    <circle cx="680" cy="700" r="4" fill="#828fff" opacity="0.55"/>
+    <circle cx="1260" cy="420" r="4" fill="#828fff" opacity="0.55"/>
+    <circle cx="1620" cy="120" r="5" fill="#828fff" opacity="0.8"/>
+  </svg>
+
+  <div class="caption">20차시 · 6개 파트</div>
+  <div class="title">엑셀에서 시작해 BI까지</div>
+
+  <div class="pipeline">
+    <div class="card">
+      <div class="dot"></div>
+      <span class="num">01</span>
+      <span class="label">엑셀</span>
+      <span class="desc">표로 감각 잡기</span>
+    </div>
+    <div class="arrow">&#8594;</div>
+    <div class="card">
+      <div class="dot"></div>
+      <span class="num">02</span>
+      <span class="label">통계</span>
+      <span class="desc">평균·분포·상관</span>
+    </div>
+    <div class="arrow">&#8594;</div>
+    <div class="card">
+      <div class="dot"></div>
+      <span class="num">03</span>
+      <span class="label">AI</span>
+      <span class="desc">자연어로 분석</span>
+    </div>
+    <div class="arrow">&#8594;</div>
+    <div class="card">
+      <div class="dot"></div>
+      <span class="num">04</span>
+      <span class="label">파이썬</span>
+      <span class="desc">재현 가능한 분석</span>
+    </div>
+    <div class="arrow">&#8594;</div>
+    <div class="card">
+      <div class="dot"></div>
+      <span class="num">05</span>
+      <span class="label">BI</span>
+      <span class="desc">대시보드로 공유</span>
+    </div>
+  </div>
+
+  <div class="footer-line">
+    <span class="f-label">도구 스파인 &nbsp;·&nbsp; <span class="f-strong">엑셀 → 통계 → AI → 파이썬 → BI</span></span>
+    <span class="f-label">DATA ANALYSIS COURSE</span>
+  </div>
+</body>
+</html>
