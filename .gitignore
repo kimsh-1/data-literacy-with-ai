@@ -1,0 +1,14 @@
+# 실공개데이터 원본은 공개 repo에 재배포하지 않음 (정부/Kaggle 약관) — 출처는 00_PLAN/REAL_DATA_CATALOG.md
+02_datasets/real_korean/
+
+# 내부 작업 산출물
+00_PLAN/_pre_yunmun_backup/
+
+# 파이썬
+__pycache__/
+*.pyc
+
+# 기타
+node_modules/
+.DS_Store
+*.tmp

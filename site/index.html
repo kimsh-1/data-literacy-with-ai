@@ -1,0 +1,1033 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>데이터 리터러시 with AI</title>
+<meta name="description" content="엑셀만 쓰던 당신이 AI와 함께 데이터로 답하기까지. 20차시, 6개 파트, 52종의 실제 한국 공공데이터로 배우는 데이터 분석 입문 코스." />
+<style>
+  :root{
+    --canvas: #010102;
+    --surface-1: #0f1011;
+    --surface-2: #141516;
+    --surface-3: #18191a;
+    --surface-4: #191a1b;
+    --ink: #f7f8f8;
+    --ink-muted: #d0d6e0;
+    --ink-subtle: #8a8f98;
+    --ink-tertiary: #62666d;
+    --primary: #5e6ad2;
+    --primary-hover: #828fff;
+    --primary-focus: #5e69d1;
+    --hairline: #23252a;
+    --hairline-strong: #34343a;
+    --hairline-tertiary: #3e3e44;
+    --success: #27a644;
+
+    --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-text: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    --font-mono: ui-monospace, "SF Mono", "JetBrains Mono", Menlo, Consolas, monospace;
+
+    --radius-xs: 4px;
+    --radius-sm: 6px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-xxl: 24px;
+    --radius-pill: 9999px;
+
+    --space-xxs: 4px;
+    --space-xs: 8px;
+    --space-sm: 12px;
+    --space-md: 16px;
+    --space-lg: 24px;
+    --space-xl: 32px;
+    --space-xxl: 48px;
+    --space-section: 96px;
+
+    --container: 1280px;
+  }
+
+  *, *::before, *::after{ box-sizing: border-box; }
+  html{ background: var(--canvas); scroll-behavior: smooth; }
+  body{
+    margin:0;
+    background: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-text);
+    font-size: 16px;
+    line-height: 1.5;
+    letter-spacing: -0.05px;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+  img{ max-width:100%; display:block; }
+  a{ color: inherit; text-decoration: none; }
+  ul{ margin:0; padding:0; list-style:none; }
+  h1,h2,h3,h4,p{ margin:0; }
+  section{ position: relative; }
+
+  .container{
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 clamp(20px, 5vw, 48px);
+  }
+
+  /* ---------- typography ---------- */
+  .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-family: var(--font-text);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.4px;
+    color: var(--primary-hover);
+    text-transform: none;
+  }
+  .eyebrow::before{
+    content:"";
+    width:6px; height:6px;
+    background: var(--primary);
+    border-radius: 1px;
+    flex-shrink:0;
+  }
+  .display-xl{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(40px, 7vw, 80px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+  }
+  .display-lg{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(30px, 4.5vw, 56px);
+    line-height: 1.1;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+  }
+  .display-md{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: clamp(24px, 3.2vw, 40px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .headline{
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 28px;
+    line-height: 1.2;
+    letter-spacing: -0.012em;
+    color: var(--ink);
+  }
+  .card-title{
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+  .body-lg{
+    font-size: 18px;
+    line-height: 1.6;
+    color: var(--ink-muted);
+    letter-spacing: -0.1px;
+  }
+  .body-sm{ font-size: 14px; line-height: 1.55; color: var(--ink-subtle); }
+  .caption{ font-size: 12px; line-height: 1.4; color: var(--ink-tertiary); }
+  .mono{ font-family: var(--font-mono); font-size: 12px; letter-spacing: 0; }
+
+  /* ---------- buttons ---------- */
+  .btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    font-family: var(--font-text);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 12px 20px;
+    border-radius: var(--radius-md);
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background-color .15s ease, border-color .15s ease, transform .15s ease;
+    white-space: nowrap;
+  }
+  .btn-primary{ background: var(--primary); color: #ffffff; }
+  .btn-primary:hover{ background: var(--primary-hover); }
+  .btn-primary:active{ background: var(--primary-focus); }
+  .btn-secondary{ background: var(--surface-1); color: var(--ink); border-color: var(--hairline); }
+  .btn-secondary:hover{ border-color: var(--hairline-strong); background: var(--surface-2); }
+
+  /* ---------- nav ---------- */
+  .top-nav{
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    height: 64px;
+    display:flex;
+    align-items:center;
+    background: rgba(1,1,2,0.82);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .top-nav .container{ display:flex; align-items:center; justify-content:space-between; gap: 24px; }
+  .brand{ display:flex; align-items:center; gap:10px; font-family: var(--font-display); font-weight:600; font-size:15px; letter-spacing:-0.01em; }
+  .brand-mark{ width:20px; height:20px; border-radius: 6px; background: var(--primary); flex-shrink:0; position:relative; }
+  .brand-mark::after{ content:""; position:absolute; inset:6px; border-radius:2px; background: rgba(255,255,255,0.85); }
+  .nav-links{ display:flex; align-items:center; gap: 28px; }
+  .nav-links a{ font-size:14px; color: var(--ink-subtle); transition: color .15s ease; }
+  .nav-links a:hover{ color: var(--ink); }
+  .nav-cta{ display:flex; align-items:center; gap:12px; }
+  .progress-bar{ position: fixed; top:0; left:0; height:2px; background: var(--primary); width:0%; z-index: 200; transition: width .1s linear; }
+
+  @media (max-width: 768px){
+    .nav-links{ display:none; }
+  }
+
+  /* ---------- reveal animation ---------- */
+  .reveal{ opacity:0; transform: translateY(24px); transition: opacity .7s cubic-bezier(.2,.7,.2,1), transform .7s cubic-bezier(.2,.7,.2,1); }
+  .reveal.in-view{ opacity:1; transform: translateY(0); }
+  .reveal-stagger .reveal:nth-child(1){ transition-delay: .02s; }
+  .reveal-stagger .reveal:nth-child(2){ transition-delay: .07s; }
+  .reveal-stagger .reveal:nth-child(3){ transition-delay: .12s; }
+  .reveal-stagger .reveal:nth-child(4){ transition-delay: .17s; }
+  .reveal-stagger .reveal:nth-child(5){ transition-delay: .22s; }
+  .reveal-stagger .reveal:nth-child(6){ transition-delay: .27s; }
+
+  /* ---------- hero ---------- */
+  .hero{
+    padding: 56px 0 var(--space-section);
+    background:
+      radial-gradient(ellipse 60% 50% at 78% 18%, rgba(94,106,210,0.22), transparent 60%),
+      radial-gradient(ellipse 40% 40% at 15% 85%, rgba(94,106,210,0.10), transparent 65%),
+      var(--canvas);
+    overflow: hidden;
+  }
+  .hero .container{
+    display:grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 56px;
+    align-items:center;
+  }
+  .hero-eyebrow{ margin-bottom: 20px; }
+  .hero h1{ margin-bottom: 20px; }
+  .hero-sub{ font-family: var(--font-display); font-weight:400; font-size: clamp(17px,2vw,20px); line-height:1.45; letter-spacing:-0.01em; color: var(--ink-muted); margin-bottom: 18px; max-width: 46ch; }
+  .hero-lead{ color: var(--ink-subtle); font-size:15px; line-height:1.7; max-width: 50ch; margin-bottom: 32px; }
+  .hero-ctas{ display:flex; gap:12px; flex-wrap:wrap; }
+  .hero-visual{
+    position:relative;
+    border-radius: var(--radius-xl);
+    border: 1px solid var(--hairline);
+    background: var(--surface-1);
+    padding: 10px;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.02), 0 40px 100px -40px rgba(94,106,210,0.35);
+  }
+  .hero-visual img{ border-radius: 12px; width:100%; }
+  .hero-visual::before{
+    content:"";
+    position:absolute;
+    inset: -40px;
+    z-index:-1;
+    background: radial-gradient(circle at 60% 40%, rgba(94,106,210,0.28), transparent 65%);
+    filter: blur(10px);
+  }
+  @media (max-width: 900px){
+    .hero .container{ grid-template-columns: 1fr; }
+    .hero-visual{ order: -1; }
+  }
+
+  /* ---------- section scaffolding ---------- */
+  .section{ padding: var(--space-section) 0; }
+  .section-surface-1{ background: var(--surface-1); border-top:1px solid var(--hairline); border-bottom:1px solid var(--hairline); }
+  .section-head{ max-width: 720px; margin-bottom: var(--space-xxl); }
+  .section-head .headline-wrap{ margin-top: 14px; }
+  .section-head .body-lg{ margin-top: 16px; }
+  .section-head.centered{ margin-left:auto; margin-right:auto; text-align:center; }
+
+  /* ---------- journey ---------- */
+  .journey-grid{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-lg);
+  }
+  .stage-card{
+    background: var(--surface-1);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    display:flex;
+    flex-direction:column;
+    gap: var(--space-md);
+    transition: border-color .2s ease, transform .2s ease;
+  }
+  .stage-card:hover{ border-color: var(--hairline-strong); transform: translateY(-2px); }
+  .stage-visual{
+    border-radius: var(--radius-md);
+    overflow:hidden;
+    background: var(--surface-2);
+    border: 1px solid var(--hairline);
+    aspect-ratio: 16/9;
+  }
+  .stage-visual svg,
+  .stage-visual img{ width:100%; height:100%; display:block; object-fit:cover; }
+  .stage-index{ font-family: var(--font-mono); font-size:12px; color: var(--ink-tertiary); }
+  .stage-card p{ color: var(--ink-subtle); font-size:14px; line-height:1.6; }
+
+  .stats-interlude{
+    margin-top: var(--space-lg);
+    background: var(--surface-2);
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xl);
+    display:grid;
+    grid-template-columns: 1fr 1.3fr;
+    gap: var(--space-xl);
+    align-items:center;
+  }
+  .stats-interlude .stage-visual{ aspect-ratio: 16/9; }
+  @media (max-width: 900px){
+    .journey-grid{ grid-template-columns: repeat(2, 1fr); }
+    .stats-interlude{ grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px){
+    .journey-grid{ grid-template-columns: 1fr; }
+  }
+
+  /* ---------- parts overview ---------- */
+  .parts-grid{
+    display:grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-lg);
+  }
+  .part-card{
+    background: var(--surface-1);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    display:flex;
+    flex-direction:column;
+    gap: var(--space-sm);
+  }
+  .part-num{ font-family: var(--font-mono); font-size:13px; color: var(--primary-hover); }
+  .part-sessions{ font-family: var(--font-mono); font-size:12px; color: var(--ink-tertiary); }
+  .part-card p{ color: var(--ink-subtle); font-size: 14px; line-height:1.65; }
+  @media (max-width: 1024px){ .parts-grid{ grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px){ .parts-grid{ grid-template-columns: 1fr; } }
+
+  /* ---------- curriculum ---------- */
+  .curriculum-intro-banner{
+    display:flex;
+    align-items:center;
+    gap: var(--space-md);
+    background: var(--surface-2);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-md);
+    padding: var(--space-md) var(--space-lg);
+    margin-bottom: var(--space-xxl);
+  }
+  .curriculum-intro-banner .badge{
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--primary-hover);
+    border: 1px solid var(--hairline-strong);
+    border-radius: var(--radius-xs);
+    padding: 3px 8px;
+    flex-shrink:0;
+  }
+  .curriculum-intro-banner p{ color: var(--ink-subtle); font-size: 14px; }
+
+  .part-group{ margin-bottom: var(--space-xxl); }
+  .part-group-head{
+    display:flex;
+    align-items:baseline;
+    gap: 14px;
+    margin-bottom: var(--space-lg);
+    padding-bottom: var(--space-md);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .part-group-head .part-num{ font-size:14px; }
+  .part-group-head h3{ font-family: var(--font-display); font-weight:600; font-size:20px; letter-spacing:-0.01em; }
+  .part-group-head .part-range{ margin-left:auto; font-family: var(--font-mono); font-size:12px; color: var(--ink-tertiary); }
+
+  .session-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: var(--space-md);
+  }
+  .session-card{
+    background: var(--surface-1);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+    display:flex;
+    flex-direction: column;
+    gap: var(--space-sm);
+    transition: border-color .2s ease, background-color .2s ease;
+  }
+  .session-card:hover{ border-color: var(--hairline-strong); background: var(--surface-2); }
+  .session-top{ display:flex; align-items:center; justify-content:space-between; }
+  .session-num{ font-family: var(--font-mono); font-size:13px; color: var(--ink-tertiary); }
+  .difficulty{ display:flex; gap:4px; align-items:center; }
+  .difficulty .dot{ width:6px; height:6px; border-radius:50%; background: var(--hairline-strong); }
+  .difficulty .dot.filled{ background: var(--primary); }
+  .difficulty-label{ font-size:11px; color: var(--ink-tertiary); margin-left:6px; }
+  .session-card .card-title{ font-size:17px; }
+  .session-card p{ font-size: 13.5px; color: var(--ink-subtle); line-height:1.6; }
+  .session-tags{ display:flex; flex-wrap:wrap; gap:6px; margin-top:auto; padding-top: var(--space-xs); }
+  .tag{ font-size:11px; color: var(--ink-tertiary); border: 1px solid var(--hairline); border-radius: var(--radius-xs); padding: 3px 7px; }
+  .tag.real{ color: var(--primary-hover); border-color: rgba(94,106,210,0.4); }
+
+  @media (max-width: 560px){
+    .part-group-head{ flex-wrap:wrap; }
+    .part-group-head .part-range{ margin-left:0; }
+  }
+
+  /* ---------- data showcase ---------- */
+  .data-stats-row{
+    display:flex;
+    gap: var(--space-xxl);
+    flex-wrap:wrap;
+    margin-bottom: var(--space-xxl);
+    padding-bottom: var(--space-xxl);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .data-stat .num{ font-family: var(--font-display); font-weight:600; font-size: 40px; letter-spacing:-0.02em; font-variant-numeric: tabular-nums; }
+  .data-stat .label{ margin-top:6px; color: var(--ink-subtle); font-size:14px; }
+
+  .dataset-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: var(--space-md);
+  }
+  .dataset-card{
+    background: var(--surface-2);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    padding: var(--space-lg);
+  }
+  .dataset-card .card-title{ font-size:16px; margin-bottom:8px; }
+  .dataset-card p{ font-size:13.5px; color: var(--ink-subtle); line-height:1.6; }
+  .dataset-card .mono{ display:inline-block; margin-top:12px; color: var(--ink-tertiary); }
+
+  /* ---------- video ---------- */
+  .video-panel{
+    background: var(--surface-1);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-xl);
+    padding: var(--space-lg);
+    max-width: 880px;
+    margin: 0 auto;
+  }
+  #intro-video{
+    position:relative;
+    aspect-ratio: 16/9;
+    border-radius: var(--radius-lg);
+    background:
+      radial-gradient(ellipse 60% 60% at 50% 40%, rgba(94,106,210,0.16), transparent 70%),
+      var(--surface-3);
+    border: 1px solid var(--hairline);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .play-btn{
+    width:64px; height:64px;
+    border-radius:50%;
+    background: var(--primary);
+    display:flex; align-items:center; justify-content:center;
+    box-shadow: 0 0 0 1px rgba(255,255,255,0.06), 0 20px 40px -12px rgba(94,106,210,0.5);
+  }
+  .play-btn svg{ margin-left:3px; }
+  .video-caption{ text-align:center; margin-top: var(--space-md); color: var(--ink-subtle); font-size:14px; }
+  .video-caption .mono{ color: var(--ink-tertiary); display:block; margin-top:4px; }
+
+  /* ---------- cta banner ---------- */
+  .cta-banner{
+    background: var(--surface-1);
+    border: 1px solid var(--hairline);
+    border-radius: var(--radius-lg);
+    padding: var(--space-xxl);
+    text-align:center;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap: var(--space-lg);
+  }
+
+  /* ---------- footer ---------- */
+  footer{
+    background: var(--canvas);
+    padding: 64px 0 40px;
+    border-top: 1px solid var(--hairline);
+  }
+  footer .container{ display:flex; flex-direction:column; gap: var(--space-lg); }
+  .footer-top{ display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+  .footer-bottom{ display:flex; justify-content:space-between; color: var(--ink-tertiary); font-size:12px; flex-wrap:wrap; gap:8px; }
+  .footer-links{ display:flex; gap:20px; }
+  .footer-links a{ color: var(--ink-subtle); font-size:13px; }
+  .footer-links a:hover{ color: var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<nav class="top-nav">
+  <div class="container">
+    <div class="brand"><span class="brand-mark"></span>데이터 리터러시 with AI</div>
+    <div class="nav-links">
+      <a href="#journey">여정</a>
+      <a href="#parts">구조</a>
+      <a href="#curriculum">커리큘럼</a>
+      <a href="#data">실데이터</a>
+      <a href="#video">소개영상</a>
+    </div>
+    <div class="nav-cta">
+      <a href="#curriculum" class="btn btn-primary">커리큘럼 보기</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero">
+  <div class="container">
+    <div class="hero-copy">
+      <div class="eyebrow hero-eyebrow">데이터 분석 입문 코스 · 20차시</div>
+      <h1 class="display-xl">데이터 리터러시<br />with AI</h1>
+      <p class="hero-sub">엑셀만 쓰던 당신이 AI와 함께 데이터로 답하기까지</p>
+      <p class="hero-lead">엑셀에서 시작해 AI, 파이썬, BI 대시보드까지 순서대로 밟아갑니다. 각 도구가 왜 필요한지, 어디서 한계를 드러내는지를 실제 한국 공공데이터로 직접 확인하면서요.</p>
+      <div class="hero-ctas">
+        <a href="#curriculum" class="btn btn-primary">커리큘럼 보기</a>
+        <a href="#journey" class="btn btn-secondary">여정 살펴보기</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <img src="./images/hero.png" alt="표 형태의 데이터가 흩어지며 상승하는 추세선으로 이어지는 이미지" />
+    </div>
+  </div>
+</header>
+
+<!-- ============ JOURNEY ============ -->
+<section class="section" id="journey">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">왜 이 순서인가</div>
+      <div class="headline-wrap"><h2 class="display-md">결국 필요한 건 도구가 아니라 순서였습니다</h2></div>
+      <p class="body-lg">엑셀은 표를 정리하는 데는 좋지만 질문에 답하려는 순간 한계가 드러납니다. AI는 빠르게 답을 내놓지만 검증하지 않으면 위험하고, 파이썬은 강력한 만큼 혼자 배우면 막막합니다. 이 코스는 그 사이의 순서를 하나씩 이어 놓았습니다 — 엑셀에서 다진 감각이 AI를 검증하는 눈이 되고, 그 눈이 파이썬 코드를 읽는 힘이 되고, 그 힘이 BI 대시보드로 완성되도록.</p>
+    </div>
+
+    <div class="journey-grid reveal-stagger">
+      <div class="stage-card reveal">
+        <div class="stage-visual">
+          <img src="./images/excel.png" alt="엑셀 스프레드시트 그리드가 강조된 열을 중심으로 데이터를 정리하는 모습을 표현한 이미지" loading="lazy" width="1672" height="941" />
+        </div>
+        <span class="stage-index">STAGE 01</span>
+        <h3 class="card-title">엑셀</h3>
+        <p>tidy 데이터의 원칙, 피벗테이블, VLOOKUP과 조건부 집계까지. 이미 쓰던 도구로 데이터를 읽는 감각부터 다집니다.</p>
+      </div>
+
+      <div class="stage-card reveal">
+        <div class="stage-visual">
+          <img src="./images/ai.png" alt="여러 층으로 연결된 노드 네트워크가 하나의 밝은 결과 지점으로 모이는 모습을 표현한 이미지" loading="lazy" width="1672" height="941" />
+        </div>
+        <span class="stage-index">STAGE 02</span>
+        <h3 class="card-title">AI</h3>
+        <p>엑셀 파일을 그대로 올려 자연어로 묻습니다. 좋은 프롬프트를 설계하고, AI가 낸 답의 환각과 계산 오류를 검증하는 습관을 함께 익힙니다.</p>
+      </div>
+
+      <div class="stage-card reveal">
+        <div class="stage-visual">
+          <img src="./images/python.png" alt="터미널 창 안에 코드 라인이 이어지는 모습을 표현한 이미지" loading="lazy" width="1672" height="941" />
+        </div>
+        <span class="stage-index">STAGE 03</span>
+        <h3 class="card-title">파이썬</h3>
+        <p>Colab과 Pandas로 넘어와 정제·집계·재구조화·시각화를 코드로 직접 다룹니다. 행이 늘어나도 엑셀처럼 관리가 무거워지지 않습니다.</p>
+      </div>
+
+      <div class="stage-card reveal">
+        <div class="stage-visual">
+          <img src="./images/bi.png" alt="막대·선·도넛 차트 타일로 구성된 BI 대시보드를 표현한 이미지" loading="lazy" width="1672" height="941" />
+        </div>
+        <span class="stage-index">STAGE 04</span>
+        <h3 class="card-title">BI</h3>
+        <p>Power BI와 Looker Studio로 데이터 모델을 설계하고, 상호작용하는 대시보드를 만들어 결과를 공유 가능한 형태로 배포합니다.</p>
+      </div>
+    </div>
+
+    <div class="stats-interlude reveal">
+      <div>
+        <div class="eyebrow" style="margin-bottom:14px">여정을 관통하는 축</div>
+        <h3 class="card-title" style="font-size:22px; margin-bottom:12px">숫자에 속지 않는 감각</h3>
+        <p class="body-sm">엑셀과 AI 사이, 통계적 직관을 다지는 시간이 따로 있습니다. 평균과 중앙값이 갈라지는 지점, 상관과 인과를 혼동하기 쉬운 순간, 그룹을 나누면 뒤집히는 심슨의 역설까지 — 강남구 아파트 실거래 데이터로 직접 확인합니다.</p>
+      </div>
+      <div class="stage-visual">
+        <img src="./images/stats.png" alt="히스토그램과 정규분포 곡선, 산점도와 추세선이 함께 있는 통계 시각화 이미지" loading="lazy" width="1672" height="941" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 PARTS ============ -->
+<section class="section section-surface-1" id="parts">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">커리큘럼 구조</div>
+      <div class="headline-wrap"><h2 class="display-md">6개 파트, 20차시</h2></div>
+      <p class="body-lg">첫 시간에는 도구 지도를 함께 그리고 수업 환경을 점검합니다. 그 다음부터 여섯 파트가 이어지며, 파트가 바뀔 때마다 난이도는 한 번씩 리셋됩니다 — 새 도구를 처음 만나는 부담을 줄이기 위해서입니다.</p>
+    </div>
+
+    <div class="parts-grid reveal-stagger">
+      <div class="part-card reveal">
+        <span class="part-num">PART 01</span>
+        <h3 class="card-title">엑셀에서 데이터 감각 잡기</h3>
+        <span class="part-sessions">S02 – S04</span>
+        <p>tidy 원칙에서 피벗테이블, VLOOKUP까지. 엑셀 사용자가 이미 아는 도구로 데이터 감각을 다집니다.</p>
+      </div>
+      <div class="part-card reveal">
+        <span class="part-num">PART 02</span>
+        <h3 class="card-title">숫자에 속지 않는 통계 직관</h3>
+        <span class="part-sessions">S05 – S06</span>
+        <p>분포와 이상치, 상관과 인과의 구분, 심슨의 역설까지 익히며 숫자를 의심하는 눈을 기릅니다.</p>
+      </div>
+      <div class="part-card reveal">
+        <span class="part-num">PART 03</span>
+        <h3 class="card-title">AI로 분석하기, 노코드</h3>
+        <span class="part-sessions">S07 – S09</span>
+        <p>엑셀 파일을 AI에 올려 자연어로 분석하되, 프롬프트 설계와 결과 검증 습관을 함께 배웁니다.</p>
+      </div>
+      <div class="part-card reveal">
+        <span class="part-num">PART 04</span>
+        <h3 class="card-title">파이썬과 Pandas 제대로</h3>
+        <span class="part-sessions">S10 – S14</span>
+        <p>Colab 기초부터 정제·집계·시각화까지. 새 도구로 진입하며 난이도가 다시 3으로 시작됩니다.</p>
+      </div>
+      <div class="part-card reveal">
+        <span class="part-num">PART 05</span>
+        <h3 class="card-title">BI 대시보드</h3>
+        <span class="part-sessions">S15 – S18</span>
+        <p>Power BI와 Looker Studio로 대시보드를 만들고 모델링하고 배포합니다. 여기서도 도구 전환으로 난이도가 다시 시작됩니다.</p>
+      </div>
+      <div class="part-card reveal">
+        <span class="part-num">PART 06</span>
+        <h3 class="card-title">종합 캡스톤</h3>
+        <span class="part-sessions">S19 – S20</span>
+        <p>쌓아온 스캐폴딩 위에서 AI, 파이썬, BI를 한 바퀴 돌리고 결과를 인사이트 보고서로 완성합니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 20 CURRICULUM ============ -->
+<section class="section" id="curriculum">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">전체 커리큘럼</div>
+      <div class="headline-wrap"><h2 class="display-md">20차시 상세</h2></div>
+      <p class="body-lg">각 차시는 앞선 차시에서 다진 감각 위에 쌓입니다. 파트별로 묶어 두었으니 처음부터 순서대로 읽어도 좋고, 관심 있는 파트부터 골라 봐도 좋습니다.</p>
+    </div>
+
+    <div class="curriculum-intro-banner reveal">
+      <span class="badge">S01</span>
+      <p><strong style="color:var(--ink)">오리엔테이션.</strong> 데이터로 답할 수 있는 질문과 답하기 어려운 질문을 구분하고, 엑셀·AI·파이썬·BI가 분석 흐름에서 맡는 역할을 지도로 그린 뒤 수업 환경(OS, Colab, AI 계정)을 점검합니다.</p>
+    </div>
+
+    <!-- PART 1 -->
+    <div class="part-group">
+      <div class="part-group-head reveal">
+        <span class="part-num">PART 01 · 엑셀</span>
+        <h3>엑셀에서 데이터 감각 잡기</h3>
+        <span class="part-range">S02 – S04</span>
+      </div>
+      <div class="session-grid reveal-stagger">
+        <div class="session-card reveal">
+          <div class="session-top"><span class="session-num">S02</span>
+            <div class="difficulty" title="난이도 1"><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">입문</span></div>
+          </div>
+          <h4 class="card-title">좋은 데이터의 모양: tidy 데이터와 척도</h4>
+          <p>한 셀 한 값, 병합셀 금지 같은 tidy 원칙과 범주형·순서형·수치형 척도를 익히고, 어지러진 데이터에서 원칙이 깨진 지점을 직접 찾아봅니다.</p>
+          <div class="session-tags"><span class="tag">카페 매출 데이터</span></div>
+        </div>
+        <div class="session-card reveal">
+          <div class="session-top"><span class="session-num">S03</span>
+            <div class="difficulty" title="난이도 2"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">기초</span></div>
+          </div>
+          <h4 class="card-title">피벗테이블로 질문에 답하기</h4>
+          <p>"표를 보는 법"에서 "표에 질문하는 법"으로 넘어갑니다. 행·열·값 구성과 집계함수로 가장 잘 팔리는 시간대가 언제인지 직접 답해봅니다.</p>
+          <div class="session-tags"><span class="tag">카페 매출 데이터</span></div>
+        </div>
+        <div class="session-card reveal">
+          <div class="session-top"><span class="session-num">S04</span>
+            <div class="difficulty" title="난이도 2"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">기초</span></div>
+          </div>
+          <h4 class="card-title">실무 함수: VLOOKUP·XLOOKUP과 조건부 집계</h4>
+          <p>여러 표에 흩어진 실무 데이터를 VLOOKUP·XLOOKUP으로 이어붙여 매출을 계산하고, SUMIF·COUNTIF로 지역별·등급별 집계를 냅니다.</p>
+          <div class="session-tags"><span class="tag">주문·고객·상품 데이터</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PART 2 -->
+    <div class="part-group">
+      <div class="part-group-head reveal">
+        <span class="part-num">PART 02 · 통계</span>
+        <h3>숫자에 속지 않는 통계 직관</h3>
+        <span class="part-range">S05 – S06</span>
+      </div>
+      <div class="session-grid reveal-stagger">
+        <div class="session-card reveal">
+          <div class="session-top"><span class="session-num">S05</span>
+            <div class="difficulty" title="난이도 2"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">기초</span></div>
+          </div>
+          <h4 class="card-title">중심·산포·분포·박스플롯</h4>
+          <p>평균·중앙값·최빈값과 범위·표준편차로 숫자 열을 제대로 읽고, 박스플롯으로 부서별 분포와 이상치를 확인합니다. 평균이 실제 보통값을 과장하는 사례도 함께 찾아봅니다.</p>
+          <div class="session-tags"><span class="tag">인사 데이터</span><span class="tag">카페 매출 데이터</span></div>
+        </div>
+        <div class="session-card reveal">
+          <div class="session-top"><span class="session-num">S06</span>
+            <div class="difficulty" title="난이도 3"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">중급</span></div>
+          </div>
+          <h4 class="card-title">상관 vs 인과, 심슨의 역설</h4>
+          <p>강남구 아파트 실거래로 전용면적과 거래금액의 상관을 확인하고, "기온이 오르면 매출이 는다" 같은 그럴듯한 주장이 실제로는 무상관임을 반박합니다. 전체 평균과 그룹별 평균이 뒤집히는 심슨의 역설도 경험합니다.</p>
+          <div class="session-tags"><span class="tag real">강남구 아파트 실거래</span><span class="tag">인사 데이터</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PART 3 -->
+    <div class="part-group">
+      <div class="part-group-head reveal">
+        <span class="part-num">PART 03 · AI</span>
+        <h3>AI로 분석하기, 노코드</h3>
+        <span class="part-range">S07 – S09</span>
+      </div>
+      <div class="session-grid reveal-stagger">
+        <div class="session-card reveal">
+          <div class="session-top"><span class="session-num">S07</span>
+            <div class="difficulty" title="난이도 2"><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">기초</span></div>
+          </div>
+          <h4 class="card-title">엑셀을 AI에 올려 자연어로 분석</h4>
+          <p>엑셀 파일을 AI 분석 도구에 업로드해 자연어로 요약·집계·추세를 요청하고, 서로 다른 AI의 답을 비교해 더 믿을 만한 쪽을 골라봅니다.</p>
+          <div class="session-tags"><span class="tag">카페 매출 데이터(정제 전)</span></div>
+        </div>
+        <div class="session-card reveal">
+          <div class="session-top"><span class="session-num">S08</span>
+            <div class="difficulty" title="난이도 3"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">중급</span></div>
+          </div>
+          <h4 class="card-title">좋은 분석 프롬프트 설계</h4>
+          <p>맥락·질문·출력형식 세 요소로 프롬프트를 설계하고, 설문 주관식 응답을 주제와 감성으로 분류하도록 요청합니다. 프롬프트를 세 버전으로 바꿔 재현 가능성도 함께 판단합니다.</p>
+          <div class="session-tags"><span class="tag">설문 응답</span><span class="tag">영화 데이터</span></div>
+        </div>
+        <div class="session-card reveal">
+          <div class="session-top"><span class="session-num">S09</span>
+            <div class="difficulty" title="난이도 3"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">중급</span></div>
+          </div>
+          <h4 class="card-title">AI 답 검증하기: 환각과 계산 오류 잡기</h4>
+          <p>AI가 낸 매출 수치를 엑셀 피벗테이블로 교차 확인하고, 중복·결측·표기 흔들림이 숫자를 어떻게 왜곡하는지 확인해 나만의 검증 체크리스트를 만듭니다.</p>
+          <div class="session-tags"><span class="tag">카페 매출 데이터</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PART 4 -->
+    <div class="part-group">
+      <div class="part-group-head reveal">
+        <span class="part-num">PART 04 · 파이썬</span>
+        <h3>파이썬과 Pandas 제대로</h3>
+        <span class="part-range">S10 – S14</span>
+      </div>
+      <div class="session-grid reveal-stagger">
+        <div class="session-card reveal">
+          <div class="session-top"><span class="session-num">S10</span>
+            <div class="difficulty" title="난이도 3"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">중급</span></div>
+          </div>
+          <h4 class="card-title">Colab과 파이썬 기초</h4>
+          <p>엑셀에서 파이썬으로 넘어가는 첫 시간입니다. 변수, 자료형, 리스트, 딕셔너리, 조건문, 반복문을 익히며 다음 차시의 pandas 필터가 오늘의 조건문을 열 전체에 한 번에 적용하는 것임을 확인합니다.</p>
+          <div class="session-tags"><span class="tag">문법 예제</span></div>
+        </div>
+        <div class="session-card reveal">
+          <div class="session-top"><span class="session-num">S11</span>
+            <div class="difficulty" title="난이도 3"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">중급</span></div>
+          </div>
+          <h4 class="card-title">Pandas 입문: Series, DataFrame과 필터</h4>
+          <p>DataFrame과 Series를 엑셀 시트와 열에 견주어 이해하고, head·info·describe로 데이터를 살핀 뒤 불리언 필터로 원하는 행만 남깁니다. 엑셀 필터가 곧 불리언 마스크라는 것이 이 차시의 핵심입니다.</p>
+          <div class="session-tags"><span class="tag">카페 매출 데이터</span></div>
+        </div>
+        <div class="session-card reveal">
+          <div class="session-top"><span class="session-num">S12</span>
+            <div class="difficulty" title="난이도 4"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="difficulty-label">심화</span></div>
+          </div>
+          <h4 class="card-title">데이터 정제: 결측, 이상치, 타입, 중복, 인코딩</h4>
+          <p>결측치 처리, IQR 이상치, 타입 변환, 중복 제거, 문자열 처리에 더해 한글 CSV의 cp949 인코딩 문제와 날짜 파싱까지 정제 전 과정을 다룹니다. 정제는 결국 계산 가능한 표로 만드는 일입니다.</p>
+          <div class="session-tags"><span class="tag">카페 매출 데이터(정제 전)</span></div>
+        </div>
+        <div class="session-card reveal">
+          <div class="session-top"><span class="session-num">S13</span>
+            <div class="difficulty" title="난이도 4"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="difficulty-label">심화</span></div>
+          </div>
+          <h4 class="card-title">그룹화·집계·재구조화</h4>
+          <p>groupby, merge, pivot_table, melt를 익힙니다. 231개 열짜리 인구 데이터를 melt로 세로형으로 바꾸고, 서울 상가업소를 업종별로 집계하며, 생활인구를 자치구 단위로 묶어보는 미션으로 마무리합니다.</p>
+          <div class="session-tags"><span class="tag real">서울 상가업소 11.9만행</span><span class="tag real">인구 KOSIS</span><span class="tag real">서울 생활인구</span></div>
+        </div>
+        <div class="session-card reveal">
+          <div class="session-top"><span class="session-num">S14</span>
+            <div class="difficulty" title="난이도 4"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="difficulty-label">심화</span></div>
+          </div>
+          <h4 class="card-title">시각화 실전: matplotlib·seaborn과 BI 핸드오프</h4>
+          <p>한글 폰트 설정부터 시작해 지하철 데이터는 히트맵으로, 아파트 데이터는 산점도와 추세선으로, 소비자물가는 시계열 라인차트로 표현합니다. 정제 결과를 저장해 BI로 넘기는 핸드오프까지 다룹니다.</p>
+          <div class="session-tags"><span class="tag real">서울 지하철 19.9만행</span><span class="tag real">강남 아파트 실거래</span><span class="tag real">한국 CPI</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PART 5 -->
+    <div class="part-group">
+      <div class="part-group-head reveal">
+        <span class="part-num">PART 05 · BI</span>
+        <h3>BI 대시보드</h3>
+        <span class="part-range">S15 – S18</span>
+      </div>
+      <div class="session-grid reveal-stagger">
+        <div class="session-card reveal">
+          <div class="session-top"><span class="session-num">S15</span>
+            <div class="difficulty" title="난이도 3"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="dot"></span><span class="difficulty-label">중급</span></div>
+          </div>
+          <h4 class="card-title">Power BI 설치, 로드, 첫 차트</h4>
+          <p>Power BI Desktop을 설치하고 CSV를 불러와 막대, 꺾은선, KPI 카드로 첫 대시보드 페이지를 만듭니다. Mac 사용자는 S18의 Looker Studio 경로로 대체됩니다.</p>
+          <div class="session-tags"><span class="tag">카페 매출 데이터</span></div>
+        </div>
+        <div class="session-card reveal">
+          <div class="session-top"><span class="session-num">S16</span>
+            <div class="difficulty" title="난이도 4"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="difficulty-label">심화</span></div>
+          </div>
+          <h4 class="card-title">데이터 모델링: 관계, 스타 스키마, 날짜 차원</h4>
+          <p>S04에서 VLOOKUP으로 풀었던 문제를 다른 방식으로 풉니다. 주문 테이블을 중심에 둔 스타 스키마로 관계를 맺고, 다음 차시의 전월 대비 계산을 위한 날짜 차원 테이블을 만듭니다.</p>
+          <div class="session-tags"><span class="tag">주문·고객·상품 데이터</span></div>
+        </div>
+        <div class="session-card reveal">
+          <div class="session-top"><span class="session-num">S17</span>
+            <div class="difficulty" title="난이도 4"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="difficulty-label">심화</span></div>
+          </div>
+          <h4 class="card-title">시각화·상호작용·DAX 기초</h4>
+          <p>슬라이서와 드릴다운으로 상호작용하는 대시보드를 만들고, 합계와 비율은 물론 전월 대비 증감까지 계산하는 DAX 측정값을 익힙니다.</p>
+          <div class="session-tags"><span class="tag">주문 데이터 + 날짜 차원</span></div>
+        </div>
+        <div class="session-card reveal">
+          <div class="session-top"><span class="session-num">S18</span>
+            <div class="difficulty" title="난이도 4"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot"></span><span class="difficulty-label">심화</span></div>
+          </div>
+          <h4 class="card-title">배포와 공유: Looker Studio, Power BI Copilot 선택</h4>
+          <p>Power BI Service와 Copilot은 조직 계정과 유료 결제가 필요해, 무료 개인 계정으로 갈 수 있는 Looker Studio를 표준 경로로 삼습니다. CSV를 연결해 보고서를 만들고 공유 링크까지 검증합니다.</p>
+          <div class="session-tags"><span class="tag">설문 응답</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PART 6 -->
+    <div class="part-group">
+      <div class="part-group-head reveal">
+        <span class="part-num">PART 06 · 캡스톤</span>
+        <h3>종합 캡스톤</h3>
+        <span class="part-range">S19 – S20</span>
+      </div>
+      <div class="session-grid reveal-stagger">
+        <div class="session-card reveal">
+          <div class="session-top"><span class="session-num">S19</span>
+            <div class="difficulty" title="난이도 5"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="difficulty-label">실전</span></div>
+          </div>
+          <h4 class="card-title">풀사이클 실습: AI 요약, 파이썬 그래프, BI 1페이지</h4>
+          <p>"서울 음식 업종 점포는 어느 구에 많이 모여 있고 구별 업종 구성은 어떻게 다른가"라는 질문 하나로, AI 요약부터 파이썬 핵심 그래프 한 장, BI 한 페이지까지 정해진 스코프를 스스로 완주합니다.</p>
+          <div class="session-tags"><span class="tag real">서울 상가업소 11.9만행</span><span class="tag real">강남 아파트 실거래</span></div>
+        </div>
+        <div class="session-card reveal">
+          <div class="session-top"><span class="session-num">S20</span>
+            <div class="difficulty" title="난이도 5"><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="dot filled"></span><span class="difficulty-label">실전</span></div>
+          </div>
+          <h4 class="card-title">인사이트 보고: 그래서 뭘 하나</h4>
+          <p>전 차시 결과물로 발견, 시사점, 액션을 담은 1페이지 보고서와 3분 발표를 만듭니다. 강남구 12,095개, 마포구 7,396개 점포 수처럼 구체적인 수치로 결론을 뒷받침합니다.</p>
+          <div class="session-tags"><span class="tag real">S19 결과물</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ REAL DATA ============ -->
+<section class="section section-surface-1" id="data">
+  <div class="container">
+    <div class="section-head reveal">
+      <div class="eyebrow">진짜 데이터로 배웁니다</div>
+      <div class="headline-wrap"><h2 class="display-md">합성 데이터로 개념을 잡고, 공공데이터로 감각을 잡습니다</h2></div>
+      <p class="body-lg">카페 매출, 주문, 설문, 인사 데이터 같은 합성 데이터로 개념을 깨끗하게 익힌 다음, 실제 한국 공공데이터로 그 개념이 현실에서 어떻게 작동하는지 확인합니다. 배달콜과 기온의 상관이 실제로는 r≈0.015로 무상관이라는 사실도, 강남구와 마포구의 점포 수 격차도 — 전부 검증을 거친 실측치입니다.</p>
+    </div>
+
+    <div class="data-stats-row reveal">
+      <div class="data-stat"><div class="num">52<span style="font-size:22px">종</span></div><div class="label">검증을 통과한 실데이터셋</div></div>
+      <div class="data-stat"><div class="num">14</div><div class="label">공공데이터 도메인</div></div>
+      <div class="data-stat"><div class="num">20<span style="font-size:22px">만+</span></div><div class="label">행 단위 실습 데이터(지하철·따릉이)</div></div>
+    </div>
+
+    <div class="dataset-grid reveal-stagger">
+      <div class="dataset-card reveal">
+        <h4 class="card-title">서울 따릉이 대여 이력</h4>
+        <p>대여소 간 이동, 시간대별 대여 이력 약 20만 행. 대여소 위경도가 포함된 마스터 데이터와 함께 씁니다.</p>
+        <span class="mono">공공자전거 · OD 데이터</span>
+      </div>
+      <div class="dataset-card reveal">
+        <h4 class="card-title">서울 지하철 승하차</h4>
+        <p>역명과 시간대별 승하차 인원 약 20만 행. 여러 해에 걸친 이력으로 시간대별 혼잡 패턴을 히트맵으로 그립니다.</p>
+        <span class="mono">서울교통공사</span>
+      </div>
+      <div class="dataset-card reveal">
+        <h4 class="card-title">아파트 실거래가</h4>
+        <p>강남구·해운대구의 매매·전월세 실거래 3,754행. 전용면적과 거래금액의 상관을 확인하는 핵심 실습 데이터입니다.</p>
+        <span class="mono">국토교통부</span>
+      </div>
+      <div class="dataset-card reveal">
+        <h4 class="card-title">서울 상가업소</h4>
+        <p>업종 대·중·소분류가 붙은 상가업소 약 11.9만 행. 자치구별 음식점 밀집도를 비교하는 캡스톤의 핵심 소재입니다.</p>
+        <span class="mono">소상공인시장진흥공단</span>
+      </div>
+      <div class="dataset-card reveal">
+        <h4 class="card-title">서울 생활인구</h4>
+        <p>자치구와 시간대 기준 약 10.9만 행. 대용량 데이터를 groupby로 다루는 감각을 익히는 실습에 씁니다.</p>
+        <span class="mono">서울 열린데이터광장</span>
+      </div>
+      <div class="dataset-card reveal">
+        <h4 class="card-title">기상청 ASOS 일별 관측</h4>
+        <p>서울 지점의 기온·강수·습도 4개년 일별 관측. 배달콜, 매출과의 상관을 직접 계산해보는 데이터입니다.</p>
+        <span class="mono">기상청</span>
+      </div>
+      <div class="dataset-card reveal">
+        <h4 class="card-title">한국 경제지표(CPI·환율)</h4>
+        <p>소비자물가지수, 환율, 실업률의 월별 시계열. 시계열 라인차트를 그리는 시각화 실습에 씁니다.</p>
+        <span class="mono">FRED</span>
+      </div>
+      <div class="dataset-card reveal">
+        <h4 class="card-title">인구·고령화 통계</h4>
+        <p>법정동 단위 231개 열의 wide 포맷 데이터. melt로 세로형으로 바꾸는 재구조화 실습의 소재입니다.</p>
+        <span class="mono">행정안전부 · KOSIS</span>
+      </div>
+      <div class="dataset-card reveal">
+        <h4 class="card-title">교통사고 통계</h4>
+        <p>사고일시, 시군구, 사상자 수가 담긴 사고 기록. 지역별 위험도를 비교하는 참고 데이터로 활용됩니다.</p>
+        <span class="mono">도로교통공단 TAAS</span>
+      </div>
+      <div class="dataset-card reveal">
+        <h4 class="card-title">영화 박스오피스</h4>
+        <p>장르, 배급사, 관객수가 담긴 영화 데이터. 프롬프트로 텍스트를 분류하는 실습에 선택적으로 씁니다.</p>
+        <span class="mono">KOBIS · DACON</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ VIDEO ============ -->
+<section class="section" id="video">
+  <div class="container">
+    <div class="section-head centered reveal" style="margin-left:auto;margin-right:auto;">
+      <div class="eyebrow" style="justify-content:center">미리보기</div>
+      <div class="headline-wrap"><h2 class="display-md">30초로 보는 이 코스</h2></div>
+    </div>
+    <div class="video-panel reveal">
+      <div id="intro-video" role="img" aria-label="소개 영상 placeholder">
+        <div class="play-btn">
+          <svg width="20" height="22" viewBox="0 0 20 22" fill="none"><path d="M1 1L19 11L1 21V1Z" fill="white"/></svg>
+        </div>
+      </div>
+      <p class="video-caption">소개 영상<span class="mono">추후 업로드 예정 · 16:9</span></p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CLOSING CTA ============ -->
+<section class="section section-surface-1">
+  <div class="container">
+    <div class="cta-banner reveal">
+      <div class="eyebrow">지금 시작하기</div>
+      <h2 class="display-md">엑셀만 쓰던 당신도<br />20차시 뒤에는 데이터로 답합니다</h2>
+      <p class="body-lg" style="max-width:56ch">순서대로 밟아가면 됩니다. 다음 파트가 부담스럽지 않도록 난이도는 매번 리셋됩니다.</p>
+      <a href="#curriculum" class="btn btn-primary">커리큘럼 다시 보기</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="footer-top">
+      <div class="brand"><span class="brand-mark"></span>데이터 리터러시 with AI</div>
+      <div class="footer-links">
+        <a href="#journey">여정</a>
+        <a href="#parts">구조</a>
+        <a href="#curriculum">커리큘럼</a>
+        <a href="#data">실데이터</a>
+        <a href="#video">소개영상</a>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>데이터 리터러시 with AI · 엑셀 → AI → 파이썬 → BI, 20차시</span>
+      <span>© 2026</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  // scroll progress bar
+  var bar = document.getElementById('progressBar');
+  function onScroll(){
+    var h = document.documentElement;
+    var scrolled = h.scrollTop;
+    var max = h.scrollHeight - h.clientHeight;
+    bar.style.width = max > 0 ? (scrolled / max * 100) + '%' : '0%';
+  }
+  document.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // reveal on scroll
+  var revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window){
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting){
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('in-view'); });
+  }
+
+  // smooth in-page nav (native scroll-behavior handles most; ensure focus for a11y)
+  document.querySelectorAll('a[href^="#"]').forEach(function(a){
+    a.addEventListener('click', function(e){
+      var id = a.getAttribute('href').slice(1);
+      var target = document.getElementById(id);
+      if (target){
+        e.preventDefault();
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    });
+  });
+
+  // video placeholder click affordance (no-op until real video is wired)
+  var video = document.getElementById('intro-video');
+  if (video){
+    video.style.cursor = 'pointer';
+    video.addEventListener('click', function(){
+      video.style.opacity = '0.85';
+      setTimeout(function(){ video.style.opacity = '1'; }, 150);
+    });
+  }
+})();
+</script>
+
+</body>
+</html>

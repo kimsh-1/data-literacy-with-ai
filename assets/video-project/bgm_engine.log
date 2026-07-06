@@ -1,0 +1,7 @@
+✓ audio engine → /mnt/d/ai-data-analysis-course/assets/video-project/audio_meta.json
+  heygen: no  ·  ran: bgm
+  voices: 0  ·  bgm: none  ·  sfx: 0
+  total voice duration: 0s
+
+anomalies (non-fatal):
+  - bgm: no Lyria key/recipe and local MusicGen deps unavailable (pip install transformers torch soundfile numpy)
